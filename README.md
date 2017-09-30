@@ -3,6 +3,7 @@
 ## Introduction
 
 Coding for kids. Enjoy :)
+Doc [设计文档](http://47.94.142.165:8088/gitlab/PRJ8_MasterYoda/Playground/wikis/home)
 
 ## Installation
 
