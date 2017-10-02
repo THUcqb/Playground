@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Operation from './Operation';
 import Game from './Game';
 import './App.css';
-import Game from './Game';
 
 class App extends Component
 {
