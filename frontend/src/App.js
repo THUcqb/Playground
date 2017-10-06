@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Operation from './Operation';
-import Game from './Game';
+import Scene from './Scene';
 import './App.css';
 
 class App extends Component
@@ -13,7 +13,7 @@ class App extends Component
                     <h1 className="App-title">Snake</h1>
                 </header>
                 <Operation className="Operation"/>
-                <Game className="Game"/>
+                <Scene className="Scene"/>
             </div>
         );
     }
