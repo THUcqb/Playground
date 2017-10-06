@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import createjs from 'easeljs';
+import GrassPainter from './GrassPainter';
+import SnakePainter from './SnakePainter';
 
 class Scene extends Component
 {
@@ -13,10 +16,12 @@ class Scene extends Component
 
     componentDidMount()
     {
-        const c = document.getElementById("canvas");
-        const cxt=c.getContext("2d");
-        cxt.fillStyle="#FF0000";
-        cxt.fillRect(0,0,150,75);
+        let stage = new createjs.Stage("canvas");
+        let grassPainter = new GrassPainter();
+        let snakePainter = new SnakePainter();
+        stage.addChild(grassPainter);
+        stage.addChild(snakePainter);
+        stage.update();
     }
 }
 
