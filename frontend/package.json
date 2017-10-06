@@ -4,9 +4,10 @@
   "private": true,
   "dependencies": {
     "easeljs": "^1.0.2",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
-    "react-scripts": "1.0.14"
+    "react": "^15.0.0",
+    "react-dom": "^15.0.0",
+    "react-scripts": "1.0.14",
+    "material-ui": "0.19.3"
   },
   "scripts": {
     "start": "react-scripts start",
