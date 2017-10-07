@@ -1,4 +1,4 @@
-"""backend URL Configuration
+"""UserSystem URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.11/topics/http/urls/
@@ -15,13 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-import rest_framework
-from usersystem import views
+from api import usersystem
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-	url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-	url(r'^login/$', views.user_login),
-	url(r'^regist/$', views.user_reg),
-	url(r'^logout/$', views.user_logout),
+	url(r'^api/', include('api.urls')),
+	url(r'^users/register$', usersystem.register),
+	url(r'^users/login$', usersystem.login),
 ]
+
