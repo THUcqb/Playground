@@ -6,12 +6,17 @@ class Operation extends Component
     {
         return(
             <div className="Operation">
-                <h1>Operations</h1>
-                <ul>
-                    <li>Operation 1</li>
-                    <li>Operation 2</li>
-                    <li>Operation 3</li>
-                </ul>
+            <h1>Operations</h1>
+                <div id="blocklyDiv" style={{height: "70vh", width: "100%"}}></div>
+                <xml id="toolbox" style={{display: "none"}}>
+                  <block type="controls_if"></block>
+                  <block type="logic_compare"></block>
+                  <block type="controls_repeat_ext"></block>
+                  <block type="math_number"></block>
+                  <block type="math_arithmetic"></block>
+                  <block type="text"></block>
+                  <block type="text_print"></block>
+                </xml>
             </div>
         );
     }

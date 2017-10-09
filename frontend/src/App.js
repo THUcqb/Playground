@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Operation from './Operation';
 import Scene from './Scene';
+import Navigation from './Navigation'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import './App.css';
 
 class App extends Component
@@ -8,13 +10,17 @@ class App extends Component
     render()
     {
         return (
+            <MuiThemeProvider>
             <div className="App">
-                <header className="App-header">
-                    <h1 className="App-title">Snake</h1>
-                </header>
-                <Operation className="Operation"/>
-                <Scene className="Scene"/>
+                <Navigation className="App-header"/>
+                <div className='SceneArea'>
+                    <Scene className="Scene"/>
+                </div>
+                <div className='GamepadArea'>
+                    <Operation className="Operation"/>
+                </div>
             </div>
+            </MuiThemeProvider>
         );
     }
 }

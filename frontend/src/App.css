@@ -1,30 +1,34 @@
 .App
 {
     text-align: center;
+    font-family: 'Roboto', sans-serif;
 }
 
-.Operation
+.GamepadArea
+{
+    float: right;
+    width: 50%;
+    height: 90vh;
+    background-color: rgb(249, 174, 85);
+}
+
+.SceneArea
 {
     float: left;
-    width: 30%;
-    background-color: #00FF00;
-    height: 750px;  
+    width: 50%;
+
+    height: 90vh;
+    background-color: rgb(191, 147, 196);
 }
 
-.Scene
-{
-    float: left;
-    width: 70%;
-    background-color: #00AAAA;
-    height: 750px;
-}
-
+/*
 .App-logo
 {
     animation: App-logo-spin infinite 20s linear;
     height: 80px;
 }
-
+*/
+/*
 .App-header
 {
     background-color: #222;
@@ -32,7 +36,7 @@
     padding: 0px;
     color: white;
 }
-
+*/
 .App-title
 {
     font-size: 1.5em;
@@ -43,8 +47,10 @@
     font-size: large;
 }
 
+/*
 @keyframes App-logo-spin
 {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
 }
+*/
