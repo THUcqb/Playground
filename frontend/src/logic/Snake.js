@@ -7,7 +7,7 @@ class Snake {
 		this.info = 0;
 		this.body = new Array(Block);
 		this.body[0] = new Block(x,y);
-		this.size = 1;
+		this.size = 0;
 		this.add_head(x,y)
 	}
 	add_head(x,y)
