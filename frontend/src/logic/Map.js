@@ -56,7 +56,7 @@ export class Map {
 	//读取地图
 	load(filename)
 	{
-
+		
 	}
 	//控制台输出地图信息
 	print()
