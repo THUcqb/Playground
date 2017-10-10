@@ -1,5 +1,5 @@
 import createjs from "easeljs";
-import {N, startPos, delta} from "./Constant";
+import {N, startPos, delta} from "../Constant";
 
 class SnakePainter extends createjs.Shape
 {
@@ -11,6 +11,10 @@ class SnakePainter extends createjs.Shape
         let deltaX = delta / 3;
         let deltaY = 3 * delta - delta / 3;
         this.graphics.beginFill("#000000").drawRect(x, y, deltaX, deltaY);
+    }
+
+    update()
+    {
     }
 }
 

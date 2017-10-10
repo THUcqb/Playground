@@ -1,5 +1,5 @@
 import createjs from "easeljs";
-import {N, startPos, delta} from "./Constant";
+import {N, startPos, delta} from "../Constant";
 
 class GrassPainter extends createjs.Shape
 {
@@ -11,6 +11,10 @@ class GrassPainter extends createjs.Shape
         for (let i = 1; i < N; i++)
         {
         }
+    }
+
+    update()
+    {
     }
 }
 

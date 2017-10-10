@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import createjs from 'easeljs';
-import GrassPainter from './GrassPainter';
-import SnakePainter from './SnakePainter';
+import GrassPainter from './painter/GrassPainter';
+import SnakePainter from './painter/SnakePainter';
 
 class Scene extends Component
 {
@@ -21,7 +21,14 @@ class Scene extends Component
         let snakePainter = new SnakePainter();
         stage.addChild(grassPainter);
         stage.addChild(snakePainter);
-        stage.update();
+        let tick = function(event) {
+            let isFinished = false;
+            grassPainter.update();
+            snakePainter.update();
+            stage.update();
+        }
+        createjs.Ticker.on("tick", tick);
+        createjs.Ticker.setFPS(60);
     }
 }
 
