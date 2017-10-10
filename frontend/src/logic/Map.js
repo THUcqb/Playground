@@ -1,5 +1,6 @@
 import {Block} from './Block';
-export class Map {
+
+class Map {
 	constructor(SIZE_X, SIZE_Y) {
 		this.SIZE_X = SIZE_X;
 		this.SIZE_Y = SIZE_Y;
@@ -8,7 +9,7 @@ export class Map {
 		this.file = file;
 	}
 	testinit(x,y) {
-		var block_list = new Array();
+		var block_list = [];
 		for (var i = 0; i < this.SIZE_X; i++) {
 			block_list[i] = new Array(Block);
 			for (var n = 0; n < this.SIZE_Y; n++) {
@@ -65,10 +66,10 @@ export class Map {
 		for (var i = 0; i < this.SIZE_X; i++) {
 			for (var n = 0; n < this.SIZE_Y; n++) {
 				var test = this.block_list[i][n].info;
-				if (test == 2) {test = " ";}
-				if (test == 3) {test = "X";}
-				if (test == 4) {test = "*";}
-				if (test == 5) {test = ".";}
+				if (test === 2) {test = " ";}
+				if (test === 3) {test = "X";}
+				if (test === 4) {test = "*";}
+				if (test === 5) {test = ".";}
 
 				str +=test;
 			}
@@ -79,9 +80,9 @@ export class Map {
 	//返回地图的二维数组，
 	Ddata()
 	{
-		var block_list = new Array();
+		var block_list = [];
 		for (var i = 0; i < this.SIZE_X; i++) {
-			block_list[i] = new Array();
+			block_list[i] = [];
 			for (var n = 0; n < this.SIZE_Y; n++) {
 				block_list[i][n] = this.block_list[i][n].info;
 			}
@@ -95,6 +96,4 @@ export class Map {
 	}
 }
 
-// var amap = new Map(10,10);
-// amap.testinit(0,0);
-// amap.print();
+export default Map;

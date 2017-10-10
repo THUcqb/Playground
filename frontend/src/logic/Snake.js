@@ -1,5 +1,5 @@
 import {Block} from './Block';
-export class Snake {
+class Snake {
 	constructor(x,y)
 	{
 		this.x = x;
@@ -36,3 +36,5 @@ export class Snake {
 		this.body = cur;
 	}
 }
+
+export default Snake;
