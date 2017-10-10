@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Operation from './Operation';
 import Scene from './Scene';
-import Navigation from './Navigation'
+import Navigation from './Navigation/Navigation'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import './App.css';
 

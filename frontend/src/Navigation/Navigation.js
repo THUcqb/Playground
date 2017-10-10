@@ -2,7 +2,7 @@ import React from 'react';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
-
+import SigninButton from './Sign'
 class Navigation extends React.Component {
 
     constructor(props) {
@@ -19,10 +19,13 @@ class Navigation extends React.Component {
             <div>
                 <AppBar
                     title="Snake"
-                    iconClassNameRight="muidocs-icon-navigation-expand-more"
+                    iconElementRight={<SigninButton />}
+                    iconStyleRight={{width: 100}}
                     onLeftIconButtonTouchTap={this.handleToggle}
                 />
                 <Drawer
+                    overlayStyle={{"top": "64px"}}
+                    containerStyle={{"top": "64px"}}
                     docked={false}
                     width="25%"
                     open={this.state.open}
@@ -31,7 +34,7 @@ class Navigation extends React.Component {
                     <MenuItem onClick={this.handleClose}>Menu Item</MenuItem>
                     <MenuItem onClick={this.handleClose}>Menu Item 2</MenuItem>
                 </Drawer>
-                </div>
+            </div>
         );
     }
 }
