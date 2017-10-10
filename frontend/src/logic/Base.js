@@ -148,6 +148,7 @@ export class Base {
 
 	check(str)
 	{
+		var s = "";
 		if (str == "check_move") 
 		{
 			return 'null'
@@ -224,7 +225,7 @@ export class Base {
 	{
 		try
 		{
-			while (self.check(check))
+			while (this.self.check(check))
 			{
 				for (var variable in this.task.tasklist)
 				{ 
@@ -274,19 +275,25 @@ export class Base {
 		else
 			if (this.runable(_x,_y) == 'runable') 
 			{
-
+				console.log(Base.bsnake.size)
 				Base.bmap.set_body(Base.bsnake.x,Base.bsnake.y);
 				var __x = Base.bsnake.body[0].x;
 				var __y = Base.bsnake.body[0].y;
-				
-				Base.bsnake.add_head(_x,_y);
-				Base.bmap.set_head(_x,_y);
 				console.log(__x,__y);
+				
 				Base.bmap.set_empty(__x,__y);
+
+				Base.bsnake.add_head(_x,_y);
+				console.log(Base.bsnake.size)
 				Base.bsnake.del_tail();
-				var __x = Base.bsnake.body[0].x;
-				var __y = Base.bsnake.body[0].y;
+				__x = Base.bsnake.body[0].x;
+				__y = Base.bsnake.body[0].y;
 				Base.bmap.set_tail(__x,__y);
+
+				Base.bmap.set_head(_x,_y);
+			
+				console.log(Base.bsnake.size)
+				
 			}
 		Base.bmap.print();
 	}
@@ -403,7 +410,7 @@ class UserBaseManager{
 
 	find_base_by_name(name)
 	{
-		for (variable in this.userBase)
+		for (var variable in this.userBase)
 		{ 
 			if (this.userBase[variable].name == name) {
 				return this.userBase[variable];
