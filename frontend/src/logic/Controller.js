@@ -4,6 +4,7 @@ export class Controller{
 	constructor()
 	{
 		this.begin = Base.begin;
+		this.state = "runable";
 	}
 
 	getMap()
@@ -19,6 +20,11 @@ export class Controller{
 	next()
 	{
 		Base.run_state.next();
+		return Base.run_state.state; // 返回String: runable, success, fail, err; 
+	}
+	check_now_state()
+	{
+		return Base.run_state.state; 
 	}
 
 }

@@ -7,7 +7,7 @@ export class Base_state{
 	{
 		this.cur = cur;
 		this.loop_time = 0;
-		this.state = "run";
+		this.state = "runable";
 	}
 	clear()
 	{
@@ -26,7 +26,7 @@ export class Base_state{
 				if (this.cur.name == "loop") 
 				{
 					this.next_move();
-					console.log(this.check_move());
+					// console.log(this.check_move());
 				}
 				else 
 				if (this.cur.name == "do_while")
@@ -48,15 +48,18 @@ export class Base_state{
 			if (this.cur.type == "success") 
 			{
 				console.log("success");
+				this.cur.state = "success";
 			}
 			else
 			if (this.cur.type == "fail") 
 			{
 				console.log("fail");
+				this.cur.state = "fail";
 			}
 			else
 			{
 				console.log("err");
+				this.cur.state = "err";
 			}
 		this.cur.run();
 	}
@@ -275,12 +278,15 @@ export class Base {
 				Base.bmap.set_body(Base.bsnake.x,Base.bsnake.y);
 				var __x = Base.bsnake.body[0].x;
 				var __y = Base.bsnake.body[0].y;
-				Base.bmap.set_tail(__x,__y);
+				
 				Base.bsnake.add_head(_x,_y);
 				Base.bmap.set_head(_x,_y);
 				console.log(__x,__y);
 				Base.bmap.set_empty(__x,__y);
 				Base.bsnake.del_tail();
+				var __x = Base.bsnake.body[0].x;
+				var __y = Base.bsnake.body[0].y;
+				Base.bmap.set_tail(__x,__y);
 			}
 		Base.bmap.print();
 	}
@@ -352,16 +358,18 @@ export class Base {
 		{}
 		else
 		if (this.name == "loop")
-		{}
+		{
+			this.loop();
+		}
 		else
 		if (this.name == "do_while")
 		{
-
+			this.do_while();
 		}
 		else
 		if (this.name == "while_do")
 		{
-
+			this.while_do();
 		} 
 			
 		} else 
