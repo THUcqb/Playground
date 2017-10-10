@@ -27,12 +27,12 @@ export class Controller{
 
 	getMap()
 	{
-		return Base.map;
+		return Base.bmap;
 	}
 
 	getSnake()
 	{
-		return Base.Snake;
+		return Base.bsnake;
 	}
 
 	next()

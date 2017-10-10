@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
 import createjs from 'easeljs';
-import GrassPainter from './GrassPainter';
-import SnakePainter from './SnakePainter';
+import GrassPainter from './painter/GrassPainter';
+import SnakePainter from './painter/SnakePainter';
+import Snake from './logic/Snake';
+import { Controller } from './logic/Controller';
 
 class Scene extends Component
 {
+    constructor()
+    {
+        super();
+        this.controller = new Controller();
+        this.controller.testInit();
+    }
+
     render()
     {
         return (
@@ -14,6 +23,19 @@ class Scene extends Component
         );
     }
 
+    tick(event, data)
+    {
+        let status = data.controller.next();
+        console.log(status);
+        if (status === "runable")
+        {
+            //TODO: Theses objects need to be cloned!!
+            data.grassPainter.update();
+            data.snakePainter.update(data.controller.getSnake());
+        }
+        data.stage.update();
+    }
+
     componentDidMount()
     {
         let stage = new createjs.Stage("canvas");
@@ -21,7 +43,14 @@ class Scene extends Component
         let snakePainter = new SnakePainter();
         stage.addChild(grassPainter);
         stage.addChild(snakePainter);
-        stage.update();
+        let data = {
+            grassPainter: grassPainter,
+            snakePainter: snakePainter,
+            stage: stage,
+            controller: this.controller,
+        };
+        createjs.Ticker.on("tick", this.tick, null, false, data);
+        createjs.Ticker.setFPS(1);
     }
 }
 
