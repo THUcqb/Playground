@@ -1,6 +1,6 @@
-import {Snake} from './Snake';
+import Snake from './Snake';
 
-import {Map} from './Map';
+import Map from './Map';
 
 export class Base_state{
 	constructor(cur)
@@ -15,26 +15,25 @@ export class Base_state{
 	}
 	next()
 	{
-
-		if (this.cur.type == "user")
+		if (this.cur.type === "user")
 		{
 			this.next_move();
 		}
 		else
-			if (this.cur.type == "sys") 
+			if (this.cur.type === "sys") 
 			{
-				if (this.cur.name == "loop") 
+				if (this.cur.name === "loop") 
 				{
 					this.next_move();
 					// console.log(this.check_move());
 				}
 				else 
-				if (this.cur.name == "do_while")
+				if (this.cur.name === "do_while")
 				{
 
 				}
 				else 
-				if (this.cur.name == "while_do") 
+				if (this.cur.name === "while_do") 
 				{
 
 				}
@@ -45,20 +44,20 @@ export class Base_state{
 				}
 			}
 			else
-			if (this.cur.type == "success") 
+			if (this.cur.type === "success") 
 			{
-				console.log("success");
+				// console.log("success");
 				this.cur.state = "success";
 			}
 			else
-			if (this.cur.type == "fail") 
+			if (this.cur.type === "fail") 
 			{
-				console.log("fail");
+				// console.log("fail");
 				this.cur.state = "fail";
 			}
 			else
 			{
-				console.log("err");
+				// console.log("err");
 				this.cur.state = "err";
 			}
 		this.cur.run();
@@ -66,29 +65,29 @@ export class Base_state{
 
 	check_move()
 	{
-		if (this.cur.name  == "loop") {return "movelist";}
-		if (this.cur.name == "do_while") {return "movelist";}
-		if (this.cur.name == "while_do") {return "movelist";}
-		if (this.cur.type == "user") {return "movelist";}
+		if (this.cur.name === "loop") {return "movelist";}
+		if (this.cur.name === "do_while") {return "movelist";}
+		if (this.cur.name === "while_do") {return "movelist";}
+		if (this.cur.type === "user") {return "movelist";}
 
-		if (this.cur.name == "move_up") {return "move";}
-		if (this.cur.name == "move_down") {return "move";}
-		if (this.cur.name == "move_left") {return "move";}
-		if (this.cur.name == "move_right") {return "move";}
+		if (this.cur.name === "move_up") {return "move";}
+		if (this.cur.name === "move_down") {return "move";}
+		if (this.cur.name === "move_left") {return "move";}
+		if (this.cur.name === "move_right") {return "move";}
 
 		return "end";
 	}
 
 	next_move()
 	{
-		while (this.check_move() == "movelist")
+		while (this.check_move() === "movelist")
 		{
 			// console.log(">")
-			if (this.cur.time == 0) 
+			if (Number(this.cur.time) === 0) 
 			{
 				this.cur = this.cur.next
 			}
-			else if(this.cur.time > 0)
+			else if (this.cur.time > 0)
 			{
 				this.cur.time -= 1;
 				this.cur = this.cur.task.tasklist[0];
@@ -148,56 +147,56 @@ export class Base {
 
 	check(str)
 	{
-		var s = "";
-		if (str == "check_move") 
+		let s = "";
+		if (str === "check_move") 
 		{
 			return 'null'
 		}
 		else
-		if (str == "check_move_up") 
+		if (str === "check_move_up") 
 		{
-			var _x = Base.bsnake.x-1 ;
-			var _y = Base.bsnake.y ;
+			let _x = Base.bsnake.x-1 ;
+			let _y = Base.bsnake.y ;
 			s = this.runable(_x,_y);
 		}
 		else
-		if (str == "check_move_down") 
+		if (str === "check_move_down") 
 		{
-			var _x = Base.bsnake.x+1;
-			var _y = Base.bsnake.y ;
+			let _x = Base.bsnake.x+1;
+			let _y = Base.bsnake.y ;
 			s = this.runable(_x,_y);
 		}
 		else
-		if (str == "check_move_left") 
+		if (str === "check_move_left") 
 		{
-			var _x = Base.bsnake.x ;
-			var _y = Base.bsnake.y-1 ;
+			let _x = Base.bsnake.x ;
+			let _y = Base.bsnake.y-1 ;
 			s = this.runable(_x,_y);
 		}
 		else
-		if (str == "check_move_right") 
+		if (str === "check_move_right") 
 		{
-			var _x = Base.bsnake.x ;
-			var _y = Base.bsnake.y+1 ;
+			let _x = Base.bsnake.x ;
+			let _y = Base.bsnake.y+1 ;
 			s = this.runable(_x,_y);
 		}
 		else
-		if (str == "check_aim") 
-		{	var _x = Base.bsnake.x ;
-			var _y = Base.bsnake.y+1 ;
+		if (str === "check_aim") 
+		{	let _x = Base.bsnake.x ;
+			let _y = Base.bsnake.y+1 ;
 			s = this.runable(_x,_y);
-			if (s == 'candy') {return 'runable';}
+			if (s === 'candy') {return 'runable';}
 			return 'null';
 		}
 		else
-		if (str == "check_toaim") 
+		if (str === "check_toaim") 
 		{}
 		else
-		if (str == "check_vtoaim") 
+		if (str === "check_vtoaim") 
 		{}
 
-		if (s == 'runable') {return s;}
-		if (s == 'candy') {return 'runable';}
+		if (s === 'runable') {return s;}
+		if (s === 'candy') {return 'runable';}
 		return 'null';
 
 	}
@@ -208,16 +207,16 @@ export class Base {
 		{
 			do
 			{
-				for (var variable in this.task.tasklist)
+				for (let variable in this.task.tasklist)
 				{ 
 					this.task.tasklist[variable].run()
 				}
 			}
-			while (check.state == "runable")
+			while (check.state === "runable")
 		}
 		catch(err)
 		{
-			console.log(err)
+			// console.log(err)
 		}
 	}
 
@@ -227,24 +226,24 @@ export class Base {
 		{
 			while (this.self.check(check))
 			{
-				for (var variable in this.task.tasklist)
+				for (let variable in this.task.tasklist)
 				{ 
 				this.task.tasklist[variable].run()
 				}
 			}
 		
-			}
-			catch(err)
-			{
-			console.log(err)
+		}
+		catch(err)
+		{
+			// console.log(err)
 		}
 	}
 
 	loop()
 	{
-		for (var i = 0; i < this.time; i++)
+		for (let i = 0; i < this.time; i++)
 		{
-			for (var variable in this.task.tasklist)
+			for (let variable in this.task.tasklist)
 			{ 
 				this.task.tasklist[variable].run()
 			}
@@ -255,36 +254,36 @@ export class Base {
 	{	
 		if (x<0 || x>=10) {return'err';}
 		if (y<0 || y>=10) {return'err';}
-		if (Base.bmap.block_list[x][y].info == 2) {return'candy';}
-		if (Base.bmap.block_list[x][y].info == 0) {return'runable';}
+		if (Number(Base.bmap.block_list[x][y].info) === 2) {return'candy';}
+		if (Number(Base.bmap.block_list[x][y].info) === 0) {return'runable';}
 		return 'err';
 	}
 
 	base_move(_x,_y)
 	{
-		if (this.runable(_x,_y) == 'candy') 
+		if (this.runable(_x,_y) === 'candy') 
 		{
 			
 			Base.bmap.set_body(Base.bsnake.x,Base.bsnake.y);
-			var __x = Base.bsnake.body[0].x;
-			var __y = Base.bsnake.body[0].y;
+			let __x = Base.bsnake.body[0].x;
+			let __y = Base.bsnake.body[0].y;
 			Base.bmap.set_tail(__x,__y);
 			Base.bsnake.add_head(_x,_y);
 			Base.bmap.set_head(_x,_y);
 		}
 		else
-			if (this.runable(_x,_y) == 'runable') 
+			if (this.runable(_x,_y) === 'runable') 
 			{
-				console.log(Base.bsnake.size)
+				// console.log(Base.bsnake.size)
 				Base.bmap.set_body(Base.bsnake.x,Base.bsnake.y);
-				var __x = Base.bsnake.body[0].x;
-				var __y = Base.bsnake.body[0].y;
-				console.log(__x,__y);
+				let __x = Base.bsnake.body[0].x;
+				let __y = Base.bsnake.body[0].y;
+				// console.log(__x,__y);
 				
 				Base.bmap.set_empty(__x,__y);
 
 				Base.bsnake.add_head(_x,_y);
-				console.log(Base.bsnake.size)
+				// console.log(Base.bsnake.size)
 				Base.bsnake.del_tail();
 				__x = Base.bsnake.body[0].x;
 				__y = Base.bsnake.body[0].y;
@@ -292,103 +291,103 @@ export class Base {
 
 				Base.bmap.set_head(_x,_y);
 			
-				console.log(Base.bsnake.size)
+				// console.log(Base.bsnake.size)
 				
 			}
-		Base.bmap.print();
+		// Base.bmap.print();
 	}
 
 	move_up()
 	{
-		var _x = Base.bsnake.x-1 ;
-		var _y = Base.bsnake.y ;
+		let _x = Base.bsnake.x-1 ;
+		let _y = Base.bsnake.y ;
 		this.base_move(_x,_y);
 		
 	}
 	
 	move_down()
 	{
-		var _x = Base.bsnake.x+1;
-		var _y = Base.bsnake.y ;
+		let _x = Base.bsnake.x+1;
+		let _y = Base.bsnake.y ;
 		this.base_move(_x,_y);
 
 	}
 	move_left()
 	{
-		var _x = Base.bsnake.x ;
-		var _y = Base.bsnake.y-1 ;
+		let _x = Base.bsnake.x ;
+		let _y = Base.bsnake.y-1 ;
 		this.base_move(_x,_y);
 
 	}
 	move_right()
 	{
-		var _x = Base.bsnake.x ;
-		var _y = Base.bsnake.y+1;
+		let _x = Base.bsnake.x ;
+		let _y = Base.bsnake.y+1;
 		this.base_move(_x,_y);
 
 	}
 	run()
 	{
-	console.log(this.type+"/"+this.name)
+	// console.log(this.type+"/"+this.name)
 
-	if (this.type == "sys") {
-		if (this.name == "move_up")
+	if (this.type === "sys") {
+		if (this.name === "move_up")
 		{
 			this.move_up();
 		}
 		else 
-		if (this.name == "move_down")
+		if (this.name === "move_down")
 		{
 			this.move_down();
 		} 
 		else
-		if (this.name == "move_left")
+		if (this.name === "move_left")
 		{
 			this.move_left();
 		} 
 		else
-		if (this.name == "move_right")
+		if (this.name === "move_right")
 		{
 			this.move_right();
 		} 
 		else
-		if (this.name == "vmove_up")
+		if (this.name === "vmove_up")
 		{} 
 		else
-		if (this.name == "vmove_down")
+		if (this.name === "vmove_down")
 		{} 
 		else
-		if (this.name == "vmove_left")
+		if (this.name === "vmove_left")
 		{}
 		else 
-		if (this.name == "vmove_right")
+		if (this.name === "vmove_right")
 		{}
 		else
-		if (this.name == "loop")
+		if (this.name === "loop")
 		{
 			this.loop();
 		}
 		else
-		if (this.name == "do_while")
+		if (this.name === "do_while")
 		{
 			this.do_while();
 		}
 		else
-		if (this.name == "while_do")
+		if (this.name === "while_do")
 		{
 			this.while_do();
 		} 
 			
 		} else 
-		if (this.type == "user") 
+		if (this.type === "user") 
 		{
-			for (var variable in this.task.tasklist)
+			for (let variable in this.task.tasklist)
 			{ 
 				this.task.tasklist[variable].run()
 			}
 		}
 		else
-		if (this.type == "check") 
+		if (this.type === "check") 
 		{
 		
 		}  
@@ -410,9 +409,9 @@ class UserBaseManager{
 
 	find_base_by_name(name)
 	{
-		for (var variable in this.userBase)
+		for (let variable in this.userBase)
 		{ 
-			if (this.userBase[variable].name == name) {
+			if (this.userBase[variable].name === name) {
 				return this.userBase[variable];
 			}
 		}

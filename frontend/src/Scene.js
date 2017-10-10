@@ -3,15 +3,16 @@ import createjs from 'easeljs';
 import GrassPainter from './painter/GrassPainter';
 import SnakePainter from './painter/SnakePainter';
 import Snake from './logic/Snake';
-// import { Base } from './logic/Base';
+import { Controller } from './logic/Controller';
 
 class Scene extends Component
 {
-//    constructor()
-//    {
-//        super();
-//        this.base = new Base();
-//    }
+    constructor()
+    {
+        super();
+        this.controller = new Controller();
+        this.controller.testInit();
+    }
 
     render()
     {
@@ -24,18 +25,13 @@ class Scene extends Component
 
     tick(event, data)
     {
-        let isFinished = false;
-        if (data.round === -1) isFinished = true;
-        else
-        {
-            data.snake.add_head(data.round, 5);
-            data.round--;
-        }
-        if (!isFinished)
+        let status = data.controller.next();
+        console.log(status);
+        if (status === "runable")
         {
             //TODO: Theses objects need to be cloned!!
             data.grassPainter.update();
-            data.snakePainter.update(data.snake);
+            data.snakePainter.update(data.controller.getSnake());
         }
         data.stage.update();
     }
@@ -45,18 +41,13 @@ class Scene extends Component
         let stage = new createjs.Stage("canvas");
         let grassPainter = new GrassPainter();
         let snakePainter = new SnakePainter();
-        let snake = new Snake(9, 5);
-        let round = Number(8);
-        let s = new Snake(3, 3);
-        snakePainter.update(s);
         stage.addChild(grassPainter);
         stage.addChild(snakePainter);
         let data = {
             grassPainter: grassPainter,
             snakePainter: snakePainter,
-            snake: snake,
             stage: stage,
-            round: round,
+            controller: this.controller,
         };
         createjs.Ticker.on("tick", this.tick, null, false, data);
         createjs.Ticker.setFPS(1);
