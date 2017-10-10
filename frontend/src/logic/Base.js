@@ -18,12 +18,7 @@ export class Base_state{
 
 		if (this.cur.type == "user")
 		{
-			// this.clear();
-			// console.log(this.cur.task.tasklist[0]);
 			this.next_move();
-			// console.log(this.check_move());
-			// this.cur = this.cur.task.tasklist[0];
-			// return this.cur.task.tasklist[0];
 		}
 		else
 			if (this.cur.type == "sys") 
@@ -47,8 +42,6 @@ export class Base_state{
 				{
 					this.cur = this.cur.next;
 					this.next_move();
-					// console.log(this.check_move());
-					// return this.cur.next;
 				}
 			}
 			else
@@ -65,10 +58,7 @@ export class Base_state{
 			{
 				console.log("err");
 			}
-
-		// console.log(this.cur.type+"/"+this.cur.name);
 		this.cur.run();
-
 	}
 
 	check_move()
@@ -210,7 +200,7 @@ export class Base {
 
 	do_while()
 	{
-	try
+		try
 		{
 			do
 			{
@@ -416,4 +406,17 @@ class UserBaseManager{
 
 }
 
+Base.bmap = new Map(10,10); //初始化地图 每个地块的信息 Base.bmap.block_list[x][y].info 参考map.js
+Base.bsnake = new Snake(5,5); //初始化蛇
+Base.bmap.testinit(5,5);//设置出生点 为了测试方便全地图初始化为2 即积分地块
+Base.begin = new Base("user","begin");
+Base.begin.time = 1;
+Base.success = new Base("success","end");//初始化success状态
+Base.fail = new Base("fail","end");//初始化fail状态
+Base.err = new Base("err","end");//初始化err状态，一切非法操作都会返回err
+Base.null = new Base("null","end");//游戏结束后如果还在输入指令会执行null操作
+Base.begin.link(Base.null);//游戏结束后跳转到null状态
+Base.run_state = new Base_state(Base.begin);//状态管理，会逐条执行指令，注意base.run()会一口气将结果执行完
+// Base.bmap.load('level_0.txt');//关卡0
+Base.game = 'run';//游戏状态初始化正常
 

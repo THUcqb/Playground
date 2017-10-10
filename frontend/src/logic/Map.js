@@ -20,32 +20,32 @@ export class Map {
 		// this.set_empty(x,y)
 	}
 
-	//地图编辑
+	//地图地表物体编辑
 	set_empty(x,y)
 	{
-		this.block_list[x][y].info = 0;
+		this.block_list[x][y].info = 0;//空地
 	}
 	set_block(x,y)
 	{
-		this.block_list[x][y].info = 1;
+		this.block_list[x][y].info = 1;//占据
 	}
 	set_candy(x,y)
 	{
-		this.block_list[x][y].info = 2;
+		this.block_list[x][y].info = 2;//表示积分
 	}
 
 	//蛇的贴图分类
 	set_head(x,y)
 	{
-		this.block_list[x][y].info = 3;
+		this.block_list[x][y].info = 3;//头
 	}
 	set_body(x,y)
 	{
-		this.block_list[x][y].info = 4;
+		this.block_list[x][y].info = 4;//身体
 	}
 	set_tail(x,y)
 	{
-		this.block_list[x][y].info = 5;
+		this.block_list[x][y].info = 5;//尾巴
 	}
 
 	//保存编辑的地图
@@ -56,7 +56,7 @@ export class Map {
 	//读取地图
 	load(filename)
 	{
-		
+
 	}
 	//控制台输出地图信息
 	print()
@@ -84,7 +84,25 @@ export class Map {
 			block_list[i] = new Array();
 			for (var n = 0; n < this.SIZE_Y; n++) {
 				block_list[i][n] = this.block_list[i][n].info;
+
 			}
+		}
+
+		return block_list;
+	}
+	//返回消除蛇的地图 //蛇经过的一定是空地。。感觉没有必要加这个
+	Edata()
+	{
+		var block_list = new Array();
+		for (var i = 0; i < this.SIZE_X; i++) {
+			block_list[i] = new Array();
+			for (var n = 0; n < this.SIZE_Y; n++) {
+				block_list[i][n] = this.block_list[i][n].info;
+				if (block_list[i][n] >= 3 ||block_list[i][n] <= 5 ) 
+				{
+					block_list[i][n] = 0;
+				}
+			}	
 		}
 
 		return block_list;
