@@ -2,24 +2,214 @@ import {Snake} from './Snake';
 
 import {Map} from './Map';
 
+export class Base_state{
+	constructor(cur)
+	{
+		this.cur = cur;
+		this.loop_time = 0;
+		this.state = "runable";
+	}
+	clear()
+	{
+		this.loop_time = 0;
+	}
+	next()
+	{
+
+		if (this.cur.type == "user")
+		{
+			this.next_move();
+		}
+		else
+			if (this.cur.type == "sys") 
+			{
+				if (this.cur.name == "loop") 
+				{
+					this.next_move();
+					// console.log(this.check_move());
+				}
+				else 
+				if (this.cur.name == "do_while")
+				{
+
+				}
+				else 
+				if (this.cur.name == "while_do") 
+				{
+
+				}
+				else
+				{
+					this.cur = this.cur.next;
+					this.next_move();
+				}
+			}
+			else
+			if (this.cur.type == "success") 
+			{
+				console.log("success");
+				this.cur.state = "success";
+			}
+			else
+			if (this.cur.type == "fail") 
+			{
+				console.log("fail");
+				this.cur.state = "fail";
+			}
+			else
+			{
+				console.log("err");
+				this.cur.state = "err";
+			}
+		this.cur.run();
+	}
+
+	check_move()
+	{
+		if (this.cur.name  == "loop") {return "movelist";}
+		if (this.cur.name == "do_while") {return "movelist";}
+		if (this.cur.name == "while_do") {return "movelist";}
+		if (this.cur.type == "user") {return "movelist";}
+
+		if (this.cur.name == "move_up") {return "move";}
+		if (this.cur.name == "move_down") {return "move";}
+		if (this.cur.name == "move_left") {return "move";}
+		if (this.cur.name == "move_right") {return "move";}
+
+		return "end";
+	}
+
+	next_move()
+	{
+		while (this.check_move() == "movelist")
+		{
+			// console.log(">")
+			if (this.cur.time == 0) 
+			{
+				this.cur = this.cur.next
+			}
+			else if(this.cur.time > 0)
+			{
+				this.cur.time -= 1;
+				this.cur = this.cur.task.tasklist[0];
+			}else 
+			{
+				this.cur = this.cur.task.tasklist[0];
+			}
+		}
+	}
+}
+
+export class Base_task{
+	constructor(begin)
+	{
+		this.begin = begin;
+		this.tasklist = new Array(Base)
+		this.size = 0;
+	}
+	add(task)
+	{
+		this.tasklist[this.size] = task;
+
+		if (this.size > 0) 
+		{
+			this.tasklist[this.size-1].link(this.tasklist[this.size]);
+		}
+		
+		this.tasklist[this.size].link(this.begin);
+		this.size+=1;
+
+	}
+
+
+}
+
 export class Base {
-	constructor(type,name,state,task,time,check) {
+	constructor(type,name,task,check) {
 		this.type = type;
 		this.name = name;
-		this.state = state;
 		this.task = task;
-		this.time = time;
+		this.time = 1;
 		this.check = check;
 	}
+
+	link(next)
+	{
+		this.next = next;
+	}
+	set_task(task)
+	{
+		this.task = task;
+	}
+	set_time(time)
+	{
+		this.time = time;
+	}
+
+	check(str)
+	{
+		if (str == "check_move") 
+		{
+			return 'null'
+		}
+		else
+		if (str == "check_move_up") 
+		{
+			var _x = Base.bsnake.x-1 ;
+			var _y = Base.bsnake.y ;
+			s = this.runable(_x,_y);
+		}
+		else
+		if (str == "check_move_down") 
+		{
+			var _x = Base.bsnake.x+1;
+			var _y = Base.bsnake.y ;
+			s = this.runable(_x,_y);
+		}
+		else
+		if (str == "check_move_left") 
+		{
+			var _x = Base.bsnake.x ;
+			var _y = Base.bsnake.y-1 ;
+			s = this.runable(_x,_y);
+		}
+		else
+		if (str == "check_move_right") 
+		{
+			var _x = Base.bsnake.x ;
+			var _y = Base.bsnake.y+1 ;
+			s = this.runable(_x,_y);
+		}
+		else
+		if (str == "check_aim") 
+		{	var _x = Base.bsnake.x ;
+			var _y = Base.bsnake.y+1 ;
+			s = this.runable(_x,_y);
+			if (s == 'candy') {return 'runable';}
+			return 'null';
+		}
+		else
+		if (str == "check_toaim") 
+		{}
+		else
+		if (str == "check_vtoaim") 
+		{}
+
+		if (s == 'runable') {return s;}
+		if (s == 'candy') {return 'runable';}
+		return 'null';
+
+	}
+
 	do_while()
 	{
-	try
+		try
 		{
 			do
 			{
-				for (variable in this.task)
+				for (var variable in this.task.tasklist)
 				{ 
-					this.task[variable].run()
+					this.task.tasklist[variable].run()
 				}
 			}
 			while (check.state == "runable")
@@ -34,11 +224,11 @@ export class Base {
 	{
 		try
 		{
-			while (check.state == "runable")
+			while (self.check(check))
 			{
-				for (variable in this.task)
+				for (var variable in this.task.tasklist)
 				{ 
-				this.task[variable].run()
+				this.task.tasklist[variable].run()
 				}
 			}
 		
@@ -53,9 +243,9 @@ export class Base {
 	{
 		for (var i = 0; i < this.time; i++)
 		{
-			for (var variable in this.task)
+			for (var variable in this.task.tasklist)
 			{ 
-				this.task[variable].run()
+				this.task.tasklist[variable].run()
 			}
 		}
 	}
@@ -88,12 +278,15 @@ export class Base {
 				Base.bmap.set_body(Base.bsnake.x,Base.bsnake.y);
 				var __x = Base.bsnake.body[0].x;
 				var __y = Base.bsnake.body[0].y;
-				Base.bmap.set_tail(__x,__y);
+				
 				Base.bsnake.add_head(_x,_y);
 				Base.bmap.set_head(_x,_y);
 				console.log(__x,__y);
 				Base.bmap.set_empty(__x,__y);
 				Base.bsnake.del_tail();
+				var __x = Base.bsnake.body[0].x;
+				var __y = Base.bsnake.body[0].y;
+				Base.bmap.set_tail(__x,__y);
 			}
 		Base.bmap.print();
 	}
@@ -165,47 +358,32 @@ export class Base {
 		{}
 		else
 		if (this.name == "loop")
-		{	this.loop();	}
+		{
+			this.loop();
+		}
 		else
 		if (this.name == "do_while")
 		{
-
+			this.do_while();
 		}
 		else
 		if (this.name == "while_do")
 		{
-
+			this.while_do();
 		} 
 			
 		} else 
 		if (this.type == "user") 
 		{
-			for (var variable in this.task)
+			for (var variable in this.task.tasklist)
 			{ 
-				this.task[variable].run()
+				this.task.tasklist[variable].run()
 			}
 		}
 		else
 		if (this.type == "check") 
 		{
-		if (this.name == "check_move") {}
-		else
-		if (this.name == "check_move_up") 
-		{}
-		else
-		if (this.name == "check_move_down") {}
-		else
-		if (this.name == "check_move_left") {}
-		else
-		if (this.name == "check_move_right") {}
-		else
-		if (this.name == "check_list") {}
-		else
-		if (this.name == "check_aim") {}
-		else
-		if (this.name == "check_toaim") {}
-		else
-		if (this.name == "check_vtoaim") {}
+		
 		}  
 	}
 }
@@ -236,4 +414,17 @@ class UserBaseManager{
 
 }
 
+Base.bmap = new Map(10,10); //初始化地图 每个地块的信息 Base.bmap.block_list[x][y].info 参考map.js
+Base.bsnake = new Snake(5,5); //初始化蛇
+Base.bmap.testinit(5,5);//设置出生点 为了测试方便全地图初始化为2 即积分地块
+Base.begin = new Base("user","begin");
+Base.begin.time = 1;
+Base.success = new Base("success","end");//初始化success状态
+Base.fail = new Base("fail","end");//初始化fail状态
+Base.err = new Base("err","end");//初始化err状态，一切非法操作都会返回err
+Base.null = new Base("null","end");//游戏结束后如果还在输入指令会执行null操作
+Base.begin.link(Base.null);//游戏结束后跳转到null状态
+Base.run_state = new Base_state(Base.begin);//状态管理，会逐条执行指令，注意base.run()会一口气将结果执行完
+// Base.bmap.load('level_0.txt');//关卡0
+Base.game = 'run';//游戏状态初始化正常
 

@@ -1,8 +1,15 @@
-import {Block} from './Block';
-import {Map} from './Map';
-import {Base} from './Base';
-import {Snake} from './Snake';
+import {Base,Base_state,Base_task} from './Base';
+import {Controller} from './Controller';
 
+const readline = require('readline');
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+ rl.setMaxListeners(0);
+
+// emitter.setMaxListeners(1);
 class test{
 	constructor(class_name,number)
 	{
@@ -14,50 +21,99 @@ class test{
 	{
 		if (input == except) {return "ok"}
 	}
+
+	runGame(loop)
+	{
+		console.log(loop);
+		if(loop <= 20)
+		{
+			var op = "";
+			// console.log(loop)
+			rl.on('line', (input) => {
+				  console.log(`Received: ${input}`);
+				   op = input;
+				   loop +=1;
+				   // rl.close();
+				 	console.log(">"+op);
+				 	if (op == 'w'| op == 'W') 
+					{
+						let b1 = new Base("sys","move_up","move");
+						b1.run();
+					}
+					if (op == 's'| op == 'S') 
+					{
+						let b3 = new Base("sys","move_down","move");
+						b3.run();
+					}
+					if (op == 'a'| op == 'A') 
+					{
+						let b2 = new Base("sys","move_left","move");
+						b2.run();
+					}
+					if (op == 'd'| op == 'D') 
+					{
+						let b4 = new Base("sys","move_right","move");
+						b4.run();
+					}
+				  // this.runGame(loop);
+				});
+			 
+		
+
+
+
+			
+			
+		}
+	}
 }
 
+var controller = new Controller();
 
-Base.bmap = new Map(10,10); //初始化地图 每个地块的信息 Base.bmap.block_list[x][y].info 参考map.js
-Base.bsnake = new Snake(5,5); //初始化蛇
-Base.bmap.testinit(5,5);//设置出生点 为了测试方便全地图初始化为2 即积分地块
-// Base.bmap.load('level_0.txt');//关卡0
-Base.game = 'run';//游戏状态初始化正常
 console.log('----test-basic_move----')
 /*
-*地图编辑的接口见Map.js
+*地图编辑的接口见Map.js Controller
 */
 
-var myBase = new Base("sys","move_up","move")//添加移动操作
-var myBase1 = new Base("sys","move_left","move")
-var myBase2 = new Base("sys","move_up","move")
-var myBase3 = new Base("sys","move_right","move")
+let b1 = new Base("sys","move_up","move")//添加移动操作 注意这是引用！所以不要复用！
+let b2 = new Base("sys","move_left","move")
+let b3 = new Base("sys","move_down","move")
+let b4 = new Base("sys","move_right","move")
+let b5 = new Base("sys","move_up","move")
 
-Base.bmap.print();
-myBase.run()//执行指令
 console.log('----test-my_function----')
-
-
-var mytask =  new Array(Base)//自定义函数任务集
-mytask[0] = myBase1//定义函数内部第一条指令
-mytask[1] = myBase2
-// mytask[2] = myBase3
-var myBase4 = new Base("user","my_function","function",mytask)//自定义函数
-myBase4.run()
 
 console.log('-----test-loop---')
 
-var mytask1 =  new Array(Base)//自定义函数任务集
-mytask1[0] = myBase1
-mytask1[1] = myBase2
-// mytask1[2] = myBase3
-// mytask1[3] = myBase4
+var b6 = new Base('sys','loop'); //设置循环函数
+	b6.set_time(2);//设置循环次数
 
-var myBase5 = new Base("sys","loop","function",mytask1,2)//循环执行任务集
-myBase5.run()
+	var mytask1 = new Base_task(b6) //Base_task 需要指定父节点
+		mytask1.add(b1);
+		mytask1.add(b2);
+b6.task = mytask1;//向父节点添加执行列表
 
-console.log('-----test-check---')
 
-console.log('-----test-while---')
+var mytask = new Base_task(controller.begin)//将任务列表指向初始节点
+mytask.add(b6);//向任务列表添加函数
 
-console.log('-----test-AI---')
+controller.begin.task=mytask;//初始节点添加执行列表
+
+
+// controller.next();console.log('expect -- up');/*执行初始节点的单条命令*/
+// controller.next();console.log('except -- left');
+// controller.next();console.log('except -- up');
+// controller.next();console.log('except -- left');
+// controller.next();console.log('expect -- end');
+// controller.next();console.log('expect -- err');
+// controller.next();console.log('except -- err');
+
+Base.bmap.load("level_0.txt");
+var t = new test()
+t.runGame(0);
+// console.log('-----test-check---')
+
+// console.log('-----test-while---')
+
+// console.log('-----test-AI---')
 
