@@ -9,7 +9,6 @@ import TextField from 'material-ui/TextField';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
-import Divider from 'material-ui/Divider';
 
 const styles = theme => ({
   container: {
@@ -52,13 +51,13 @@ class SignDialog extends React.Component {
         </form>
         </DialogContent>
         <DialogActions className={classes.actions}>
-          <Button raised color="primary" onClick={this.props.onRequestSignUp} color="primary">
+          <Button raised onClick={this.props.onRequestSignUp} color="primary">
             Sign up
           </Button>
-          <Button color="primary" onClick={this.props.onRequestClose} color="primary">
+          <Button onClick={this.props.onRequestClose} color="primary">
             Cancel
           </Button>
-          <Button color="primary" onClick={this.props.onRequestSignIn} color="primary">
+          <Button onClick={this.props.onRequestSignIn} color="primary">
             Sign in
           </Button>
         </DialogActions>

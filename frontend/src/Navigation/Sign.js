@@ -1,6 +1,8 @@
 import React from 'react';
 import Button from 'material-ui/Button';
 import SignDialog from './SignDialog';
+import { login } from '../utils/Auth'
+
 class SignButton extends React.Component {
   state = {
     open: false,
@@ -11,7 +13,7 @@ class SignButton extends React.Component {
   handleRequestClose = () => this.setState({open: false})
 
   handleRequestSignIn() {
-    alert('sign in');
+    login('test', 'test');
   }
 
   handleRequestSignUp() {
