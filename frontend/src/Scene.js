@@ -27,7 +27,7 @@ class Scene extends Component
     {
         let status = data.controller.next();
         console.log(status);
-        if (status === "runable")
+        if (status === "runnable")
         {
             //TODO: Theses objects need to be cloned!!
             data.grassPainter.update();
