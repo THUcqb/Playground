@@ -30,7 +30,7 @@ class Scene extends Component
         if (status === "runnable")
         {
             //TODO: Theses objects need to be cloned!!
-            data.grassPainter.update();
+            data.grassPainter.update(data.controller.getMap());
             data.snakePainter.update(data.controller.getSnake());
         }
         data.stage.update();
