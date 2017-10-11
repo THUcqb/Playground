@@ -82,7 +82,7 @@ class Map {
 
 		for (let i = 0; i < this.SIZE_X; i++) {
 			for (let n = 0; n < this.SIZE_Y; n++) {
-				this.block_list[i][n].info = str[i*this.SIZE_X+n];
+				this.block_list[i][n].info = Number(str[i*this.SIZE_X+n]);
 			}
 		}
 		// console.log(str);
@@ -90,11 +90,12 @@ class Map {
 	//控制台输出地图信息
 	print()
 	{
+		let a = this.Ddata();
         console.log(this.SIZE_X + " " + this.SIZE_Y);
 		let str = "";
 		for (let i = 0; i < this.SIZE_X; i++) {
 			for (let n = 0; n < this.SIZE_Y; n++) {
-				let test = Number(this.block_list[i][n].info);
+				let test = (a[i][n]);
                 let out = "";
 				if (test === 2) {out = "@";}
 				else
@@ -134,7 +135,7 @@ class Map {
 			block_list[i] = [];
 			for (let n = 0; n < this.SIZE_Y; n++) {
 				block_list[i][n] = this.block_list[i][n].info;
-				if (block_list[i][n] >= 3 ||block_list[i][n] <= 5 ) 
+				if (block_list[i][n] >= 3 && block_list[i][n] <= 5 ) 
 				{
 					block_list[i][n] = 0;
 				}
