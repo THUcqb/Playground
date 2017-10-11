@@ -3,10 +3,10 @@ import {Controller} from './Controller';
 
 const readline = require('readline');
 
-// const rl = readline.createInterface({
-// 	input: process.stdin,
-// 	output: process.stdout
-// });
+const rl = readline.createInterface({
+	input: process.stdin,
+	output: process.stdout
+});
 // rl.setMaxListeners(0);
 
 // emitter.setMaxListeners(1);
@@ -57,14 +57,19 @@ class test{
 					}
 				  // this.runGame(loop);
 				});
-			 
-		
-
-
-
-			
-			
 		}
+	}
+	testcontroller()
+	{
+		let op = ""
+		rl.on('line', (input) => {
+		console.log(`Received: ${input}`);
+		op = input;
+		console.log(">"+op);
+		controller.next();
+
+		// this.runGame(loop);
+		});
 	}
 }
 
@@ -80,17 +85,10 @@ console.log('----test-my_function----')
 console.log('-----test-loop---')
 
 controller.testInit();
-controller.next();
-controller.next();
-controller.next();
-controller.next();
-controller.next();
-controller.next();
-controller.next();
 
 // Base.bmap.load("level_0.txt");
-// var t = new test()
-// t.runGame(0);
+var t = new test()
+t.testcontroller();
 console.log('-----test-check---')
 
 // console.log('-----test-while---')

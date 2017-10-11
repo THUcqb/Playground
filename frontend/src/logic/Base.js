@@ -333,7 +333,7 @@ export class Base {
 	{
 	// console.log(this.type+"/"+this.name)
 
-	if (this.type === "sys") {
+		if (this.type === "sys") {
 		if (this.name === "move_up")
 		{
 			this.move_up();
@@ -394,6 +394,7 @@ export class Base {
 		{
 		
 		}  
+		Base.bmap.print();
 	}
 }
 
