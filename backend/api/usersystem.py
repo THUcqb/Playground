@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.template import Template, Context
 from django.views.decorators.csrf import csrf_exempt
 from .models import UserInfo
-
+import json
 @csrf_exempt
 def register(request):
 	res = {}
@@ -17,7 +17,7 @@ def register(request):
 		password = request.POST['password']
 		phonenumber = request.POST['phonenumber']
 		email = request.POST['email']
-		
+
 		try:
 			exist_user = UserInfo.objects.get(username = username)
 		except UserInfo.DoesNotExist:
@@ -34,15 +34,14 @@ def login(request):
 		return render_to_response('login.html')
 	if request.method == 'POST':
 		try:
-			userinfo = UserInfo.objects.get(username = request.POST['username'])
-			if userinfo.password == request.POST['password']:
+			post = json.loads(request.body)
+			userinfo = UserInfo.objects.get(username = post['username'])
+			if userinfo.password == post['password']:
 				request.session['userid'] = userinfo.id
-				return HttpResponse('登录成功')
+				return HttpResponse('{"status": "OK", "token": "haha"}')
 		except UserInfo.DoesNotExist:
-			res['result'] = '账号或密码错误'
-		
-		res['result'] = '账号或密码错误'
-		return render(request, 'login.html', res)
+			return HttpResponse('{"status": "UserNotExist", "token": "haha"}')
+		return HttpResponse('{"status": "IncorrectPassword", "token": "haha"}')
 
 @csrf_exempt
 def logout(request):
