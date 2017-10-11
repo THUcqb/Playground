@@ -1,60 +1,67 @@
 import React from 'react';
-import Button from 'material-ui/Button';
-import Dialog, { DialogTitle } from 'material-ui/Dialog';
+import Dialog, {
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
+import Button from 'material-ui/Button';
+import Divider from 'material-ui/Divider';
 
 const styles = theme => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
   },
-  textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    width: 200,
-  },
-  menu: {
-    width: 200,
-  },
 });
 
 class SignDialog extends React.Component {
-  state = {
-    username: '',
-  }
-
-  handleChange = name => event => {
-    this.setState({
-      [name]: event.target.value,
-    });
-  };
 
   render() {
-    const { classes, open, onRequestClose } = this.props;
+    const { classes } = this.props;
 
     return (
-      <Dialog open={this.props.open} onRequestClose={this.props.onRequestClose} >
+      <Dialog
+        open={this.props.open}
+        onRequestClose={this.props.onRequestClose}
+      >
         <DialogTitle>Sign in</DialogTitle>
-        <form className={classes.container} noValid ate autoComplete="off">
-          <TextField
-            className={classes.textField}
-            id="username"
-            label="Username"
-            value={this.state.username}
-            onChange={this.handleChange('username')}
-            margin="normal"
-          />
-          <TextField
-            className={classes.textField}
-            id="password"
-            label="Password"
-            type="password"
-            autoComplete="current-password"
-            margin="normal"
-          />
+        <DialogContent>
+          <DialogContentText>
+            Please type in your username and password.
+          </DialogContentText>
+          <form className={classes.container} autoComplete="off">
+            <TextField
+              id="username"
+              label="Username"
+              margin="dense"
+              fullWidth
+              autoFocus
+            />
+            <TextField
+              id="password"
+              label="Password"
+              margin="dense"
+              fullWidth
+              type="password"
+              autoComplete="current-password"
+            />
         </form>
+        </DialogContent>
+        <DialogActions className={classes.actions}>
+          <Button raised color="primary" onClick={this.props.onRequestSignUp} color="primary">
+            Sign up
+          </Button>
+          <Button color="primary" onClick={this.props.onRequestClose} color="primary">
+            Cancel
+          </Button>
+          <Button color="primary" onClick={this.props.onRequestSignIn} color="primary">
+            Sign in
+          </Button>
+        </DialogActions>
       </Dialog>
     );
   }
@@ -64,4 +71,4 @@ SignDialog.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SignDialog);
+export default withStyles(styles, {withTheme: true})(SignDialog);
