@@ -7,7 +7,7 @@ export class Base_state{
 	{
 		this.cur = cur;
 		this.loop_time = 0;
-		this.state = "runable";
+		this.state = "runnable";
 	}
 	clear()
 	{
@@ -48,17 +48,20 @@ export class Base_state{
 			{
 				// console.log("success");
 				this.cur.state = "success";
+				this.state = "success";
 			}
 			else
 			if (this.cur.type === "fail") 
 			{
 				// console.log("fail");
 				this.cur.state = "fail";
+				this.state = "fail";
 			}
 			else
 			{
 				// console.log("err");
 				this.cur.state = "err";
+				this.state = "err";
 			}
 		this.cur.run();
 	}
@@ -157,35 +160,35 @@ export class Base {
 		{
 			let _x = Base.bsnake.x-1 ;
 			let _y = Base.bsnake.y ;
-			s = this.runable(_x,_y);
+			s = this.runnable(_x,_y);
 		}
 		else
 		if (str === "check_move_down") 
 		{
 			let _x = Base.bsnake.x+1;
 			let _y = Base.bsnake.y ;
-			s = this.runable(_x,_y);
+			s = this.runnable(_x,_y);
 		}
 		else
 		if (str === "check_move_left") 
 		{
 			let _x = Base.bsnake.x ;
 			let _y = Base.bsnake.y-1 ;
-			s = this.runable(_x,_y);
+			s = this.runnable(_x,_y);
 		}
 		else
 		if (str === "check_move_right") 
 		{
 			let _x = Base.bsnake.x ;
 			let _y = Base.bsnake.y+1 ;
-			s = this.runable(_x,_y);
+			s = this.runnable(_x,_y);
 		}
 		else
 		if (str === "check_aim") 
 		{	let _x = Base.bsnake.x ;
 			let _y = Base.bsnake.y+1 ;
-			s = this.runable(_x,_y);
-			if (s === 'candy') {return 'runable';}
+			s = this.runnable(_x,_y);
+			if (s === 'candy') {return 'runnable';}
 			return 'null';
 		}
 		else
@@ -195,8 +198,8 @@ export class Base {
 		if (str === "check_vtoaim") 
 		{}
 
-		if (s === 'runable') {return s;}
-		if (s === 'candy') {return 'runable';}
+		if (s === 'runnable') {return s;}
+		if (s === 'candy') {return 'runnable';}
 		return 'null';
 
 	}
@@ -212,7 +215,7 @@ export class Base {
 					this.task.tasklist[variable].run()
 				}
 			}
-			while (check.state === "runable")
+			while (check.state === "runnable")
 		}
 		catch(err)
 		{
@@ -250,18 +253,18 @@ export class Base {
 		}
 	}
 
-	runable(x,y)
+	runnable(x,y)
 	{	
 		if (x<0 || x>=10) {return'err';}
 		if (y<0 || y>=10) {return'err';}
 		if (Number(Base.bmap.block_list[x][y].info) === 2) {return'candy';}
-		if (Number(Base.bmap.block_list[x][y].info) === 0) {return'runable';}
+		if (Number(Base.bmap.block_list[x][y].info) === 0) {return'runnable';}
 		return 'err';
 	}
 
 	base_move(_x,_y)
 	{
-		if (this.runable(_x,_y) === 'candy') 
+		if (this.runnable(_x,_y) === 'candy') 
 		{
 			
 			Base.bmap.set_body(Base.bsnake.x,Base.bsnake.y);
@@ -272,7 +275,7 @@ export class Base {
 			Base.bmap.set_head(_x,_y);
 		}
 		else
-			if (this.runable(_x,_y) === 'runable') 
+			if (this.runnable(_x,_y) === 'runnable') 
 			{
 				// console.log(Base.bsnake.size)
 				Base.bmap.set_body(Base.bsnake.x,Base.bsnake.y);
