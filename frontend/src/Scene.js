@@ -50,7 +50,7 @@ class Scene extends Component
             controller: this.controller,
         };
         createjs.Ticker.on("tick", this.tick, null, false, data);
-        createjs.Ticker.setFPS(1);
+        createjs.Ticker.setFPS(4);
     }
 }
 
