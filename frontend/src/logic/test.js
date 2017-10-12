@@ -82,13 +82,16 @@ console.log('----test-my_function----')
 
 console.log('-----test-loop---')
 
-controller.testInit();
+// controller.testInit();
+
 
 // Base.bmap.load("level_0.txt");
 var t = new test()
-t.testcontroller();
+// t.testcontroller();
 console.log('-----test-check---')
-
+var usertask = new Base_task(this.begin)//将任务列表指向初始节点
+usertask.add(base_loop_circle_up);//向任务列表添加函数
+this.begin.task=usertask;
 // console.log('-----test-while---')
 
 // console.log('-----test-AI---')

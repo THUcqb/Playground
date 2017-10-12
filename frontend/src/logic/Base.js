@@ -8,6 +8,7 @@ export class Base_state{
 		this.cur = cur;
 		this.loop_time = 0;
 		this.state = "runnable";
+		this.move_state = "null";
 	}
 	clear()
 	{
@@ -27,7 +28,7 @@ export class Base_state{
 					this.next_move();
 					// console.log(this.check_move());
 				}
-				else 
+				else
 				if (this.cur.name === "do_while")
 				{
 
@@ -37,6 +38,31 @@ export class Base_state{
 				{
 
 				}
+				else
+				if (this.type === "judge") 
+				{
+					if (this.Check(this.check) === "runnable") 
+					{
+						if (this.cur.task.tasklist.length > 0) 
+							this.next_move();
+						else
+						{
+							this.cur = this.cur.next;
+							this.next_move();
+						}
+					}
+					else
+					{
+						if (this.cur.else_task.tasklist.length > 0) 
+							this.else_next_move();
+						else
+						{
+							this.cur = this.cur.next;
+							this.next_move();
+						}
+
+					}
+				}  
 				else
 				{
 					this.cur = this.cur.next;
@@ -63,7 +89,64 @@ export class Base_state{
 				this.cur.state = "err";
 				this.state = "err";
 			}
-		this.cur.run();
+
+		if (this.cur.name === "trun_right")
+		{
+			if (this.state === "null" || this.state === "move_up")
+			{
+				this.move_state = "move_right";
+				let a = new Base("sys","move_right","move");
+				a.run();
+			}
+			if (this.state === "move_right")
+			{
+				this.move_state = "move_down";
+				let a = new Base("sys","move_down","move");
+				a.run();
+			}
+			if (this.state === "move_down")
+			{
+				this.move_state = "move_left";
+				let a = new Base("sys","move_left","move");
+				a.run();
+			}
+			if (this.state === "move_left")
+			{
+				this.move_state = "move_up";
+				let a = new Base("sys","move_up","move");
+				a.run();
+			}
+		}
+		else
+		if (this.cur.name === "trun_left")
+		{
+			if (this.state === "null" || this.state === "move_up")
+			{
+				this.move_state = "move_left";
+				let a = new Base("sys","move_left","move");
+				a.run();
+			}
+			if (this.state === "move_left")
+			{
+				this.move_state = "move_down";
+				let a = new Base("sys","move_down","move");
+				a.run();
+			}
+			if (this.state === "move_down")
+			{
+				this.move_state = "move_right";
+				let a = new Base("sys","move_right","move");
+				a.run();
+			}
+			if (this.state === "move_right")
+			{
+				this.move_state = "move_up";
+				let a = new Base("sys","move_up","move");
+				a.run();
+			}
+		}	
+		else
+			this.cur.run();
 	}
 
 	check_move()
@@ -71,12 +154,15 @@ export class Base_state{
 		if (this.cur.name === "loop") {return "movelist";}
 		if (this.cur.name === "do_while") {return "movelist";}
 		if (this.cur.name === "while_do") {return "movelist";}
+		if (this.cur.name === "judge") {return "movelist";}
 		if (this.cur.type === "user") {return "movelist";}
 
-		if (this.cur.name === "move_up") {return "move";}
-		if (this.cur.name === "move_down") {return "move";}
-		if (this.cur.name === "move_left") {return "move";}
-		if (this.cur.name === "move_right") {return "move";}
+		if (this.cur.name === "move_up") { this.move_state = "move_up";return "move";}
+		if (this.cur.name === "move_down") { this.move_state = "move_down";return "move";}
+		if (this.cur.name === "move_left") {this.move_state = "move_left";return "move";}
+		if (this.cur.name === "move_right") {this.move_state = " move_right";return "move";}
+		if (this.cur.name === "trun_left") {return "move";}
+		if (this.cur.name === "trun_right") {return "move";}
 
 		return "end";
 	}
@@ -100,13 +186,32 @@ export class Base_state{
 			}
 		}
 	}
+	else_next_move()
+	{
+		while (this.check_move() === "movelist")
+		{
+			// console.log(">")
+			if (Number(this.cur.time) === 0) 
+			{
+				this.cur = this.cur.next
+			}
+			else if (this.cur.time > 0)
+			{
+				this.cur.time -= 1;
+				this.cur = this.cur.else_task.tasklist[0];
+			}else 
+			{
+				this.cur = this.cur.else_task.tasklist[0];
+			}
+		}
+	}
 }
 
 export class Base_task{
 	constructor(begin)
 	{
 		this.begin = begin;
-		this.tasklist = new Array(Base)
+		this.tasklist = [];
 		this.size = 0;
 	}
 	add(task)
@@ -147,8 +252,12 @@ export class Base {
 	{
 		this.time = time;
 	}
+	set_else(else_task)
+	{
+		this.else_task = else_task;
+	}
 
-	check(str)
+	Check(str)
 	{
 		let s = "";
 		if (str === "check_move") 
@@ -186,8 +295,8 @@ export class Base {
 		else
 		if (str === "check_aim") 
 		{	let _x = Base.bsnake.x ;
-			let _y = Base.bsnake.y+1 ;
-			s = this.runnable(_x,_y);
+			let _y = Base.bsnake.y ;
+			// s = this.runnable(_x,_y);
 			if (s === 'candy') {return 'runnable';}
 			return 'null';
 		}
@@ -227,18 +336,18 @@ export class Base {
 	{
 		try
 		{
-			while (this.self.check(check))
+			while (this.self.Check(check))
 			{
 				for (let variable in this.task.tasklist)
 				{ 
-				this.task.tasklist[variable].run()
+					this.task.tasklist[variable].run()
 				}
 			}
 		
 		}
 		catch(err)
 		{
-			// console.log(err)
+			console.log(err)
 		}
 	}
 
@@ -379,7 +488,25 @@ export class Base {
 		if (this.name === "while_do")
 		{
 			this.while_do();
-		} 
+		}
+		else
+		if (this.type === "judge") 
+		{
+			if (this.Check(this.check) === "runnable") 
+			{
+				for (let variable in this.task.tasklist)
+				{ 
+					this.task.tasklist[variable].run()
+				}
+			}
+			else
+			{
+				for (let variable in this.else_task.tasklist)
+				{ 
+					this.else_task.tasklist[variable].run()
+				}
+			}
+		}  
 			
 		} else 
 		if (this.type === "user") 
@@ -390,10 +517,7 @@ export class Base {
 			}
 		}
 		else
-		if (this.type === "check") 
-		{
-		
-		}  
+		{}
 		Base.bmap.print();
 	}
 }
@@ -402,7 +526,7 @@ export class Base {
 
 class UserBaseManager{
 	constructor(){
-		this.userBase = new Array(Base);
+		this.userBase = [];
 		this.counter = 0;
 		this.base = 'null';
 	}

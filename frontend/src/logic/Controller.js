@@ -56,7 +56,7 @@ export class Controller{
 		base_loop_l7.task = task_loop5;//向父节点添加执行列表
 
 		var base_loop_circle = new Base('sys','loop'); //设置循环函数
-			base_loop_circle.set_time(3);//设置循环次数
+			base_loop_circle.set_time(10);//设置循环次数
 			var task_loop6 = new Base_task(base_loop_circle) //Base_task 需要指定父节点
 			task_loop6.add(new Base("sys","move_up","move"));
 			task_loop6.add(new Base("sys","move_up","move"));
