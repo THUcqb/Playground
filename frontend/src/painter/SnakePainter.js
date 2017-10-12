@@ -1,4 +1,4 @@
-import createjs from "easeljs";
+import createjs from "masteryodaeaseljs";
 import {N, startPos, delta} from "../Constant";
 import {Snake} from "../logic/Snake";
 
