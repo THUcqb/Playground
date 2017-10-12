@@ -7,9 +7,7 @@ const rl = readline.createInterface({
 	input: process.stdin,
 	output: process.stdout
 });
-// rl.setMaxListeners(0);
 
-// emitter.setMaxListeners(1);
 class test{
 	constructor(class_name,number)
 	{
@@ -35,22 +33,22 @@ class test{
 				   loop +=1;
 				   // rl.close();
 				 	console.log(">"+op);
-				 	if (op == 'w'| op == 'W') 
+				 	if (op === 'w'|| op === 'W') 
 					{
 						let b1 = new Base("sys","move_up","move");
 						b1.run();
 					}
-					if (op == 's'| op == 'S') 
+					if (op === 's'|| op === 'S') 
 					{
 						let b3 = new Base("sys","move_down","move");
 						b3.run();
 					}
-					if (op == 'a'| op == 'A') 
+					if (op === 'a'|| op === 'A') 
 					{
 						let b2 = new Base("sys","move_left","move");
 						b2.run();
 					}
-					if (op == 'd'| op == 'D') 
+					if (op === 'd'|| op === 'D') 
 					{
 						let b4 = new Base("sys","move_right","move");
 						b4.run();

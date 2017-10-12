@@ -19,7 +19,6 @@ class Map {
 		}
 		this.block_list = block_list;
 		this.set_head(x,y);
-		// this.set_empty(x,y)
 	}
 
 	//地图地表物体编辑
