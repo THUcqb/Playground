@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import createjs from 'easeljs';
+import createjs from 'masteryodaeaseljs';
 import GrassPainter from './painter/GrassPainter';
 import SnakePainter from './painter/SnakePainter';
 import Snake from './logic/Snake';
