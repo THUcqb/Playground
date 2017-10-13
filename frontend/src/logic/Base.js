@@ -55,8 +55,12 @@ export class Base {
 
 	Check(str){
 		let s = "";
-		if (str === "move") {
-			return 'null'
+		if (str === "true") {
+			return 'runnable'
+		}
+		else
+		if (str === "false") {
+		return 'null'
 		}
 		else
 		if (str === "check_move_up") {

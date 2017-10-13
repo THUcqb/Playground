@@ -13,7 +13,6 @@ export class Base_state{
 	}
 	next()
 	{
-		console.log("in")
 		if (this.cur.type === "user")
 		{
 
@@ -22,8 +21,6 @@ export class Base_state{
 		else
 			if (this.cur.type === "sys") 
 			{
-				console.log("sys - type :"+this.cur.name)
-				
 				{
 					this.cur = this.cur.next;
 					this.next_move();
@@ -46,15 +43,11 @@ export class Base_state{
 				this.cur.state = "err";
 				this.state = "err";
 			}
-			console.log(">:")
-			console.log(this.cur)
 			this.tr_run();
 			
 	}
 	tr_run()
 	{
-		console.log("> tr_run :" + this.move_state)
-		console.log("> name :" + this.cur.name)
 
 		if (this.cur.name === "trun_right")
 		{
@@ -202,8 +195,6 @@ export class Base_state{
 				else
 				if (this.cur.name === "judge")
 				{
-					console.log(this.tr_check())
-					console.log(this.cur.Check(this.tr_check()))
 					if (this.cur.Check(this.tr_check()) === "runnable") 
 					{
 						this.cur = this.cur.task.tasklist[0];
@@ -216,27 +207,27 @@ export class Base_state{
 					}
 				}
 				else
-					if (this.cur.name === "while_do") 
+				if (this.cur.name === "while_do") 
+				{
+					if (this.cur.Check(this.tr_check()) === "runnable")
 					{
-						if (this.cur.Check(this.tr_check()) === "runnable")
-						{
-							this.cur.time = 1;
-							this.cur = this.cur.task.tasklist[0];
-							this.cur.time = this.cur.cur_time;
-						}
-						else
-						{
-							this.cur.time = 0;
-							this.cur = this.cur.next
-						}
+						this.cur.time = 1;
+						this.cur = this.cur.task.tasklist[0];
+						this.cur.time = this.cur.cur_time;
 					}
 					else
-						if (this.cur.name === "do_while")
-						{
-							this.cur.name = "while_do"
-							this.cur.time = 1;
-							this.cur = this.cur.task.tasklist[0];
-						}
+					{
+						this.cur.time = 0;
+						this.cur = this.cur.next
+					}
+				}
+				else
+					if (this.cur.name === "do_while")
+					{
+						this.cur.name = "while_do"
+						this.cur.time = 1;
+						this.cur = this.cur.task.tasklist[0];
+					}
 				
 			}else 
 			{
