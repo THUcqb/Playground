@@ -22,29 +22,12 @@ export class Base_state{
 		else
 			if (this.cur.type === "sys") 
 			{
-				console.log("sys - type"+this.cur.name)
-				if (this.cur.name === "loop") 
-				{
-					this.next_move();
-				}
-				else
-				if (this.cur.name === "do_while")
-				{
-
-				}
-				else 
-				if (this.cur.name === "while_do") 
-				{
-
-				}
+				console.log("sys - type :"+this.cur.name)
 				
-				else
 				{
 					this.cur = this.cur.next;
 					this.next_move();
 				} 
-				
-					
 			}
 			else
 			if (this.cur.type === "success") 
@@ -188,7 +171,6 @@ export class Base_state{
 
 	tr_check()
 	{
-		console.log("check :>>"+this.cur.check)
 		if (this.cur.check === "move") 
 		{
 			if (this.move_state === "move_up"||this.move_state === "null") {return "check_move_up"}
@@ -206,27 +188,20 @@ export class Base_state{
 		{
 			if (Number(this.cur.time) === 0) 
 			{
-				// console.log("----->")
-				// console.log(this.cur)
 				this.cur = this.cur.next
-
 			}
 			else if (this.cur.time > 0)
 			{
-				// console.log("----->")
-				// console.log(this.cur)
 				this.cur.time -= 1;
 				
 				if (this.cur.name === "loop" || this.cur.type === "user" ) 
 				{
-					// console.log("------------------------list_loop_user")
 					this.cur = this.cur.task.tasklist[0];
 					this.cur.time = this.cur.cur_time;
 				}
 				else
 				if (this.cur.name === "judge")
 				{
-					// console.log("-------------------------list_judge")
 					console.log(this.tr_check())
 					console.log(this.cur.Check(this.tr_check()))
 					if (this.cur.Check(this.tr_check()) === "runnable") 
@@ -240,6 +215,28 @@ export class Base_state{
 						this.cur.time = this.cur.cur_time;	
 					}
 				}
+				else
+					if (this.cur.name === "while_do") 
+					{
+						if (this.cur.Check(this.tr_check()) === "runnable")
+						{
+							this.cur.time = 1;
+							this.cur = this.cur.task.tasklist[0];
+							this.cur.time = this.cur.cur_time;
+						}
+						else
+						{
+							this.cur.time = 0;
+							this.cur = this.cur.next
+						}
+					}
+					else
+						if (this.cur.name === "do_while")
+						{
+							this.cur.name = "while_do"
+							this.cur.time = 1;
+							this.cur = this.cur.task.tasklist[0];
+						}
 				
 			}else 
 			{
