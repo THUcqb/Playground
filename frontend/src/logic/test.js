@@ -1,4 +1,5 @@
-import {Base,Base_state,Base_task} from './Base';
+import {Base,Base_task} from './Base';
+import {Base_state} from "./Base_state";
 import {Controller} from './Controller';
 
 const readline = require('readline');
@@ -83,15 +84,30 @@ console.log('----test-my_function----')
 console.log('-----test-loop---')
 
 // controller.testInit();
+let usertask = new Base_task(controller.begin)//将任务列表指向初始节点
+	let judge = new Base("sys","judge","move");
+		let true_task = new Base_task(judge);
+		true_task.add(new Base("sys","move"));
+		let false_task = new Base_task(judge);
+		false_task.add(new Base("sys","trun_left"));
+		judge.set_task(true_task);
+		judge.set_else(false_task);
+	let loop = new Base("sys","loop");
+		loop.set_time(100);
+		let loop_task = new Base_task(loop);
+		loop_task.add(judge);
+		loop.set_task(loop_task);
 
+usertask.add(loop);//向任务列表添加函数
+		
 
-// Base.bmap.load("level_0.txt");
-var t = new test()
-// t.testcontroller();
+		controller.begin.task=usertask;
+let t = new test()
+t.testcontroller();
 console.log('-----test-check---')
-var usertask = new Base_task(this.begin)//将任务列表指向初始节点
-usertask.add(base_loop_circle_up);//向任务列表添加函数
-this.begin.task=usertask;
+// var usertask = new Base_task(this.begin)//将任务列表指向初始节点
+// usertask.add(base_loop_circle_up);//向任务列表添加函数
+// this.begin.task=usertask;
 // console.log('-----test-while---')
 
 // console.log('-----test-AI---')
