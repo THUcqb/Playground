@@ -12,13 +12,14 @@ class Scene extends Component
         super();
         this.controller = new Controller();
         this.controller.testInit();
+        this.handleResize = this.handleResize.bind(this);
     }
 
     render()
     {
         return (
-            <div>
-                <canvas id="canvas" width="1000" height="700" />
+            <div className="CanvasDiv" ref="CanvasDiv">
+                <canvas id="canvas" ref="canvas" width="600" height="600" />
             </div>
         );
     }
@@ -35,10 +36,28 @@ class Scene extends Component
         }
         data.stage.update();
     }
+    
+    handleResize(event)
+    {
+        let fatherDiv = this.refs.CanvasDiv;
+        let stage = this.refs.canvas;
+        
+        let width = fatherDiv.offsetWidth;
+        let height = fatherDiv.offsetHeight;
+        
+        let minSize = width;
+        if (height < width)
+            minSize = height;
+        stage.style.width = minSize.toString() + 'px';
+        stage.style.height = minSize.toString() + 'px';
+    }
 
     componentDidMount()
     {
+        window.addEventListener("resize", this.handleResize, false);
+        this.handleResize();
         let stage = new createjs.Stage("canvas");
+        
         let grassPainter = new GrassPainter();
         let snakePainter = new SnakePainter();
         stage.addChild(grassPainter);
@@ -51,6 +70,11 @@ class Scene extends Component
         };
         createjs.Ticker.on("tick", this.tick, null, false, data);
         createjs.Ticker.setFPS(4);
+    }
+    
+    componentWillUnmount()
+    {
+        window.removeEventListener("resize", this.handleResize);
     }
 }
 
