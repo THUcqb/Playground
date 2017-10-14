@@ -1,7 +1,18 @@
+html
+{
+    height: 100%;
+}
+
+body
+{
+    height: 100%;
+}
+
 .App
 {
     text-align: center;
     font-family: 'Roboto', sans-serif;
+    height: 100%
 }
 
 .GamepadArea
@@ -16,10 +27,17 @@
 {
     float: left;
     width: 50%;
-
     height: 90vh;
     background-color: rgb(191, 147, 196);
 }
+
+.CanvasDiv
+{
+    width: 100%;
+    height: 100%;
+}
+
+
 
 /*
 .App-logo
