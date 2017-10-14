@@ -1,35 +1,63 @@
-# 鐢ㄦ埛鐧诲綍
+#用户注册
 
-### POST
-`^login/$`
+##URL
+users/register
 
-闇�瑕佸弬鏁帮細
+##Method
+POST
+
+##parameter
 username
 password
-
-### Response
-HttpResponse('login in')
-
-# 鐢ㄦ埛鐧诲嚭
-
-### POST
-`^logout/$`
-
-### Response
-
-HttpResponse('logout out')
-
-# 鐢ㄦ埛娉ㄥ唽
-
-### POST
-`^register/$`
-
-闇�瑕佸弬鏁帮細
-username
-password
-email
 phonenumber
+email
 
-### Response
+##Response
+注册成功，返回json格式{'status' : 'successful'}
+注册失败，返回json格式{'status' : 'failed'}
 
-HttpResponse('register success')
+#用户登录
+
+##URL
+users/login
+
+##Method
+POST
+
+##parameter
+username
+password
+
+##Response
+登录成功，返回json格式{'toeken' : token}
+登录失败，返回json格式{'status' : 'failed'}
+
+#请求用户信息
+
+##URL
+users/getinfo
+
+##Method
+POST
+
+##parameter
+token
+
+##Response
+用户信息：username phonenumber email
+
+格式：json
+
+#后台管理
+
+#URL
+/admin
+
+#superuser
+
+username:admin
+
+password:waitlove
+
+email:admin@admin.com
+
