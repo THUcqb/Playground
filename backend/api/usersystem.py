@@ -16,7 +16,7 @@ def register(request):
 	#if request.method == 'GET':
 	#	return render_to_response('register.html')
 	if request.method == 'POST':
-		d = json.loads(request.body)
+		d = json.loads(request.body.decode('utf-8'))
 		response_data = {}
 		username = d['username']
 		password = d['password']
@@ -39,7 +39,7 @@ def login(request):
 	#if request.method == 'GET':
 	#	return render_to_response('login.html')
 	if request.method == 'POST':
-		d = json.loads(request.body)
+		d = json.loads(request.body.decode('utf-8'))
 		response_data = {}
 		try:
 			userinfo = UserInfo.objects.get(username = d['username'])
@@ -55,6 +55,7 @@ def login(request):
 				payload_str = json.dumps(payload_dict)
 				payload = base64.b64encode(payload_str.encode(encoding = "utf-8"))
 				response_data["token"] = payload.decode()
+				response_data["status"] = "successful"
 				return HttpResponse(json.dumps(response_data),content_type="application/json")
 		except UserInfo.DoesNotExist:
 			pass
@@ -72,10 +73,11 @@ def logout(request):
 @csrf_exempt
 def getuserinfo(request):
 	if request.method == 'POST':
-		d = json.loads(request.body)
+		d = json.loads(request.body.decode('utf-8'))
 		token_byte = d['token']
-		token_info = base64.b64decode(token_byte.encode(encoding = "utf-8"))
-		token = token_info.decode()
+		token_str = token_byte.encode(encoding = "utf-8")
+		token_info = base64.b64decode(token_str)
+		token = token_info.decode('utf-8','ignore')
 		user_info = json.loads(token)
 		username = user_info['username']
 		response_data = {}
@@ -89,6 +91,7 @@ def getuserinfo(request):
 			response_data['username'] = userinfo.username
 			response_data['phonenumber'] = userinfo.phonenumber
 			response_data['email'] = userinfo.email
+			response_data['status'] = 'successful'
 			return HttpResponse(json.dumps(response_data),content_type="application/json")
 		except UserInfo.DoesNotExist:
 			pass
