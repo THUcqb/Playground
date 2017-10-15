@@ -54,6 +54,11 @@ class UsersystemTest(TestCase):
         res_2 = self.client.post(login_url, json_data_2, content_type = 'application/json')
         text_2 = json.loads(res_2.content.decode('utf-8'))
         self.assertEqual(text_2['status'], 'failed')
+        data_3 = {'username':'DoesNotExist', 'password':'do-not-exist'}
+        json_data_3 = json.dumps(data_3)
+        res_3 = self.client.post(login_url, json_data_3, content_type = 'application/json')
+        text_3 = json.loads(res_3.content.decode('utf-8'))
+        self.assertEqual(text_3['status'], 'failed')
     
     def test_logout(self):
         logout_url = '/users/logout'
@@ -79,3 +84,8 @@ class UsersystemTest(TestCase):
         get_res_2 = self.client.post(get_url, get_json_data_2, content_type = 'application/json')
         get_text_2 = json.loads(get_res_2.content.decode('utf-8'))
         self.assertEqual(get_text_2['status'], 'failed')
+        get_data_3 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwMTk4NjYwOC40ODQsICJ1c2VybmFtZSI6ICJoZWppZSIsICJleHAiOiAxNTAxOTg2NjEwLjQ4NH0='}
+        get_json_data_3 = json.dumps(get_data_3)
+        get_res_3 = self.client.post(get_url, get_json_data_3, content_type = 'application/json')
+        get_text_3 = json.loads(get_res_3.content.decode('utf-8'))
+        self.assertEqual(get_text_3['status'], 'failed')
