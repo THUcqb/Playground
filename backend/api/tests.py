@@ -5,7 +5,6 @@ from django.test import TestCase
 import unittest
 from api.models import UserInfo
 from django.test import Client
-import requests
 import json
 
 # Create your tests here.
