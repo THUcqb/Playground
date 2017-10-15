@@ -6,18 +6,29 @@ import { login } from '../utils/Auth'
 class SignButton extends React.Component {
   state = {
     open: false,
-  }
+    textStatus: {
+      disabled: false,
+      usernameError: false,
+      passwordError: false,
+    }
+  };
 
-  handleClickOpen = () => this.setState({open: true})
+  handleClickOpen = () => this.setState({open: true});
 
-  handleRequestClose = () => this.setState({open: false})
+  handleRequestClose = () => this.setState({open: false});
 
-  handleRequestSignIn() {
-    login('test', 'test');
+  handleRequestSignIn(username, password) {
+    this.setState({textStatus: {disabled: true}});
+    login(username, password).then(responseData => {
+      if (responseData.status === 'successful')
+        this.setState({open: false});
+      if (responseData.status === 'failed')
+        this.setState({textStatus: {disabled: false, usernameError: true, passwordError: true}});
+    });
   }
 
   handleRequestSignUp() {
-    alert('sign in');
+    alert('sign up');
   }
 
   render() {
@@ -26,9 +37,10 @@ class SignButton extends React.Component {
         <Button raised color="primary" onClick={this.handleClickOpen}>Sign in</Button>
         <SignDialog
           open={this.state.open}
+          textStatus={this.state.textStatus}
           onRequestClose={this.handleRequestClose}
-          onRequestSignIn={this.handleRequestSignIn}
-          onRequestSignUp={this.handleRequestSignUp}
+          onRequestSignIn={this.handleRequestSignIn.bind(this)}
+          onRequestSignUp={this.handleRequestSignUp.bind(this)}
         />
       </div>
     )

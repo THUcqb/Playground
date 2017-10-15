@@ -18,6 +18,23 @@ const styles = theme => ({
 });
 
 class SignDialog extends React.Component {
+  state = {
+    username: '',
+    password: '',
+  };
+
+  handleChange = name => event => {
+    this.setState({
+      [name]: event.target.value,
+    });
+  };
+
+  handleEnterKeyPress = (ev) => {
+    if (ev.key === 'Enter') {
+      this.props.onRequestSignIn(this.state.username, this.state.password)
+      ev.preventDefault();
+    }
+  }
 
   render() {
     const { classes } = this.props;
@@ -33,20 +50,32 @@ class SignDialog extends React.Component {
             Please type in your username and password.
           </DialogContentText>
           <form className={classes.container} autoComplete="off">
-            <TextField
+            <TextField className={classes.username}
+              ref="usernameField"
               id="username"
               label="Username"
               margin="dense"
               fullWidth
               autoFocus
+              value={this.state.username}
+              onChange={this.handleChange('username')}
+              disabled={this.props.textStatus.disabled}
+              error={this.props.textStatus.usernameError}
+              onKeyPress={this.handleEnterKeyPress}
             />
-            <TextField
+            <TextField className={classes.password}
+              ref="passwordField"
               id="password"
               label="Password"
               margin="dense"
               fullWidth
               type="password"
               autoComplete="current-password"
+              value={this.state.password}
+              onChange={this.handleChange('password')}
+              disabled={this.props.textStatus.disabled}
+              error={this.props.textStatus.passwordError}
+              onKeyPress={this.handleEnterKeyPress}
             />
         </form>
         </DialogContent>
@@ -54,10 +83,7 @@ class SignDialog extends React.Component {
           <Button raised onClick={this.props.onRequestSignUp} color="primary">
             Sign up
           </Button>
-          <Button onClick={this.props.onRequestClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={this.props.onRequestSignIn} color="primary">
+          <Button onClick={() => this.props.onRequestSignIn(this.state.username, this.state.password)} color="primary">
             Sign in
           </Button>
         </DialogActions>

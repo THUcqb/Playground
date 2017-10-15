@@ -29,7 +29,7 @@ def register(request):
 			userinfo = UserInfo.objects.create(username = username, password = password, phonenumber = phonenumber, email = email)
 			response_data["status"] = "successful"
 			return HttpResponse(json.dumps(response_data),content_type="application/json")
-		
+
 		response_data["status"] = "failed"
 		return HttpResponse(json.dumps(response_data),content_type="application/json")
 
@@ -59,7 +59,6 @@ def login(request):
 				return HttpResponse(json.dumps(response_data),content_type="application/json")
 		except UserInfo.DoesNotExist:
 			pass
-		
 		response_data["status"] = "failed"
 		return HttpResponse(json.dumps(response_data),content_type="application/json")
 
@@ -95,6 +94,6 @@ def getuserinfo(request):
 			return HttpResponse(json.dumps(response_data),content_type="application/json")
 		except UserInfo.DoesNotExist:
 			pass
-		
+
 		response_data["status"] = "failed"
 		return HttpResponse(json.dumps(response_data),content_type="application/json")
