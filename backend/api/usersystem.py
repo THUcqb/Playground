@@ -34,7 +34,7 @@ def login(request):
 		return render_to_response('login.html')
 	if request.method == 'POST':
 		try:
-			post = json.loads(request.body)
+			post = json.loads(request.body.decode())
 			userinfo = UserInfo.objects.get(username = post['username'])
 			if userinfo.password == post['password']:
 				request.session['userid'] = userinfo.id

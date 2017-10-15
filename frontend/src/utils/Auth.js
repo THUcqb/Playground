@@ -13,11 +13,11 @@ export function login(username, password) {
   return axios
     .post(URL + LOGIN, {
       username,
-      password
+      password,
     })
     .then(function (response) {
-      alert(response.data.status)
-      // store.dispatch(setToken(response.data.token));
+      store.dispatch(setToken(response.data.token));
+      return response.data;
     })
     .catch(function (error) {
       // raise different exception if due to invalid credentials
