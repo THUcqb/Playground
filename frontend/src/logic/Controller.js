@@ -114,7 +114,6 @@ export class Controller{
 	next()
 	{
 		Base.run_state.next();
-		// console.log(Base.run_state.cur)
 		return Base.run_state.state; // 返回String: runnable, success, fail, err; 
 	}
 	check_now_state()

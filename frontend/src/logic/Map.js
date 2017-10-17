@@ -12,7 +12,7 @@ class Map {
 	testinit(x,y) {
 		let block_list = [];
 		for (let i = 0; i < this.SIZE_X; i++) {
-			block_list[i] = new Array(Block);
+			block_list[i] = [];
 			for (let n = 0; n < this.SIZE_Y; n++) {
 				block_list[i][n] = new Block(i,n);
 			}
@@ -50,15 +50,27 @@ class Map {
 	}
 
 	//保存编辑的地图
-	save(filename)
-	{
 
+	save() // 不知道API
+	{
+		var fetchUrl = require("fetch").fetchUrl;
+		fetchUrl("host/level/save/", function(error, meta, body){
+			console.log(body.toString());
+		});
+	}
+
+	static get() // 不知道API+1
+	{
+		var fetchUrl = require("fetch").fetchUrl;
+		fetchUrl("host/level/get/", function(error, meta, body){
+			console.log(body.toString());
+		});
 	}
 	//读取地图
 	load(filename)
 	{
 	
-		// let str ="1000000000"
+		// let str ="1000000000"{"level":level,"map":str}
 		// 		+"0002000100"
 		// 		+"1000001102"
 		// 		+"1020000211"
@@ -90,12 +102,12 @@ class Map {
 	print()
 	{
 		let a = this.Ddata();
-        console.log(this.SIZE_X + " " + this.SIZE_Y);
+		console.log(this.SIZE_X + " " + this.SIZE_Y);
 		let str = "";
 		for (let i = 0; i < this.SIZE_X; i++) {
 			for (let n = 0; n < this.SIZE_Y; n++) {
 				let test = (a[i][n]);
-                let out = "";
+				let out = "";
 				if (test === 2) {out = "@";}
 				else
 				if (test === 3) {out = "X";}
@@ -150,3 +162,7 @@ class Map {
 }
 
 export default Map;
+
+// Map.save();
+
+
