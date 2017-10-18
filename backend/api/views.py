@@ -8,5 +8,5 @@ from .models import UserInfo
 from .serializers import UserSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
-	queryset = UserInfo.objects.all()
-	serializer_class = UserSerializer
+    queryset = UserInfo.objects.all()
+    serializer_class = UserSerializer
