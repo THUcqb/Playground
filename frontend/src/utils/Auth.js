@@ -16,7 +16,7 @@ export function login(username, password) {
       password,
     })
     .then(function (response) {
-      if (response.data.status == 'successful')
+      if (response.data.status === 'successful')
         store.dispatch(setToken(response.data.token));
       return response.data;
     })
