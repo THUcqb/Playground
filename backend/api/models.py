@@ -6,6 +6,7 @@ from django.db import models
 # Create your models here.
 
 class UserInfo(models.Model):
+    '''Store users' information.'''
     username = models.CharField(max_length = 50, default = '')
     password = models.CharField(max_length = 50, default = '')
     phonenumber = models.CharField(max_length = 11, default = '')
@@ -15,6 +16,7 @@ class UserInfo(models.Model):
         return self.username
 
 class ImmanentMaps(models.Model):
+    '''Store the common maps.'''
     level = models.CharField(max_length = 3, default = '')
     immanentmap = models.CharField(max_length = 200, default = '')
     

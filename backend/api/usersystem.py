@@ -12,6 +12,7 @@ import time
 
 @csrf_exempt
 def register(request):
+    '''Handle request of users' registration.'''
     res = {}
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
@@ -33,6 +34,7 @@ def register(request):
 
 @csrf_exempt
 def login(request):
+    '''Handle request of users' login.'''
     res = {}
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
@@ -60,6 +62,7 @@ def login(request):
 
 @csrf_exempt
 def logout(request):
+    '''Handle request of users' logout.'''
     if request.method == 'POST':
         response_data = {}
         response_data["status"] = "successful"
@@ -67,6 +70,7 @@ def logout(request):
 
 @csrf_exempt
 def getuserinfo(request):
+    '''Handle request of getting a user's information after login.'''
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
         token_byte = d['token']
