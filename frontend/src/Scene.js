@@ -5,6 +5,9 @@ import SnakePainter from './painter/SnakePainter';
 import { Controller } from './logic/Controller';
 import { Base } from './logic/Base';
 
+/**
+ * The app's scene part
+ */
 class Scene extends Component
 {
     constructor()
@@ -16,6 +19,11 @@ class Scene extends Component
         this.handleResize = this.handleResize.bind(this);
     }
 
+    /**
+     * Render function
+     * @returns {XML} consists of a canvas which
+     * draws the game interface
+     */
     render()
     {
         return (
@@ -25,7 +33,12 @@ class Scene extends Component
         );
     }
 
-    tick(event, data)
+    /**
+     * Tick function
+     * @param event
+     * @param data consist of essential information
+     */
+    static tick(event, data)
     {
         let status = data.controller.current_state();
         console.log(status);
@@ -37,7 +50,11 @@ class Scene extends Component
         }
         data.stage.update();
     }
-    
+
+    /**
+     * Handle resizing event
+     * @param event
+     */
     handleResize(event)
     {
         let fatherDiv = this.refs.CanvasDiv;
@@ -53,6 +70,9 @@ class Scene extends Component
         stage.style.height = minSize.toString() + 'px';
     }
 
+    /**
+     * This function executes when the component mounts
+     */
     componentDidMount()
     {
         window.addEventListener("resize", this.handleResize, false);
@@ -69,10 +89,13 @@ class Scene extends Component
             stage: stage,
             controller: this.controller,
         };
-        createjs.Ticker.on("tick", this.tick, null, false, data);
+        createjs.Ticker.on("tick", Scene.tick, null, false, data);
         createjs.Ticker.framerate = 24;
     }
-    
+
+    /**
+     * This function executes when the component is going to unmount
+     */
     componentWillUnmount()
     {
         window.removeEventListener("resize", this.handleResize);

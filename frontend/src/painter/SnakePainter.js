@@ -1,7 +1,9 @@
 import createjs from "masteryodaeaseljs";
-import {N, startPos, delta} from "../Constant";
-import {Snake} from "../logic/Snake";
+import { startPos, delta } from "../Constant";
 
+/**
+ * The class in charge of painting the snake
+ */
 class SnakePainter extends createjs.Shape
 {
     constructor()
@@ -11,6 +13,10 @@ class SnakePainter extends createjs.Shape
         this.snake = null;
     }
 
+    /**
+     * Update the snake's position and redraw
+     * @param snake
+     */
     update(snake)
     {
         this.graphics.clear();
