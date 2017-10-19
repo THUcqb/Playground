@@ -302,7 +302,7 @@ const toolbox = (
 );
 
 /**
- * The Gamepad field consists of a action bar and the blocklyDiv.
+ * The gamepad field consists of a action bar and the blocklyDiv.
  */
 class Gamepad extends Component
 {

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
-import classNames from 'classnames';
 import Drawer from 'material-ui/Drawer';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
@@ -13,22 +12,11 @@ import MenuIcon from 'material-ui-icons/Menu';
 import HomeIcon from 'material-ui-icons/Home'
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import ChevronRightIcon from 'material-ui-icons/ChevronRight';
-import Operation from '../Gamepad/Gamepad';
-import Scene from '../Scene';
 
 const styles = theme => ({
-  root: {
-    width: '100%',
-    zIndex: 1,
-  },
-  appFrame: {
-    position: 'relative',
-    display: 'flex',
-    width: '100%',
-    height: '100%',
-  },
   appBar: {
     position: 'absolute',
+    textAlign: 'center',
   },
   flex: {
     flex: 1,
@@ -43,14 +31,6 @@ const styles = theme => ({
     display: 'flex',
     alignItems: 'center',
     padding: '0 8px',
-    ...theme.mixins.toolbar,
-  },
-  content: {
-    width: '100%',
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
-    height: 'calc(100% - 56px)',
-    marginTop: 56,
   },
 });
 
@@ -114,20 +94,10 @@ class Navigation extends React.Component {
     );
 
     return (
-      <div className={classes.root}>
-        <div className={classes.appFrame}>
+        <div>
           {appbar}
           {drawer}
-          <main className={classNames(classes.content, this.state.open && classes.contentShift)}>
-            <div className='SceneArea'>
-              <Scene className="Scene"/>
-            </div>
-            <div className='GamepadArea' >
-              <Operation className="Operation"/>
-            </div>
-          </main>
         </div>
-      </div>
     );
   }
 }
