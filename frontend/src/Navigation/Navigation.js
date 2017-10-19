@@ -13,7 +13,7 @@ import MenuIcon from 'material-ui-icons/Menu';
 import HomeIcon from 'material-ui-icons/Home'
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import ChevronRightIcon from 'material-ui-icons/ChevronRight';
-import Operation from '../Operation';
+import Operation from '../Gamepad/Gamepad';
 import Scene from '../Scene';
 
 const styles = theme => ({

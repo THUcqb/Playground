@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import GameActions from './GameActions';
 
 const Blockly = window.Blockly;
 const listVariable = window.listVariable;
@@ -313,16 +314,43 @@ const toolbox = (
 
 class Operation extends Component
 {
+    constructor(props)
+    {
+        super(props);
+        this.resetWorkspace.bind(this);
+        this.submitWorkspace.bind(this);
+        this.viewWorkspaceCode.bind(this);
+    }
     componentDidMount()
     {
-        Blockly.inject('blocklyDiv', {toolbox: document.getElementById('toolbox')});
+        this.workspace = Blockly.inject('blocklyDiv', {toolbox: document.getElementById('toolbox')});
+    }
+
+    resetWorkspace()
+    {
+    }
+
+    submitWorkspace()
+    {
+
+    }
+
+    viewWorkspaceCode()
+    {
+        let code = Blockly.JavaScript.workspaceToCode(this.workspace);
+
+        alert(code);
     }
 
     render()
     {
         return(
             <div className="Operation">
-            <h1>Operations</h1>
+                <GameActions
+                    reset={this.resetWorkspace}
+                    submit={this.submitWorkspace}
+                    view={this.viewWorkspaceCode}
+                />
                 <div id="blocklyDiv" style={{height: "70vh", width: "100%"}}/>
                 {toolbox}
             </div>
