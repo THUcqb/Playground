@@ -49,5 +49,6 @@ export class Controller{
 	{
 		return Base.run_state.state; 
 	}
-
 }
+
+Controller.controller = new Controller();

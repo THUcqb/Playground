@@ -34,7 +34,7 @@ class SignDialog extends React.Component {
       this.props.onRequestSignIn(this.state.username, this.state.password)
       ev.preventDefault();
     }
-  }
+  };
 
   render() {
     const { classes } = this.props;

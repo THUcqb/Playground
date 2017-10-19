@@ -21,6 +21,7 @@ body
     width: 50%;
     height: 93vh;
     background-color: rgb(249, 174, 85);
+    padding-top: 6px;
 }
 
 .SceneArea
