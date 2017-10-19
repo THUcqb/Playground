@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import createjs from 'masteryodaeaseljs';
 import GrassPainter from './painter/GrassPainter';
 import SnakePainter from './painter/SnakePainter';
-import Snake from './logic/Snake';
 import { Controller } from './logic/Controller';
 
 class Scene extends Component
@@ -10,7 +9,8 @@ class Scene extends Component
     constructor()
     {
         super();
-        this.controller = new Controller();
+        this.controller = Controller.controller;
+
         this.controller.testInit();
         this.handleResize = this.handleResize.bind(this);
     }

@@ -312,7 +312,10 @@ const toolbox = (
     </xml>
 );
 
-class Operation extends Component
+/**
+ * The Gamepad field consists of a action bar and the blocklyDiv.
+ */
+class Gamepad extends Component
 {
     constructor(props)
     {
@@ -326,19 +329,30 @@ class Operation extends Component
         this.workspace = Blockly.inject('blocklyDiv', {toolbox: document.getElementById('toolbox')});
     }
 
+    /**
+     * Clear the coding workspace.
+     */
     resetWorkspace()
     {
+    //    TODO: clear the workspace.
     }
 
+    /**
+     * Submit and run the code.
+     */
     submitWorkspace()
     {
-
+    //    TODO: generate run the snake.
     }
 
+    /**
+     * View the code in specific language.
+     */
     viewWorkspaceCode()
     {
         let code = Blockly.JavaScript.workspaceToCode(this.workspace);
 
+    //  TODO: show the code properly.
         alert(code);
     }
 
@@ -358,4 +372,4 @@ class Operation extends Component
     }
 }
 
-export default Operation;
+export default Gamepad;

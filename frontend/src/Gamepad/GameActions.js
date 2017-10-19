@@ -26,6 +26,10 @@ class GameActions extends Component {
         this.props.view();
     };
 
+    /**
+     * Handle the language selection menu open request
+     * @param {Event} ev
+     */
     handleLanguageSelectionOpen(ev)
     {
         this.setState({
@@ -34,6 +38,9 @@ class GameActions extends Component {
         });
     }
 
+    /**
+     * Handle the language selection menu close request
+     */
     handleLanguageSelectionClose()
     {
         this.setState({languageSelectionOpen: false});
