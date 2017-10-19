@@ -1,5 +1,13 @@
 import {Block} from './Block';
 
+class MapInfo{
+	constructor(level,maps)
+	{
+		this.level = level;
+		this.maps = maps;
+	}
+}
+
 class Map {
 	constructor(SIZE_X, SIZE_Y) {
 		this.SIZE_X = SIZE_X;
@@ -12,14 +20,13 @@ class Map {
 	testinit(x,y) {
 		let block_list = [];
 		for (let i = 0; i < this.SIZE_X; i++) {
-			block_list[i] = new Array(Block);
+			block_list[i] = [];
 			for (let n = 0; n < this.SIZE_Y; n++) {
 				block_list[i][n] = new Block(i,n);
 			}
 		}
 		this.block_list = block_list;
 		this.set_head(x,y);
-		// this.set_empty(x,y)
 	}
 
 	//地图地表物体编辑
@@ -51,15 +58,41 @@ class Map {
 	}
 
 	//保存编辑的地图
-	save(filename)
-	{
 
+	save() // 不知道API
+	{
+		let mi = new MapInfo('1','1111000000100002000010010000211000020001000000000110200000000000000200020010000000002001010000000021');
+		let acm = JSON.stringify(mi);
+		var fetchUrl = require("fetch").fetchUrl
+		fetchUrl("http://127.0.0.1:8000/save",{
+		    method:"post",
+		    headers:{
+		        "Content-type":"application:/x-www-form-urlencoded:charset=UTF-8"
+		    },
+		    body:"save="+acm
+		},(function(data){
+		    console.log("请求成功，JSON解析后的响应数据为:",data);
+		}))
+	}
+
+	get() // 不知道API+1
+	{
+		var fetchUrl = require("fetch").fetchUrl
+		fetchUrl("http://127.0.0.1:8000/get",{
+		    method:"post",
+		    headers:{
+		        "Content-type":"application:/x-www-form-urlencoded:charset=UTF-8"
+		    },
+		    body:"get=MapInfo&MapID='1'"
+		},(function(data){
+		    console.log("请求成功，JSON解析后的响应数据为:",data);
+		}))
 	}
 	//读取地图
 	load(filename)
 	{
 	
-		// let str ="1000000000"
+		// let str ="1000000000"{"level":level,"map":str}
 		// 		+"0002000100"
 		// 		+"1000001102"
 		// 		+"1020000211"
@@ -87,16 +120,23 @@ class Map {
 		}
 		// console.log(str);
 	}
+
+	static show_info()
+	{
+		let mi = new MapInfo('1','1111000000100002000010010000211000020001000000000110200000000000000200020010000000002001010000000021');
+		let a = JSON.stringify(mi); 
+		console.log(a);
+	}
 	//控制台输出地图信息
 	print()
 	{
 		let a = this.Ddata();
-        console.log(this.SIZE_X + " " + this.SIZE_Y);
+		console.log(this.SIZE_X + " " + this.SIZE_Y);
 		let str = "";
 		for (let i = 0; i < this.SIZE_X; i++) {
 			for (let n = 0; n < this.SIZE_Y; n++) {
 				let test = (a[i][n]);
-                let out = "";
+				let out = "";
 				if (test === 2) {out = "@";}
 				else
 				if (test === 3) {out = "X";}
@@ -151,3 +191,7 @@ class Map {
 }
 
 export default Map;
+
+// Map.show_info();
+
+
