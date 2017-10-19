@@ -1,5 +1,13 @@
 import {Block} from './Block';
 
+class MapInfo{
+	constructor(level,maps)
+	{
+		this.level = level;
+		this.maps = maps;
+	}
+}
+
 class Map {
 	constructor(SIZE_X, SIZE_Y) {
 		this.SIZE_X = SIZE_X;
@@ -53,18 +61,32 @@ class Map {
 
 	save() // 不知道API
 	{
-		var fetchUrl = require("fetch").fetchUrl;
-		fetchUrl("host/level/save/", function(error, meta, body){
-			console.log(body.toString());
-		});
+		let mi = new MapInfo('1','1111000000100002000010010000211000020001000000000110200000000000000200020010000000002001010000000021');
+		let acm = JSON.stringify(mi);
+		var fetchUrl = require("fetch").fetchUrl
+		fetchUrl("http://127.0.0.1:8000/save",{
+		    method:"post",
+		    headers:{
+		        "Content-type":"application:/x-www-form-urlencoded:charset=UTF-8"
+		    },
+		    body:"save="+acm
+		},(function(data){
+		    console.log("请求成功，JSON解析后的响应数据为:",data);
+		}))
 	}
 
-	static get() // 不知道API+1
+	get() // 不知道API+1
 	{
-		var fetchUrl = require("fetch").fetchUrl;
-		fetchUrl("host/level/get/", function(error, meta, body){
-			console.log(body.toString());
-		});
+		var fetchUrl = require("fetch").fetchUrl
+		fetchUrl("http://127.0.0.1:8000/get",{
+		    method:"post",
+		    headers:{
+		        "Content-type":"application:/x-www-form-urlencoded:charset=UTF-8"
+		    },
+		    body:"get=MapInfo&MapID='1'"
+		},(function(data){
+		    console.log("请求成功，JSON解析后的响应数据为:",data);
+		}))
 	}
 	//读取地图
 	load(filename)
@@ -97,6 +119,13 @@ class Map {
 			}
 		}
 		// console.log(str);
+	}
+
+	static show_info()
+	{
+		let mi = new MapInfo('1','1111000000100002000010010000211000020001000000000110200000000000000200020010000000002001010000000021');
+		let a = JSON.stringify(mi); 
+		console.log(a);
 	}
 	//控制台输出地图信息
 	print()
@@ -163,6 +192,6 @@ class Map {
 
 export default Map;
 
-// Map.save();
+// Map.show_info();
 
 

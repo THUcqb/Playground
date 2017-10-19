@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.16.2",
+    "dns": "^0.2.2",
     "fetch": "^1.1.0",
     "masteryodaeaseljs": "^1.0.2",
     "material-ui": "^1.0.0-beta.16",
