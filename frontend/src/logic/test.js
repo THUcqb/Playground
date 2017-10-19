@@ -114,6 +114,7 @@ class test{
 		controller.begin.task=usertask;
 		this.testcontroller()
 	}
+
 }
 
 var controller = new Controller();
@@ -122,7 +123,6 @@ console.log('----test-basic_move----')
 /*
 *地图编辑的接口见Map.js Controller
 */
-
 console.log('----test-my_function----')
 
 console.log('-----test-loop---')

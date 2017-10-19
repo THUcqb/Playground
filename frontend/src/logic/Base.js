@@ -109,7 +109,8 @@ export class Base {
 		try{
 			do{
 				for (let variable in this.task.tasklist){ 
-					this.task.tasklist[variable].run()
+					if (this.task.tasklist.hasOwnProperty(variable))
+						this.task.tasklist[variable].run()
 				}
 			}
 			while (Base.Check(check) === "runnable")
@@ -123,7 +124,8 @@ export class Base {
 		try{
 			while (Base.Check(check)){
 				for (let variable in this.task.tasklist){ 
-					this.task.tasklist[variable].run()
+					if (this.task.tasklist.hasOwnProperty(variable))
+						this.task.tasklist[variable].run()
 				}
 			}
 		
@@ -136,7 +138,9 @@ export class Base {
 	loop(){
 		for (let i = 0; i < this.time; i++){
 			for (let variable in this.task.tasklist){ 
-				this.task.tasklist[variable].run()
+
+				if (this.task.tasklist.hasOwnProperty(variable))
+					this.task.tasklist[variable].run()
 			}
 		}
 	}
@@ -231,12 +235,14 @@ export class Base {
 		if (this.name === "judge") {
 			if (Base.Check(this.check) === "runnable") {
 				for (let variable in this.task.tasklist){ 
+					if (this.task.tasklist.hasOwnProperty(variable))
 					this.task.tasklist[variable].run()
 				}
 			}
 			else{
 				for (let variable in this.else_task.tasklist){ 
-					this.else_task.tasklist[variable].run()
+					if (this.task.tasklist.hasOwnProperty(variable))
+					this.task.tasklist[variable].run()
 				}
 			}
 		}  
