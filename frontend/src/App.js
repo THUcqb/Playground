@@ -22,10 +22,12 @@ const styles = theme => ({
     },
 });
 
+/**
+ * The app which consists of a AppBar(top), a Scene(left) and a Gamepad(right).
+ */
 class App extends Component
 {
-    render()
-    {
+    render() {
         const { classes } = this.props;
 
         return (

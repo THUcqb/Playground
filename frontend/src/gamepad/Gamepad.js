@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import GameActions from './GameActions';
 import Blockly from 'node-blockly/browser';
 
+/**
+ * The react toolbox.
+ * @type {XML} - the toolbox in xml format.
+ */
 const toolbox = (
     <xml id="toolbox" style={{display: "none"}}>
         <category name="Logic" colour="%{BKY_LOGIC_HUE}">
@@ -302,52 +306,45 @@ const toolbox = (
 );
 
 /**
- * The gamepad field consists of a action bar and the blocklyDiv.
+ * The gamepad field which consists of a action bar and the blocklyDiv.
  */
-class Gamepad extends Component
-{
-    constructor(props)
-    {
+class Gamepad extends Component {
+    constructor(props) {
         super(props);
         this.resetWorkspace.bind(this);
         this.submitWorkspace.bind(this);
         this.viewWorkspaceCode.bind(this);
     }
-    componentDidMount()
-    {
+    componentDidMount() {
         this.workspace = Blockly.inject('blocklyDiv', {toolbox: document.getElementById('toolbox')});
     }
 
     /**
      * Clear the coding workspace.
      */
-    resetWorkspace()
-    {
+    resetWorkspace() {
     //    TODO: clear the workspace.
     }
 
     /**
      * Submit and run the code.
      */
-    submitWorkspace()
-    {
+    submitWorkspace() {
     //    TODO: generate run the snake.
     }
 
     /**
      * View the code in specific language.
      */
-    viewWorkspaceCode()
-    {
+    viewWorkspaceCode() {
         let code = Blockly.JavaScript.workspaceToCode(this.workspace);
 
     //  TODO: show the code properly.
         alert(code);
     }
 
-    render()
-    {
-        return(
+    render() {
+        return (
             <div className="Operation">
                 <GameActions
                     reset={this.resetWorkspace}

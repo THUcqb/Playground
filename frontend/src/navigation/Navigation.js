@@ -34,19 +34,36 @@ const styles = theme => ({
   },
 });
 
+/**
+ * The app's navigation bar.
+ */
 class Navigation extends React.Component {
-  state = {
-    open: false,
-  };
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: false,
+        }
+    }
 
-  handleDrawerOpen = () => {
-    this.setState({ open: true });
-  };
+    /**
+     * Change the drawer state to open.
+     */
+    handleDrawerOpen = () => {
+        this.setState({ open: true });
+    };
 
-  handleDrawerClose = () => {
-    this.setState({ open: false });
-  };
+    /**
+     * Change the drawer state to closed.
+     */
+    handleDrawerClose = () => {
+        this.setState({ open: false });
+    };
 
+    /**
+     * Render function
+     * @returns {XML} Navigation - consists of a AppBar which have
+     * a title and a button, and a Drawer.
+     */
   render() {
     const { classes, theme } = this.props;
 

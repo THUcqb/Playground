@@ -35,20 +35,20 @@ class GrassPainter extends createjs.Shape
 
     paintGround(screen_x, screen_y)
     {
-        this.graphics.beginFill("#9ACD32");
+        this.graphics.beginFill("#8BC34A");
         this.graphics.drawRect(screen_x, screen_y, delta, delta);
     }
 
     paintWall(screen_x, screen_y)
     {
-        this.graphics.beginFill("#8B0000");
+        this.graphics.beginFill("#5D4037");
         this.graphics.drawRect(screen_x, screen_y, delta, delta);
     }
 
     paintCoin(screen_x, screen_y)
     {
         this.paintGround(screen_x, screen_y);
-        this.graphics.beginFill("#F6B840");
+        this.graphics.beginFill("#FFC107");
         this.graphics.drawCircle(screen_x + delta / 2, screen_y + delta / 2, delta / 4);
     }
 }

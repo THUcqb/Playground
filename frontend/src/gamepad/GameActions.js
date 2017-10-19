@@ -2,7 +2,18 @@ import React, { Component } from 'react';
 import Button from 'material-ui/Button';
 import Toolbar from 'material-ui/Toolbar';
 import Menu, { MenuItem } from 'material-ui/Menu';
+import { withStyles } from 'material-ui/styles';
 
+const styles = ({
+    button: {
+        flex: 1,
+        margin: 10,
+    }
+});
+
+/**
+ * The user actions above the blockly div.
+ */
 class GameActions extends Component {
     constructor(props) {
         super(props);
@@ -46,9 +57,11 @@ class GameActions extends Component {
     }
 
     render() {
+        const { classes } = this.props;
+
         return (
             <Toolbar color="primary">
-                <Button raised
+                <Button raised className={classes.button}
                     ref={node => {this.toggleLanguageSelectionButton = node;}}
                     onClick={(ev) => this.handleLanguageSelectionOpen(ev)}
                 >
@@ -67,12 +80,21 @@ class GameActions extends Component {
                     <MenuItem onClick={() => this.handleLanguageSelectionClose()}>Dart</MenuItem>
 
                 </Menu>
-                    <Button raised onClick={() => this.handleView()}>View</Button>
-                    <Button raised onClick={() => this.handleReset()}>Reset</Button>
-                    <Button raised onClick={() => this.handleSubmit()}>Submit Code</Button>
+                <Button raised className={classes.button}
+                        onClick={() => this.handleView()}>
+                    View
+                </Button>
+                <Button raised className={classes.button}
+                        onClick={() => this.handleReset()}>
+                    Reset
+                </Button>
+                <Button raised className={classes.button}
+                        onClick={() => this.handleSubmit()}>
+                    Submit Code
+                </Button>
             </Toolbar>
         )
     }
 }
 
-export default GameActions;
+export default withStyles(styles)(GameActions);

@@ -17,6 +17,9 @@ const styles = theme => ({
   },
 });
 
+/**
+ * The sign in/up pop up dialog.
+ */
 class SignDialog extends React.Component {
   state = {
     username: '',

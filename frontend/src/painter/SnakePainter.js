@@ -54,13 +54,13 @@ class SnakePainter extends createjs.Shape
                     width_x = this.width;
                     width_y = delta;
                 }
-                this.graphics.beginFill("#000000").drawRect(y, x, width_y, width_x);
+                this.graphics.beginFill("#FF5722").drawRect(y, x, width_y, width_x);
             }
             else
             {
                 let x = startPos + snake.body[i].x * delta + (delta - this.width) / 2;
                 let y = startPos + snake.body[i].y * delta + (delta - this.width) / 2;
-                this.graphics.beginFill("#000000").drawRect(y, x, this.width, this.width);
+                this.graphics.beginFill("#FF5722").drawRect(y, x, this.width, this.width);
             }
         }
         this.snake = snake;
