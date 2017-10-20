@@ -71,7 +71,7 @@ class SignButton extends React.Component {
         .then(status => {
           if (status.OK)
             this.setState({isSignUp: false});
-          this.setState({textStatus: {disabled: false}});
+          this.setState({textStatus: {disabled: false, usernameError: true}});
         })
     }
   }

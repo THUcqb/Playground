@@ -88,6 +88,7 @@ class SignDialog extends React.Component {
                            value={this.state.username}
                            onChange={this.handleChange('username')}
                            disabled={this.props.textStatus.disabled}
+                           error={this.props.textStatus.usernameError}
                 />
                 <TextField className={classes.password}
                            ref="passwordField"
