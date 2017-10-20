@@ -5,6 +5,7 @@ import Drawer from 'material-ui/Drawer';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import SignButton from './Sign';
+import Avatar from 'material-ui/Avatar';
 import Typography from 'material-ui/Typography';
 import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
@@ -42,6 +43,8 @@ class Navigation extends React.Component {
         super(props);
         this.state = {
             open: false,
+            loggedIn: false,
+            username: '',
         }
     }
 
@@ -60,12 +63,26 @@ class Navigation extends React.Component {
     };
 
     /**
+     * When the user has logged in successfully.
+     */
+    handleLoggedIn(username) {
+        this.setState({ loggedIn: true, username });
+    }
+
+    /**
      * Render function
      * @returns {XML} Navigation - consists of a AppBar which have
      * a title and a button, and a Drawer.
      */
   render() {
     const { classes, theme } = this.props;
+
+    let userInfo = null;
+
+    if (!this.state.loggedIn)
+        userInfo = (<SignButton loggedIn={(username) => this.handleLoggedIn(username)}/>);
+    else
+        userInfo = (<Avatar>{this.state.username}</Avatar>);
 
     const appbar = (
       <AppBar className={classes.appBar}>
@@ -80,7 +97,7 @@ class Navigation extends React.Component {
           <Typography type="title" color="inherit" className={classes.flex}>
             Snake
           </Typography>
-          <SignButton/>
+          {userInfo}
         </Toolbar>
       </AppBar>
     );
