@@ -192,6 +192,6 @@ class Map {
 
 export default Map;
 
-// Map.show_info();
+Map.show_info();
 
 

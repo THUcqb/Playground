@@ -1,5 +1,6 @@
 import {Base,Base_task} from './Base';
 export class Base_state{
+
 	constructor(cur)
 	{
 		this.cur = cur;
@@ -7,10 +8,15 @@ export class Base_state{
 		this.state = "runnable";
 		this.move_state = "null";
 	}
+	/*
+	
+	 */
 	clear()
 	{
 		this.loop_time = 0;
 	}
+
+
 	next()
 	{
 		if (this.cur.type === "user")
@@ -46,6 +52,11 @@ export class Base_state{
 			this.tr_run();
 			
 	}
+
+    /**
+     * 指令转化 将trun_right 等命令转为基础的 move 指令
+     */
+
 	tr_run()
 	{
 
