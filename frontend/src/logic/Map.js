@@ -1,4 +1,6 @@
 import {Block} from './Block';
+import axios from 'axios';
+import {URL,SAVEMAP,LOADMAP}from '../config/Api';
 
 class MapInfo{
 	constructor(level,maps)
@@ -58,38 +60,43 @@ class Map {
 	}
 
 	//保存编辑的地图
-
-	save() // 不知道API
+	/**
+	 * level , maps 分别为地图等级和地图信息
+	 */
+	save(level,maps) // 不知道API
 	{
-		let mi = new MapInfo('1','1111000000100002000010010000211000020001000000000110200000000000000200020010000000002001010000000021');
-		let acm = JSON.stringify(mi);
-		var fetchUrl = require("fetch").fetchUrl
-		fetchUrl("http://127.0.0.1:8000/save",{
-		    method:"post",
-		    headers:{
-		        "Content-type":"application:/x-www-form-urlencoded:charset=UTF-8"
-		    },
-		    body:"save="+acm
-		},(function(data){
-		    console.log("请求成功，JSON解析后的响应数据为:",data);
-		}))
+		return axios.post(URL + SAVEMAP,
+		{
+			level,
+			maps,
+		})
+		.then(function (response) {
+			return response.data;
+		})
+		.catch(function (error){
+			throw error;
+		});
+
 	}
+	/**
+	 * leve 为地图等级
+	 */
 
-	get() // 不知道API+1
+	load(level) // 不知道API+1
 	{
-		var fetchUrl = require("fetch").fetchUrl
-		fetchUrl("http://127.0.0.1:8000/get",{
-		    method:"post",
-		    headers:{
-		        "Content-type":"application:/x-www-form-urlencoded:charset=UTF-8"
-		    },
-		    body:"get=MapInfo&MapID='1'"
-		},(function(data){
-		    console.log("请求成功，JSON解析后的响应数据为:",data);
-		}))
+		return axios.post(URL + LOADMAP,
+		{
+			level,
+		})
+		.then(function (response) {
+			return response.data
+		})
+		.catch(function (error){
+			throw error;
+		});
 	}
 	//读取地图
-	load(filename)
+	tsetload(filename)
 	{
 	
 		// let str ="1000000000"{"level":level,"map":str}
