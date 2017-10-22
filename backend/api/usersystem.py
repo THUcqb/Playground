@@ -12,7 +12,17 @@ import time
 
 @csrf_exempt
 def register(request):
-    '''Handle request of users' registration.'''
+    '''
+    Handle request of users' registration.
+    
+    :method: post
+    :param param1: username
+    :param param2: password
+    :param param3: phonenumber
+    :param param4: email
+    :returns: if succeed, return {'status':'successful'}
+              else, return {'status':'failed'} 
+    '''
     res = {}
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
@@ -34,7 +44,15 @@ def register(request):
 
 @csrf_exempt
 def login(request):
-    '''Handle request of users' login.'''
+    '''
+    Handle request of users' login.
+    
+    :method: post
+    :param param1: username
+    :param param2: password
+    :returns: if succeed, return {'status':'successful','token':the_token}
+              else, return {'status':'failed'}
+    '''
     res = {}
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
@@ -62,7 +80,12 @@ def login(request):
 
 @csrf_exempt
 def logout(request):
-    '''Handle request of users' logout.'''
+    '''
+    Handle request of users' logout.
+    
+    :method: post
+    :returns: {'status':'successful'}
+    '''
     if request.method == 'POST':
         response_data = {}
         response_data["status"] = "successful"
@@ -70,7 +93,14 @@ def logout(request):
 
 @csrf_exempt
 def getuserinfo(request):
-    '''Handle request of getting a user's information after login.'''
+    '''
+    Handle request of getting a user's information after login.
+    
+    :method: post
+    :param param1: token
+    :returns: if succeed, return {'username' : username, ' phonenumber' : phonenumber, ' email' : email, 'status' : 'successful'}
+              else, return {'status':'failed'}
+    '''
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
         token_byte = d['token']

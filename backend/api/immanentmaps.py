@@ -10,7 +10,15 @@ import json
 
 @csrf_exempt
 def savemaps(request):
-    '''Handle request of saving a common map.'''
+    '''
+    Handle request of saving a common map.
+    
+    :method: post
+    :param param1: level
+    :param param2: maps
+    :returns: if succeed, return {'status':'saved'}
+              else, return {'status':'existed'}
+    '''
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
         response_data = {}
@@ -29,7 +37,14 @@ def savemaps(request):
         
 @csrf_exempt
 def loadmaps(request):
-    '''Handle request of loading a common map.'''
+    '''
+    Handle request of loading a common map.
+    
+    :method: post
+    :param param1: level
+    :returns: if succeed, return {'status':'successful', 'maps':required_map}
+              else, return {'status':'doesnotexist'}
+    '''
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
         response_data = {}

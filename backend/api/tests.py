@@ -15,20 +15,26 @@ class UserTestCase(TestCase):
     
 class ModelTest(TestCase):
     def setUp(self):
-        '''Init the database for test.'''
+        '''
+        Init the database for test.
+        '''
         UserInfo.objects.create(username = 'First', password = 'first', phonenumber = '110', email = 'first@example.com')
         UserInfo.objects.create(username = 'Second', password = 'second', phonenumber = '110', email = 'second@example.com')
         ImmanentMaps.objects.create(level = '1', immanentmap = '1111000000100002000010010000211000020001000000000110200000000000000200020010000000002001010000000021')
     
     def test_str_1(self):
-        '''Test the function of '__str__(self)' in UserInfo in Models.'''
+        '''
+        Test the function of '__str__(self)' in UserInfo in Models.
+        '''
         First = UserInfo.objects.get(username = 'First')
         Second = UserInfo.objects.get(username = 'Second')
         self.assertEqual(First.__str__(), 'First')
         self.assertEqual(Second.__str__(), 'Second')
         
     def test_str_2(self):
-        '''Test the function of '__str__(self)' in ImmanentMaps in Models.'''
+        '''
+        Test the function of '__str__(self)' in ImmanentMaps in Models.
+        '''
         map_1 = ImmanentMaps.objects.get(level = '1')
         self.assertEqual(map_1.__str__(), '1')
 
@@ -37,7 +43,9 @@ class UsersystemTest(TestCase):
         self.client = Client()
     
     def test_register(self):
-        '''Test the registration API in usersystem.'''
+        '''
+        Test the registration API in usersystem.
+        '''
         reg_url = '/users/register'
         data = {'username':'zuohaojia', 'password':'waitlove', 'phonenumber':'12345', 'email':'zuohaojia@163.com'}
         json_data = json.dumps(data)
@@ -49,7 +57,9 @@ class UsersystemTest(TestCase):
         self.assertEqual(text_2['status'], 'failed')
     
     def test_login(self):
-        '''Test the login API in usersystem.'''
+        '''
+        Test the login API in usersystem.
+        '''
         login_url = '/users/login'
         UserInfo.objects.create(username = 'zuohaojia', password = 'waitlove', phonenumber = '110', email = 'zuohaojia@example.com')
         data_1 = {'username':'zuohaojia', 'password':'waitlove'}
@@ -69,14 +79,18 @@ class UsersystemTest(TestCase):
         self.assertEqual(text_3['status'], 'failed')
     
     def test_logout(self):
-        '''Test the logout API in usersystem.'''
+        '''
+        Test the logout API in usersystem.
+        '''
         logout_url = '/users/logout'
         res = self.client.post(logout_url)
         text = json.loads(res.content.decode('utf-8'))
         self.assertEqual(text['status'], 'successful')
     
     def test_getinfo(self):
-        '''Test the getuserinfo API in usersystem.'''
+        '''
+        Test the getuserinfo API in usersystem.
+        '''
         login_url = '/users/login'
         get_url = '/users/getinfo'
         UserInfo.objects.create(username = 'zuohaojia', password = 'waitlove', phonenumber = '110', email = 'zuohaojia@example.com')
@@ -105,7 +119,9 @@ class ImmanentmapsTestcase(TestCase):
         self.client = Client()
     
     def test_savemaps(self):
-        '''Test the savemaps API in immanentmaps.'''
+        '''
+        Test the savemaps API in immanentmaps.
+        '''
         save_url = '/maps/save'
         parameter = {'level':'1', 'maps':'1111000000100002000010010000211000020001000000000110200000000000000200020010000000002001010000000021'}
         json_parameter = json.dumps(parameter)
@@ -117,7 +133,9 @@ class ImmanentmapsTestcase(TestCase):
         self.assertEqual(text_2['status'], 'existed')
     
     def test_loadmaps(self):
-        '''Test the loadmaps API in immanentmaps.'''
+        '''
+        Test the loadmaps API in immanentmaps.
+        '''
         load_url = '/maps/load'
         ImmanentMaps.objects.create(level = '1', immanentmap = '1111000000100002000010010000211000020001000000000110200000000000000200020010000000002001010000000021')
         parameter_1 = {'level':'1'}
