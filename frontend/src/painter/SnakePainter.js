@@ -1,10 +1,11 @@
-import createjs from "masteryodaeaseljs";
 import { startPos, delta } from "../Constant";
+import easelJS from "masteryodaeaseljs";
+import tweenJS from "masteryodatweenjs";
 
 /**
  * The class in charge of painting the snake
  */
-class SnakePainter extends createjs.Shape
+class SnakePainter extends easelJS.Shape
 {
     constructor()
     {
@@ -20,6 +21,9 @@ class SnakePainter extends createjs.Shape
     update(snake)
     {
         this.graphics.clear();
+        let position = { x: 100, y: 0 };
+        let tween = new tweenJS.Tween(position);
+        tween.to({ x: 200 }, 1000);
         for (let i = snake.size - 1; i >= 0; i--)
         {
             if (i < snake.size - 1)
