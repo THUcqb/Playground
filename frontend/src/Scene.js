@@ -3,6 +3,7 @@ import createjs from 'masteryodaeaseljs';
 import GrassPainter from './painter/GrassPainter';
 import SnakePainter from './painter/SnakePainter';
 import { Controller } from './logic/Controller';
+import { Base } from './logic/Base';
 
 class Scene extends Component
 {
@@ -11,7 +12,7 @@ class Scene extends Component
         super();
         this.controller = Controller.controller;
 
-        this.controller.testInit();
+        this.controller.init();
         this.handleResize = this.handleResize.bind(this);
     }
 
@@ -26,7 +27,7 @@ class Scene extends Component
 
     tick(event, data)
     {
-        let status = data.controller.next();
+        let status = data.controller.current_state();
         console.log(status);
         if (status === "runnable")
         {

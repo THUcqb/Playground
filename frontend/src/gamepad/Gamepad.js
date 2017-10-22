@@ -313,10 +313,23 @@ class Gamepad extends Component {
         super(props);
         this.resetWorkspace.bind(this);
         this.submitWorkspace.bind(this);
-        this.viewWorkspaceCode.bind(this);
     }
     componentDidMount() {
-        this.workspace = Blockly.inject('blocklyDiv', {toolbox: document.getElementById('toolbox')});
+        this.workspace = Blockly.inject('blocklyDiv', {
+            toolbox: document.getElementById('toolbox'),
+            grid: {spacing: 20,
+                    length: 3,
+                    colour: '#ccc',
+                    snap: true},
+            zoom:
+                {controls: true,
+                    wheel: true,
+                    startScale: 1.0,
+                    maxScale: 3,
+                    minScale: 0.3,
+                    scaleSpeed: 1.2},
+
+        });
     }
 
     /**
@@ -333,23 +346,12 @@ class Gamepad extends Component {
     //    TODO: generate run the snake.
     }
 
-    /**
-     * View the code in specific language.
-     */
-    viewWorkspaceCode() {
-        let code = Blockly.JavaScript.workspaceToCode(this.workspace);
-
-    //  TODO: show the code properly.
-        alert(code);
-    }
-
     render() {
         return (
             <div className="Operation">
                 <GameActions
                     reset={this.resetWorkspace}
                     submit={this.submitWorkspace}
-                    view={this.viewWorkspaceCode}
                 />
                 <div id="blocklyDiv" style={{height: "70vh", width: "100%"}}/>
                 {toolbox}

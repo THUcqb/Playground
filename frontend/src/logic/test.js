@@ -65,7 +65,7 @@ class test{
 		console.log(`Received: ${input}`);
 		op = input;
 		console.log(">"+op);
-		controller.next();
+		controller.step();
 		});
 	}
 

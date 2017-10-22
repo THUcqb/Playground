@@ -3,6 +3,8 @@ import Button from 'material-ui/Button';
 import Toolbar from 'material-ui/Toolbar';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import { withStyles } from 'material-ui/styles';
+import { Controller }from '../logic/Controller';
+import { Base } from "../logic/Base";
 
 const styles = ({
     button: {
@@ -19,6 +21,7 @@ class GameActions extends Component {
         super(props);
         this.state = {
             languageSelectionOpen: false,
+            moveOpen: false,
             anchorEl: null,
             anchorOriginVertical: 'bottom',
         }
@@ -32,16 +35,11 @@ class GameActions extends Component {
         this.props.submit();
     };
 
-    handleView() {
-        this.props.view();
-    };
-
     /**
      * Handle the language selection menu open request
      * @param {Event} ev
      */
-    handleLanguageSelectionOpen(ev)
-    {
+    handleLanguageSelectionOpen(ev) {
         this.setState({
             languageSelectionOpen: true,
             anchorEl: ev.currentTarget,
@@ -51,9 +49,36 @@ class GameActions extends Component {
     /**
      * Handle the language selection menu close request
      */
-    handleLanguageSelectionClose()
-    {
+    handleLanguageSelectionClose() {
         this.setState({languageSelectionOpen: false});
+    }
+
+    /**
+     * Open the move menu to show operations
+     * @param ev
+     */
+    handleMoveOpen(ev) {
+        this.setState({
+            moveOpen: true,
+            anchorEl: ev.currentTarget,
+        });
+    }
+
+    /**
+     * close the move menu.
+     * @param op
+     */
+    handleMoveClose() {
+        this.setState({moveOpen: false});
+    }
+
+    /**
+     * handle move operation
+     * @returns {XML}
+     */
+    handleMoveOp(op) {
+        Controller.controller.begin.task.add(new Base('sys', op));
+        Controller.controller.step();
     }
 
     render() {
@@ -62,7 +87,6 @@ class GameActions extends Component {
         return (
             <Toolbar color="primary">
                 <Button raised className={classes.button}
-                    ref={node => {this.toggleLanguageSelectionButton = node;}}
                     onClick={(ev) => this.handleLanguageSelectionOpen(ev)}
                 >
                     Language
@@ -81,10 +105,6 @@ class GameActions extends Component {
 
                 </Menu>
                 <Button raised className={classes.button}
-                        onClick={() => this.handleView()}>
-                    View
-                </Button>
-                <Button raised className={classes.button}
                         onClick={() => this.handleReset()}>
                     Reset
                 </Button>
@@ -92,6 +112,23 @@ class GameActions extends Component {
                         onClick={() => this.handleSubmit()}>
                     Submit Code
                 </Button>
+                <Button raised className={classes.button}
+                        onClick={(ev) => this.handleMoveOpen(ev)}
+                >
+                    Move
+                </Button>
+                <Menu
+                    open={this.state.moveOpen}
+                    onRequestClose={() => this.handleMoveClose()}
+                    anchorEl={this.state.anchorEl}
+                >
+
+                    <MenuItem onClick={() => this.handleMoveOp('move_left')}>Left</MenuItem>
+                    <MenuItem onClick={() => this.handleMoveOp('move_right')}>Right</MenuItem>
+                    <MenuItem onClick={() => this.handleMoveOp('move_up')}>Up</MenuItem>
+                    <MenuItem onClick={() => this.handleMoveOp('move_down')}>Down</MenuItem>
+
+                </Menu>
             </Toolbar>
         )
     }
