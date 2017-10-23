@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import GameActions from './GameActions';
 import Blockly from 'node-blockly/browser';
+import './BlocklyDef';
+import run, { reset } from './LogicApi';
 
 /**
  * The react toolbox.
@@ -8,6 +10,12 @@ import Blockly from 'node-blockly/browser';
  */
 const toolbox = (
     <xml id="toolbox" style={{display: "none"}}>
+        <category name="Action" colour="#935ba5">
+            <block type="action_move">
+                <field name="OP">left</field>
+            </block>
+        </category>
+        <sep/>
         <category name="Logic" colour="%{BKY_LOGIC_HUE}">
             <block type="controls_if"/>
             <block type="logic_compare"/>
@@ -336,14 +344,23 @@ class Gamepad extends Component {
      * Clear the coding workspace.
      */
     resetWorkspace() {
-    //    TODO: clear the workspace.
+        reset();
+    }
+
+    /**
+     * View the code converted from blockly in the workspace.
+     */
+    viewWorkspace() {
+        alert(Blockly.JavaScript.workspaceToCode(this.workspace));
     }
 
     /**
      * Submit and run the code.
      */
     submitWorkspace() {
-    //    TODO: generate run the snake.
+        window.LoopTrap = 1000;
+        Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if(--window.LoopTrap == 0) throw "Infinite loop.";\n';
+        run(Blockly.JavaScript.workspaceToCode(this.workspace));
     }
 
     render() {
@@ -351,6 +368,7 @@ class Gamepad extends Component {
             <div className="Operation">
                 <GameActions
                     reset={this.resetWorkspace}
+                    view={this.viewWorkspace}
                     submit={this.submitWorkspace}
                 />
                 <div id="blocklyDiv" style={{height: "70vh", width: "100%"}}/>
