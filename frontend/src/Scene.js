@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import createjs from 'masteryodaeaseljs';
+import EaselJS from 'masteryodaeaseljs';
 import GrassPainter from './painter/GrassPainter';
 import SnakePainter from './painter/SnakePainter';
 import { Controller } from './logic/Controller';
@@ -40,14 +40,16 @@ class Scene extends Component
      */
     static tick(event, data)
     {
-        let status = data.controller.current_state();
-        console.log(status);
-        if (status === "runnable")
+        if (data.count === 0)
         {
-            //TODO: Theses objects need to be cloned!!
-            data.grassPainter.update(data.controller.getMap());
-            data.snakePainter.update(data.controller.getSnake());
+            let status = data.controller.current_state();
+            if (status === "runnable")
+            {
+                data.grassPainter.update(data.controller.getMap());
+                data.snakePainter.update(data.controller.getSnake());
+            }
         }
+        data.count = (data.count + 1) % 12;
         data.stage.update();
     }
 
@@ -77,20 +79,22 @@ class Scene extends Component
     {
         window.addEventListener("resize", this.handleResize, false);
         this.handleResize();
-        let stage = new createjs.Stage("canvas");
+        let stage = new EaselJS.Stage("canvas");
         
         let grassPainter = new GrassPainter();
-        let snakePainter = new SnakePainter();
         stage.addChild(grassPainter);
-        stage.addChild(snakePainter);
+
+        let snakePainter = new SnakePainter(stage);
+        let count = 0;
         let data = {
             grassPainter: grassPainter,
             snakePainter: snakePainter,
             stage: stage,
             controller: this.controller,
+            count: count,
         };
-        createjs.Ticker.on("tick", Scene.tick, null, false, data);
-        createjs.Ticker.framerate = 24;
+        EaselJS.Ticker.on("tick", Scene.tick, null, false, data);
+        EaselJS.Ticker.framerate = 24;
     }
 
     /**
