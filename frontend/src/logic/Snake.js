@@ -10,6 +10,9 @@ class Snake {
 		this.size = 1;
 		this.add_head(x,y)
 	}
+	/**
+	 * add new head for snake
+	 */
 	add_head(x,y)
 	{
 		this.x = x;
@@ -17,6 +20,9 @@ class Snake {
 		this.body[this.size] = new Block(x,y);
 		this.size +=1;
 	}
+	/**
+	 * delete current tail for snake
+	 */
 	del_tail()
 	{
 		var cur = new Array(Block);
@@ -26,7 +32,9 @@ class Snake {
 		this.body = cur;
 		this.size -= 1;
 	}
-
+	/**
+	 * init snake and set birth point(x,y)
+	 */
 	init(x,y)
 	{
 		this.x = x;

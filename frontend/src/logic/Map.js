@@ -14,11 +14,13 @@ class Map {
 	constructor(SIZE_X, SIZE_Y) {
 		this.SIZE_X = SIZE_X;
 		this.SIZE_Y = SIZE_Y;
-		this.base_address = '/Map/'
 	}
-	init(file) {
-		this.file = file;
-	}
+	/**
+	 * init map info and set the birth place of snake
+	 * @param  {[int]} x 
+	 * @param  {[int]} y 
+	 * 
+	 */
 	testinit(x,y) {
 		let block_list = [];
 		for (let i = 0; i < this.SIZE_X; i++) {
@@ -38,39 +40,57 @@ class Map {
 		this.set_head(x,y);
 	}
 
-	//地图地表物体编辑
+	/**
+	 * set point(x,y) state empty 
+	 */
 	set_empty(x,y)
 	{
 		this.block_list[x][y].info = 0;//空地
 	}
+	/**
+	 * set point(x,y) state block
+	 */
 	set_block(x,y)
 	{
 		this.block_list[x][y].info = 1;//占据
 	}
+	/**
+	 * set point(x,y) state candy 
+	 */
 	set_candy(x,y)
 	{
 		this.block_list[x][y].info = 2;//表示积分
 	}
 
-	//蛇的贴图分类
+	/**
+	 * set the head of snake
+	 */
 	set_head(x,y)
 	{
 		this.block_list[x][y].info = 3;//头
 	}
+	/**
+	 * set the boday of snake
+	 */
 	set_body(x,y)
 	{
 		this.block_list[x][y].info = 4;//身体
 	}
+	/**
+	 * set the tail of snake
+	 */
 	set_tail(x,y)
 	{
 		this.block_list[x][y].info = 5;//尾巴
 	}
 
-	//保存编辑的地图
+	
 	/**
-	 * level , maps 分别为地图等级和地图信息
+	 * save map
+	 * (int)level the level of map 
+	 * (String) maps : map info 
 	 */
-	save(level,maps) // 不知道API
+	save(level,maps)
 	{
 		return axios.post(URL + SAVEMAP,
 		{
@@ -86,10 +106,11 @@ class Map {
 
 	}
 	/**
-	 * leve 为地图等级
+	 * load map by level 
+	 * (int)level the level of map
 	 */
 
-	load(level) // 不知道API+1
+	load(level) 
 	{
 		let str = this.loacalmap[level];
 		for (let i = 0; i < this.SIZE_X; i++) {
@@ -130,20 +151,13 @@ class Map {
 		// 	throw error;
 		// });
 	}
-	//读取地图
+	/**
+	 * used for test
+	 */
 	tsetload(filename)
 	{
 	
-		// let str ="1000000000"{"level":level,"map":str}
-		// 		+"0002000100"
-		// 		+"1000001102"
-		// 		+"1020000211"
-		// 		+"1000000000"
-		// 		+"0000000002"
-		// 		+"2010200011"
-		// 		+"0110000000"
-		// 		+"0000011010"
-		// 		+"2000001000";
+		
 		let str = "1111000000"      
 				+"1000020000"
 				+"1001000021"
@@ -160,16 +174,11 @@ class Map {
 				this.block_list[i][n].info = Number(str[i*this.SIZE_X+n]);
 			}
 		}
-		// console.log(str);
+		
 	}
-
-	static show_info()
-	{
-		let mi = new MapInfo('1','1111000000100002000010010000211000020001000000000110200000000000000200020010000000002001010000000021');
-		let a = JSON.stringify(mi); 
-		console.log(a);
-	}
-	//控制台输出地图信息
+	/**
+	 * used for test
+	 */
 	print()
 	{
 		let a = this.Ddata();
@@ -195,7 +204,9 @@ class Map {
 		}
 		console.log(str);
 	}
-	//返回地图的二维数组，
+	/**
+	 * (string list)return map info with snake
+	 */
 	Ddata()
 	{
 		let block_list = [];
@@ -209,7 +220,9 @@ class Map {
 
 		return block_list;
 	}
-	//返回消除蛇的地图 //蛇经过的一定是空地。。感觉没有必要加这个
+	/**
+	 * (string list)return map info without snake
+	 */
 	Edata()
 	{
 		let block_list = [];
@@ -226,6 +239,9 @@ class Map {
 
 		return block_list;
 	}
+	/**
+	 * return map Basic info
+	 */
 	Data()
 	{
 		return this.block_list;
