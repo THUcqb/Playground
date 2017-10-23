@@ -4,25 +4,33 @@ export class Base_state{
 	constructor(cur)
 	{
 		this.cur = cur;
+		this.pre = null;
 		this.loop_time = 0;
 		this.state = "runnable";
 		this.move_state = "null";
 	}
-	/*
-	
+	/**
+	 * return pre state
 	 */
-	clear()
+	get_pre()
 	{
-		this.loop_time = 0;
+		return this.pre;
 	}
-
-
+	/**
+	 * return current state
+	 */
+	get_cur()
+	{
+		return this.cur;
+	}
+	/**
+	 * run current task 
+	 */
 	next()
 	{
 		this.pre = this.cur;
 		if (this.cur.type === "user")
 		{
-
 			this.next_move();
 		}
 		else
@@ -53,10 +61,6 @@ export class Base_state{
 			this.tr_run();
 			
 	}
-
-    /**
-     * 指令转化 将trun_right 等命令转为基础的 move 指令
-     */
 
 	tr_run()
 	{

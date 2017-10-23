@@ -2,11 +2,13 @@ import {Block} from './Block';
 import axios from 'axios';
 import {URL,SAVEMAP,LOADMAP}from '../config/Api';
 import {level0,level1,level2,level3,level4} from './Maplevel';
+
 class MapInfo{
 	constructor(level,maps)
 	{
 		this.level = level;
 		this.maps = maps;
+		this.candy= 0;
 	}
 }
 
@@ -19,7 +21,6 @@ class Map {
 	 * init map info and set the birth place of snake
 	 * @param  {[int]} x 
 	 * @param  {[int]} y 
-	 * 
 	 */
 	testinit(x,y) {
 		let block_list = [];
@@ -150,6 +151,7 @@ class Map {
 		// .catch(function (error){
 		// 	throw error;
 		// });
+
 	}
 	/**
 	 * used for test
@@ -159,15 +161,15 @@ class Map {
 	
 		
 		let str = "1111000000"      
-				+"1000020000"
-				+"1001000021"
-				+"1000020001"
-				+"0000000001"
-				+"1020000000"
-				+"0000000200"
-				+"0200100000"
-				+"0000200101"
-				+"0000000021";
+				+ "1000020000"
+				+ "1001000021"
+				+ "1000020001"
+				+ "0000000001"
+				+ "1020000000"
+				+ "0000000200"
+				+ "0200100000"
+				+ "0000200101"
+				+ "0000000021";
 
 		for (let i = 0; i < this.SIZE_X; i++) {
 			for (let n = 0; n < this.SIZE_Y; n++) {
@@ -250,6 +252,5 @@ class Map {
 
 export default Map;
 
-Map.show_info();
 
 
