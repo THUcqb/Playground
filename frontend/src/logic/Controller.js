@@ -8,7 +8,15 @@ export class Controller{
 		this.state = "runable";
 		Base.bmap.load("level_0.txt");
 	}
-	testInit()
+
+    init()
+    {
+        let usertask = new Base_task(this.begin)//将任务列表指向初始节点
+
+        this.begin.task=usertask;
+    }
+
+    testInit()
 	{
 		let usertask = new Base_task(this.begin)//将任务列表指向初始节点
 		let judge = new Base("sys","judge","move");
@@ -16,7 +24,7 @@ export class Controller{
 			let false_task = new Base_task(judge);
 
 			true_task.add(new Base("sys","move"));
-			false_task.add(new Base("sys","trun_left"));
+			false_task.add(new Base("sys","tuun_left"));
 
 			judge.set_task(true_task);
 			judge.set_else(false_task);
@@ -40,12 +48,12 @@ export class Controller{
 		return Base.bsnake;
 	}
 
-	next()
+	step()
 	{
 		Base.run_state.next();
-		return Base.run_state.state; // 返回String: runnable, success, fail, err; 
 	}
-	check_now_state()
+
+	current_state()
 	{
 		return Base.run_state.state; 
 	}

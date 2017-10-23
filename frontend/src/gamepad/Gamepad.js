@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import GameActions from './GameActions';
 import Blockly from 'node-blockly/browser';
+import './BlocklyDef';
+import run, { reset } from './LogicApi';
 
 /**
  * The react toolbox.
@@ -8,6 +10,12 @@ import Blockly from 'node-blockly/browser';
  */
 const toolbox = (
     <xml id="toolbox" style={{display: "none"}}>
+        <category name="Action" colour="#935ba5">
+            <block type="action_move">
+                <field name="OP">left</field>
+            </block>
+        </category>
+        <sep/>
         <category name="Logic" colour="%{BKY_LOGIC_HUE}">
             <block type="controls_if"/>
             <block type="logic_compare"/>
@@ -313,34 +321,46 @@ class Gamepad extends Component {
         super(props);
         this.resetWorkspace.bind(this);
         this.submitWorkspace.bind(this);
-        this.viewWorkspaceCode.bind(this);
     }
     componentDidMount() {
-        this.workspace = Blockly.inject('blocklyDiv', {toolbox: document.getElementById('toolbox')});
+        this.workspace = Blockly.inject('blocklyDiv', {
+            toolbox: document.getElementById('toolbox'),
+            grid: {spacing: 20,
+                    length: 3,
+                    colour: '#ccc',
+                    snap: true},
+            zoom:
+                {controls: true,
+                    wheel: true,
+                    startScale: 1.0,
+                    maxScale: 3,
+                    minScale: 0.3,
+                    scaleSpeed: 1.2},
+
+        });
     }
 
     /**
      * Clear the coding workspace.
      */
     resetWorkspace() {
-    //    TODO: clear the workspace.
+        reset();
+    }
+
+    /**
+     * View the code converted from blockly in the workspace.
+     */
+    viewWorkspace() {
+        alert(Blockly.JavaScript.workspaceToCode(this.workspace));
     }
 
     /**
      * Submit and run the code.
      */
     submitWorkspace() {
-    //    TODO: generate run the snake.
-    }
-
-    /**
-     * View the code in specific language.
-     */
-    viewWorkspaceCode() {
-        let code = Blockly.JavaScript.workspaceToCode(this.workspace);
-
-    //  TODO: show the code properly.
-        alert(code);
+        window.LoopTrap = 1000;
+        Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if(--window.LoopTrap == 0) throw "Infinite loop.";\n';
+        run(Blockly.JavaScript.workspaceToCode(this.workspace));
     }
 
     render() {
@@ -348,8 +368,8 @@ class Gamepad extends Component {
             <div className="Operation">
                 <GameActions
                     reset={this.resetWorkspace}
+                    view={this.viewWorkspace}
                     submit={this.submitWorkspace}
-                    view={this.viewWorkspaceCode}
                 />
                 <div id="blocklyDiv" style={{height: "70vh", width: "100%"}}/>
                 {toolbox}

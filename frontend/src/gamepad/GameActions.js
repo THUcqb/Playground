@@ -3,6 +3,7 @@ import Button from 'material-ui/Button';
 import Toolbar from 'material-ui/Toolbar';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import { withStyles } from 'material-ui/styles';
+import { move } from './LogicApi';
 
 const styles = ({
     button: {
@@ -18,7 +19,7 @@ class GameActions extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            languageSelectionOpen: false,
+            moveOpen: false,
             anchorEl: null,
             anchorOriginVertical: 'bottom',
         }
@@ -28,32 +29,30 @@ class GameActions extends Component {
         this.props.reset();
     };
 
-    handleSubmit() {
-        this.props.submit();
-    };
-
     handleView() {
         this.props.view();
     };
 
+    handleSubmit() {
+        this.props.submit();
+    };
+
     /**
-     * Handle the language selection menu open request
-     * @param {Event} ev
+     * Open the move menu to show operations
+     * @param ev
      */
-    handleLanguageSelectionOpen(ev)
-    {
+    handleMoveOpen(ev) {
         this.setState({
-            languageSelectionOpen: true,
+            moveOpen: true,
             anchorEl: ev.currentTarget,
         });
     }
 
     /**
-     * Handle the language selection menu close request
+     * close the move menu.
      */
-    handleLanguageSelectionClose()
-    {
-        this.setState({languageSelectionOpen: false});
+    handleMoveClose() {
+        this.setState({moveOpen: false});
     }
 
     render() {
@@ -62,31 +61,29 @@ class GameActions extends Component {
         return (
             <Toolbar color="primary">
                 <Button raised className={classes.button}
-                    ref={node => {this.toggleLanguageSelectionButton = node;}}
-                    onClick={(ev) => this.handleLanguageSelectionOpen(ev)}
+                        onClick={(ev) => this.handleMoveOpen(ev)}
                 >
-                    Language
+                    Move
                 </Button>
                 <Menu
-                    open={this.state.languageSelectionOpen}
-                    onRequestClose={() => this.handleLanguageSelectionClose()}
+                    open={this.state.moveOpen}
+                    onRequestClose={() => this.handleMoveClose()}
                     anchorEl={this.state.anchorEl}
                 >
 
-                    <MenuItem onClick={() => this.handleLanguageSelectionClose()}>Javascript</MenuItem>
-                    <MenuItem onClick={() => this.handleLanguageSelectionClose()}>Python</MenuItem>
-                    <MenuItem onClick={() => this.handleLanguageSelectionClose()}>PHP</MenuItem>
-                    <MenuItem onClick={() => this.handleLanguageSelectionClose()}>Lua</MenuItem>
-                    <MenuItem onClick={() => this.handleLanguageSelectionClose()}>Dart</MenuItem>
+                    <MenuItem onClick={() => move('left')}>Left</MenuItem>
+                    <MenuItem onClick={() => move('right')}>Right</MenuItem>
+                    <MenuItem onClick={() => move('up')}>Up</MenuItem>
+                    <MenuItem onClick={() => move('down')}>Down</MenuItem>
 
                 </Menu>
                 <Button raised className={classes.button}
-                        onClick={() => this.handleView()}>
-                    View
-                </Button>
-                <Button raised className={classes.button}
                         onClick={() => this.handleReset()}>
                     Reset
+                </Button>
+                <Button raised className={classes.button}
+                        onClick={() => this.handleView()}>
+                    View Code
                 </Button>
                 <Button raised className={classes.button}
                         onClick={() => this.handleSubmit()}>
