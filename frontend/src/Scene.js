@@ -15,7 +15,6 @@ class Scene extends Component
         super();
         this.controller = Controller.controller;
 
-        this.controller.init();
         this.handleResize = this.handleResize.bind(this);
     }
 
@@ -43,11 +42,11 @@ class Scene extends Component
         if (data.count === 0)
         {
             let status = data.controller.current_state();
-            if (status === "runnable")
-            {
+            // if (status === "runnable")
+            // {
                 data.grassPainter.update(data.controller.getMap());
                 data.snakePainter.update(data.controller.getSnake());
-            }
+            // }
         }
         data.count = (data.count + 1) % 12;
         data.stage.update();
