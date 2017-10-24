@@ -1,12 +1,8 @@
 import createjs from "masteryodaeaseljs";
-import {N, startPos, delta} from "../Constant";
+import { startPos, delta } from "../Constant";
 
 class GrassPainter extends createjs.Shape
 {
-    constructor()
-    {
-        super();
-    }
 
     update(map)
     {
@@ -20,9 +16,7 @@ class GrassPainter extends createjs.Shape
             const screen_y = startPos + delta * i;
             for (let j = 0; j < size_y; j++)
             {
-                console.log(info_arr[i][j]);
                 const screen_x = startPos + delta * j;
-                console.log(info_arr[i][j]);
                 if (info_arr[i][j] === 0)
                     this.paintGround(screen_x, screen_y);
                 else if (info_arr[i][j] === 1)

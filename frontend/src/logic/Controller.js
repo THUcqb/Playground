@@ -5,7 +5,7 @@ export class Controller{
 	constructor()
 	{
 		this.begin = Base.begin;
-		this.state = "runable";
+		this.state = "runnable";
 		Base.bmap.load("level_0.txt");
 	}
 
