@@ -6,36 +6,10 @@ export class Controller{
 	{
 		this.begin = Base.begin;
 		this.state = "runnable";
-		Base.bmap.load("level_0.txt");
-	}
+		Base.bmap.load(0);
 
-    init()
-    {
         let usertask = new Base_task(this.begin)//将任务列表指向初始节点
-
         this.begin.task=usertask;
-    }
-
-    testInit()
-	{
-		let usertask = new Base_task(this.begin)//将任务列表指向初始节点
-		let judge = new Base("sys","judge","move");
-			let true_task = new Base_task(judge);
-			let false_task = new Base_task(judge);
-
-			true_task.add(new Base("sys","move"));
-			false_task.add(new Base("sys","tuun_left"));
-
-			judge.set_task(true_task);
-			judge.set_else(false_task);
-
-		let while_do = new Base("sys","while_do","true");
-			let while_do_task = new Base_task(while_do);
-			while_do_task.add(judge);
-			while_do.set_task(while_do_task);
-
-		usertask.add(while_do);//向任务列表添加函数
-		this.begin.task=usertask;
 	}
 
 	getMap()

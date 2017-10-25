@@ -19,6 +19,7 @@ export class Base_state{
 
 	next()
 	{
+		this.pre = this.cur;
 		if (this.cur.type === "user")
 		{
 
@@ -60,7 +61,7 @@ export class Base_state{
 	tr_run()
 	{
 
-		if (this.cur.name === "trun_right")
+		if (this.cur.name === "turn_right")
 		{
 			if (this.move_state === "null" || this.move_state === "move_up")
 			{
@@ -90,7 +91,7 @@ export class Base_state{
 
 		}
 		else
-		if (this.cur.name === "trun_left")
+		if (this.cur.name === "turn_left")
 		{
 			if (this.move_state === "null" || this.move_state === "move_up")
 			{
@@ -166,8 +167,8 @@ export class Base_state{
 		if (this.cur.name === "move_down") { this.move_state = "move_down";return "move";}
 		if (this.cur.name === "move_left") {this.move_state = "move_left";return "move";}
 		if (this.cur.name === "move_right") {this.move_state = " move_right";return "move";}
-		if (this.cur.name === "trun_left") {return "move";}
-		if (this.cur.name === "trun_right") {return "move";}
+		if (this.cur.name === "turn_left") {return "move";}
+		if (this.cur.name === "turn_right") {return "move";}
 		if (this.cur.name === "move") {return "move";}
 
 		return "end";

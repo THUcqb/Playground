@@ -79,7 +79,9 @@ class Segment extends EaselJS.Shape
         this.graphics.clear();
         this.x = 0;
         this.y = 0;
-        if (x === this.now_x && x === this.last_x)
+        if (x === this.now_x && y === this.now_y)
+            this.drawPic();
+        else if (x === this.now_x && x === this.last_x)
         {
             this.moveForward();
             this.updatePos(x, y);
