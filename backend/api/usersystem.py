@@ -183,7 +183,7 @@ def create_code(randomlength = 8):
     res = ''
     chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789'
     length = len(chars) - 1
-    random = Ramdom()
+    random = Random()
     for i in range(randomlength):
         res += chars[random.randint(0, length)]
     return res
@@ -195,6 +195,49 @@ def emailauth(request):
     
     :method: post
     :param param1: token
+    :returns: if succeed, return {"status":"successful","code":code}
+              else if the token is out of date, return {"status":"expiration"}
+              else, return {"status":"failed"}
+    '''
+    if request.method == 'POST':
+        response_data = {}
+        d = json.loads(request.body.decode('utf-8'))
+        token_byte = d['token']
+        token_str = token_byte.encode(encoding = "utf-8")
+        token_info = base64.b64decode(token_str)
+        token = token_info.decode('utf-8','ignore')
+        user_info = json.loads(token)
+        username = user_info['username']
+        now = time.time()
+        expire = user_info['exp']
+        if expire < now:
+            response_data["status"] = "expiration"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        try:
+            userinfo = UserInfo.objects.get(username = username)
+            code = create_code()
+            userinfo.auth_code = code
+            userinfo.save()
+            email = userinfo.email
+            email_title = 'Code'
+            email_body = 'Your code is: ' + code
+            send_mail(email_title, email_body, EMAIL_FROM, [email])
+            response_data["status"] = "successful"
+            response_data["code"] = code
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        except UserInfo.DoesNotExist:
+            pass
+        response_data["status"] = "failed"
+        return HttpResponse(json.dumps(response_data),content_type="application/json")
+
+@csrf_exempt
+def authresponse(request):
+    '''
+    Handle the request of verification by Email.
+    
+    :method: post
+    :param param1: token
+    :param param2: code
     :returns: if succeed, return {"status":"successful"}
               else if the token is out of date, return {"status":"expiration"}
               else, return {"status":"failed"}
@@ -215,57 +258,7 @@ def emailauth(request):
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         try:
             userinfo = UserInfo.objects.get(username = username)
-            authcode = {}
-            authcode['code'] = create_code()
-            authcode['exp'] = time.time() + 300
-            userinfo.auth_code = json.dumps(authcode)
-            userinfo.save()
-            email = userinfo.email
-            email_title = 'Code'
-            email_body = 'Your code is: ' + authcode['code'] + '. It will lose efficacy in 5 minutes.'
-            send_mail(email_title, email_body, EMAIL_FROM, [email])
-            response_data["status"] = "successful"
-            return HttpResponse(json.dumps(response_data),content_type="application/json")
-        except UserInfo.DoesNotExist:
-            pass
-        response_data["status"] = "failed"
-        return HttpResponse(json.dumps(response_data),content_type="application/json")
-
-@csrf_exempt
-def authresponse(request):
-    '''
-    Handle the request of verification by Email.
-    
-    :method: post
-    :param param1: token
-    :param param2: code
-    :returns: if succeed, return {"status":"successful"}
-              else if the token is out of date, return {"status":"token_expiration"}
-              else if the code is out of date, return {"status":"code_expiration"}
-              else, return {"status":"failed"}
-    '''
-    if request.method == 'POST':
-        response_data = {}
-        d = json.loads(request.body.decode('utf-8'))
-        token_byte = d['token']
-        token_str = token_byte.encode(encoding = "utf-8")
-        token_info = base64.b64decode(token_str)
-        token = token_info.decode('utf-8','ignore')
-        user_info = json.loads(token)
-        username = user_info['username']
-        now = time.time()
-        expire = user_info['exp']
-        if expire < now:
-            response_data["status"] = "token_expiration"
-            return HttpResponse(json.dumps(response_data),content_type="application/json")
-        try:
-            userinfo = UserInfo.objects.get(username = username)
-            authcode = json.loads(userinfo.auth_code.decode('utf-8'))
-            nowtime = time.time()
-            if authcode['exp'] < nowtime():
-                response_data["status"] = "code_expiration"
-                return HttpResponse(json.dumps(response_data),content_type="application/json")
-            if d['code'] == authcode['code']:
+            if d['code'] == userinfo.auth_code:
                 userinfo.is_active = True
                 userinfo.save()
                 response_data["status"] = "successful"

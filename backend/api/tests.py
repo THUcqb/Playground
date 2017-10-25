@@ -173,6 +173,80 @@ class UsersystemTest(TestCase):
         the_res_4 = self.client.post(the_url, the_json_data_4, content_type = 'application/json')
         the_text_4 = json.loads(the_res_4.content.decode('utf-8'))
         self.assertEqual(the_text_4['status'], 'failed')
+    
+    def test_emailauth(self):
+        '''
+        Test the emailauth API in usersystem.
+        '''
+        the_url = '/users/email_auth'
+        login_url = '/users/login'
+        UserInfo.objects.create(username = 'zuohaojia', password = 'waitlove', phonenumber = '110', email = 'hejie_cq@163.com')
+        
+        login_data = {'username':'zuohaojia', 'password':'waitlove'}
+        log_json_data = json.dumps(login_data)
+        log_res = self.client.post(login_url, log_json_data, content_type = 'application/json')
+        log_text = json.loads(log_res.content.decode('utf-8'))
+        
+        the_data = {'token':log_text['token']}
+        the_json_data = json.dumps(the_data)
+        the_res = self.client.post(the_url, the_json_data, content_type = 'application/json')
+        the_text = json.loads(the_res.content.decode('utf-8'))
+        self.assertEqual(the_text['status'], 'successful')
+        
+        the_data_3 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwNzk5MzUyMC42OTIsICJ1c2VybmFtZSI6ICJoZWppZSIsICJleHAiOiAxNTA4NTk4MzIwLjY5Mn0='}
+        the_json_data_3 = json.dumps(the_data_3)
+        the_res_3 = self.client.post(the_url, the_json_data_3, content_type = 'application/json')
+        the_text_3 = json.loads(the_res_3.content.decode('utf-8'))
+        self.assertEqual(the_text_3['status'], 'expiration')
+        
+        the_data_4 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwODkxMjc5Mi4yMTEsICJ1c2VybmFtZSI6ICJoZWxsbyIsICJleHAiOiAxNTQwNDQ4NzkyLjIxMX0='}
+        the_json_data_4 = json.dumps(the_data_4)
+        the_res_4 = self.client.post(the_url, the_json_data_4, content_type = 'application/json')
+        the_text_4 = json.loads(the_res_4.content.decode('utf-8'))
+        self.assertEqual(the_text_4['status'], 'failed')
+    
+    def test_authresponse(self):
+        '''
+        Test the authresponse API in usersystem.
+        '''
+        the_url = '/users/auth_response'
+        login_url = '/users/login'
+        auth_url = '/users/email_auth'
+        UserInfo.objects.create(username = 'zuohaojia', password = 'waitlove', phonenumber = '110', email = 'hejie_cq@163.com')
+        
+        login_data = {'username':'zuohaojia', 'password':'waitlove'}
+        log_json_data = json.dumps(login_data)
+        log_res = self.client.post(login_url, log_json_data, content_type = 'application/json')
+        log_text = json.loads(log_res.content.decode('utf-8'))
+        
+        the_data = {'token':log_text['token']}
+        the_json_data = json.dumps(the_data)
+        the_res = self.client.post(auth_url, the_json_data, content_type = 'application/json')
+        the_text = json.loads(the_res.content.decode('utf-8'))
+        
+        the_data_1 = {'token':log_text['token'], 'code':the_text['code']}
+        the_json_data_1 = json.dumps(the_data_1)
+        the_res_1 = self.client.post(the_url, the_json_data_1, content_type = 'application/json')
+        the_text_1 = json.loads(the_res_1.content.decode('utf-8'))
+        self.assertEqual(the_text_1['status'], 'successful')
+        
+        the_data_2 = {'token':log_text['token'], 'code':'12345678'}
+        the_json_data_2 = json.dumps(the_data_2)
+        the_res_2 = self.client.post(the_url, the_json_data_2, content_type = 'application/json')
+        the_text_2 = json.loads(the_res_2.content.decode('utf-8'))
+        self.assertEqual(the_text_2['status'], 'failed')
+        
+        the_data_3 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwNzk5MzUyMC42OTIsICJ1c2VybmFtZSI6ICJoZWppZSIsICJleHAiOiAxNTA4NTk4MzIwLjY5Mn0=','code':'12345678'}
+        the_json_data_3 = json.dumps(the_data_3)
+        the_res_3 = self.client.post(the_url, the_json_data_3, content_type = 'application/json')
+        the_text_3 = json.loads(the_res_3.content.decode('utf-8'))
+        self.assertEqual(the_text_3['status'], 'expiration')
+        
+        the_data_4 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwODkxMjc5Mi4yMTEsICJ1c2VybmFtZSI6ICJoZWxsbyIsICJleHAiOiAxNTQwNDQ4NzkyLjIxMX0=','code':'12345678'}
+        the_json_data_4 = json.dumps(the_data_4)
+        the_res_4 = self.client.post(the_url, the_json_data_4, content_type = 'application/json')
+        the_text_4 = json.loads(the_res_4.content.decode('utf-8'))
+        self.assertEqual(the_text_4['status'], 'failed')
 
 class ImmanentmapsTestcase(TestCase):
     def setUp(self):
