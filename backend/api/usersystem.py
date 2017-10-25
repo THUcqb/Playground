@@ -20,8 +20,8 @@ def register(request):
     :param param2: password
     :param param3: phonenumber
     :param param4: email
-    :returns: if succeed, return {'status':'successful'}
-              else, return {'status':'failed'} 
+    :returns: if succeed, return {"status":"successful"}
+              else, return {"status":"failed"} 
     '''
     res = {}
     if request.method == 'POST':
@@ -50,8 +50,8 @@ def login(request):
     :method: post
     :param param1: username
     :param param2: password
-    :returns: if succeed, return {'status':'successful','token':the_token}
-              else, return {'status':'failed'}
+    :returns: if succeed, return {"status":"successful","token":the_token}
+              else, return {"status":"failed"}
     '''
     res = {}
     if request.method == 'POST':
@@ -84,7 +84,7 @@ def logout(request):
     Handle request of users' logout.
     
     :method: post
-    :returns: {'status':'successful'}
+    :returns: {"status":"successful"}
     '''
     if request.method == 'POST':
         response_data = {}
@@ -98,8 +98,8 @@ def getuserinfo(request):
     
     :method: post
     :param param1: token
-    :returns: if succeed, return {'username' : username, ' phonenumber' : phonenumber, ' email' : email, 'status' : 'successful'}
-              else, return {'status':'failed'}
+    :returns: if succeed, return {"username":username, "phonenumber": phonenumber, "email":email, "status":"successful"}
+              else, return {"status":"failed"}
     '''
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
@@ -117,13 +117,64 @@ def getuserinfo(request):
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         try:
             userinfo = UserInfo.objects.get(username = username)
-            response_data['username'] = userinfo.username
-            response_data['phonenumber'] = userinfo.phonenumber
-            response_data['email'] = userinfo.email
-            response_data['status'] = 'successful'
+            response_data["username"] = userinfo.username
+            response_data["phonenumber"] = userinfo.phonenumber
+            response_data["email"] = userinfo.email
+            response_data["status"] = "successful"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         except UserInfo.DoesNotExist:
             pass
 
         response_data["status"] = "failed"
         return HttpResponse(json.dumps(response_data),content_type="application/json")
+        
+@csrf_exempt
+def changepassword(request):
+    '''
+    Handle the request of changing the password.
+    
+    :method: post
+    :param param1: token
+    :param param2: old_password
+    :param param3: new_password
+    :returns: if succeed, return {"status":"successful"}
+              else, return {"status":"failed"}
+    '''
+    if request.method == 'POST':
+        response_data = {}
+        d = json.loads(request.body.decode('utf-8'))
+        token_byte = d['token']
+        token_str = token_byte.encode(encoding = "utf-8")
+        token_info = base64.b64decode(token_str)
+        token = token_info.decode('utf-8','ignore')
+        user_info = json.loads(token)
+        username = user_info['username']
+        old_password = d['old_password']
+        new_password = d['new_password']
+        now = time.time()
+        expire = user_info['exp']
+        if expire < now:
+            response_data["status"] = "failed"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        try:
+            userinfo = UserInfo.objects.get(username = username)
+            if userinfo.password == old_password:
+                userinfo.password = new_password
+                response_data["status"] = "successful"
+                return HttpResponse(json.dumps(response_data),content_type="application/json")
+        except UserInfo.DoesNotExist:
+            pass
+        response_data["status"] = "failed"
+        return HttpResponse(json.dumps(response_data),content_type="application/json") 
+
+@csrf_exempt
+def emailauth(request):
+    response_data = {}
+    response_data["status"] = "successful"
+    return HttpResponse(json.dumps(response_data),content_type="application/json")
+
+@csrf_exempt
+def authresponse(request):
+    response_data = {}
+    response_data["status"] = "successful"
+    return HttpResponse(json.dumps(response_data),content_type="application/json")

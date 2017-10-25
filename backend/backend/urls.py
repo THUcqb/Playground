@@ -1,6 +1,6 @@
 from django.conf.urls import url, include
 from django.contrib import admin
-from api import usersystem, immanentmaps
+from api import usersystem, sources
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -9,7 +9,11 @@ urlpatterns = [
     url(r'^users/login$', usersystem.login),
     url(r'^users/logout$', usersystem.logout),
     url(r'^users/getinfo$', usersystem.getuserinfo),
-    url(r'^maps/save$', immanentmaps.savemaps),
-    url(r'^maps/load$', immanentmaps.loadmaps),
+    url(r'^users/changepassword$', usersystem.changepassword),
+    url(r'^users/email_auth$', usersystem.emailauth),
+    url(r'^users/auth_response$', usersystem.authresponse),
+    url(r'^maps/save$', sources.savemaps),
+    url(r'^maps/load$', sources.loadmaps),
+    url(r'^sources/images$', sources.getimag),
 ]
 

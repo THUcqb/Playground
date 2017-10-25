@@ -113,6 +113,39 @@ class UsersystemTest(TestCase):
         get_res_3 = self.client.post(get_url, get_json_data_3, content_type = 'application/json')
         get_text_3 = json.loads(get_res_3.content.decode('utf-8'))
         self.assertEqual(get_text_3['status'], 'failed')
+        
+    def test_changepassword(self):
+        '''
+        Test the changepassword API in usersystem.
+        '''
+        the_url = '/users/changepassword'
+        login_url = '/users/login'
+        UserInfo.objects.create(username = 'zuohaojia', password = 'waitlove', phonenumber = '110', email = 'zuohaojia@example.com')
+        login_data = {'username':'zuohaojia', 'password':'waitlove'}
+        log_json_data = json.dumps(login_data)
+        log_res = self.client.post(login_url, log_json_data, content_type = 'application/json')
+        log_text = json.loads(log_res.content.decode('utf-8'))
+        the_data = {'token':log_text['token'],'old_password':'waitlove','new_password':'wait5683'}
+        the_json_data = json.dumps(the_data)
+        the_res = self.client.post(the_url, the_json_data, content_type = 'application/json')
+        the_text = json.loads(the_res.content.decode('utf-8'))
+        self.assertEqual(the_text['status'], 'successful')
+        the_data_2 = {'token':log_text['token'],'old_password':'wait5683','new_password':'wait5683'}
+        the_json_data_2 = json.dumps(the_data_2)
+        the_res_2 = self.client.post(the_url, the_json_data_2, content_type = 'application/json')
+        the_text_2 = json.loads(the_res_2.content.decode('utf-8'))
+        self.assertEqual(the_text_2['status'], 'failed')
+        the_data_3 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwNzk5MzUyMC42OTIsICJ1c2VybmFtZSI6ICJoZWppZSIsICJleHAiOiAxNTA4NTk4MzIwLjY5Mn0=','old_password':'waitlove','new_password':'wait5683'}
+        the_json_data_3 = json.dumps(the_data_3)
+        the_res_3 = self.client.post(the_url, the_json_data_3, content_type = 'application/json')
+        the_text_3 = json.loads(the_res_3.content.decode('utf-8'))
+        self.assertEqual(the_text_3['status'], 'failed')
+        the_data_4 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwMTk4NjYwOC40ODQsICJ1c2VybmFtZSI6ICJoZWppZSIsICJleHAiOiAxNTAxOTg2NjEwLjQ4NH0=','old_password':'waitlove','new_password':'wait5683'}
+        the_json_data_4 = json.dumps(the_data_4)
+        the_res_4 = self.client.post(the_url, the_json_data_4, content_type = 'application/json')
+        the_text_4 = json.loads(the_res_4.content.decode('utf-8'))
+        self.assertEqual(the_text_4['status'], 'failed')
+        
 
 class ImmanentmapsTestcase(TestCase):
     def setUp(self):

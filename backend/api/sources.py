@@ -59,3 +59,17 @@ def loadmaps(request):
         response_data["maps"] = the_map.immanentmap
         response_data["status"] = "successful"
         return HttpResponse(json.dumps(response_data), content_type = "application/json")
+        
+@csrf_exempt
+def getimag(request):
+    '''
+    Handle the request of get imag source.
+    
+    :method: get
+    :param param1: imag_name end with '.png'
+    :returns: The imag required.
+    '''
+    if request.method == 'GET':
+        imag_name = request.GET['imag_name']
+        f = open(imag_name, 'rb')
+        return HttpResponse(f.read(), content_type = 'image/png')
