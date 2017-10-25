@@ -8,6 +8,10 @@ export class Base_task{
 		this.tasklist = [];
 		this.size = 0;
 	}
+	/**
+	 * add a task in tasklist
+	 * @param {[Base]}  
+	 */
 	add(task){
 		this.tasklist[this.size] = task;
 
@@ -28,23 +32,47 @@ export class Base {
 		this.check = check;
 	}
 
+	/**
+	 * link current task to next task
+	 * @param  {Function} next : naxt task
+	 */
 	link(next){
 		this.next = next;
 	}
-	set_task(task){
-		this.task = task;
+	/**
+	 * add tasklist for Base unit
+	 * @param {[Base_task]} tasklist 
+	 */
+	set_task(tasklist){
+		this.task = tasklist;
 	}
+	/**
+	 * set run time for tasklist
+	 * @param {[int]} time 
+	 */
 	set_time(time){
 		this.time = time;
 		this.cur_time = time;
 	}
-	set_else(else_task){
-		this.else_task = else_task;
+	/**
+	 * set else branch for Base unit 
+	 * "if...else do else_tasklist "
+	 * @param {[Base_task]} else_tasklist [description]
+	 */
+	set_else(else_tasklist){
+		this.else_task = else_tasklist;
 	}
+	/**
+	 * set check info "move" "check_move_up" ...
+	 * see also the function Check()
+	 * @param {[String]} check
+	 */
 	set_check(check){
 		this.check = check;
 	}
-
+	/**
+	 * chek point(x,y) if "runnable" or have "candy"
+	 */
 	runnable(x,y){	
 		if (x<0 || x>=10) {return'err';}
 		if (y<0 || y>=10) {return'err';}
@@ -52,7 +80,11 @@ export class Base {
 		if (Number(Base.bmap.block_list[x][y].info) === 0) {return'runnable';}
 		return 'err';
 	}
-
+	/**
+	 * Based on the check info check current state if right or not
+	 * runnable : the check info is right
+	 * null: current state is missing or wrong
+	 */
 	Check(str){
 		let s = "";
 		if (str === "true") {
@@ -104,7 +136,9 @@ export class Base {
 		return 'null';
 
 	}
-
+	/**
+	 * run the Base unit tasklist base on do while
+	 */
 	do_while(){
 		try{
 			do{
@@ -119,7 +153,9 @@ export class Base {
 			console.log(err)
 		}
 	}
-
+	/**
+	 * run the Base unit tasklist base on while do 
+	 */
 	while_do(){
 		try{
 			while (Base.Check(check)){
@@ -134,7 +170,9 @@ export class Base {
 			console.log(err)
 		}
 	}
-
+	/**
+	 * run the Base unit tasklist base on for loop
+	 */
 	loop(){
 		for (let i = 0; i < this.time; i++){
 			for (let variable in this.task.tasklist){ 
@@ -145,7 +183,9 @@ export class Base {
 		}
 	}
 
-	
+	/**
+	 * base_move change snake and map info by task
+	 */
 
 	base_move(_x,_y){
 		if (this.runnable(_x,_y) === 'candy') {
@@ -171,28 +211,46 @@ export class Base {
 				Base.bmap.set_head(_x,_y);
 			}
 	}
+	/**
+	 *  snake move up one step
+	 */
 
 	move_up(){
 		let _x = Base.bsnake.x-1 ;
 		let _y = Base.bsnake.y ;
 		this.base_move(_x,_y);
 	}
-	
+	/**
+	 *  snake move down one step
+	 */
+
 	move_down(){
 		let _x = Base.bsnake.x+1;
 		let _y = Base.bsnake.y ;
 		this.base_move(_x,_y);
 	}
+	/**
+	 *  snake move left one step
+	 */
+
 	move_left(){
 		let _x = Base.bsnake.x ;
 		let _y = Base.bsnake.y-1 ;
 		this.base_move(_x,_y);
 	}
+	/**
+	 *  snake move right one step
+	 */
+
 	move_right(){
 		let _x = Base.bsnake.x ;
 		let _y = Base.bsnake.y+1;
 		this.base_move(_x,_y);
 	}
+	/**
+	 * Base unit will run it's tasklist automatically untill finshed 
+	 * Woring: if you want to move one step you'd better use next() in Base__state
+	 */
 	run(){
 		console.log("run: > "+this.name)
 		if (this.type === "sys") {
@@ -254,7 +312,7 @@ export class Base {
 			}
 		}
 		
-		Base.bmap.print();
+		// Base.bmap.print();
 	}
 }
 
