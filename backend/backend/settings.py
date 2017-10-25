@@ -124,3 +124,10 @@ STATIC_URL = '/static/'
 
 # CORS_ORIGIN_ALLOW_ALL
 CORS_ORIGIN_ALLOW_ALL = True
+
+EMAIL_HOST = 'smtp.163.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'snake_server@163.com'
+EMAIL_HOST_PASSWORD = 'snake163'
+EMAIL_USE_TLS = False
+EMAIL_FROM = 'snake_server@163com'

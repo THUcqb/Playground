@@ -14,7 +14,7 @@ class UserInfo(models.Model):
     phonenumber = models.CharField(max_length = 11, default = '')
     email = models.EmailField()
     is_active = models.BooleanField(default = False)
-    auth_code = models.CharField(max_length = 9, default = '')
+    auth_code = models.CharField(max_length = 50, default = '')
 
     def __str__(self):
         return self.username

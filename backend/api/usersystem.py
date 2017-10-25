@@ -9,6 +9,9 @@ from .models import UserInfo
 import json
 import base64
 import time
+from random import Random
+from django.core.mail import send_mail
+from backend.settings import EMAIL_FROM
 
 @csrf_exempt
 def register(request):
@@ -99,6 +102,7 @@ def getuserinfo(request):
     :method: post
     :param param1: token
     :returns: if succeed, return {"username":username, "phonenumber": phonenumber, "email":email, "status":"successful"}
+              else if the token is out of date, return {"status":"expiration"}
               else, return {"status":"failed"}
     '''
     if request.method == 'POST':
@@ -113,7 +117,7 @@ def getuserinfo(request):
         now = time.time()
         expire = user_info['exp']
         if expire < now:
-            response_data["status"] = "failed"
+            response_data["status"] = "expiration"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         try:
             userinfo = UserInfo.objects.get(username = username)
@@ -138,6 +142,7 @@ def changepassword(request):
     :param param2: old_password
     :param param3: new_password
     :returns: if succeed, return {"status":"successful"}
+              else if the token is out of date, return {"status":"expiration"}
               else, return {"status":"failed"}
     '''
     if request.method == 'POST':
@@ -154,12 +159,13 @@ def changepassword(request):
         now = time.time()
         expire = user_info['exp']
         if expire < now:
-            response_data["status"] = "failed"
+            response_data["status"] = "expiration"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         try:
             userinfo = UserInfo.objects.get(username = username)
             if userinfo.password == old_password:
                 userinfo.password = new_password
+                userinfo.save()
                 response_data["status"] = "successful"
                 return HttpResponse(json.dumps(response_data),content_type="application/json")
         except UserInfo.DoesNotExist:
@@ -167,14 +173,104 @@ def changepassword(request):
         response_data["status"] = "failed"
         return HttpResponse(json.dumps(response_data),content_type="application/json") 
 
+def create_code(randomlength = 8):
+    '''
+    Create a random code.
+    
+    :param param1: randomlength
+    :returns: A random code whose length is equal to randomlength.
+    '''
+    res = ''
+    chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789'
+    length = len(chars) - 1
+    random = Ramdom()
+    for i in range(randomlength):
+        res += chars[random.randint(0, length)]
+    return res
+
 @csrf_exempt
 def emailauth(request):
-    response_data = {}
-    response_data["status"] = "successful"
-    return HttpResponse(json.dumps(response_data),content_type="application/json")
+    '''
+    Handle the request of verification by Email.
+    
+    :method: post
+    :param param1: token
+    :returns: if succeed, return {"status":"successful"}
+              else if the token is out of date, return {"status":"expiration"}
+              else, return {"status":"failed"}
+    '''
+    if request.method == 'POST':
+        response_data = {}
+        d = json.loads(request.body.decode('utf-8'))
+        token_byte = d['token']
+        token_str = token_byte.encode(encoding = "utf-8")
+        token_info = base64.b64decode(token_str)
+        token = token_info.decode('utf-8','ignore')
+        user_info = json.loads(token)
+        username = user_info['username']
+        now = time.time()
+        expire = user_info['exp']
+        if expire < now:
+            response_data["status"] = "expiration"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        try:
+            userinfo = UserInfo.objects.get(username = username)
+            authcode = {}
+            authcode['code'] = create_code()
+            authcode['exp'] = time.time() + 300
+            userinfo.auth_code = json.dumps(authcode)
+            userinfo.save()
+            email = userinfo.email
+            email_title = 'Code'
+            email_body = 'Your code is: ' + authcode['code'] + '. It will lose efficacy in 5 minutes.'
+            send_mail(email_title, email_body, EMAIL_FROM, [email])
+            response_data["status"] = "successful"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        except UserInfo.DoesNotExist:
+            pass
+        response_data["status"] = "failed"
+        return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 @csrf_exempt
 def authresponse(request):
-    response_data = {}
-    response_data["status"] = "successful"
-    return HttpResponse(json.dumps(response_data),content_type="application/json")
+    '''
+    Handle the request of verification by Email.
+    
+    :method: post
+    :param param1: token
+    :param param2: code
+    :returns: if succeed, return {"status":"successful"}
+              else if the token is out of date, return {"status":"token_expiration"}
+              else if the code is out of date, return {"status":"code_expiration"}
+              else, return {"status":"failed"}
+    '''
+    if request.method == 'POST':
+        response_data = {}
+        d = json.loads(request.body.decode('utf-8'))
+        token_byte = d['token']
+        token_str = token_byte.encode(encoding = "utf-8")
+        token_info = base64.b64decode(token_str)
+        token = token_info.decode('utf-8','ignore')
+        user_info = json.loads(token)
+        username = user_info['username']
+        now = time.time()
+        expire = user_info['exp']
+        if expire < now:
+            response_data["status"] = "token_expiration"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        try:
+            userinfo = UserInfo.objects.get(username = username)
+            authcode = json.loads(userinfo.auth_code.decode('utf-8'))
+            nowtime = time.time()
+            if authcode['exp'] < nowtime():
+                response_data["status"] = "code_expiration"
+                return HttpResponse(json.dumps(response_data),content_type="application/json")
+            if d['code'] == authcode['code']:
+                userinfo.is_active = True
+                userinfo.save()
+                response_data["status"] = "successful"
+                return HttpResponse(json.dumps(response_data),content_type="application/json")
+        except UserInfo.DoesNotExist:
+            pass
+        response_data["status"] = "failed"
+        return HttpResponse(json.dumps(response_data),content_type="application/json")
