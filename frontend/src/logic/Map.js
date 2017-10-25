@@ -1,7 +1,7 @@
 import {Block} from './Block';
 import axios from 'axios';
 import {URL,SAVEMAP,LOADMAP}from '../config/Api';
-
+import {level0,level1,level2,level3,level4} from './Maplevel';
 class MapInfo{
 	constructor(level,maps)
 	{
@@ -28,6 +28,13 @@ class Map {
 			}
 		}
 		this.block_list = block_list;
+		this.loacalmap = [];
+		this.loacalmap[0] = (level0);
+		this.loacalmap[1] = (level1);
+		this.loacalmap[2] = (level2);
+		this.loacalmap[3] = (level3);
+		this.loacalmap[4] = (level4);
+		console.log(this.loacalmap);
 		this.set_head(x,y);
 	}
 
@@ -84,16 +91,44 @@ class Map {
 
 	load(level) // 不知道API+1
 	{
-		return axios.post(URL + LOADMAP,
-		{
-			level,
-		})
-		.then(function (response) {
-			return response.data
-		})
-		.catch(function (error){
-			throw error;
-		});
+		let str = this.loacalmap[level];
+		for (let i = 0; i < this.SIZE_X; i++) {
+				for (let n = 0; n < this.SIZE_Y; n++) {
+					let info = Number(str[i*this.SIZE_X+n]);
+
+					this.block_list[i][n].info = info;
+					if (info == 2) 
+					{
+						this.candy+=1;
+					}
+				}
+			}
+
+
+		// return axios.post(URL + LOADMAP,
+		// {
+		// 	level,
+		// })
+		// .then(function (response) {
+
+		// 	let str = response.data;
+		// 	this.candy = 0;
+		// 	for (let i = 0; i < this.SIZE_X; i++) {
+		// 		for (let n = 0; n < this.SIZE_Y; n++) {
+		// 			let info = Number(str[i*this.SIZE_X+n]);
+
+		// 				this.block_list[i][n].info = info;
+		// 				if (info == 2) 
+		// 				{
+		// 					this.candy+=1;
+		// 				}
+		// 		}
+		// 	}
+		// 	return response.data
+		// })
+		// .catch(function (error){
+		// 	throw error;
+		// });
 	}
 	//读取地图
 	tsetload(filename)

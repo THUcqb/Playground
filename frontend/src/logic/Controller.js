@@ -6,7 +6,7 @@ export class Controller{
 	{
 		this.begin = Base.begin;
 		this.state = "runnable";
-		Base.bmap.load("level_0.txt");
+		Base.bmap.load(0);
 
         let usertask = new Base_task(this.begin)//将任务列表指向初始节点
         this.begin.task=usertask;
