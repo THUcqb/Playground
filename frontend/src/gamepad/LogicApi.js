@@ -9,7 +9,7 @@ let historyStep = 0;
 
 export async function move(op) {
     Controller.controller.begin.task.add(new Base('sys', 'move_' + op));
-    // await sleep(300 * historyStep++);
+    await sleep(500 * historyStep++);
 //  TODO: move the await to painter if paint continuously.
     Controller.controller.step();
 }
@@ -22,6 +22,7 @@ export function reset() {
 
 export default function run(code) {
     // Blockly.JavaScript.addReservedWords('code');
+    reset()
     try {
         eval(code);
     } catch (e) {
