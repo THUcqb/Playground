@@ -180,6 +180,7 @@ class UsersystemTest(TestCase):
         '''
         the_url = '/users/email_auth'
         login_url = '/users/login'
+        response_url = '/users/auth_response'
         UserInfo.objects.create(username = 'zuohaojia', password = 'waitlove', phonenumber = '110', email = 'hejie_cq@163.com')
         
         login_data = {'username':'zuohaojia', 'password':'waitlove'}
@@ -192,6 +193,16 @@ class UsersystemTest(TestCase):
         the_res = self.client.post(the_url, the_json_data, content_type = 'application/json')
         the_text = json.loads(the_res.content.decode('utf-8'))
         self.assertEqual(the_text['status'], 'successful')
+        
+        the_data_1 = {'token':log_text['token'], 'code':the_text['code']}
+        the_json_data_1 = json.dumps(the_data_1)
+        the_res_1 = self.client.post(response_url, the_json_data_1, content_type = 'application/json')
+        
+        the_data_2 = {'token':log_text['token']}
+        the_json_data_2 = json.dumps(the_data_2)
+        the_res_2 = self.client.post(the_url, the_json_data_2, content_type = 'application/json')
+        the_text_2 = json.loads(the_res_2.content.decode('utf-8'))
+        self.assertEqual(the_text_2['status'], 'Actived')
         
         the_data_3 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwNzk5MzUyMC42OTIsICJ1c2VybmFtZSI6ICJoZWppZSIsICJleHAiOiAxNTA4NTk4MzIwLjY5Mn0='}
         the_json_data_3 = json.dumps(the_data_3)
@@ -247,3 +258,66 @@ class UsersystemTest(TestCase):
         the_res_4 = self.client.post(the_url, the_json_data_4, content_type = 'application/json')
         the_text_4 = json.loads(the_res_4.content.decode('utf-8'))
         self.assertEqual(the_text_4['status'], 'failed')
+
+    def test_retrievepassword(self):
+        '''
+        Test the retrievepassword api in usersystem.
+        '''
+        the_url = '/users/retrieve_password'
+        UserInfo.objects.create(username = 'zuohaojia', password = 'waitlove', phonenumber = '110', email = 'hejie_cq@163.com')
+        UserInfo.objects.create(username = 'yanlimin', password = 'waitlove', phonenumber = '110', email = 'hejie_cq@163.com', is_active = True)
+        
+        the_data_1 = {'username':'zuohaojia', 'email':'zuohaojia@163.com'}
+        the_json_data_1 = json.dumps(the_data_1)
+        the_res_1 = self.client.post(the_url, the_json_data_1, content_type = 'application/json')
+        the_text_1 = json.loads(the_res_1.content.decode('utf-8'))
+        self.assertEqual(the_text_1['status'], 'EmailError')
+        
+        the_data_2 = {'username':'zuohaojia', 'email':'hejie_cq@163.com'}
+        the_json_data_2 = json.dumps(the_data_2)
+        the_res_2 = self.client.post(the_url, the_json_data_2, content_type = 'application/json')
+        the_text_2 = json.loads(the_res_2.content.decode('utf-8'))
+        self.assertEqual(the_text_2['status'], 'EmailNotActived')
+        
+        the_data_3 = {'username':'hejie', 'email':'hejie_cq@163.com'}
+        the_json_data_3 = json.dumps(the_data_3)
+        the_res_3 = self.client.post(the_url, the_json_data_3, content_type = 'application/json')
+        the_text_3 = json.loads(the_res_3.content.decode('utf-8'))
+        self.assertEqual(the_text_3['status'], 'UsersNotExisted')
+        
+        the_data_4 = {'username':'yanlimin', 'email':'hejie_cq@163.com'}
+        the_json_data_4 = json.dumps(the_data_4)
+        the_res_4 = self.client.post(the_url, the_json_data_4, content_type = 'application/json')
+        the_text_4 = json.loads(the_res_4.content.decode('utf-8'))
+        self.assertEqual(the_text_4['status'], 'successful')
+    
+    def test_retrieveresponse(self):
+        '''
+        Test the retrieveresponse api in usersystem.
+        '''
+        the_url_1 = '/users/retrieve_password'
+        the_url_2 = '/users/retrieve_response'
+        UserInfo.objects.create(username = 'yanlimin', password = 'waitlove', phonenumber = '110', email = 'hejie_cq@163.com', is_active = True)
+        
+        the_data = {'username':'yanlimin', 'email':'hejie_cq@163.com'}
+        the_json_data = json.dumps(the_data)
+        the_res = self.client.post(the_url_1, the_json_data, content_type = 'application/json')
+        the_text = json.loads(the_res.content.decode('utf-8'))
+        
+        the_data_1 = {'username':'hejie', 'code':the_text['code']}
+        the_json_data_1 = json.dumps(the_data_1)
+        the_res_1 = self.client.post(the_url_2, the_json_data_1, content_type = 'application/json')
+        the_text_1 = json.loads(the_res_1.content.decode('utf-8'))
+        self.assertEqual(the_text_1['status'], 'UsersNotExisted')
+        
+        the_data_2 = {'username':'yanlimin', 'code':'12345678'}
+        the_json_data_2 = json.dumps(the_data_2)
+        the_res_2 = self.client.post(the_url_2, the_json_data_2, content_type = 'application/json')
+        the_text_2 = json.loads(the_res_2.content.decode('utf-8'))
+        self.assertEqual(the_text_2['status'], 'CodeError')
+        
+        the_data_3 = {'username':'yanlimin', 'code':the_text['code']}
+        the_json_data_3 = json.dumps(the_data_3)
+        the_res_3 = self.client.post(the_url_2, the_json_data_3, content_type = 'application/json')
+        the_text_3 = json.loads(the_res_3.content.decode('utf-8'))
+        self.assertEqual(the_text_3['status'], 'successful')
