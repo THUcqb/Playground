@@ -11,7 +11,8 @@ const preloader = new createjs.LoadQueue(false);
 function setupManifest()
 {
     manifest = [{
-        src: "http://www.hbwksj.com/uploads/allimg/160719/2-160G91P92c30.jpg",
+        //src: "http://www.hbwksj.com/uploads/allimg/160719/2-160G91P92c30.jpg",
+        src: "http://oyeyx4fo5.bkt.clouddn.com/17-10-26/48853568.jpg",
         id: "square"
     }, {
         src: "http://58pic.ooopic.com/58pic/12/91/84/91y58PIC2m7.jpg",
