@@ -36,13 +36,14 @@ class Head extends Part
         this.graphics.clear();
         this.drawPic();
         if (x === this.nowX + 1)
-            TweenJS.Tween.get(this, null, true).to({ y: delta }, this.time).call(this.updatePos, [x, y]);
+            TweenJS.Tween.get(this, null, true).to({ y: delta }, this.time);
         else if (x === this.nowX - 1)
-            TweenJS.Tween.get(this, null, true).to({ y: -delta }, this.time).call(this.updatePos, [x, y]);
+            TweenJS.Tween.get(this, null, true).to({ y: -delta }, this.time);
         else if (y === this.nowY + 1)
-            TweenJS.Tween.get(this, null, true).to({ x: delta }, this.time).call(this.updatePos, [x, y]);
+            TweenJS.Tween.get(this, null, true).to({ x: delta }, this.time);
         else if (y === this.nowY - 1)
-            TweenJS.Tween.get(this, null, true).to({ x: -delta }, this.time).call(this.updatePos, [x, y]);
+            TweenJS.Tween.get(this, null, true).to({ x: -delta }, this.time);
+        this.updatePos(x, y);
     }
 
     updatePos(x, y)
