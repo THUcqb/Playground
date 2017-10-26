@@ -129,7 +129,7 @@ class UsersystemTest(TestCase):
         '''
         Test the changepassword API in usersystem.
         '''
-        the_url = '/users/changepassword'
+        the_url = '/users/change_password'
         login_url = '/users/login'
         UserInfo.objects.create(username = 'zuohaojia', password = 'waitlove', phonenumber = '110', email = 'zuohaojia@example.com')
         

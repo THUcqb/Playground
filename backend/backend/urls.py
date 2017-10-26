@@ -9,7 +9,7 @@ urlpatterns = [
     url(r'^users/login$', usersystem.login),
     url(r'^users/logout$', usersystem.logout),
     url(r'^users/getinfo$', usersystem.getuserinfo),
-    url(r'^users/changepassword$', usersystem.changepassword),
+    url(r'^users/change_password$', usersystem.changepassword),
     url(r'^users/email_auth$', usersystem.emailauth),
     url(r'^users/auth_response$', usersystem.authresponse),
     url(r'^maps/save$', sources.savemaps),
