@@ -80,7 +80,7 @@ class Scene extends Component
         this.handleResize();
         let stage = new EaselJS.Stage("canvas");
         
-        let grassPainter = new GrassPainter();
+        let grassPainter = new GrassPainter(this.controller.getMap());
         stage.addChild(grassPainter);
 
         let snakePainter = new SnakePainter(stage);
