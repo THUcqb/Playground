@@ -2,19 +2,23 @@ import { startPos, delta } from "../Constant";
 import EaselJS from "masteryodaeaseljs";
 import TweenJS from "masteryodatweenjs";
 
-class Segment extends EaselJS.Shape
+class Part extends EaselJS.Shape
 {
-    constructor(now_x, now_y, last_x, last_y, width)
+    move(x, y) {}
+    updatePos(x, y) {}
+    drawPic() {}
+}
+
+class Head extends Part
+{
+    constructor(nowX, nowY, width)
     {
         super();
-        this.x = 0;
-        this.y = 0;
-        this.now_x = now_x;
-        this.now_y = now_y;
-        this.last_x = last_x;
-        this.last_y = last_y;
+        this.name = "head";
+        this.nowX = nowX;
+        this.nowY = nowY;
         this.width = width;
-        this.time = 500;
+        this.time = 495;
         this.drawPic();
     }
 
@@ -22,35 +26,82 @@ class Segment extends EaselJS.Shape
     {
         this.x = 0;
         this.y = 0;
+        let x = startPos + this.nowX * delta + (delta - this.width) / 2;
+        let y = startPos + this.nowY * delta + (delta - this.width) / 2;
+        this.graphics.beginFill("#4518ff").drawRect(y, x, this.width, this.width);
+    }
+
+    move(x, y)
+    {
+        this.graphics.clear();
+        this.drawPic();
+        if (x === this.nowX + 1)
+            TweenJS.Tween.get(this, null, true).to({ y: delta }, this.time).call(this.updatePos, [x, y]);
+        else if (x === this.nowX - 1)
+            TweenJS.Tween.get(this, null, true).to({ y: -delta }, this.time).call(this.updatePos, [x, y]);
+        else if (y === this.nowY + 1)
+            TweenJS.Tween.get(this, null, true).to({ x: delta }, this.time).call(this.updatePos, [x, y]);
+        else if (y === this.nowY - 1)
+            TweenJS.Tween.get(this, null, true).to({ x: -delta }, this.time).call(this.updatePos, [x, y]);
+    }
+
+    updatePos(x, y)
+    {
+        this.nowX = x;
+        this.nowY = y;
+    }
+}
+
+class Segment extends Part
+{
+    constructor(nowX, nowY, lastX, lastY, width)
+    {
+        super();
+        this.name = "segment";
+        this.x = 0;
+        this.y = 0;
+        this.nowX = nowX;
+        this.nowY = nowY;
+        this.lastX = lastX;
+        this.lastY = lastY;
+        this.width = width;
+        this.time = 495;
+        this.drawPic(this.nowX, this.nowY, this.lastX, this.lastY);
+    }
+
+    drawPic(nowX, nowY, lastX, lastY)
+    {
+        this.x = 0;
+        this.y = 0;
         let x = 0;
         let y = 0;
         let width_x = 0;
         let width_y = 0;
-        if (this.now_x === this.last_x + 1)
+        if (nowX === lastX + 1)
         {
-            x = startPos + this.last_x * delta + (delta + this.width) / 2;
-            y = startPos + this.last_y * delta + (delta - this.width) / 2;
+            x = startPos + lastX * delta + (delta - this.width) / 2;
+            y = startPos + lastY * delta + (delta - this.width) / 2;
             width_x = delta;
             width_y = this.width;
         }
-        if (this.now_x === this.last_x - 1)
+        if (nowX === lastX - 1)
         {
-            x = startPos + this.now_x * delta + (delta - this.width) / 2;
-            y = startPos + this.now_y * delta + (delta - this.width) / 2;
+            x = startPos + nowX * delta + (delta + this.width) / 2;
+            y = startPos + nowY * delta + (delta - this.width) / 2;
             width_x = delta;
             width_y = this.width;
         }
-        if (this.now_y === this.last_y + 1)
+        if (nowY === lastY + 1)
         {
-            x = startPos + this.last_x * delta + (delta - this.width) / 2;
-            y = startPos + this.last_y * delta + (delta + this.width) / 2;
+            x = startPos + lastX * delta + (delta - this.width) / 2;
+            y = startPos + lastY * delta + (delta - this.width) / 2;
             width_x = this.width;
             width_y = delta;
         }
-        if (this.now_y === this.last_y - 1)
+        if (nowY === lastY - 1)
         {
-            x = startPos + this.now_x * delta + (delta - this.width) / 2;
-            y = startPos + this.now_y * delta + (delta - this.width) / 2;
+            x = startPos + nowX * delta + (delta - this.width) / 2;
+            y = startPos + nowY * delta + (delta + this.width) / 2;
             width_x = this.width;
             width_y = delta;
         }
@@ -59,43 +110,46 @@ class Segment extends EaselJS.Shape
 
     moveForward()
     {
-        this.drawPic();
-        if (this.now_x === this.last_x + 1) TweenJS.Tween.get(this).to({ y: delta }, this.time);
-        if (this.now_x === this.last_x - 1) TweenJS.Tween.get(this).to({ y: -delta }, this.time);
-        if (this.now_y === this.last_y + 1) TweenJS.Tween.get(this).to({ x: delta }, this.time);
-        if (this.now_y === this.last_y - 1) TweenJS.Tween.get(this).to({ x: -delta }, this.time);
+        this.drawPic(this.nowX, this.nowY, this.lastX, this.lastY);
+        if (this.nowX === this.lastX + 1)
+            TweenJS.Tween.get(this).to({ y: delta }, this.time);
+        else if (this.nowX === this.lastX - 1)
+            TweenJS.Tween.get(this).to({ y: -delta }, this.time);
+        else if (this.nowY === this.lastY + 1)
+            TweenJS.Tween.get(this).to({ x: delta }, this.time);
+        else if (this.nowY === this.lastY - 1)
+            TweenJS.Tween.get(this).to({ x: -delta }, this.time);
     }
 
     updatePos(x, y)
     {
-        this.last_x = this.now_x;
-        this.last_y = this.now_y;
-        this.now_x = x;
-        this.now_y = y;
+        if (x === this.nowX && y === this.nowY) return;
+        console.log("update", x, y, this.nowX, this.nowY, this.lastX, this.lastY);
+        this.lastX = this.nowX;
+        this.lastY = this.nowY;
+        this.nowX = x;
+        this.nowY = y;
     }
 
     move(x, y)
     {
+        console.log("Segment move", this.nowX, this.nowY, x, y);
         this.graphics.clear();
         this.x = 0;
         this.y = 0;
-        if (x === this.now_x && y === this.now_y)
-            this.drawPic();
-        else if (x === this.now_x && x === this.last_x)
-        {
+        if (x === this.nowX && y === this.nowY)
+            this.drawPic(this.nowX, this.nowY, this.lastX, this.lastY);
+        else if (x === this.nowX && x === this.lastX)
             this.moveForward();
-            this.updatePos(x, y);
-        }
-        else if (y === this.now_y && y === this.last_y)
-        {
+        else if (y === this.nowY && y === this.lastY)
             this.moveForward();
-            this.updatePos(x, y);
-        }
         else
         {
-            this.updatePos(x, y);
-            //this.drawPic();
+            // TODO: rotate in the corner
+            // this.updatePos(x, y);
+            // this.drawPic();
         }
+        this.updatePos(x, y);
     }
 }
 
@@ -108,7 +162,12 @@ class SnakePainter
     {
         this.stage = stage;
         this.width = delta / 3;
-        this.snake = [];
+        this.snake = null;
+    }
+
+    reset()
+    {
+        this.snake = null;
     }
 
     /**
@@ -117,28 +176,31 @@ class SnakePainter
      */
     update(snake)
     {
-        // TODO: Use Tween.to() || Tween.rotate() function to implement contiguous movement of a snake
         if (this.snake === null)
         {
-            this.snake = new Array(Segment);
+            this.snake = [];
+            let head = new Head(snake.body[snake.size - 1].x, snake.body[snake.size - 1].y, this.width);
+            this.stage.addChild(head);
+            this.snake.push(head);
             for (let i = snake.size - 2; i >= 0; i--)
             {
-                let now_x = snake.body[i + 1].x;
-                let now_y = snake.body[i + 1].y;
-                let last_x = snake.body[i].x;
-                let last_y = snake.body[i].y;
+                let nowX = snake.body[i + 1].x;
+                let nowY = snake.body[i + 1].y;
+                let lastX = snake.body[i].x;
+                let lastY = snake.body[i].y;
 
-                let shape = new Segment(now_x, now_y, last_x, last_y, this.width);
+                let shape = new Segment(nowX, nowY, lastX, lastY, this.width);
                 this.stage.addChild(shape);
                 this.snake.push(shape);
             }
         }
         else
         {
-            let tmp = snake.size - this.snake.length - 1;
-            for (let i = this.snake.length - 1; i >= 0; i--)
+            let tmp = snake.size - this.snake.length;
+            this.snake[0].move(snake.body[snake.size - 1].x, snake.body[snake.size - 1].y);
+            for (let i = this.snake.length - 2; i >= 0; i--)
             {
-                this.snake[this.snake.length - 1 - i].move(snake.body[i + tmp + 1].x, snake.body[i + tmp + 1].y);
+                this.snake[this.snake.length - 1 - i].move(snake.body[i + 1 + tmp].x, snake.body[i + 1 + tmp].y);
             }
             if (tmp === 1)
             {
