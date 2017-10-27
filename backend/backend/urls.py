@@ -10,6 +10,8 @@ urlpatterns = [
     url(r'^users/logout$', usersystem.logout),
     url(r'^users/getinfo$', usersystem.getuserinfo),
     url(r'^users/change_password$', usersystem.changepassword),
+    url(r'^users/retrieve_password$', usersystem.retrievepassword),
+    url(r'^users/retrieve_response$', usersystem.retrieveresponse),
     url(r'^users/email_auth$', usersystem.emailauth),
     url(r'^users/auth_response$', usersystem.authresponse),
     url(r'^maps/save$', sources.savemaps),

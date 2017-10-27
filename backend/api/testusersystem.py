@@ -180,6 +180,7 @@ class UsersystemTest(TestCase):
         '''
         the_url = '/users/email_auth'
         login_url = '/users/login'
+        response_url = '/users/auth_response'
         UserInfo.objects.create(username = 'zuohaojia', password = 'waitlove', phonenumber = '110', email = 'hejie_cq@163.com')
         
         login_data = {'username':'zuohaojia', 'password':'waitlove'}
@@ -192,6 +193,16 @@ class UsersystemTest(TestCase):
         the_res = self.client.post(the_url, the_json_data, content_type = 'application/json')
         the_text = json.loads(the_res.content.decode('utf-8'))
         self.assertEqual(the_text['status'], 'successful')
+        
+        the_data_1 = {'token':log_text['token'], 'code':the_text['code']}
+        the_json_data_1 = json.dumps(the_data_1)
+        the_res_1 = self.client.post(response_url, the_json_data_1, content_type = 'application/json')
+        
+        the_data_2 = {'token':log_text['token']}
+        the_json_data_2 = json.dumps(the_data_2)
+        the_res_2 = self.client.post(the_url, the_json_data_2, content_type = 'application/json')
+        the_text_2 = json.loads(the_res_2.content.decode('utf-8'))
+        self.assertEqual(the_text_2['status'], 'Actived')
         
         the_data_3 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwNzk5MzUyMC42OTIsICJ1c2VybmFtZSI6ICJoZWppZSIsICJleHAiOiAxNTA4NTk4MzIwLjY5Mn0='}
         the_json_data_3 = json.dumps(the_data_3)
@@ -248,42 +259,65 @@ class UsersystemTest(TestCase):
         the_text_4 = json.loads(the_res_4.content.decode('utf-8'))
         self.assertEqual(the_text_4['status'], 'failed')
 
-class ImmanentmapsTestcase(TestCase):
-    def setUp(self):
-        self.client = Client()
+    def test_retrievepassword(self):
+        '''
+        Test the retrievepassword api in usersystem.
+        '''
+        the_url = '/users/retrieve_password'
+        UserInfo.objects.create(username = 'zuohaojia', password = 'waitlove', phonenumber = '110', email = 'hejie_cq@163.com')
+        UserInfo.objects.create(username = 'yanlimin', password = 'waitlove', phonenumber = '110', email = 'hejie_cq@163.com', is_active = True)
+        
+        the_data_1 = {'username':'zuohaojia', 'email':'zuohaojia@163.com'}
+        the_json_data_1 = json.dumps(the_data_1)
+        the_res_1 = self.client.post(the_url, the_json_data_1, content_type = 'application/json')
+        the_text_1 = json.loads(the_res_1.content.decode('utf-8'))
+        self.assertEqual(the_text_1['status'], 'EmailError')
+        
+        the_data_2 = {'username':'zuohaojia', 'email':'hejie_cq@163.com'}
+        the_json_data_2 = json.dumps(the_data_2)
+        the_res_2 = self.client.post(the_url, the_json_data_2, content_type = 'application/json')
+        the_text_2 = json.loads(the_res_2.content.decode('utf-8'))
+        self.assertEqual(the_text_2['status'], 'EmailNotActived')
+        
+        the_data_3 = {'username':'hejie', 'email':'hejie_cq@163.com'}
+        the_json_data_3 = json.dumps(the_data_3)
+        the_res_3 = self.client.post(the_url, the_json_data_3, content_type = 'application/json')
+        the_text_3 = json.loads(the_res_3.content.decode('utf-8'))
+        self.assertEqual(the_text_3['status'], 'UsersNotExisted')
+        
+        the_data_4 = {'username':'yanlimin', 'email':'hejie_cq@163.com'}
+        the_json_data_4 = json.dumps(the_data_4)
+        the_res_4 = self.client.post(the_url, the_json_data_4, content_type = 'application/json')
+        the_text_4 = json.loads(the_res_4.content.decode('utf-8'))
+        self.assertEqual(the_text_4['status'], 'successful')
     
-    def test_savemaps(self):
+    def test_retrieveresponse(self):
         '''
-        Test the savemaps API in immanentmaps.
+        Test the retrieveresponse api in usersystem.
         '''
-        save_url = '/maps/save'
+        the_url_1 = '/users/retrieve_password'
+        the_url_2 = '/users/retrieve_response'
+        UserInfo.objects.create(username = 'yanlimin', password = 'waitlove', phonenumber = '110', email = 'hejie_cq@163.com', is_active = True)
         
-        parameter = {'level':'1', 'maps':'1111000000100002000010010000211000020001000000000110200000000000000200020010000000002001010000000021'}
-        json_parameter = json.dumps(parameter)
+        the_data = {'username':'yanlimin', 'email':'hejie_cq@163.com'}
+        the_json_data = json.dumps(the_data)
+        the_res = self.client.post(the_url_1, the_json_data, content_type = 'application/json')
+        the_text = json.loads(the_res.content.decode('utf-8'))
         
-        res_1 = self.client.post(save_url, json_parameter, content_type = "application/json")
-        text_1 = json.loads(res_1.content.decode('utf-8'))
-        self.assertEqual(text_1['status'], 'saved')
+        the_data_1 = {'username':'hejie', 'code':the_text['code']}
+        the_json_data_1 = json.dumps(the_data_1)
+        the_res_1 = self.client.post(the_url_2, the_json_data_1, content_type = 'application/json')
+        the_text_1 = json.loads(the_res_1.content.decode('utf-8'))
+        self.assertEqual(the_text_1['status'], 'UsersNotExisted')
         
-        res_2 = self.client.post(save_url, json_parameter, content_type = "application/json")
-        text_2 = json.loads(res_2.content.decode('utf-8'))
-        self.assertEqual(text_2['status'], 'existed')
-    
-    def test_loadmaps(self):
-        '''
-        Test the loadmaps API in immanentmaps.
-        '''
-        load_url = '/maps/load'
-        ImmanentMaps.objects.create(level = '1', immanentmap = '1111000000100002000010010000211000020001000000000110200000000000000200020010000000002001010000000021')
+        the_data_2 = {'username':'yanlimin', 'code':'12345678'}
+        the_json_data_2 = json.dumps(the_data_2)
+        the_res_2 = self.client.post(the_url_2, the_json_data_2, content_type = 'application/json')
+        the_text_2 = json.loads(the_res_2.content.decode('utf-8'))
+        self.assertEqual(the_text_2['status'], 'CodeError')
         
-        parameter_1 = {'level':'1'}
-        json_parameter_1 = json.dumps(parameter_1)
-        res_1 = self.client.post(load_url, json_parameter_1, content_type = "application/json")
-        text_1 = json.loads(res_1.content.decode('utf-8'))
-        self.assertEqual(text_1['status'], 'successful')
-        
-        parameter_2 = {'level':'3'}
-        json_parameter_2 = json.dumps(parameter_2)
-        res_2 = self.client.post(load_url, json_parameter_2, content_type = "application/json")
-        text_2 = json.loads(res_2.content.decode('utf-8'))
-        self.assertEqual(text_2['status'], 'doesnotexist')
+        the_data_3 = {'username':'yanlimin', 'code':the_text['code']}
+        the_json_data_3 = json.dumps(the_data_3)
+        the_res_3 = self.client.post(the_url_2, the_json_data_3, content_type = 'application/json')
+        the_text_3 = json.loads(the_res_3.content.decode('utf-8'))
+        self.assertEqual(the_text_3['status'], 'successful')

@@ -215,6 +215,9 @@ def emailauth(request):
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         try:
             userinfo = UserInfo.objects.get(username = username)
+            if userinfo.is_active == True:
+                response_data["status"] = "Actived"
+                return HttpResponse(json.dumps(response_data),content_type="application/json")
             code = create_code()
             userinfo.auth_code = code
             userinfo.save()
@@ -267,3 +270,71 @@ def authresponse(request):
             pass
         response_data["status"] = "failed"
         return HttpResponse(json.dumps(response_data),content_type="application/json")
+
+@csrf_exempt
+def retrievepassword(request):
+    '''
+    Handle the request of getting back the user's password by Email.
+    
+    :method: post
+    :param param1: username
+    :param param2: email
+    :returns: if the email is wrong , return {"status" : "EmailError"}
+              else if the username is wrong, return {"status" : "UserNotExisted"}
+              else if the email hasn't actived, return {"status" : "EmailNotActived"}
+              else if succeed, return {"status" : "successful"}
+    '''
+    if request.method == 'POST':
+        response_data = {}
+        d = json.loads(request.body.decode('utf-8'))
+        try:
+            userinfo = UserInfo.objects.get(username = d['username'])
+            if userinfo.email != d['email']:
+                response_data["status"] = "EmailError"
+                return HttpResponse(json.dumps(response_data),content_type="application/json")
+            if userinfo.is_active == False:
+                response_data["status"] = "EmailNotActived"
+                return HttpResponse(json.dumps(response_data),content_type="application/json")
+            code = create_code()
+            userinfo.auth_code = code
+            userinfo.save()
+            email = userinfo.email
+            email_title = 'Code'
+            email_body = 'Your code is: ' + code
+            send_mail(email_title, email_body, EMAIL_FROM, [email])
+            response_data["status"] = "successful"
+            response_data["code"] = code
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        except UserInfo.DoesNotExist:
+            response_data["status"] = "UsersNotExisted"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+
+@csrf_exempt
+def retrieveresponse(request):
+    '''
+    Handle the request of getting back the user's password after emailed.
+    
+    :method: post
+    :param param1: username
+    :param param2: code
+    :returns: if the code is wrong , return {"status" : "CodeError"}
+              else if the username is wrong, return {"status" : "UserNotExisted"}
+              else if succeed, return {"status" : "successful"}
+    '''
+    if request.method == 'POST':
+        response_data = {}
+        d = json.loads(request.body.decode('utf-8'))
+        try:
+            userinfo = UserInfo.objects.get(username = d['username'])
+            if userinfo.auth_code != d['code']:
+                response_data["status"] = "CodeError"
+                return HttpResponse(json.dumps(response_data),content_type="application/json")
+            email = userinfo.email
+            email_title = 'Password'
+            email_body = 'Your password is: ' + userinfo.password
+            send_mail(email_title, email_body, EMAIL_FROM, [email])
+            response_data["status"] = "successful"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        except UserInfo.DoesNotExist:
+            response_data["status"] = "UsersNotExisted"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
