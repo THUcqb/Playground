@@ -16,8 +16,6 @@ class GrassPainter extends createjs.Container
         this.wall = preloader.getResult("wall");
         this.coin = preloader.getResult("coin");
         this.init(map);
-        this.coins = new createjs.Shape();
-        this.addChild(this.coins);
     }
     
     /**
@@ -26,6 +24,7 @@ class GrassPainter extends createjs.Container
      */
     init(map)
     {
+        this.removeAllChildren()
         const info_arr = map.Edata();
         const size_x = map.SIZE_X;
         const size_y = map.SIZE_Y;
@@ -35,14 +34,15 @@ class GrassPainter extends createjs.Container
             for (let j = 0; j < size_y; j++)
             {
                 const screen_x = startPos + delta * j;
-                if (info_arr[i][j] === 0)
+                if (info_arr[i][j] === 0 || info_arr[i][j] === 2)
                     this.paintGround(screen_x, screen_y);
                 else if (info_arr[i][j] === 1)
                     this.paintWall(screen_x, screen_y);
-                else if (info_arr[i][j] === 2)
-                    this.paintGround(screen_x, screen_y);
             }
         }
+        this.coins = new createjs.Shape();
+        this.addChild(this.coins);
+        this.update(map)
     }
 
     /**
