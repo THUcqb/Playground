@@ -48,7 +48,7 @@ class Scene extends Component
                 data.snakePainter.update(data.controller.getSnake());
             // }
         }
-        data.count = (data.count + 1) % 12;
+        data.count = (data.count + 1) % 30;
         data.stage.update();
     }
 
@@ -93,7 +93,7 @@ class Scene extends Component
             count: count,
         };
         EaselJS.Ticker.on("tick", Scene.tick, null, false, data);
-        EaselJS.Ticker.framerate = 24;
+        EaselJS.Ticker.framerate = 60;
     }
 
     /**
