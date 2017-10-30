@@ -23,10 +23,9 @@ def register(request):
     :param param2: password
     :param param3: phonenumber
     :param param4: email
-    :returns: if succeed, return {"status":"successful"}
-              else, return {"status":"failed"} 
+    :returns: if succeed, return {"status":"Successful"}
+              else if the user has registered, return {"status":"Existed"}
     '''
-    res = {}
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
         response_data = {}
@@ -34,16 +33,14 @@ def register(request):
         password = d['password']
         phonenumber = d['phonenumber']
         email = d['email']
-
         try:
-            exist_user = UserInfo.objects.get(username = username)
+            userinfo = UserInfo.objects.get(username = username)
+            response_data["status"] = "Existed"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
         except UserInfo.DoesNotExist:
             userinfo = UserInfo.objects.create(username = username, password = password, phonenumber = phonenumber, email = email)
-            response_data["status"] = "successful"
+            response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
-
-        response_data["status"] = "failed"
-        return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 @csrf_exempt
 def login(request):
@@ -53,8 +50,9 @@ def login(request):
     :method: post
     :param param1: username
     :param param2: password
-    :returns: if succeed, return {"status":"successful","token":the_token}
-              else, return {"status":"failed"}
+    :returns: if succeed, return {"status":"Successful","token":the_token}
+              else if the password is wrong, return {"status":"PasswordError"}
+              else if the user hasn't registered, return {"status":"NotExisted"}
     '''
     res = {}
     if request.method == 'POST':
@@ -74,12 +72,14 @@ def login(request):
                 payload_str = json.dumps(payload_dict)
                 payload = base64.b64encode(payload_str.encode(encoding = "utf-8"))
                 response_data["token"] = payload.decode()
-                response_data["status"] = "successful"
+                response_data["status"] = "Successful"
+                return HttpResponse(json.dumps(response_data),content_type="application/json")
+            else:
+                response_data["status"] = "PasswordError"
                 return HttpResponse(json.dumps(response_data),content_type="application/json")
         except UserInfo.DoesNotExist:
-            pass
-        response_data["status"] = "failed"
-        return HttpResponse(json.dumps(response_data),content_type="application/json")
+            response_data["status"] = "NotExisted"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 @csrf_exempt
 def logout(request):
@@ -87,11 +87,11 @@ def logout(request):
     Handle request of users' logout.
     
     :method: post
-    :returns: {"status":"successful"}
+    :returns: {"status":"Successful"}
     '''
     if request.method == 'POST':
         response_data = {}
-        response_data["status"] = "successful"
+        response_data["status"] = "Successful"
         return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 @csrf_exempt
@@ -101,9 +101,9 @@ def getuserinfo(request):
     
     :method: post
     :param param1: token
-    :returns: if succeed, return {"username":username, "phonenumber": phonenumber, "email":email, "status":"successful"}
-              else if the token is out of date, return {"status":"expiration"}
-              else, return {"status":"failed"}
+    :returns: if succeed, return {"username":username, "phonenumber": phonenumber, "email":email, "status":"Successful"}
+              else if the token is out of date, return {"status":"Expiration"}
+              else if the user doesn't exist, return {"status":"NotExisted"}
     '''
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
@@ -117,20 +117,18 @@ def getuserinfo(request):
         now = time.time()
         expire = user_info['exp']
         if expire < now:
-            response_data["status"] = "expiration"
+            response_data["status"] = "Expiration"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         try:
             userinfo = UserInfo.objects.get(username = username)
             response_data["username"] = userinfo.username
             response_data["phonenumber"] = userinfo.phonenumber
             response_data["email"] = userinfo.email
-            response_data["status"] = "successful"
+            response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         except UserInfo.DoesNotExist:
-            pass
-
-        response_data["status"] = "failed"
-        return HttpResponse(json.dumps(response_data),content_type="application/json")
+            response_data["status"] = "NotExisted"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
         
 @csrf_exempt
 def changepassword(request):
@@ -141,9 +139,10 @@ def changepassword(request):
     :param param1: token
     :param param2: old_password
     :param param3: new_password
-    :returns: if succeed, return {"status":"successful"}
-              else if the token is out of date, return {"status":"expiration"}
-              else, return {"status":"failed"}
+    :returns: if succeed, return {"status":"Successful"}
+              else if the token is out of date, return {"status":"Expiration"}
+              else if the user doesn't exist, return {"status":"NotExisted"}
+              else if the old password is wrong, return {"status":"OldPasswordError"}
     '''
     if request.method == 'POST':
         response_data = {}
@@ -159,19 +158,21 @@ def changepassword(request):
         now = time.time()
         expire = user_info['exp']
         if expire < now:
-            response_data["status"] = "expiration"
+            response_data["status"] = "Expiration"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         try:
             userinfo = UserInfo.objects.get(username = username)
             if userinfo.password == old_password:
                 userinfo.password = new_password
                 userinfo.save()
-                response_data["status"] = "successful"
+                response_data["status"] = "Successful"
+                return HttpResponse(json.dumps(response_data),content_type="application/json")
+            else:
+                response_data["status"] = "OldPasswordError"
                 return HttpResponse(json.dumps(response_data),content_type="application/json")
         except UserInfo.DoesNotExist:
-            pass
-        response_data["status"] = "failed"
-        return HttpResponse(json.dumps(response_data),content_type="application/json") 
+            response_data["status"] = "NotExisted"
+            return HttpResponse(json.dumps(response_data),content_type="application/json") 
 
 def create_code(randomlength = 8):
     '''
@@ -195,9 +196,10 @@ def emailauth(request):
     
     :method: post
     :param param1: token
-    :returns: if succeed, return {"status":"successful","code":code}
-              else if the token is out of date, return {"status":"expiration"}
-              else, return {"status":"failed"}
+    :returns: if succeed, return {"status":"Successful"}
+              else if the token is out of date, return {"status":"Expiration"}
+              else if the Email is already actived, return {"status":"Actived"}
+              else if the user doesn't exist, return {"status":"NotExisted"}
     '''
     if request.method == 'POST':
         response_data = {}
@@ -211,7 +213,7 @@ def emailauth(request):
         now = time.time()
         expire = user_info['exp']
         if expire < now:
-            response_data["status"] = "expiration"
+            response_data["status"] = "Expiration"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         try:
             userinfo = UserInfo.objects.get(username = username)
@@ -225,13 +227,12 @@ def emailauth(request):
             email_title = 'Code'
             email_body = 'Your code is: ' + code
             send_mail(email_title, email_body, EMAIL_FROM, [email])
-            response_data["status"] = "successful"
+            response_data["status"] = "Successful"
             response_data["code"] = code
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         except UserInfo.DoesNotExist:
-            pass
-        response_data["status"] = "failed"
-        return HttpResponse(json.dumps(response_data),content_type="application/json")
+            response_data["status"] = "NotExisted"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 @csrf_exempt
 def authresponse(request):
@@ -241,9 +242,10 @@ def authresponse(request):
     :method: post
     :param param1: token
     :param param2: code
-    :returns: if succeed, return {"status":"successful"}
-              else if the token is out of date, return {"status":"expiration"}
-              else, return {"status":"failed"}
+    :returns: if succeed, return {"status":"Successful"}
+              else if the token is out of date, return {"status":"Expiration"}
+              else if the code is wrong, return {"status":"CodeError"}
+              else if the user doesn't exist, return {"status":"NotExisted"}
     '''
     if request.method == 'POST':
         response_data = {}
@@ -257,19 +259,21 @@ def authresponse(request):
         now = time.time()
         expire = user_info['exp']
         if expire < now:
-            response_data["status"] = "expiration"
+            response_data["status"] = "Expiration"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         try:
             userinfo = UserInfo.objects.get(username = username)
             if d['code'] == userinfo.auth_code:
                 userinfo.is_active = True
                 userinfo.save()
-                response_data["status"] = "successful"
+                response_data["status"] = "Successful"
+                return HttpResponse(json.dumps(response_data),content_type="application/json")
+            else:
+                response_data["status"] = "CodeError"
                 return HttpResponse(json.dumps(response_data),content_type="application/json")
         except UserInfo.DoesNotExist:
-            pass
-        response_data["status"] = "failed"
-        return HttpResponse(json.dumps(response_data),content_type="application/json")
+            response_data["status"] = "NotExisted"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 @csrf_exempt
 def retrievepassword(request):
@@ -280,9 +284,9 @@ def retrievepassword(request):
     :param param1: username
     :param param2: email
     :returns: if the email is wrong , return {"status" : "EmailError"}
-              else if the username is wrong, return {"status" : "UserNotExisted"}
-              else if the email hasn't actived, return {"status" : "EmailNotActived"}
-              else if succeed, return {"status" : "successful"}
+              else if the user doesn't exist, return {"status":"NotExisted"}
+              else if the email hasn't actived, return {"status":"EmailNotActived"}
+              else if succeed, return {"status":"Successful"}
     '''
     if request.method == 'POST':
         response_data = {}
@@ -302,11 +306,11 @@ def retrievepassword(request):
             email_title = 'Code'
             email_body = 'Your code is: ' + code
             send_mail(email_title, email_body, EMAIL_FROM, [email])
-            response_data["status"] = "successful"
+            response_data["status"] = "Successful"
             response_data["code"] = code
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         except UserInfo.DoesNotExist:
-            response_data["status"] = "UsersNotExisted"
+            response_data["status"] = "NotExisted"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 @csrf_exempt
@@ -318,8 +322,8 @@ def retrieveresponse(request):
     :param param1: username
     :param param2: code
     :returns: if the code is wrong , return {"status" : "CodeError"}
-              else if the username is wrong, return {"status" : "UserNotExisted"}
-              else if succeed, return {"status" : "successful"}
+              else if the username is wrong, return {"status" : "NotExisted"}
+              else if succeed, return {"status" : "Successful"}
     '''
     if request.method == 'POST':
         response_data = {}
@@ -333,8 +337,8 @@ def retrieveresponse(request):
             email_title = 'Password'
             email_body = 'Your password is: ' + userinfo.password
             send_mail(email_title, email_body, EMAIL_FROM, [email])
-            response_data["status"] = "successful"
+            response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         except UserInfo.DoesNotExist:
-            response_data["status"] = "UsersNotExisted"
+            response_data["status"] = "NotExisted"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
