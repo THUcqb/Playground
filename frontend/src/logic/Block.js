@@ -3,7 +3,7 @@ export class Block {
 	{
 		this.x = x;
 		this.y = y;
-		this.info = 2;
+		this.info = 0;
 		this.detial_info = 0; 
 	}
 } 

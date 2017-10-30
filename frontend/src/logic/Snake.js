@@ -9,6 +9,7 @@ class Snake {
 		this.body[0] = new Block(x,y);
 		this.size = 1;
 		this.add_head(x - 1,y)
+		this.state = "up";
 	}
 	/**
 	 * add new head for snake

@@ -24,10 +24,13 @@ class Map {
 	 */
 	testinit(x,y) {
 		let block_list = [];
+		let slot_map = [];
 		for (let i = 0; i < this.SIZE_X; i++) {
 			block_list[i] = [];
+			slot_map[i] = [];
 			for (let n = 0; n < this.SIZE_Y; n++) {
 				block_list[i][n] = new Block(i,n);
+				slot_map[i][n] = 0;
 			}
 		}
 		this.block_list = block_list;
@@ -37,7 +40,7 @@ class Map {
 		this.loacalmap[2] = (level2);
 		this.loacalmap[3] = (level3);
 		this.loacalmap[4] = (level4);
-		console.log(this.loacalmap);
+		// console.log(this.loacalmap);
 		this.set_head(x,y);
 	}
 
@@ -84,7 +87,13 @@ class Map {
 	{
 		this.block_list[x][y].info = 5;//尾巴
 	}
-
+	/**
+	 * draw slot of snake head
+	 */
+	set_slot(x,y)
+	{
+		this.slot_map[x][y].info = 1;
+	}
 	
 	/**
 	 * save map
@@ -104,7 +113,6 @@ class Map {
 		.catch(function (error){
 			throw error;
 		});
-
 	}
 	/**
 	 * load map by level 
@@ -247,6 +255,11 @@ class Map {
 	Data()
 	{
 		return this.block_list;
+	}
+
+	SlotData()
+	{
+		return this.slot_map;
 	}
 }
 

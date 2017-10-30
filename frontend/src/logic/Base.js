@@ -195,6 +195,8 @@ export class Base {
 			let __y = Base.bsnake.body[0].y;
 			Base.bmap.set_tail(__x,__y);
 			Base.bsnake.add_head(_x,_y);
+			if (Base.bmap.state = "down")
+				Base.bmap.set_slot(_x,_y);
 			Base.bmap.set_head(_x,_y);
 		}
 		else
@@ -208,6 +210,8 @@ export class Base {
 				__x = Base.bsnake.body[0].x;
 				__y = Base.bsnake.body[0].y;
 				Base.bmap.set_tail(__x,__y);
+				if (Base.bmap.state = "down")
+					Base.bmap.set_slot(_x,_y);
 				Base.bmap.set_head(_x,_y);
 			}
 	}
@@ -252,7 +256,7 @@ export class Base {
 	 * Woring: if you want to move one step you'd better use next() in Base__state
 	 */
 	run(){
-		console.log("run: > "+this.name)
+		// console.log("run: > "+this.name)
 		if (this.type === "sys") {
 		if (this.name === "move_up"){
 			this.move_up();
@@ -269,14 +273,14 @@ export class Base {
 		if (this.name === "move_right"){
 			this.move_right();
 		} 
-		else
-		if (this.name === "vmove_up"){} 
-		else
-		if (this.name === "vmove_down"){} 
-		else
-		if (this.name === "vmove_left"){}
-		else 
-		if (this.name === "vmove_right"){}
+		// else
+		// if (this.name === "vmove_up"){} 
+		// else
+		// if (this.name === "vmove_down"){} 
+		// else
+		// if (this.name === "vmove_left"){}
+		// else 
+		// if (this.name === "vmove_right"){}
 		else
 		if (this.name === "loop"){
 			this.loop();
