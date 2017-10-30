@@ -1,5 +1,8 @@
 import {Base,Base_task} from './Base';
 import {Base_state} from './Base_state';
+import Map from './Map';
+import Snake from './Snake';
+
 
 export class Controller{
 	
@@ -10,7 +13,8 @@ export class Controller{
 		Base.bmap.load(0);
         let usertask = new Base_task(this.begin)//将任务列表指向初始节点
         this.begin.task=usertask;
-
+        this.emap = new Map(10,10);
+        this.snake = Base.bsnake;
 	}
 	/**
 	 * usertask is main function 
@@ -22,10 +26,18 @@ export class Controller{
 		usertask.add(task)
 		this.begin.task=usertask;
 	}
+	setSnakeState(state)
+	{
+		this.snake = Base.bsnake.state = state;
+	}
+	getslotMap()
+	{
+		return Base.bmap.SlotData();
+	}
+
 	/**
 	 * return map info
 	 */
-
 	getMap()
 	{
 		return Base.bmap;
@@ -36,6 +48,11 @@ export class Controller{
 	getSnake()
 	{
 		return Base.bsnake;
+	}
+
+	EditNewMap()
+	{
+		return this.emap;
 	}
 
 	step()

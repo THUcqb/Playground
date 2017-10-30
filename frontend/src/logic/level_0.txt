@@ -64,6 +64,7 @@ let usertask = new Base_task(this.begin);
 1211001001
 1010120100
 0001011102
+
 >>>>>>> feat: add maplevel.js with some maps and add doc in Base_state.js
 
             true_task.add(new Base("sys","move"));

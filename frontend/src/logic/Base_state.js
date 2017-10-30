@@ -1,6 +1,12 @@
 import {Base,Base_task} from './Base';
 export class Base_state{
 
+	/**
+	 * move_state return runstate
+	 * snake_state 
+	 *      up:    draw
+	 *      down:
+	 */
 	constructor(cur)
 	{
 		this.cur = cur;
@@ -8,6 +14,7 @@ export class Base_state{
 		this.loop_time = 0;
 		this.state = "runnable";
 		this.move_state = "null";
+		this.snake_state = "up";
 	}
 	/**
 	 * return pre state
