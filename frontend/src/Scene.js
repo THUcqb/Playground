@@ -4,6 +4,7 @@ import Toolbar from 'material-ui/Toolbar';
 import EaselJS from 'masteryodaeaseljs';
 import GrassPainter from './painter/GrassPainter';
 import SnakePainter from './painter/SnakePainter';
+import LevelButton from './LevelChoose';
 import { Controller } from './logic/Controller';
 import { Base } from './logic/Base';
 
@@ -26,9 +27,11 @@ class Scene extends Component
      */
     handleChooseLevel(levelNum)
     {
-        this.controller.getMap().load(levelNum)
-        this.grassPainter.init(this.controller.getMap())
-        this.snakePainter.reset()
+        this.stage.removeAllChildren();
+        this.controller.getSnake().init(5, 5);
+        this.controller.getMap().load(levelNum);
+        this.grassPainter.init(this.controller.getMap());
+        this.snakePainter.reset();
     }
 
     /**
@@ -42,18 +45,9 @@ class Scene extends Component
             <div>
             <div className="levelsDiv">
                 <Toolbar color="primary">
-                    <Button raised className="level0"
-                            onClick={() => this.handleChooseLevel(0)}>
-                        Level0
-                    </Button>
-                    <Button raised className="level1"
-                            onClick={() => this.handleChooseLevel(1)}>
-                        Level1
-                    </Button>
-                    <Button raised className="level2"
-                            onClick={() => this.handleChooseLevel(2)}>
-                        Level2
-                    </Button>
+                    <LevelButton
+                        onChooseLevel={(levelNum) => this.handleChooseLevel(levelNum)}
+                    />
                 </Toolbar>
             </div>
             <div className="CanvasDiv" ref="CanvasDiv">
@@ -109,17 +103,16 @@ class Scene extends Component
     {
         window.addEventListener("resize", this.handleResize, false);
         this.handleResize();
-        let stage = new EaselJS.Stage("canvas");
+        this.stage = new EaselJS.Stage("canvas");
         
-        this.grassPainter = new GrassPainter(this.controller.getMap());
-        stage.addChild(this.grassPainter);
-
-        this.snakePainter = new SnakePainter(stage);
+        this.grassPainter = new GrassPainter(this.stage);
+        this.snakePainter = new SnakePainter(this.stage);
+        
         let count = 0;
         let data = {
             grassPainter: this.grassPainter,
             snakePainter: this.snakePainter,
-            stage: stage,
+            stage: this.stage,
             controller: this.controller,
             count: count,
         };
