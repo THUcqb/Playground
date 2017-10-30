@@ -195,7 +195,7 @@ export class Base {
 			let __y = Base.bsnake.body[0].y;
 			Base.bmap.set_tail(__x,__y);
 			Base.bsnake.add_head(_x,_y);
-			if (Base.bmap.state = "down")
+			if (Base.bmap.state == "down")
 				Base.bmap.set_slot(_x,_y);
 			Base.bmap.set_head(_x,_y);
 		}
@@ -210,7 +210,7 @@ export class Base {
 				__x = Base.bsnake.body[0].x;
 				__y = Base.bsnake.body[0].y;
 				Base.bmap.set_tail(__x,__y);
-				if (Base.bmap.state = "down")
+				if (Base.bmap.state == "down")
 					Base.bmap.set_slot(_x,_y);
 				Base.bmap.set_head(_x,_y);
 			}
