@@ -13,6 +13,7 @@ import MenuIcon from 'material-ui-icons/Menu';
 import HomeIcon from 'material-ui-icons/Home'
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import ChevronRightIcon from 'material-ui-icons/ChevronRight';
+import { CookiesProvider } from 'react-cookie';
 
 const styles = theme => ({
   appBar: {
@@ -80,7 +81,11 @@ class Navigation extends React.Component {
     let userInfo = null;
 
     if (!this.state.loggedIn)
-        userInfo = (<SignButton loggedIn={(username) => this.handleLoggedIn(username)}/>);
+        userInfo = (
+            <CookiesProvider>
+                <SignButton loggedIn={(username) => this.handleLoggedIn(username)}/>
+            </CookiesProvider>
+        );
     else
         userInfo = (<Avatar>{this.state.username}</Avatar>);
 
