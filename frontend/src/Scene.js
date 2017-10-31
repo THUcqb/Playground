@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import EaselJS from 'masteryodaeaseljs';
 import GrassPainter from './painter/GrassPainter';
 import SnakePainter from './painter/SnakePainter';
+import MapEditorButton from './mapeditor/MapEditorButton';
 import { Controller } from './logic/Controller';
 import { Base } from './logic/Base';
 
@@ -27,6 +28,7 @@ class Scene extends Component
     {
         return (
             <div className="CanvasDiv" ref="CanvasDiv">
+                <MapEditorButton/>
                 <canvas id="canvas" ref="canvas" width="600" height="600" />
             </div>
         );
