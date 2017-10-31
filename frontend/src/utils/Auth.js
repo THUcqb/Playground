@@ -1,8 +1,5 @@
 import axios from 'axios';
-import _ from 'lodash';
-import store from './store';
-import { setToken } from '../actions'
-import { URL, SIGNIN, SIGNUP } from '../config/Api';
+import { URL, SIGNIN, SIGNUP, GETINFO } from '../config/Api';
 
 export function InvalidCredentialsException(message) {
     this.message = message;
@@ -22,19 +19,8 @@ export function signin(username, password) {
       password,
     })
     .then(function (response) {
-      if (response.data.status === 'successful')
-        store.dispatch(setToken(response.data.token));
-      return {OK: (response.data.status === 'successful')};
+      return {OK: (response.data.status === 'successful'), token: response.data.token};
     })
-/*
-    .catch(function (error) {
-      // raise different exception if due to invalid credentials
-      if (_.get(error, 'response.status') === 400) {
-        throw new InvalidCredentialsException(error);
-      }
-      throw error;
-    });
-*/
 }
 
 /**
@@ -57,6 +43,18 @@ export function signup(username, password, phonenumber, email) {
         });
 }
 
-export function loggedIn() {
-  return store.getState().token == null;
+export function getInfoWithCookies(token) {
+    return axios
+        .post(URL + GETINFO, {
+            token
+        })
+        .then((response) => {
+            return {
+                OK: (response.data.status === 'successful'),
+                username: response.data.username,
+                phonenumber: response.data.phonenumber,
+                email: response.data.email,
+            }
+        })
+
 }
