@@ -1,9 +1,9 @@
 import React from 'react';
+import { withCookies, Cookies } from 'react-cookie';
 import Button from 'material-ui/Button';
 import SignDialog from './SignDialog';
 import { signin, signup, getInfoWithCookies } from '../utils/Auth';
 import { instanceOf } from 'prop-types';
-import { withCookies, Cookies } from 'react-cookie';
 
 class SignButton extends React.Component {
   /**
@@ -21,6 +21,7 @@ class SignButton extends React.Component {
     this.state = {
       open: false,
       isSignUp: false,
+      cookieAlertOpen: false,
       textStatus: {
         disabled: false,
         usernameError: false,
@@ -36,7 +37,7 @@ class SignButton extends React.Component {
         if (response.OK) {
           this.props.loggedIn(response.username);
         }
-      })
+      });
   }
 
   handleClickOpen() {
@@ -64,9 +65,9 @@ class SignButton extends React.Component {
         .then(SignInStatus => {
           if (SignInStatus.OK)
           {
-            this.setState({open: false});
-            this.props.loggedIn(username);
-            this.props.cookies.set('token', SignInStatus.token, { path: '/', maxAge: 2592000});
+            this.setState({open: false, cookieAlertOpen: true});
+            this.props.loggedIn(username, true);
+            this.props.cookies.set('token', SignInStatus.token, { path: '/', maxAge: 600});
           }
           else
             this.setState({textStatus: {disabled: false, usernameError: true, passwordError: true}});
@@ -74,9 +75,13 @@ class SignButton extends React.Component {
     }
   }
 
-  /**
-   * The sign up function.
-   */
+    /**
+     * The sign up function.
+     * @param username
+     * @param password
+     * @param phonenumber
+     * @param email
+     */
   handleRequestSignUp(username, password, phonenumber, email) {
     if (!this.state.isSignUp) {
       this.setState({isSignUp: true});

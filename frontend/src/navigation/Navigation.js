@@ -6,6 +6,7 @@ import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import SignButton from './Sign';
 import Avatar from 'material-ui/Avatar';
+import deepOrange from 'material-ui/colors/deepOrange';
 import Typography from 'material-ui/Typography';
 import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
@@ -13,6 +14,7 @@ import MenuIcon from 'material-ui-icons/Menu';
 import HomeIcon from 'material-ui-icons/Home'
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import ChevronRightIcon from 'material-ui-icons/ChevronRight';
+import CookieAlertBar from './CookieAlert';
 import { CookiesProvider } from 'react-cookie';
 
 const styles = theme => ({
@@ -34,6 +36,10 @@ const styles = theme => ({
     alignItems: 'center',
     padding: '0 8px',
   },
+  avatar: {
+    backgroundColor: deepOrange[300],
+  }
+
 });
 
 /**
@@ -46,6 +52,7 @@ class Navigation extends React.Component {
             open: false,
             loggedIn: false,
             username: '',
+            cookieAlertOpen: false,
         }
     }
 
@@ -66,8 +73,16 @@ class Navigation extends React.Component {
     /**
      * When the user has logged in successfully.
      */
-    handleLoggedIn(username) {
-        this.setState({ loggedIn: true, username });
+    handleLoggedIn(username, justSet) {
+        this.setState({
+            loggedIn: true,
+            username
+        });
+        if (justSet) {
+            this.setState({
+                cookieAlertOpen: true
+            });
+        }
     }
 
     /**
@@ -87,7 +102,7 @@ class Navigation extends React.Component {
             </CookiesProvider>
         );
     else
-        userInfo = (<Avatar>{this.state.username}</Avatar>);
+        userInfo = (<Avatar className={classes.avatar}>{this.state.username}</Avatar>);
 
     const appbar = (
       <AppBar className={classes.appBar}>
@@ -103,6 +118,7 @@ class Navigation extends React.Component {
             Snake
           </Typography>
           {userInfo}
+          <CookieAlertBar open={this.state.cookieAlertOpen}/>
         </Toolbar>
       </AppBar>
     );
