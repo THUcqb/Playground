@@ -8,9 +8,7 @@ class Snake {
 		this.body = new Array(Block);
 		this.body[0] = new Block(x,y);
 		this.size = 1;
-		this.add_head(x - 1,y)
 		this.state = "up";
-		//this.add_head(x - 1,y)
 	}
 	/**
 	 * add new head for snake
@@ -43,6 +41,7 @@ class Snake {
 		this.y = y;
 		var cur = new Array(Block);
 		cur[0] = new Block(x,y);
+		this.size = 1;
 		this.body = cur;
 	}
 }
