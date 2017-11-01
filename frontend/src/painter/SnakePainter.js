@@ -4,18 +4,6 @@ import TweenJS from "masteryodatweenjs";
 
 class Part extends EaselJS.Shape
 {
-    constructor()
-    {
-        super();
-        this.moving = false;
-        this.queue = [];
-    }
-
-    finishMoving()
-    {
-        this.moving = false;
-    }
-
     move(x, y) {}
     updatePos(x, y) {}
 }
@@ -31,18 +19,12 @@ class Head extends Part
         this.nowX = nowX;
         this.nowY = nowY;
         this.width = width;
-        this.time = 490;
+        this.time = 480;
         this.drawPic();
     }
 
     drawPic(nowX, nowY)
     {
-        if (this.moving)
-        {
-            console.log("returned");
-            return;
-        }
-        console.log("drawing", this.x, this.y, nowX, nowY);
         let x = startPos + nowX * delta + (delta - this.width) / 2;
         let y = startPos + nowY * delta + (delta - this.width) / 2;
         this.graphics.beginFill("#4518ff").drawRect(y - this.x, x - this.y, this.width, this.width);
@@ -50,37 +32,26 @@ class Head extends Part
 
     move(x, y)
     {
+        TweenJS.Tween.removeTweens(this);
         this.graphics.clear();
-        console.log("move");
         this.drawPic(this.nowX, this.nowY);
-        this.moving = true;
         if (x === this.nowX + 1)
         {
-            TweenJS.Tween.get(this).to({ y: this.y + delta }, this.time).call(this.finishMoving, [x, y]);
+            TweenJS.Tween.get(this, { override: true }).to({ y: this.y + delta }, this.time);
         }
         else if (x === this.nowX - 1)
         {
-            TweenJS.Tween.get(this).to({ y: this.y - delta }, this.time).call(this.finishMoving, [x, y]);
+            TweenJS.Tween.get(this, { override: true }).to({ y: this.y - delta }, this.time);
         }
         else if (y === this.nowY + 1)
         {
-            TweenJS.Tween.get(this).to({ x: this.x + delta }, this.time).call(this.finishMoving, [x, y]);
+            TweenJS.Tween.get(this, { override: true }).to({ x: this.x + delta }, this.time);
         }
         else if (y === this.nowY - 1)
         {
-            TweenJS.Tween.get(this).to({ x: this.x - delta }, this.time).call(this.finishMoving, [x, y]);
-        }
-        else
-        {
-            this.moving = false;
+            TweenJS.Tween.get(this, { override: true }).to({ x: this.x - delta }, this.time);
         }
         this.updatePos(x, y);
-    }
-
-    finishMoving(x, y)
-    {
-        super.finishMoving();
-        this.drawPic(x, y);
     }
 
     updatePos(x, y)
@@ -103,13 +74,12 @@ class Segment extends Part
         this.lastX = lastX;
         this.lastY = lastY;
         this.width = width;
-        this.time = 490;
+        this.time = 480;
         this.drawPic(this.nowX, this.nowY, this.lastX, this.lastY);
     }
 
     drawPic(nowX, nowY, lastX, lastY)
     {
-        if (this.moving) return;
         let x = 0;
         let y = 0;
         let width_x = 0;
@@ -148,22 +118,21 @@ class Segment extends Part
     moveForward()
     {
         this.drawPic(this.nowX, this.nowY, this.lastX, this.lastY);
-        this.moving = true;
         if (this.nowX === this.lastX + 1)
         {
-            TweenJS.Tween.get(this).to({y: this.y + delta}, this.time).call(this.finishMoving, [this.nowX + 1, this.nowY, this.nowX, this.lastY]);
+            TweenJS.Tween.get(this, { override: true }).to({y: this.y + delta}, this.time);
         }
         else if (this.nowX === this.lastX - 1)
         {
-            TweenJS.Tween.get(this).to({y: this.y - delta}, this.time).call(this.finishMoving, [this.nowX - 1, this.nowY, this.nowX, this.lastY]);
+            TweenJS.Tween.get(this, { override: true }).to({y: this.y - delta}, this.time);
         }
         else if (this.nowY === this.lastY + 1)
         {
-            TweenJS.Tween.get(this).to({x: this.x + delta}, this.time).call(this.finishMoving, [this.nowX, this.nowY + 1, this.lastX, this.nowY]);
+            TweenJS.Tween.get(this, { override: true }).to({x: this.x + delta}, this.time);
         }
         else if (this.nowY === this.lastY - 1)
         {
-            TweenJS.Tween.get(this).to({x: this.x - delta}, this.time).call(this.finishMoving, [this.nowX, this.nowY - 1, this.lastX, this.nowY]);
+            TweenJS.Tween.get(this, { override: true }).to({x: this.x - delta}, this.time);
         }
     }
 
@@ -179,7 +148,7 @@ class Segment extends Part
 
     move(x, y)
     {
-        console.log("Segment move", this.nowX, this.nowY, x, y);
+        TweenJS.Tween.removeTweens(this);
         this.graphics.clear();
         if (x === this.nowX && y === this.nowY)
         {
@@ -200,12 +169,6 @@ class Segment extends Part
             // this.drawPic();
         }
         this.updatePos(x, y);
-    }
-
-    finishMoving(nowX, nowY, lastX, lastY)
-    {
-        super.finishMoving();
-        this.drawPic(nowX, nowY, lastX, lastY);
     }
 }
 
