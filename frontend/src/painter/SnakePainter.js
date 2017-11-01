@@ -6,7 +6,6 @@ class Part extends EaselJS.Shape
 {
     move(x, y) {}
     updatePos(x, y) {}
-    drawPic() {}
 }
 
 class Head extends Part
@@ -14,35 +13,44 @@ class Head extends Part
     constructor(nowX, nowY, width)
     {
         super();
+        this.x = 0;
+        this.y = 0;
         this.name = "head";
         this.nowX = nowX;
         this.nowY = nowY;
         this.width = width;
-        this.time = 495;
+        this.time = 480;
         this.drawPic();
     }
 
-    drawPic()
+    drawPic(nowX, nowY)
     {
-        this.x = 0;
-        this.y = 0;
-        let x = startPos + this.nowX * delta + (delta - this.width) / 2;
-        let y = startPos + this.nowY * delta + (delta - this.width) / 2;
-        this.graphics.beginFill("#4518ff").drawRect(y, x, this.width, this.width);
+        let x = startPos + nowX * delta + (delta - this.width) / 2;
+        let y = startPos + nowY * delta + (delta - this.width) / 2;
+        this.graphics.beginFill("#4518ff").drawRect(y - this.x, x - this.y, this.width, this.width);
     }
 
     move(x, y)
     {
+        TweenJS.Tween.removeTweens(this);
         this.graphics.clear();
-        this.drawPic();
+        this.drawPic(this.nowX, this.nowY);
         if (x === this.nowX + 1)
-            TweenJS.Tween.get(this, null, true).to({ y: delta }, this.time);
+        {
+            TweenJS.Tween.get(this, { override: true }).to({ y: this.y + delta }, this.time);
+        }
         else if (x === this.nowX - 1)
-            TweenJS.Tween.get(this, null, true).to({ y: -delta }, this.time);
+        {
+            TweenJS.Tween.get(this, { override: true }).to({ y: this.y - delta }, this.time);
+        }
         else if (y === this.nowY + 1)
-            TweenJS.Tween.get(this, null, true).to({ x: delta }, this.time);
+        {
+            TweenJS.Tween.get(this, { override: true }).to({ x: this.x + delta }, this.time);
+        }
         else if (y === this.nowY - 1)
-            TweenJS.Tween.get(this, null, true).to({ x: -delta }, this.time);
+        {
+            TweenJS.Tween.get(this, { override: true }).to({ x: this.x - delta }, this.time);
+        }
         this.updatePos(x, y);
     }
 
@@ -66,14 +74,12 @@ class Segment extends Part
         this.lastX = lastX;
         this.lastY = lastY;
         this.width = width;
-        this.time = 495;
+        this.time = 480;
         this.drawPic(this.nowX, this.nowY, this.lastX, this.lastY);
     }
 
     drawPic(nowX, nowY, lastX, lastY)
     {
-        this.x = 0;
-        this.y = 0;
         let x = 0;
         let y = 0;
         let width_x = 0;
@@ -106,20 +112,28 @@ class Segment extends Part
             width_x = this.width;
             width_y = delta;
         }
-        this.graphics.beginFill("#FF5722").drawRect(y, x, width_y, width_x);
+        this.graphics.beginFill("#FF5722").drawRect(y - this.x, x - this.y, width_y, width_x);
     }
 
     moveForward()
     {
         this.drawPic(this.nowX, this.nowY, this.lastX, this.lastY);
         if (this.nowX === this.lastX + 1)
-            TweenJS.Tween.get(this).to({ y: delta }, this.time);
+        {
+            TweenJS.Tween.get(this, { override: true }).to({y: this.y + delta}, this.time);
+        }
         else if (this.nowX === this.lastX - 1)
-            TweenJS.Tween.get(this).to({ y: -delta }, this.time);
+        {
+            TweenJS.Tween.get(this, { override: true }).to({y: this.y - delta}, this.time);
+        }
         else if (this.nowY === this.lastY + 1)
-            TweenJS.Tween.get(this).to({ x: delta }, this.time);
+        {
+            TweenJS.Tween.get(this, { override: true }).to({x: this.x + delta}, this.time);
+        }
         else if (this.nowY === this.lastY - 1)
-            TweenJS.Tween.get(this).to({ x: -delta }, this.time);
+        {
+            TweenJS.Tween.get(this, { override: true }).to({x: this.x - delta}, this.time);
+        }
     }
 
     updatePos(x, y)
@@ -134,16 +148,20 @@ class Segment extends Part
 
     move(x, y)
     {
-        console.log("Segment move", this.nowX, this.nowY, x, y);
+        TweenJS.Tween.removeTweens(this);
         this.graphics.clear();
-        this.x = 0;
-        this.y = 0;
         if (x === this.nowX && y === this.nowY)
+        {
             this.drawPic(this.nowX, this.nowY, this.lastX, this.lastY);
+        }
         else if (x === this.nowX && x === this.lastX)
+        {
             this.moveForward();
+        }
         else if (y === this.nowY && y === this.lastY)
+        {
             this.moveForward();
+        }
         else
         {
             // TODO: rotate in the corner

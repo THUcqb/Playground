@@ -10,6 +10,7 @@ class Snake {
 		this.size = 1;
 		this.add_head(x - 1,y)
 		this.state = "up";
+		//this.add_head(x - 1,y)
 	}
 	/**
 	 * add new head for snake
