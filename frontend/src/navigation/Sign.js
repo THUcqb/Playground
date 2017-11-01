@@ -6,16 +6,17 @@ import { signin, signup, getInfoWithCookies } from '../utils/Auth';
 import { instanceOf } from 'prop-types';
 
 class SignButton extends React.Component {
+
+  static propTypes = {
+    cookies: instanceOf(Cookies).isRequired
+  };
+
   /**
    * @constructor
    * @param props
    * @state open - If the dialog is open
    * @state textStatus - If the textField in the dialog is currently busy or not.
    */
-  static propTypes = {
-    cookies: instanceOf(Cookies).isRequired
-  };
-
   constructor(props) {
     super(props);
     this.state = {
