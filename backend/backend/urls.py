@@ -1,6 +1,6 @@
 from django.conf.urls import url, include
 from django.contrib import admin
-from api import usersystem, sources
+from api import usersystem, sources, usermaps
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -14,8 +14,10 @@ urlpatterns = [
     url(r'^users/retrieve_response$', usersystem.retrieveresponse),
     url(r'^users/email_auth$', usersystem.emailauth),
     url(r'^users/auth_response$', usersystem.authresponse),
-    url(r'^maps/save$', sources.savemaps),
-    url(r'^maps/load$', sources.loadmaps),
+    url(r'^sources/save_maps$', sources.savemaps),
+    url(r'^sources/load_maps$', sources.loadmaps),
     url(r'^sources/images$', sources.getimag),
+    url(r'^maps/save_maps$', usermaps.savemapsinfo),
+    url(r'^maps/get_maps$', usermaps.getmapsinfo),
 ]
 

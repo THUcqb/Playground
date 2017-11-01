@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
-
+import json
 # Create your models here.
 
 class UserInfo(models.Model):
@@ -28,3 +28,13 @@ class ImmanentMaps(models.Model):
     
     def __str__(self):
         return self.level
+
+class AMap(models.Model):
+    '''
+    Store one of the users' maps.
+    '''
+    username = models.CharField(max_length = 100, default = '')
+    level = models.CharField(max_length = 2, default = '')
+    stars = models.CharField(max_length = 1, default = '')
+    unlock = models.BooleanField(default = False)
+
