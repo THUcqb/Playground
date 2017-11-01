@@ -5,17 +5,47 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
+import Chip from 'material-ui/Chip';
 
 const styles = theme => ({
-    container: {
+    button: {
+        flex: 1,
+        margin: 10,
+    },
+    chip: {
+        margin: theme.spacing.unit / 2,
+    },
+    row: {
         display: 'flex',
+        justifyContent: 'center',
         flexWrap: 'wrap',
     },
 });
 
 class LevelDialog extends React.Component {
+    state = {
+        chipData: [
+            { key: 0, label: "Level0" },
+            { key: 1, label: "Level1" },
+            { key: 2, label: "Level2" },
+            { key: 3, label: "Level3" },
+            { key: 4, label: "Level4" },
+        ],
+    };
+    
+    styles = {
+        chip: {
+            margin: 4,
+        },
+        wrapper: {
+            display: 'flex',
+            flexWrap: 'wrap',
+        },
+    };
     
     render() {
+        const { classes } = this.props;
+        
         return (
             <Dialog
                 open={this.props.open}
@@ -23,18 +53,18 @@ class LevelDialog extends React.Component {
             >
                 <DialogTitle>Choose a level</DialogTitle>
                 <DialogContent>
-                    <Button raised className="level0"
-                            onClick={() => this.props.onChooseLevel(0)}>
-                        Level0
-                    </Button>
-                    <Button raised className="level1"
-                            onClick={() => this.props.onChooseLevel(1)}>
-                        Level1
-                    </Button>
-                    <Button raised className="level2"
-                            onClick={() => this.props.onChooseLevel(2)}>
-                        Level2
-                    </Button>
+                    <div className={classes.row}>
+                        {this.state.chipData.map(data => {
+                            return (
+                                <Chip
+                                    label={data.label}
+                                    key={data.key}
+                                    className={classes.chip}
+                                    onClick={() => this.props.onChooseLevel(data.key)}
+                                />
+                            );
+                        })}
+                    </div>
                 </DialogContent>
             </Dialog>
         );
