@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import Toolbar from 'material-ui/Toolbar';
 import EaselJS from 'masteryodaeaseljs';
-import GrassPainter from './painter/GrassPainter';
-import SnakePainter from './painter/SnakePainter';
 import LevelButton from './LevelChoose';
+import Element from './painter/Element';
+import Background from './painter/Background';
+import Role from './painter/Role';
 import { Controller } from './logic/Controller';
 import { loadToolbox } from "./utils/LoadBlockly";
 
@@ -29,9 +30,13 @@ class Scene extends Component
         this.stage.removeAllChildren();
         this.controller.getSnake().init(5, 5);
         this.controller.getMap().load(levelNum);
-        this.grassPainter.init(this.controller.getMap());
-        this.snakePainter.reset();
         loadToolbox(levelNum);
+        this.background.reset();
+        this.element.reset();
+        this.role.reset();
+        this.background.update(this.controller.getMap());
+        this.element.update(this.controller.getMap());
+        this.role.update(this.controller.getSnake());
     }
 
     /**
@@ -69,8 +74,9 @@ class Scene extends Component
             let status = data.controller.current_state();
             // if (status === "runnable")
             // {
-                data.grassPainter.update(data.controller.getMap());
-                data.snakePainter.update(data.controller.getSnake());
+                data.background.update(data.controller.getMap());
+                data.element.update(data.controller.getMap());
+                data.role.update(data.controller.getSnake());
             // }
         }
         data.count = (data.count + 1) % 30;
@@ -104,14 +110,15 @@ class Scene extends Component
         window.addEventListener("resize", this.handleResize, false);
         this.handleResize();
         this.stage = new EaselJS.Stage("canvas");
-        
-        this.grassPainter = new GrassPainter(this.stage);
-        this.snakePainter = new SnakePainter(this.stage);
-        
+
+        this.background = new Background(this.stage);
+        this.element = new Element(this.stage);
+        this.role = new Role(this.stage);
         let count = 0;
         let data = {
-            grassPainter: this.grassPainter,
-            snakePainter: this.snakePainter,
+            background: this.background,
+            element: this.element,
+            role: this.role,
             stage: this.stage,
             controller: this.controller,
             count: count,
