@@ -7,6 +7,7 @@ import Background from './painter/Background';
 import Role from './painter/Role';
 import { Controller } from './logic/Controller';
 import { loadToolbox } from "./utils/LoadBlockly";
+import Trajectory from "./painter/Trajectory";
 
 /**
  * The app's scene part
@@ -33,9 +34,11 @@ class Scene extends Component
         loadToolbox(levelNum);
         this.background.reset();
         this.element.reset();
+        this.trajectory.reset();
         this.role.reset();
         this.background.update(this.controller.getMap());
         this.element.update(this.controller.getMap());
+        this.trajectory.update(this.controller.getSnake());
         this.role.update(this.controller.getSnake());
     }
 
@@ -76,6 +79,7 @@ class Scene extends Component
             // {
                 data.background.update(data.controller.getMap());
                 data.element.update(data.controller.getMap());
+                data.trajectory.update(data.controller.getSnake());
                 data.role.update(data.controller.getSnake());
             // }
         }
@@ -113,11 +117,13 @@ class Scene extends Component
 
         this.background = new Background(this.stage);
         this.element = new Element(this.stage);
+        this.trajectory = new Trajectory(this.stage);
         this.role = new Role(this.stage);
         let count = 0;
         let data = {
             background: this.background,
             element: this.element,
+            trajectory: this.trajectory,
             role: this.role,
             stage: this.stage,
             controller: this.controller,
