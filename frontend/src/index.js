@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import createjs from 'preload-js';
 import registerServiceWorker from './registerServiceWorker';
+import { CookiesProvider } from 'react-cookie';
 
 let manifest;
 const preloader = new createjs.LoadQueue(false);
@@ -46,7 +47,9 @@ function loadError(event)
 function loadComplete(event)
 {
     console.log("Finished Loading Assets");
-    ReactDOM.render(<App />, document.getElementById('root'));
+    ReactDOM.render(<CookiesProvider><App /></CookiesProvider>,
+        document.getElementById('root')
+    );
     registerServiceWorker();
 }
 
