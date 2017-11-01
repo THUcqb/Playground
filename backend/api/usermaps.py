@@ -5,13 +5,14 @@ from django.shortcuts import render_to_response
 from django.shortcuts import render
 from django.template import Template, Context
 from django.views.decorators.csrf import csrf_exempt
-from .models import UserMaps
+from .models import AMap
 import json
 import base64
 import time
 from random import Random
 
-def save_mapsinfo(request):
+@csrf_exempt
+def savemapsinfo(request):
     '''
     Save a map when the user have completed a level.
     
@@ -38,20 +39,22 @@ def save_mapsinfo(request):
             response_data["status"] = "Expiration"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         try:
-            usermaps = UserMaps.objects.get(username = username)
             level = d['level']
             stars = d['stars']
-            usermaps.maps[level - 1].stars = stars
-            usermaps.maps[level - 1].save()
-            usermaps.maps[level].unlock = True
-            usermaps.maps[level].save()
+            amap = AMap.objects.get(username = username, level = level)
+            amap.stars = stars
+            amap.save()
+            nmap = AMap.objects.get(username = username, level = str(int(level) + 1))
+            nmap.unlock = True
+            nmap.save()
             response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
-        except UserInfo.DoesNotExist:
+        except AMap.DoesNotExist:
             response_data["status"] = "NotExisted"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
 
-def get_mapsinfo(request):
+@csrf_exempt
+def getmapsinfo(request):
     '''
     Get a user's all maps information.
     
@@ -76,14 +79,15 @@ def get_mapsinfo(request):
             response_data["status"] = "Expiration"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         try:
-            usermaps = UserMaps.objects.get(username = username)
-            mapinfo = {}
             for i in range(10):
-                mapinfo["statrs"] = usermaps.maps[i].stars
-                mapinfo["unlock"] = usermaps.maps[i].unlock
-                response_data[i + 1] = mapinfo
+                mapinfo = {}
+                amap = AMap.objects.get(username = username, level = str(i + 1))
+                mapinfo["unlock"] = amap.unlock
+                mapinfo["stars"] = amap.stars
+                response_data[amap.level] = mapinfo
             response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
-        except UserInfo.DoesNotExist:
+        except AMap.DoesNotExist:
             response_data["status"] = "NotExisted"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
+

@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response
 from django.shortcuts import render
 from django.template import Template, Context
 from django.views.decorators.csrf import csrf_exempt
-from .models import UserInfo
+from .models import UserInfo, AMap
 import json
 import base64
 import time
@@ -39,6 +39,9 @@ def register(request):
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         except UserInfo.DoesNotExist:
             userinfo = UserInfo.objects.create(username = username, password = password, phonenumber = phonenumber, email = email)
+            AMap.objects.create(username = username, level = str(1), unlock = True)
+            for i in range(1, 10):
+                AMap.objects.create(level = str(i + 1), username = username)
             response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
 
@@ -342,3 +345,4 @@ def retrieveresponse(request):
         except UserInfo.DoesNotExist:
             response_data["status"] = "NotExisted"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
+

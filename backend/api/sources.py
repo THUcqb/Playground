@@ -16,23 +16,21 @@ def savemaps(request):
     :method: post
     :param param1: level
     :param param2: maps
-    :returns: if succeed, return {'status':'saved'}
-              else, return {'status':'existed'}
+    :returns: if succeed, return {'status':'Successful'}
+              else, return {'status':'Existed'}
     '''
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
         response_data = {}
         level = d['level']
         immanentmap = d['maps']
-        
         try:
             exist_level = ImmanentMaps.objects.get(level = level)
         except ImmanentMaps.DoesNotExist:
             the_map = ImmanentMaps.objects.create(level = level, immanentmap = immanentmap)
-            response_data["status"] = "saved"
+            response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data), content_type = "application/json")
-            
-        response_data["status"] = "existed"
+        response_data["status"] = "Existed"
         return HttpResponse(json.dumps(response_data), content_type = "application/json")
         
 @csrf_exempt
@@ -42,22 +40,20 @@ def loadmaps(request):
     
     :method: post
     :param param1: level
-    :returns: if succeed, return {'status':'successful', 'maps':required_map}
-              else, return {'status':'doesnotexist'}
+    :returns: if succeed, return {'status':'Successful', 'maps':required_map}
+              else, return {'status':'NotExisted'}
     '''
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
         response_data = {}
         level = d['level']
-        
         try:
             the_map = ImmanentMaps.objects.get(level = level)
         except ImmanentMaps.DoesNotExist:
-            response_data["status"] = "doesnotexist"
+            response_data["status"] = "NotExisted"
             return HttpResponse(json.dumps(response_data), content_type = "application/json")
-            
         response_data["maps"] = the_map.immanentmap
-        response_data["status"] = "successful"
+        response_data["status"] = "Successful"
         return HttpResponse(json.dumps(response_data), content_type = "application/json")
         
 @csrf_exempt

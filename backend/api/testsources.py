@@ -15,34 +15,34 @@ class ImmanentmapsTestcase(TestCase):
         '''
         Test the savemaps API in immanentmaps.
         '''
-        save_url = '/maps/save'
+        save_url = '/sources/save_maps'
         
         parameter = {'level':'1', 'maps':'1111000000100002000010010000211000020001000000000110200000000000000200020010000000002001010000000021'}
         json_parameter = json.dumps(parameter)
         
         res_1 = self.client.post(save_url, json_parameter, content_type = "application/json")
         text_1 = json.loads(res_1.content.decode('utf-8'))
-        self.assertEqual(text_1['status'], 'saved')
+        self.assertEqual(text_1['status'], 'Successful')
         
         res_2 = self.client.post(save_url, json_parameter, content_type = "application/json")
         text_2 = json.loads(res_2.content.decode('utf-8'))
-        self.assertEqual(text_2['status'], 'existed')
+        self.assertEqual(text_2['status'], 'Existed')
     
     def test_loadmaps(self):
         '''
         Test the loadmaps API in immanentmaps.
         '''
-        load_url = '/maps/load'
+        load_url = '/sources/load_maps'
         ImmanentMaps.objects.create(level = '1', immanentmap = '1111000000100002000010010000211000020001000000000110200000000000000200020010000000002001010000000021')
         
         parameter_1 = {'level':'1'}
         json_parameter_1 = json.dumps(parameter_1)
         res_1 = self.client.post(load_url, json_parameter_1, content_type = "application/json")
         text_1 = json.loads(res_1.content.decode('utf-8'))
-        self.assertEqual(text_1['status'], 'successful')
+        self.assertEqual(text_1['status'], 'Successful')
         
         parameter_2 = {'level':'3'}
         json_parameter_2 = json.dumps(parameter_2)
         res_2 = self.client.post(load_url, json_parameter_2, content_type = "application/json")
         text_2 = json.loads(res_2.content.decode('utf-8'))
-        self.assertEqual(text_2['status'], 'doesnotexist')
+        self.assertEqual(text_2['status'], 'NotExisted')
