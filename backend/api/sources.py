@@ -12,7 +12,7 @@ import json
 def savemaps(request):
     '''
     Handle request of saving a common map.
-    
+
     :method: post
     :param param1: level
     :param param2: maps
@@ -32,12 +32,12 @@ def savemaps(request):
             return HttpResponse(json.dumps(response_data), content_type = "application/json")
         response_data["status"] = "Existed"
         return HttpResponse(json.dumps(response_data), content_type = "application/json")
-        
+
 @csrf_exempt
 def loadmaps(request):
     '''
     Handle request of loading a common map.
-    
+
     :method: post
     :param param1: level
     :returns: if succeed, return {'status':'Successful', 'maps':required_map}
@@ -55,12 +55,38 @@ def loadmaps(request):
         response_data["maps"] = the_map.immanentmap
         response_data["status"] = "Successful"
         return HttpResponse(json.dumps(response_data), content_type = "application/json")
-        
+
+
+import os
+module_dir = os.path.dirname(__file__)  # get current directory
+
+@csrf_exempt
+def load_toolbox(request):
+    '''
+    Handle the request of get blockly toolbox.
+
+    :method: post
+    :param param1: level
+    :returns: The toolbox required.
+    '''
+    if request.method == 'POST':
+        d = json.loads(request.body.decode('utf-8'))
+        response_data = {}
+        level = d['level']
+        file_path = os.path.join(module_dir, '../static/toolbox/toolbox_' + str(level) + '.xml')
+        if not os.path.exists(file_path):
+            file_path = os.path.join(module_dir, '../static/toolbox/toolbox_0.xml')
+
+        f = open(file_path, 'r')
+        response_data["status"] = "successful"
+        response_data["toolbox"] = f.read()
+        return HttpResponse(json.dumps(response_data), content_type = 'application/json')
+
 @csrf_exempt
 def getimag(request):
     '''
     Handle the request of get imag source.
-    
+
     :method: get
     :param param1: imag_name end with '.png'
     :returns: The imag required.

@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^users/auth_response$', usersystem.authresponse),
     url(r'^sources/save_maps$', sources.savemaps),
     url(r'^sources/load_maps$', sources.loadmaps),
+    url(r'^blockly/load_toolbox$', sources.load_toolbox),
     url(r'^sources/images$', sources.getimag),
     url(r'^maps/save_maps$', usermaps.savemapsinfo),
     url(r'^maps/get_maps$', usermaps.getmapsinfo),
