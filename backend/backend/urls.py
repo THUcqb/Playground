@@ -18,7 +18,6 @@ urlpatterns = [
     url(r'^sources/load_maps$', sources.load_maps),
     url(r'^blockly/save_toolbox$', sources.save_toolbox),
     url(r'^blockly/load_toolbox$', sources.load_toolbox),
-    url(r'^sources/images$', sources.get_imag),
     url(r'^maps/save_maps$', usermaps.save_mapsinfo),
     url(r'^maps/get_maps$', usermaps.get_mapsinfo),
 ]
