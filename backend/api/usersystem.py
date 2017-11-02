@@ -98,7 +98,7 @@ def logout(request):
         return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 @csrf_exempt
-def getuserinfo(request):
+def get_userinfo(request):
     '''
     Handle request of getting a user's information after login.
     
@@ -134,7 +134,7 @@ def getuserinfo(request):
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         
 @csrf_exempt
-def changepassword(request):
+def change_password(request):
     '''
     Handle the request of changing the password.
     
@@ -193,7 +193,7 @@ def create_code(randomlength = 8):
     return res
 
 @csrf_exempt
-def emailauth(request):
+def email_auth(request):
     '''
     Handle the request of verification by Email.
     
@@ -238,7 +238,7 @@ def emailauth(request):
             return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 @csrf_exempt
-def authresponse(request):
+def auth_response(request):
     '''
     Handle the request of verification by Email.
     
@@ -279,7 +279,7 @@ def authresponse(request):
             return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 @csrf_exempt
-def retrievepassword(request):
+def retrieve_password(request):
     '''
     Handle the request of getting back the user's password by Email.
     
@@ -317,7 +317,7 @@ def retrievepassword(request):
             return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 @csrf_exempt
-def retrieveresponse(request):
+def retrieve_response(request):
     '''
     Handle the request of getting back the user's password after emailed.
     
