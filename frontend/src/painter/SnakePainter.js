@@ -199,6 +199,9 @@ class SnakePainter
         {
             this.snake = [];
             let head = new Head(snake.body[snake.size - 1].x, snake.body[snake.size - 1].y, this.width);
+            head.cursor = "pointer";
+            head.on("mousedown", (ev) => {alert("I'm your head.");});
+
             this.stage.addChild(head);
             this.snake.push(head);
             for (let i = snake.size - 2; i >= 0; i--)

@@ -102,7 +102,8 @@ class Scene extends Component
         window.addEventListener("resize", this.handleResize, false);
         this.handleResize();
         this.stage = new EaselJS.Stage("canvas");
-        
+        this.stage.enableMouseOver(10);
+
         this.grassPainter = new GrassPainter(this.stage);
         this.snakePainter = new SnakePainter(this.stage);
         
