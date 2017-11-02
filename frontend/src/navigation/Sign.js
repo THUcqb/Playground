@@ -33,12 +33,15 @@ class SignButton extends React.Component {
 
   componentDidMount() {
     const token = this.props.cookies.get('token');
-    getInfoWithCookies(token)
-      .then((response) => {
-        if (response.OK) {
-          this.props.loggedIn(response.username);
-        }
-      });
+    if (token)
+    {
+      getInfoWithCookies(token)
+        .then((response) => {
+          if (response.OK) {
+            this.props.loggedIn(response.username);
+          }
+        });
+    }
   }
 
   handleClickOpen() {

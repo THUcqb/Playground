@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { URL, LOADTOOLBOX} from '../config/Api';
+import Gamepad from "../gamepad/Gamepad";
 
 /**
  * Request the toolbox xml received as a string.
@@ -12,6 +13,7 @@ export function loadToolbox(level) {
             level,
         })
         .then(function (response) {
-            return {OK: (response.data.status === 'successful'), toolbox: response.data.toolbox};
+            if (response.data.status === 'Successful')
+                Gamepad.workspace.updateToolbox(response.data.toolbox);
         })
 }

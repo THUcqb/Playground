@@ -78,7 +78,7 @@ def load_toolbox(request):
             file_path = os.path.join(module_dir, '../static/toolbox/toolbox_0.xml')
 
         f = open(file_path, 'r')
-        response_data["status"] = "successful"
+        response_data["status"] = "Successful"
         response_data["toolbox"] = f.read()
         return HttpResponse(json.dumps(response_data), content_type = 'application/json')
 
