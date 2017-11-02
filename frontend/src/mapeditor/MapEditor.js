@@ -7,6 +7,7 @@ import Dialog, {
     DialogActions,
 } from 'material-ui/Dialog';
 import PropTypes from 'prop-types';
+import Done from 'material-ui-icons/Done';
 import { withStyles } from 'material-ui/styles';
 import MenuItem from 'material-ui/Menu/MenuItem';
 import Button from 'material-ui/Button';
@@ -68,10 +69,16 @@ class MapEditor extends React.Component {
     handleFinishEditing() {
     //TODO: to something including save the map and close the dialog.
 
-        alert("map saved!");
+        alert(this.state.mapSize);
     }
 
-
+    handleClick(e) {
+      const  element = this.refs.canvas;
+      var rect = element.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
+      alert('You clicked the Chip.'+x-0.5+" : "+y); // eslint-disable-line no-alert
+    }
 
     render() {
         const { classes } = this.props;
@@ -94,6 +101,7 @@ class MapEditor extends React.Component {
                       select
                       label="Size select"
                       className={classes.textField}
+                      ref="select"
                       value={this.state.mapSize}
                       onChange={this.handleChange('mapSize')}
                       SelectProps={{
@@ -110,9 +118,17 @@ class MapEditor extends React.Component {
                           {option.label}
                         </option>
                       ))}
+
                     </TextField>
                        <div>
-                          <canvas id="canvas" ref="canvas" width="400" height="400" />
+                          {this.state.mapSize}
+                          <canvas 
+                            id="canvas" 
+                            ref="canvas"
+                            width="400" 
+                            height="400"
+                            onClick={(e) => this.handleClick(e)} 
+                          />
                        </div>
                     </div>
                     }
@@ -128,7 +144,14 @@ class MapEditor extends React.Component {
             </Dialog>
         );
     }
+    componentDidMount(){
+    const select = this.refs.select;
+    // const index = select.selectedIndex;
+    // alert(select.options[index].value);
+  }
 }
+
+
 
 MapEditor.propTypes = {
     classes: PropTypes.object.isRequired,
