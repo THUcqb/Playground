@@ -77,7 +77,18 @@ class MapEditor extends React.Component {
       var rect = element.getBoundingClientRect();
       var x = e.clientX - rect.left;
       var y = e.clientY - rect.top;
-      alert('You clicked the Chip.'+x-0.5+" : "+y); // eslint-disable-line no-alert
+
+      
+      var c_max_x = element.width;
+      var c_max_y = element.height;
+
+      var block_size = this.state.mapSize;
+
+      var b_x = Math.floor(Number(x / c_max_x * block_size));
+      var b_y = Math.floor(Number(y / c_max_y * block_size));
+
+
+      alert( this.state.mapSize + ":" + 'pos:('+x+" : "+y+")"+ "block:("+b_x+" : "+b_y+")"); // eslint-disable-line no-alert
     }
 
     render() {
