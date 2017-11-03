@@ -22,7 +22,7 @@ export function reset() {
 
 export default function run(code) {
     // Blockly.JavaScript.addReservedWords('code');
-    reset()
+    reset();
     try {
         eval(code);
     } catch (e) {

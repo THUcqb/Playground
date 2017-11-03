@@ -19,7 +19,7 @@ export function signin(username, password) {
       password,
     })
     .then(function (response) {
-      return {OK: (response.data.status === 'successful'), token: response.data.token};
+      return {OK: (response.data.status === 'Successful'), token: response.data.token};
     })
 }
 
@@ -39,7 +39,7 @@ export function signup(username, password, phonenumber, email) {
             email,
         })
         .then((response) => {
-            return {OK: (response.data.status === 'successful')}
+            return {OK: (response.data.status === 'Successful')}
         });
 }
 
@@ -50,7 +50,7 @@ export function getInfoWithCookies(token) {
         })
         .then((response) => {
             return {
-                OK: (response.data.status === 'successful'),
+                OK: (response.data.status === 'Successful'),
                 username: response.data.username,
                 phonenumber: response.data.phonenumber,
                 email: response.data.email,

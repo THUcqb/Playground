@@ -1,0 +1,7 @@
+<xml>
+    <category name="Action" colour="#935ba5">
+        <block type="action_move">
+            <field name="OP">left</field>
+        </block>
+    </category>
+</xml>

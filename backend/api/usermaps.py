@@ -12,7 +12,7 @@ import time
 from random import Random
 
 @csrf_exempt
-def savemapsinfo(request):
+def save_mapsinfo(request):
     '''
     Save a map when the user have completed a level.
     
@@ -20,7 +20,7 @@ def savemapsinfo(request):
     :param param1: token
     :param param2: level
     :param param3: stars
-    :returns: if the token is out of date, return {"status":"Expration"}
+    :returns: if the token is out of date, return {"status":"Expiration"}
               else if the user doesn't exist, return {"status":"NotExisted"}
               else if succeed, return {"status":"Successful"}
     '''
@@ -54,14 +54,14 @@ def savemapsinfo(request):
             return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 @csrf_exempt
-def getmapsinfo(request):
+def get_mapsinfo(request):
     '''
     Get a user's all maps information.
     
     :method: POST
     :param param1: token
     :returns: if succeed, return {"status":"Successful", level:{"stars":stars, "unlock":true or false}, level:{}, level:{}}
-              else if the token is out of date, return {"status":"Expration"}
+              else if the token is out of date, return {"status":"Expiration"}
               else if the user doesn't exist, return {"status":"NotExisted"}
     '''
     if request.method == 'POST':

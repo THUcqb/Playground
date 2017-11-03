@@ -5,6 +5,7 @@ import GrassPainter from './painter/GrassPainter';
 import SnakePainter from './painter/SnakePainter';
 import LevelButton from './LevelChoose';
 import { Controller } from './logic/Controller';
+import { loadToolbox } from "./utils/LoadBlockly";
 
 /**
  * The app's scene part
@@ -30,6 +31,7 @@ class Scene extends Component
         this.controller.getMap().load(levelNum);
         this.grassPainter.init(this.controller.getMap());
         this.snakePainter.reset();
+        loadToolbox(levelNum);
     }
 
     /**
@@ -116,6 +118,8 @@ class Scene extends Component
         };
         EaselJS.Ticker.on("tick", Scene.tick, null, false, data);
         EaselJS.Ticker.framerate = 60;
+
+        this.handleChooseLevel(1);
     }
 
     /**

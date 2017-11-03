@@ -18,12 +18,15 @@ const styles = theme => ({
         marginTop: 64,
     },
     container: {
+        bottom: 0,
     },
     paper: {
         textAlign: 'center',
+        margin: theme.spacing.unit * 2,
+        padding: theme.spacing.unit * 2,
         color: theme.palette.text.secondary,
     },
-    welcomepaper: {
+    landingPaper: {
         textAlign: 'center',
         padding: theme.spacing.unit * 20,
         margin: theme.spacing.unit * 10,
@@ -72,7 +75,7 @@ class App extends Component
                 <div>
                     <Grid container className={classes.container}>
                         <Grid item xs={12} sm={12}>
-                            <Paper className={classes.welcomepaper}>
+                            <Paper className={classes.landingPaper}>
                                 <Typography className={classes.flex} type="title">
                                     FootMark is a boring game
                                     <br/>
