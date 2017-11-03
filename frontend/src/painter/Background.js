@@ -1,5 +1,5 @@
 import createjs from "masteryodaeaseljs";
-import { startPos, delta } from "../Constant";
+import { N, startPos, delta } from "../Constant";
 import { preloader } from "../index";
 
 class Background
@@ -21,17 +21,7 @@ class Background
         this.container = new createjs.Container();
         this.stage.addChild(this.container);
 
-        const size_x = map.SIZE_X;
-        const size_y = map.SIZE_Y;
-        for (let i = 0; i < size_x; i++)
-        {
-            const screen_y = startPos + delta * i;
-            for (let j = 0; j < size_y; j++)
-            {
-                const screen_x = startPos + delta * j;
-                this.paintGround(screen_x, screen_y);
-            }
-        }
+        this.paintGround();
     }
 
     update(map)
@@ -42,17 +32,17 @@ class Background
         }
     }
 
-    paintGround(screen_x, screen_y)
+    paintGround()
     {
         const ground = new createjs.Shape();
         const m = new createjs.Matrix2D();
-        m.scale(delta / this.square.width, delta / this.square.height);
+        m.scale(delta * N / this.square.width, delta * N / this.square.height);
         ground.graphics.beginBitmapFill(this.square, "no-repeat", m);
 
-        ground.graphics.drawRect(0, 0, delta, delta);
-        ground.x = screen_x;
-        ground.y = screen_y;
-        ground.cache(0, 0, delta, delta);
+        ground.graphics.drawRect(0, 0, delta * N, delta * N);
+        ground.x = startPos;
+        ground.y = startPos;
+        ground.cache(0, 0, delta * N, delta * N);
         this.container.addChild(ground);
     }
 }
