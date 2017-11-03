@@ -115,7 +115,7 @@ class Navigation extends React.Component {
             <MenuIcon />
           </IconButton>
           <Typography type="title" color="inherit" className={classes.flex}>
-            Snake
+            FootMark
           </Typography>
           {userInfo}
           <CookieAlertBar open={this.state.cookieAlertOpen}/>

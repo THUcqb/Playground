@@ -1,4 +1,5 @@
 import createjs from "masteryodaeaseljs";
+import TweenJS from "masteryodatweenjs";
 import {N, startPos, delta} from "../Constant";
 import {preloader} from "../index";
 
@@ -48,6 +49,8 @@ class GrassPainter
             }
         }
         this.coins = new createjs.Shape();
+        this.coins.cursor = "pointer";
+        this.coins.on("mousedown", (ev) => {alert("I'm a coin.");});
         this.container.addChild(this.coins);
     }
 
@@ -107,9 +110,17 @@ class GrassPainter
      */
     paintWall(screen_x, screen_y)
     {
-        const wall = new createjs.Shape();
+        let wall = new createjs.Shape();
+        wall.cursor = "pointer";
+        wall.on("mousedown", (ev) => {
+            let clickedWall = ev.target;
+            clickedWall.alpha = 0.1;
+            TweenJS.Tween.get(clickedWall).to({ alpha: 1 }, 1000);
+
+        });
+
         //wall.graphics.beginFill("#5D4037");
-        
+
         const m = new createjs.Matrix2D();
         m.scale(delta / this.wall.width, delta / this.wall.height);
         wall.graphics.beginBitmapFill(this.wall, "no-repeat", m);
@@ -129,7 +140,7 @@ class GrassPainter
     paintCoin(screen_x, screen_y)
     {
         //this.coins.graphics.beginFill("#FFC107");
-        
+
         const m = new createjs.Matrix2D();
         m.translate(screen_x, screen_y);
         m.scale(delta / this.coin.width, delta / this.coin.height);
