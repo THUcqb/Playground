@@ -1,4 +1,5 @@
 import createjs from "masteryodaeaseljs";
+import TweenJS from "masteryodatweenjs";
 import {N, startPos, delta} from "../Constant";
 import {preloader} from "../index";
 
@@ -111,7 +112,12 @@ class GrassPainter
     {
         let wall = new createjs.Shape();
         wall.cursor = "pointer";
-        wall.on("mousedown", (ev) => {alert("I'm a wall.");});
+        wall.on("mousedown", (ev) => {
+            let clickedWall = ev.target;
+            clickedWall.alpha = 0.1;
+            TweenJS.Tween.get(clickedWall).to({ alpha: 1 }, 1000);
+
+        });
 
         //wall.graphics.beginFill("#5D4037");
 
