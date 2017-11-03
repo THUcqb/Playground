@@ -1,14 +1,23 @@
 import React, { Component } from 'react';
 import Toolbar from 'material-ui/Toolbar';
 import EaselJS from 'masteryodaeaseljs';
-import LevelButton from './LevelChoose';
 import Element from './painter/Element';
 import Background from './painter/Background';
 import Role from './painter/Role';
 import MapEditorButton from './mapeditor/MapEditorButton';
+import LevelButton from './gameflow/LevelChoose';
+import OverDialog from './gameflow/OverDialog';
+import Button from 'material-ui/Button';
+import { withStyles } from 'material-ui/styles';
 import { Controller } from './logic/Controller';
 import { loadToolbox } from "./utils/LoadBlockly";
 import Trajectory from "./painter/Trajectory";
+
+const styles = theme => ({
+    button: {
+        margin: theme.spacing.unit,
+    },
+});
 
 /**
  * The app's scene part
@@ -19,8 +28,12 @@ class Scene extends Component
     {
         super();
         this.controller = Controller.controller;
-
         this.handleResize = this.handleResize.bind(this);
+        this.state = {
+            open: false,
+            nowLevel: 1,
+            dialogTitle: "Game Over",
+        };
     }
     
     /**
@@ -29,6 +42,7 @@ class Scene extends Component
      */
     handleChooseLevel(levelNum)
     {
+        this.setState({nowLevel: levelNum});
         this.stage.removeAllChildren();
         this.controller.getSnake().init(5, 5);
         this.controller.getMap().load(levelNum);
@@ -43,6 +57,21 @@ class Scene extends Component
         this.role.update(this.controller.getSnake());
     }
 
+    handleGameOver() {
+        this.setState({open: true});
+    }
+
+    handleRequestClose() {
+        this.setState({open: false});
+    }
+
+    handleNextLevel() {
+        if (this.state.nowLevel < 4) {
+            this.handleChooseLevel(this.state.nowLevel + 1);
+        }
+        this.handleRequestClose();
+    }
+
     /**
      * Render function
      * @returns {XML} consists of a canvas which
@@ -50,20 +79,44 @@ class Scene extends Component
      */
     render()
     {
+        const { classes } = this.props;
         return (
-            <div>
-            <div className="levelsDiv">
-                <Toolbar color="primary">
-                    <LevelButton
-                        onChooseLevel={(levelNum) => this.handleChooseLevel(levelNum)}
+            //<div>
+            //     <div className="levelsDiv">
+
+                // </div>
+                <div className="CanvasDiv" ref="CanvasDiv">
+                    <Toolbar color="primary">
+                        <LevelButton className={classes.button}
+                            ref="levelButton"
+                            onChooseLevel={(levelNum) => this.handleChooseLevel(levelNum)}
+                        />
+                        <Button raised className={classes.button}
+                                color="primary"
+                                onClick={() => this.handleGameOver()}
+                        >
+                            Test Game Over
+                        </Button>
+                    </Toolbar>
+                    <MapEditorButton/>
+                    <canvas id="canvas" ref="canvas" width="600" height="600" />
+                    <OverDialog
+                        open={this.state.open}
+                        onRequestClose={() => this.handleRequestClose()}
+                        dialogTitle={this.state.dialogTitle}
+                        onNext={() => this.handleNextLevel()}
+                        onLevels={() => {
+                            this.handleRequestClose();
+                            this.refs.levelButton.handleClickOpen();
+                        }}
+                        onReplay={() => {
+                            this.handleRequestClose();
+                            this.handleChooseLevel(this.state.nowLevel);
+                        }}
                     />
-                </Toolbar>
-            </div>
-            <div className="CanvasDiv" ref="CanvasDiv">
-                <MapEditorButton/>
-                <canvas id="canvas" ref="canvas" width="600" height="600" />
-            </div>
-            </div>
+
+                </div>
+            // </div>
         );
     }
 
@@ -146,4 +199,4 @@ class Scene extends Component
     }
 }
 
-export default Scene;
+export default withStyles(styles, {withTheme: true})(Scene);
