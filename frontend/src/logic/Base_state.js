@@ -66,7 +66,16 @@ export class Base_state{
 				this.state = "err";
 			}
 			this.tr_run();
-			
+
+			if (Base.bmap.candy == 0)
+			{
+				this.state = "success";
+			}
+
+			console.log(this.cur.name);
+			console.log(this.cur.type);
+			console.log(this.state);
+
 	}
 
 	tr_run()
