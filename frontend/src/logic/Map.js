@@ -17,6 +17,22 @@ class Map {
 		this.SIZE_X = SIZE_X;
 		this.SIZE_Y = SIZE_Y;
 	}
+
+	editinit()
+	{
+		let block_list = [];
+		let slot_map = [];
+		for (let i = 0; i < this.SIZE_X; i++) {
+			block_list[i] = [];
+			slot_map[i] = [];
+			for (let n = 0; n < this.SIZE_Y; n++) {
+				block_list[i][n] = new Block(i,n);
+				slot_map[i][n] = 0;
+			}
+		}
+		this.block_list = block_list;
+	}
+
 	/**
 	 * init map info and set the birth place of snake
 	 * @param  {[int]} x 

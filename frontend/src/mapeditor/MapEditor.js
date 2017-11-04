@@ -1,4 +1,5 @@
 import React from 'react';
+import Map from '../logic/Map';
 import TextField from 'material-ui/TextField';
 import Dialog, {
     DialogTitle,
@@ -26,10 +27,7 @@ const styles = theme => ({
 });
 
   const currencies = [
-  {
-    value: '0',
-    label: '0',
-  },
+  
   {
     value: '10',
     label: 'S',
@@ -53,6 +51,8 @@ class MapEditor extends React.Component {
      */
     constructor(props) {
         super(props);
+        this.map = new Map(10,10);
+        this.map.editinit();
         this.state = {
         }
     }
@@ -65,6 +65,12 @@ class MapEditor extends React.Component {
     this.setState({
       [name]: event.target.value,
     });
+    if (name == 'mapSize') 
+    {
+      this.map = new Map(this.state.mapSize,this.state.mapSize);
+      this.map.editinit();
+    }
+
   };
     handleFinishEditing() {
     //TODO: to something including save the map and close the dialog.
@@ -84,10 +90,16 @@ class MapEditor extends React.Component {
 
       var block_size = this.state.mapSize;
 
+      if (block_size == null) 
+      {
+        block_size = 10;
+      }
       var b_x = Math.floor(Number(x / c_max_x * block_size));
       var b_y = Math.floor(Number(y / c_max_y * block_size));
 
-
+      
+      this.map.block_list[b_x][b_y].info =(1 + this.map.block_list[b_x][b_y].info)%3
+      this.map.print();
       alert( this.state.mapSize + ":" + 'pos:('+x+" : "+y+")"+ "block:("+b_x+" : "+b_y+")"); // eslint-disable-line no-alert
     }
 
