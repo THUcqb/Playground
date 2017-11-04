@@ -115,6 +115,20 @@ class test{
 		this.testcontroller()
 	}
 
+	testGameOver()
+	{
+		let usertask = new Base_task(controller.begin)//将任务列表指向初始节点
+		let loop = new Base("sys","loop");
+			loop.set_time(200);
+			let loop_task = new Base_task(loop);
+			loop_task.add(new Base("sys","move_up"));
+			loop.set_task(loop_task);
+			
+		usertask.add(loop);//向任务列表添加函数
+		controller.begin.task=usertask;
+		this.testcontroller()
+	}
+
 }
 
 var controller = new Controller();
@@ -132,7 +146,7 @@ console.log('-----test-check---')
 
 
 let t = new test()
-t.testWhile();
+t.testGameOver();
 
 // console.log('-----test-while---')
 

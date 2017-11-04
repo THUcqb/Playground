@@ -195,9 +195,10 @@ export class Base {
 			let __y = Base.bsnake.body[0].y;
 			Base.bmap.set_tail(__x,__y);
 			Base.bsnake.add_head(_x,_y);
-			if (Base.bmap.state == "down")
+			if (Base.bmap.state === "down")
 				Base.bmap.set_slot(_x,_y);
 			Base.bmap.set_head(_x,_y);
+			Base.bmap.candy -- ;
 		}
 		else
 			if (this.runnable(_x,_y) === 'runnable') {
@@ -214,6 +215,7 @@ export class Base {
 					Base.bmap.set_slot(_x,_y);
 				Base.bmap.set_head(_x,_y);
 			}
+			else this.type = "fail";
 	}
 	/**
 	 *  snake move up one step
@@ -316,7 +318,7 @@ export class Base {
 			}
 		}
 		
-		// Base.bmap.print();
+		Base.bmap.print();
 	}
 }
 

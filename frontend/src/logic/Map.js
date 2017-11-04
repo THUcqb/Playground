@@ -2,6 +2,7 @@ import {Block} from './Block';
 import axios from 'axios';
 import {URL,SAVEMAP,LOADMAP}from '../config/Api';
 import {level0,level1,level2,level3,level4} from './Maplevel';
+import {Base,Base_task} from './Base';
 
 class MapInfo{
 	constructor(level,maps)
@@ -130,6 +131,10 @@ class Map {
 					if (info == 2) 
 					{
 						this.candy+=1;
+					}
+					if (info == 9)
+					{
+						Base.bsnake.init(i,n);
 					}
 				}
 			}
