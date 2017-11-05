@@ -1,6 +1,7 @@
 import EaselJS from "masteryodaeaseljs";
 import TweenJS from "masteryodatweenjs";
-import { startPos, delta } from "../Constant";
+import { N, startPos, delta } from "../Constant";
+import { preloader } from "../index";
 
 class Trajectory
 {
@@ -8,6 +9,7 @@ class Trajectory
     {
         this.width = delta / 3;
         this.time = 480;
+        this.totalLength = 10;
         this.stage = stage;
         this.nowX = 0;
         this.nowY = 0;
@@ -23,8 +25,44 @@ class Trajectory
     {
         this.container = new EaselJS.Container();
         this.stage.addChild(this.container);
+
+        let img = preloader.getResult("square");
+
+        this.blur = new EaselJS.Bitmap(img);
+        this.picWidth = img.width;
+        this.picHeight = img.height;
+        let blurFilter = new EaselJS.BlurFilter(6, 6, 3);
+        this.blur.filters = [blurFilter, new EaselJS.ColorMatrixFilter(new EaselJS.ColorMatrix(60, 0, 0, 0))];
+        this.blur.setTransform(startPos, startPos, delta * N / this.picWidth, delta * N / this.picHeight);
+        this.blur.cache(0, 0, this.picWidth, this.picHeight);
+
+        this.drawingCanvas = new EaselJS.Shape();
+        this.drawingCanvas.cache(0, 0, this.picWidth, this.picHeight);
+        this.drawingCanvas.setTransform(startPos, startPos, delta * N / this.picWidth, delta * N / this.picHeight);
+
+        this.bitmap = new EaselJS.Bitmap(img);
+        let maskFilter = new EaselJS.AlphaMaskFilter(this.drawingCanvas.cacheCanvas);
+        this.bitmap.setTransform(startPos, startPos, delta * N / this.picWidth, delta * N / this.picHeight);
+        this.bitmap.filters = [maskFilter];
+        this.bitmap.cache(0, 0, this.picWidth, this.picHeight);
         this.nowX = x;
         this.nowY = y;
+
+        this.deltaWidth = this.picWidth / N;
+        this.deltaHeight = this.picHeight / N;
+        this.edgeWidth = (delta - this.width) / 2 * this.picWidth / delta / N;
+        this.edgeHeight = (delta - this.width) / 2 * this.picHeight / delta / N;
+        this.widthW = this.width * this.picWidth / delta / N;
+        this.widthH = this.width * this.picHeight / delta / N;
+
+        this.container.addChild(this.blur, this.bitmap);
+
+        this.drawingCanvas.graphics.clear().beginFill("#000000");
+        this.drawingCanvas.graphics.alpha = 0.3;
+        this.drawingCanvas.graphics.drawRect(y * this.deltaWidth + this.edgeWidth, x * this.deltaHeight + this.edgeHeight, this.widthW, this.widthH);
+
+        this.drawingCanvas.updateCache("source-over");
+        this.bitmap.updateCache();
     }
 
     update(snake)
@@ -44,47 +82,42 @@ class Trajectory
 
     newTrajectory(nowX, nowY)
     {
-        let lastX = this.nowX;
-        let lastY = this.nowY;
+        console.log("newTrajectory");
+        this.drawingCanvas.alpha = 0;
+        let tween = TweenJS.Tween.get(this.drawingCanvas).to({ alpha: 1 }, this.time).call(() => this.complete(nowX, nowY));
+        this.length = 0;
+        tween.addEventListener("change", () => this.change(nowX, nowY));
+    }
+
+    complete(nowX, nowY)
+    {
         this.nowX = nowX;
         this.nowY = nowY;
-        let part = new EaselJS.Shape();
-        let x = 0;
-        let y = 0;
-        let width_x = 0;
-        let width_y = 0;
-        if (nowX === lastX + 1)
+        console.log(nowX, nowY, "inin");
+    }
+
+    change(nowX, nowY)
+    {
+        this.length++;
+        this.drawingCanvas.graphics.clear().beginFill("rgba(0, 0, 0, 1)");
+        if (nowX === this.nowX + 1)
         {
-            x = startPos + lastX * delta + (delta - this.width) / 2;
-            y = startPos + lastY * delta + (delta - this.width) / 2;
-            width_x = delta;
-            width_y = this.width;
+            this.drawingCanvas.graphics.drawRect(this.nowY * this.deltaWidth + this.edgeWidth, this.nowX * this.deltaHeight + this.edgeHeight + this.widthH, this.widthW, this.deltaHeight * this.length / (this.totalLength - 1));
         }
-        if (nowX === lastX - 1)
+        if (nowX === this.nowX - 1)
         {
-            x = startPos + nowX * delta + (delta + this.width) / 2;
-            y = startPos + nowY * delta + (delta - this.width) / 2;
-            width_x = delta;
-            width_y = this.width;
+            this.drawingCanvas.graphics.drawRect(this.nowY * this.deltaWidth + this.edgeWidth, this.nowX * this.deltaHeight + this.edgeHeight, this.widthW, -this.deltaHeight * this.length / (this.totalLength - 1));
         }
-        if (nowY === lastY + 1)
+        if (nowY === this.nowY + 1)
         {
-            x = startPos + lastX * delta + (delta - this.width) / 2;
-            y = startPos + lastY * delta + (delta - this.width) / 2;
-            width_x = this.width;
-            width_y = delta;
+            this.drawingCanvas.graphics.drawRect(this.nowY * this.deltaWidth + this.edgeWidth + this.widthW, this.nowX * this.deltaHeight + this.edgeHeight, this.deltaWidth * this.length / (this.totalLength - 1), this.widthH);
         }
-        if (nowY === lastY - 1)
+        if (nowY === this.nowY - 1)
         {
-            x = startPos + nowX * delta + (delta - this.width) / 2;
-            y = startPos + nowY * delta + (delta + this.width) / 2;
-            width_x = this.width;
-            width_y = delta;
+            this.drawingCanvas.graphics.drawRect(this.nowY * this.deltaWidth + this.edgeWidth, this.nowX * this.deltaHeight + this.edgeHeight, -this.deltaWidth * this.length / (this.totalLength - 1), this.widthH);
         }
-        part.alpha = 0;
-        part.graphics.beginFill("#FF5722").drawRect(y - part.x, x - part.y, width_y, width_x);
-        this.container.addChild(part);
-        TweenJS.Tween.get(part).to({ alpha: 1 }, this.time);
+        this.drawingCanvas.updateCache("source-over");
+        this.bitmap.updateCache();
     }
 }
 
