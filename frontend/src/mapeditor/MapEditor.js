@@ -98,7 +98,7 @@ class MapEditor extends React.Component {
       var b_y = Math.floor(Number(y / c_max_y * block_size));
 
       
-      this.map.block_list[b_x][b_y].info =(1 + this.map.block_list[b_x][b_y].info)%3
+      this.map.block_list[b_y][b_x].info =(1 + this.map.block_list[b_y][b_x].info)%3
       this.map.print();
       alert( this.state.mapSize + ":" + 'pos:('+x+" : "+y+")"+ "block:("+b_x+" : "+b_y+")"); // eslint-disable-line no-alert
     }

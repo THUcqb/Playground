@@ -17,7 +17,9 @@ class Map {
 		this.SIZE_X = SIZE_X;
 		this.SIZE_Y = SIZE_Y;
 	}
-
+	/**
+	 * init map with empty block_list
+	 */
 	editinit()
 	{
 		let block_list = [];
