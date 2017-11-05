@@ -1,6 +1,7 @@
 import EaselJS from "masteryodaeaseljs";
 import TweenJS from "masteryodatweenjs";
 import {preloader} from "../index";
+import HintBar from './Hints';
 
 class Element
 {
@@ -50,9 +51,21 @@ class Element
             }
         }
         this.coins.cursor = "pointer";
+        this.coins.shadow = new EaselJS.Shadow('#000', 2, 2, 8);
+
         if (this.animation)
         {
-            this.coins.on("mousedown", (ev) => {alert("I'm a coin.");});
+            this.coins.on("mousedown", (ev) => {
+                HintBar.show('coin');
+                let coins = ev.target;
+                TweenJS.Tween.get(coins)
+                    .to({
+                        alpha: 0.5,
+                    }, 1000)
+                    .to({
+                        alpha: 1
+                    }, 300);
+            });
         }
         this.container.addChild(this.coins);
     }
@@ -79,10 +92,6 @@ class Element
             for (let j = 0; j < size_y; j++)
             {
                 const screen_x = this.size * j;
-                if (info_arr[i][j] === 1)
-                {
-                    this.paintWall(screen_x, screen_y);
-                }
                 if (info_arr[i][j] === 2)
                 {
                     this.paintCoin(screen_x, screen_y);
@@ -110,10 +119,22 @@ class Element
         if (this.animation)
         {
             wall.on("mousedown", (ev) => {
+                HintBar.show('wall');
                 let clickedWall = ev.target;
-                clickedWall.alpha = 0.1;
-                TweenJS.Tween.get(clickedWall).to({ alpha: 1 }, 1000);
-
+                TweenJS.Tween.get(clickedWall)
+                    .to({
+                        alpha: 0.1,
+                        scaleX: 0.3,
+                        scaleY: 0.3,
+                    })
+                    .to({
+                        alpha: 0.5,
+                        scaleX: 1,
+                        scaleY: 1,
+                    }, 1000, TweenJS.Ease.elasticOut)
+                    .to({
+                        alpha: 1
+                    }, 300);
             });
         }
 
@@ -124,6 +145,8 @@ class Element
         wall.graphics.beginBitmapFill(this.wall, "no-repeat", m);
 
         wall.graphics.drawRect(0, 0, this.size, this.size);
+        wall.shadow = new EaselJS.Shadow('#000', 4, 4, 8);
+
         wall.x = screen_x;
         wall.y = screen_y;
         wall.cache(0, 0, this.size, this.size);

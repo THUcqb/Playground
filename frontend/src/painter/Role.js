@@ -30,6 +30,7 @@ class Role
         this.nowX = nowX;
         this.nowY = nowY;
         this.role = new EaselJS.Shape();
+        this.role.shadow = new EaselJS.Shadow('#000', 2, 2, 8);
         this.container.addChild(this.role);
         this.drawPic();
     }
