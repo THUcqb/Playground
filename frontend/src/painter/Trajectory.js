@@ -1,4 +1,5 @@
 import EaselJS from "masteryodaeaseljs";
+import TweenJS from "masteryodatweenjs";
 import { N, startPos, delta } from "../Constant";
 import { preloader } from "../index";
 
@@ -8,6 +9,7 @@ class Trajectory
     {
         this.width = delta / 3;
         this.time = 480;
+        this.totalLength = 10;
         this.stage = stage;
         this.nowX = 0;
         this.nowY = 0;
@@ -80,28 +82,42 @@ class Trajectory
 
     newTrajectory(nowX, nowY)
     {
+        console.log("newTrajectory");
+        this.drawingCanvas.alpha = 0;
+        let tween = TweenJS.Tween.get(this.drawingCanvas).to({ alpha: 1 }, this.time).call(() => this.complete(nowX, nowY));
+        this.length = 0;
+        tween.addEventListener("change", () => this.change(nowX, nowY));
+    }
+
+    complete(nowX, nowY)
+    {
+        this.nowX = nowX;
+        this.nowY = nowY;
+        console.log(nowX, nowY, "inin");
+    }
+
+    change(nowX, nowY)
+    {
+        this.length++;
         this.drawingCanvas.graphics.clear().beginFill("rgba(0, 0, 0, 1)");
         if (nowX === this.nowX + 1)
         {
-            this.drawingCanvas.graphics.drawRect(this.nowY * this.deltaWidth + this.edgeWidth, this.nowX * this.deltaHeight + this.edgeHeight + this.widthH, this.widthW, this.deltaHeight);
+            this.drawingCanvas.graphics.drawRect(this.nowY * this.deltaWidth + this.edgeWidth, this.nowX * this.deltaHeight + this.edgeHeight + this.widthH, this.widthW, this.deltaHeight * this.length / (this.totalLength - 1));
         }
         if (nowX === this.nowX - 1)
         {
-            this.drawingCanvas.graphics.drawRect(this.nowY * this.deltaWidth + this.edgeWidth, this.nowX * this.deltaHeight + this.edgeHeight, this.widthW, -this.deltaHeight);
+            this.drawingCanvas.graphics.drawRect(this.nowY * this.deltaWidth + this.edgeWidth, this.nowX * this.deltaHeight + this.edgeHeight, this.widthW, -this.deltaHeight * this.length / (this.totalLength - 1));
         }
         if (nowY === this.nowY + 1)
         {
-            this.drawingCanvas.graphics.drawRect(this.nowY * this.deltaWidth + this.edgeWidth + this.widthW, this.nowX * this.deltaHeight + this.edgeHeight, this.deltaWidth, this.widthH);
+            this.drawingCanvas.graphics.drawRect(this.nowY * this.deltaWidth + this.edgeWidth + this.widthW, this.nowX * this.deltaHeight + this.edgeHeight, this.deltaWidth * this.length / (this.totalLength - 1), this.widthH);
         }
         if (nowY === this.nowY - 1)
         {
-            this.drawingCanvas.graphics.drawRect(this.nowY * this.deltaWidth + this.edgeWidth, this.nowX * this.deltaHeight + this.edgeHeight, -this.deltaWidth, this.widthH);
+            this.drawingCanvas.graphics.drawRect(this.nowY * this.deltaWidth + this.edgeWidth, this.nowX * this.deltaHeight + this.edgeHeight, -this.deltaWidth * this.length / (this.totalLength - 1), this.widthH);
         }
-
         this.drawingCanvas.updateCache("source-over");
         this.bitmap.updateCache();
-        this.nowX = nowX;
-        this.nowY = nowY;
     }
 }
 
