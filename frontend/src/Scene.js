@@ -58,7 +58,17 @@ class Scene extends Component
     }
 
     handleGameOver() {
-        this.setState({open: true});
+        this.setState({
+            open: true,
+            dialogTitle: "Game Over"
+        });
+    }
+
+    handleSuccess() {
+        this.setState({
+            open: true,
+            dialogTitle: "Success!"
+        });
     }
 
     handleRequestClose() {
@@ -102,7 +112,7 @@ class Scene extends Component
                     <canvas id="canvas" ref="canvas" width="600" height="600" />
                     <OverDialog
                         open={this.state.open}
-                        onRequestClose={() => this.handleRequestClose()}
+                        //onRequestClose={() => this.handleRequestClose()}
                         dialogTitle={this.state.dialogTitle}
                         onNext={() => this.handleNextLevel()}
                         onLevels={() => {
@@ -130,13 +140,21 @@ class Scene extends Component
         if (data.count === 0)
         {
             let status = data.controller.current_state();
-            // if (status === "runnable")
-            // {
+            if (status === "runnable")
+            {
                 data.background.update(data.controller.getMap());
                 data.trajectory.update(data.controller.getSnake());
                 data.element.update(data.controller.getMap());
                 data.role.update(data.controller.getSnake());
-            // }
+            }
+            else if (status === "fail")
+            {
+                data.handleGameOver();
+            }
+            else if (status === "success")
+            {
+                data.handleSuccess();
+            }
         }
         data.count = (data.count + 1) % 30;
         data.stage.update();
@@ -183,6 +201,8 @@ class Scene extends Component
             stage: this.stage,
             controller: this.controller,
             count: count,
+            handleGameOver: () => this.handleGameOver(),
+            handleSuccess: () => this.handleSuccess(),
         };
         EaselJS.Ticker.on("tick", Scene.tick, null, false, data);
         EaselJS.Ticker.framerate = 60;

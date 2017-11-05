@@ -10,9 +10,13 @@ import Button from 'material-ui/Button';
 import NextIcon from 'material-ui-icons/ArrowForward';
 import LevelsIcon from 'material-ui-icons/List';
 import ReplayIcon from 'material-ui-icons/Replay';
+import StarBorder from 'material-ui-icons/StarBorder'
 
 const styles = theme => ({
     button: {
+        margin: theme.spacing.unit,
+    },
+    star: {
         margin: theme.spacing.unit,
     },
 });
@@ -28,7 +32,9 @@ class OverDialog extends React.Component {
             >
                 <DialogTitle>{this.props.dialogTitle}</DialogTitle>
                 <DialogContent>
-
+                    <StarBorder className={classes.star}/>
+                    <StarBorder className={classes.star}/>
+                    <StarBorder className={classes.star}/>
                 </DialogContent>
                 <DialogActions>
                     <Button fab className={classes.button}
