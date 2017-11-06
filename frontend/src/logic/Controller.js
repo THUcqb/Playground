@@ -36,7 +36,9 @@ export class Controller{
     }
     switch_level(level)
     {
+        console.log("fuck you!!");
         this.begin = Base.begin;
+        Base.begin.time = 1;
         this.begin.type = "user";
         this.state = "runnable";
         Base.bmap.load(level);
@@ -44,6 +46,7 @@ export class Controller{
         this.begin.task=usertask;
         this.snake = Base.bsnake;
         Base.run_state.state = "runnable";
+        Base.run_state.cur = Base.begin;
     }
     /**
      * return map info
