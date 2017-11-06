@@ -1,6 +1,6 @@
 import {Block} from './Block';
 class Snake {
-	constructor(x,y)
+	constructor(x, y)
 	{
 		this.x = x;
 		this.y = y;
@@ -13,20 +13,20 @@ class Snake {
 	/**
 	 * add new head for snake
 	 */
-	add_head(x,y)
+	add_head(x, y)
 	{
 		this.x = x;
 		this.y = y;
-		this.body[this.size] = new Block(x,y);
-		this.size +=1;
+        this.body[this.size] = new Block(x,y);
+		this.size += 1;
 	}
 	/**
 	 * delete current tail for snake
 	 */
 	del_tail()
 	{
-		var cur = new Array(Block);
-		for (var i = 1; i < this.body.length; i++) {
+		let cur = new Array(Block);
+		for (let i = 1; i < this.body.length; i++) {
 			cur[i-1] = this.body[i];
 		}
 		this.body = cur;
@@ -39,8 +39,8 @@ class Snake {
 	{
 		this.x = x;
 		this.y = y;
-		var cur = new Array(Block);
-		cur[0] = new Block(x,y);
+		let cur = new Array(Block);
+		cur[0] = new Block(x, y);
 		this.size = 1;
 		this.body = cur;
 	}

@@ -5,6 +5,7 @@ import LevelButton from './LevelChoose';
 import Element from './painter/Element';
 import Background from './painter/Background';
 import Role from './painter/Role';
+import MapEditorButton from './mapeditor/MapEditorButton';
 import { Controller } from './logic/Controller';
 import { loadToolbox } from "./utils/LoadBlockly";
 import Trajectory from "./painter/Trajectory";
@@ -59,6 +60,7 @@ class Scene extends Component
                 </Toolbar>
             </div>
             <div className="CanvasDiv" ref="CanvasDiv">
+                <MapEditorButton/>
                 <canvas id="canvas" ref="canvas" width="600" height="600" />
             </div>
             </div>
