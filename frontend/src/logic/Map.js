@@ -1,7 +1,7 @@
 import {Block} from './Block';
 import axios from 'axios';
 import {URL,SAVEMAP,LOADMAP}from '../config/Api';
-import {level0,level1,level2,level3,level4} from './Maplevel';
+import {level0, level1, level2, level3, level4, level5} from './Maplevel';
 import {Base,Base_task} from './Base';
 
 class MapInfo{
@@ -59,6 +59,7 @@ class Map {
 		this.loacalmap[2] = (level2);
 		this.loacalmap[3] = (level3);
 		this.loacalmap[4] = (level4);
+        this.loacalmap[5] = (level5);
 		// console.log(this.loacalmap);
 		this.set_head(x,y);
 	}
@@ -146,13 +147,14 @@ class Map {
 					let info = Number(str[i*this.SIZE_X+n]);
 
 					this.block_list[i][n].info = info;
-					if (info == 2) 
+					if (info === 2)
 					{
 						this.candy+=1;
 					}
-					if (info == 9)
+					if (info === 9)
 					{
 						Base.bsnake.init(i,n);
+						this.set_head(i, n);
 					}
 				}
 			}

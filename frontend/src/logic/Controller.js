@@ -37,6 +37,7 @@ export class Controller{
     switch_level(level)
     {
         this.begin = Base.begin;
+        this.begin.type = "user";
         this.state = "runnable";
         Base.bmap.load(level);
         let usertask = new Base_task(this.begin)//将任务列表指向初始节点

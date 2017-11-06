@@ -4,14 +4,9 @@ import Dialog, {
   DialogContent
 } from 'material-ui/Dialog';
 import { withStyles } from 'material-ui/styles';
-import Button from 'material-ui/Button';
 import Chip from 'material-ui/Chip';
 
 const styles = theme => ({
-    button: {
-        flex: 1,
-        margin: 10,
-    },
     chip: {
         margin: theme.spacing.unit / 2,
     },
@@ -25,21 +20,13 @@ const styles = theme => ({
 class LevelDialog extends React.Component {
     state = {
         chipData: [
+            { key: 0, label: "Level0" },
             { key: 1, label: "Level1" },
             { key: 2, label: "Level2" },
             { key: 3, label: "Level3" },
             { key: 4, label: "Level4" },
+            { key: 5, label: "Level5" },
         ],
-    };
-    
-    styles = {
-        chip: {
-            margin: 4,
-        },
-        wrapper: {
-            display: 'flex',
-            flexWrap: 'wrap',
-        },
     };
     
     render() {
