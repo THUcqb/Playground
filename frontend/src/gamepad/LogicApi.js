@@ -10,14 +10,15 @@ let historyStep = 0;
 export async function move(op) {
     Controller.controller.begin.task.add(new Base('sys', 'move_' + op));
     await sleep(500 * historyStep++);
-//  TODO: move the await to painter if paint continuously.
+    console.log(op);
+    //  TODO: move the await to painter if paint continuously.
     Controller.controller.step();
 }
 
 export function reset() {
     historyStep = 0;
-    // Controller.controller = new Controller();
-//  TODO: properly reset the map.
+    //  Controller.controller = new Controller();
+    //  TODO: properly reset the map.
 }
 
 export default function run(code) {

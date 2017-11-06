@@ -17,6 +17,7 @@ class Map {
 	constructor(SIZE_X, SIZE_Y) {
 		this.SIZE_X = SIZE_X;
 		this.SIZE_Y = SIZE_Y;
+		this.candy= 0;
 	}
 	/**
 	 * init map with empty block_list
@@ -141,6 +142,7 @@ class Map {
 
 	load(level) 
 	{
+		this.candy = 0;
 		let str = this.loacalmap[level];
 		for (let i = 0; i < this.SIZE_X; i++) {
 				for (let n = 0; n < this.SIZE_Y; n++) {

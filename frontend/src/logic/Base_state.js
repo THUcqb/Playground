@@ -74,6 +74,9 @@ export class Base_state{
 
 			console.log(this.cur.name);
 			console.log(this.cur.type);
+			if (this.cur.type == "fail") 
+				{this.state = "fail";}
+			console.log(Base.bmap.candy)
 			console.log(this.state);
 
 	}
