@@ -1,16 +1,24 @@
-import { startPos, delta } from "../Constant";
 import EaselJS from "masteryodaeaseljs";
 import TweenJS from "masteryodatweenjs";
 
 class Role
 {
-    constructor(stage)
+    constructor(stage, size, n)
     {
+        this.size = size / n;
+        this.n = n;
         this.stage = stage;
-        this.width = delta / 3;
+        this.width = this.size / 3;
         this.time = 480;
         this.nowX = -1;
         this.container = null;
+    }
+
+    updateN(n)
+    {
+        this.size = this.size * this.n;
+        this.n = n;
+        this.size = this.size / this.n;
     }
 
     init(nowX, nowY)
@@ -28,8 +36,8 @@ class Role
 
     drawPic()
     {
-        let x = startPos + this.nowX * delta + (delta - this.width) / 2;
-        let y = startPos + this.nowY * delta + (delta - this.width) / 2;
+        let x = this.nowX * this.size + (this.size - this.width) / 2;
+        let y = this.nowY * this.size + (this.size - this.width) / 2;
         this.role.graphics.beginFill("#4518ff").drawRect(y - this.role.x, x - this.role.y, this.width, this.width);
     }
 
@@ -40,19 +48,19 @@ class Role
         this.drawPic();
         if (x === this.nowX + 1)
         {
-            TweenJS.Tween.get(this.role, { override: true }).to({ y: this.role.y + delta }, this.time);
+            TweenJS.Tween.get(this.role, { override: true }).to({ y: this.role.y + this.size }, this.time);
         }
         else if (x === this.nowX - 1)
         {
-            TweenJS.Tween.get(this.role, { override: true }).to({ y: this.role.y - delta }, this.time);
+            TweenJS.Tween.get(this.role, { override: true }).to({ y: this.role.y - this.size }, this.time);
         }
         else if (y === this.nowY + 1)
         {
-            TweenJS.Tween.get(this.role, { override: true }).to({ x: this.role.x + delta }, this.time);
+            TweenJS.Tween.get(this.role, { override: true }).to({ x: this.role.x + this.size }, this.time);
         }
         else if (y === this.nowY - 1)
         {
-            TweenJS.Tween.get(this.role, { override: true }).to({ x: this.role.x - delta }, this.time);
+            TweenJS.Tween.get(this.role, { override: true }).to({ x: this.role.x - this.size }, this.time);
         }
         this.updatePos(x, y);
     }

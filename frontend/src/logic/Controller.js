@@ -1,39 +1,43 @@
-import {Base,Base_task} from './Base';
+import {Base, Base_task} from './Base';
 import {Base_state} from './Base_state';
 import Map from './Map';
 import Snake from './Snake';
 
 
-export class Controller{
-    
+export class Controller
+{
     constructor()
     {
         this.begin = Base.begin;
         this.state = "runnable";
         Base.bmap.load(0);
-        let usertask = new Base_task(this.begin)//将任务列表指向初始节点
-        this.begin.task=usertask;
-        this.emap = new Map(10,10);
+        //将任务列表指向初始节点
+        this.begin.task = new Base_task(this.begin);
+        this.emap = new Map(10, 10);
         this.snake = Base.bsnake;
     }
+
     /**
-     * usertask is main function 
+     * usertask is main function
      * task is based on user's blockly
      */
     init(task)
     {
-        let usertask = new Base_task(this.begin);
-        usertask.add(task)
-        this.begin.task=usertask;
+        let user_task = new Base_task(this.begin);
+        user_task.add(task);
+        this.begin.task = user_task;
     }
+
     setSnakeState(state)
     {
         this.snake = Base.bsnake.state = state;
     }
-    getslotMap()
+
+    getSlotMap()
     {
-        return Base.bmap.SlotData();
+        return Base.bmap.slotData();
     }
+
     switch_level(level)
     {
         console.log("fuck you!!");
@@ -42,12 +46,13 @@ export class Controller{
         this.begin.type = "user";
         this.state = "runnable";
         Base.bmap.load(level);
-        let usertask = new Base_task(this.begin)//将任务列表指向初始节点
-        this.begin.task=usertask;
+        //将任务列表指向初始节点
+        this.begin.task = new Base_task(this.begin);
         this.snake = Base.bsnake;
         Base.run_state.state = "runnable";
         Base.run_state.cur = Base.begin;
     }
+
     /**
      * return map info
      */
@@ -55,15 +60,16 @@ export class Controller{
     {
         return Base.bmap;
     }
+
     /**
-     * return Snak info
+     * return Snake info
      */
     getSnake()
     {
         return Base.bsnake;
     }
 
-    EditNewMap()
+    editNewMap()
     {
         return this.emap;
     }
@@ -73,9 +79,9 @@ export class Controller{
         Base.run_state.next();
     }
 
-    current_state()
+    currentState()
     {
-        return Base.run_state.state; 
+        return Base.run_state.state;
     }
 }
 

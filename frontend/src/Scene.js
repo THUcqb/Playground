@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Toolbar from 'material-ui/Toolbar';
 import EaselJS from 'masteryodaeaseljs';
 import Element from './painter/Element';
@@ -8,9 +8,9 @@ import MapEditorButton from './mapeditor/MapEditorButton';
 import LevelButton from './gameflow/LevelChoose';
 import OverDialog from './gameflow/OverDialog';
 import Button from 'material-ui/Button';
-import { withStyles } from 'material-ui/styles';
-import { Controller } from './logic/Controller';
-import { loadToolbox } from "./utils/LoadBlockly";
+import {withStyles} from 'material-ui/styles';
+import {Controller} from './logic/Controller';
+import {loadToolbox} from "./utils/LoadBlockly";
 import Trajectory from "./painter/Trajectory";
 
 const styles = theme => ({
@@ -24,6 +24,8 @@ const styles = theme => ({
  */
 class Scene extends Component
 {
+    canvasScene;
+    CanvasDiv;
 
     constructor()
     {
@@ -35,7 +37,7 @@ class Scene extends Component
             dialogTitle: "Game Over",
         };
     }
-    
+
     /**
      * Change the game level and update the scene
      * @param levelNum number representation of a game level
@@ -57,26 +59,31 @@ class Scene extends Component
         this.role.update(Controller.controller.getSnake());
     }
 
-    handleGameOver() {
+    handleGameOver()
+    {
         this.setState({
             open: true,
             dialogTitle: "Game Over"
         });
     }
 
-    handleSuccess() {
+    handleSuccess()
+    {
         this.setState({
             open: true,
             dialogTitle: "Success!"
         });
     }
 
-    handleRequestClose() {
+    handleRequestClose()
+    {
         this.setState({open: false});
     }
 
-    handleNextLevel() {
-        if (this.state.nowLevel < 5) {
+    handleNextLevel()
+    {
+        if (this.state.nowLevel < 5)
+        {
             this.handleChooseLevel(this.state.nowLevel + 1);
         }
         this.handleRequestClose();
@@ -89,43 +96,40 @@ class Scene extends Component
      */
     render()
     {
-        const { classes } = this.props;
+        const {classes} = this.props;
         return (
-            //<div>
-            //     <div className="levelsDiv">
-
-                // </div>
-                <div className="CanvasDiv" ref="CanvasDiv">
-                    <Toolbar color="primary">
-                        <LevelButton className={classes.button}
-                            ref="levelButton"
-                            onChooseLevel={(levelNum) => this.handleChooseLevel(levelNum)}
-                        />
-                        <Button raised className={classes.button}
-                                color="primary"
-                                onClick={() => this.handleGameOver()}
-                        >
-                            Test Game Over
-                        </Button>
-                    </Toolbar>
-                    <MapEditorButton/>
-                    <canvas id="canvas" ref="canvas" width="600" height="600" />
-                    <OverDialog
-                        open={this.state.open}
-                        dialogTitle={this.state.dialogTitle}
-                        onNext={() => this.handleNextLevel()}
-                        onLevels={() => {
-                            this.handleRequestClose();
-                            this.refs.levelButton.handleClickOpen();
-                        }}
-                        onReplay={() => {
-                            this.handleRequestClose();
-                            this.handleChooseLevel(this.state.nowLevel);
-                        }}
+            <div className = "CanvasDiv" ref = "CanvasDiv">
+                <Toolbar color = "primary">
+                    <LevelButton className = {classes.button}
+                                 ref = "levelButton"
+                                 onChooseLevel = {(levelNum) => this.handleChooseLevel(levelNum)}
                     />
+                    <Button raised className = {classes.button}
+                            color = "primary"
+                            onClick = {() => this.handleGameOver()}
+                    >
+                        Test Game Over
+                    </Button>
+                    <MapEditorButton color = "primary"/>
+                </Toolbar>
+                <canvas id = "canvasScene" ref = "canvasScene" width = "600" height = "600"/>
+                <OverDialog
+                    open = {this.state.open}
+                    dialogTitle = {this.state.dialogTitle}
+                    onNext = {() => this.handleNextLevel()}
+                    onLevels = {() =>
+                    {
+                        this.handleRequestClose();
+                        this.refs.levelButton.handleClickOpen();
+                    }}
+                    onReplay = {() =>
+                    {
+                        this.handleRequestClose();
+                        this.handleChooseLevel(this.state.nowLevel);
+                    }}
+                />
 
-                </div>
-            // </div>
+            </div>
         );
     }
 
@@ -134,7 +138,7 @@ class Scene extends Component
         if (this.count === 0)
         {
             const controller = Controller.controller;
-            const status = controller.current_state();
+            const status = controller.currentState();
             if (status === "runnable")
             {
                 this.background.update(controller.getMap());
@@ -162,11 +166,11 @@ class Scene extends Component
     handleResize(event)
     {
         let fatherDiv = this.refs.CanvasDiv;
-        let stage = this.refs.canvas;
-        
+        let stage = this.refs.canvasScene;
+
         let width = fatherDiv.offsetWidth;
         let height = fatherDiv.offsetHeight;
-        
+
         let minSize = width;
         if (height < width)
             minSize = height;
@@ -179,14 +183,15 @@ class Scene extends Component
      */
     componentDidMount()
     {
+        const element = this.refs.canvasScene;
         window.addEventListener("resize", this.handleResize, false);
         this.handleResize();
-        this.stage = new EaselJS.Stage("canvas");
+        this.stage = new EaselJS.Stage(element);
         this.stage.enableMouseOver(10);
-        this.background = new Background(this.stage);
-        this.trajectory = new Trajectory(this.stage);
-        this.element = new Element(this.stage);
-        this.role = new Role(this.stage);
+        this.background = new Background(this.stage, 600, 10);
+        this.trajectory = new Trajectory(this.stage, 600, 10);
+        this.element = new Element(this.stage, 600, 10, true);
+        this.role = new Role(this.stage, 600, 10);
         this.count = 0;
         EaselJS.Ticker.addEventListener("tick", () => this.tick());
         EaselJS.Ticker.framerate = 60;
