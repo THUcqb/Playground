@@ -1,181 +1,181 @@
 import {Base,Base_task} from './Base';
 export class Base_state{
 
-	/**
-	 * move_state return runstate
-	 * snake_state 
-	 *      up:    draw
-	 *      down:
-	 */
-	constructor(cur)
-	{
-		this.cur = cur;
-		this.pre = null;
-		this.loop_time = 0;
-		this.state = "runnable";
-		this.move_state = "null";
-		this.snake_state = "up";
-	}
-	/**
-	 * return pre state
-	 */
-	get_pre()
-	{
-		return this.pre;
-	}
-	/**
-	 * return current state
-	 */
-	get_cur()
-	{
-		return this.cur;
-	}
-	/**
-	 * run current task 
-	 */
-	next()
-	{
-		this.pre = this.cur;
-		if (this.cur.type === "user")
-		{
-			this.next_move();
-		}
-		else
-			if (this.cur.type === "sys") 
-			{
-				{
-					this.cur = this.cur.next;
-					this.next_move();
-				} 
-			}
-			else
-			if (this.cur.type === "success") 
-			{
-				this.cur.state = "success";
-				this.state = "success";
-			}
-			else
-			if (this.cur.type === "fail") 
-			{
-				this.cur.state = "fail";
-				this.state = "fail";
-			}
-			else
-			{
-				this.cur.state = "err";
-				this.state = "err";
-			}
-			this.tr_run();
+    /**
+     * move_state return runstate
+     * snake_state
+     *      up:    draw
+     *      down:
+     */
+    constructor(cur)
+    {
+        this.cur = cur;
+        this.pre = null;
+        this.loop_time = 0;
+        this.state = "runnable";
+        this.move_state = "null";
+        this.snake_state = "up";
+    }
+    /**
+     * return pre state
+     */
+    get_pre()
+    {
+        return this.pre;
+    }
+    /**
+     * return current state
+     */
+    get_cur()
+    {
+        return this.cur;
+    }
+    /**
+     * run current task
+     */
+    next()
+    {
+        this.pre = this.cur;
+        if (this.cur.type === "user")
+        {
+            this.next_move();
+        }
+        else
+            if (this.cur.type === "sys")
+            {
+                {
+                    this.cur = this.cur.next;
+                    this.next_move();
+                }
+            }
+            else
+            if (this.cur.type === "success")
+            {
+                this.cur.state = "success";
+                this.state = "success";
+            }
+            else
+            if (this.cur.type === "fail")
+            {
+                this.cur.state = "fail";
+                this.state = "fail";
+            }
+            else
+            {
+                this.cur.state = "err";
+                this.state = "err";
+            }
+            this.tr_run();
 
-			if (Base.bmap.candy == 0)
-			{
-				this.state = "success";
-			}
+            if (Base.bmap.candy == 0)
+            {
+                this.state = "success";
+            }
 
-			console.log(this.cur.name);
-			console.log(this.cur.type);
-			console.log(this.state);
+            console.log(this.cur.name);
+            console.log(this.cur.type);
+            console.log(this.state);
 
-	}
+    }
 
-	tr_run()
-	{
+    tr_run()
+    {
 
-		if (this.cur.name === "turn_right")
-		{
-			if (this.move_state === "null" || this.move_state === "move_up")
-			{
-				this.move_state = "move_right";
-				let a = new Base("sys","move_right");
-				a.run();
-			}else
-			if (this.move_state === "move_right")
-			{
-				this.move_state = "move_down";
-				let a = new Base("sys","move_down");
-				a.run();
-			}else
-			if (this.move_state === "move_down")
-			{
-				this.move_state = "move_left";
-				let a = new Base("sys","move_left");
-				a.run();
-			}else
-			if (this.move_state === "move_left")
-			{
-				this.move_state = "move_up";
-				let a = new Base("sys","move_up");
-				a.run();
-			}
-			
+        if (this.cur.name === "turn_right")
+        {
+            if (this.move_state === "null" || this.move_state === "move_up")
+            {
+                this.move_state = "move_right";
+                let a = new Base("sys","move_right");
+                a.run();
+            }else
+            if (this.move_state === "move_right")
+            {
+                this.move_state = "move_down";
+                let a = new Base("sys","move_down");
+                a.run();
+            }else
+            if (this.move_state === "move_down")
+            {
+                this.move_state = "move_left";
+                let a = new Base("sys","move_left");
+                a.run();
+            }else
+            if (this.move_state === "move_left")
+            {
+                this.move_state = "move_up";
+                let a = new Base("sys","move_up");
+                a.run();
+            }
 
-		}
-		else
-		if (this.cur.name === "turn_left")
-		{
-			if (this.move_state === "null" || this.move_state === "move_up")
-			{
-				this.move_state = "move_left";
-				let a = new Base("sys","move_left");
-				a.run();
-			}else
-			if (this.move_state === "move_left")
-			{
-				this.move_state = "move_down";
-				let a = new Base("sys","move_down");
-				a.run();
-			}else
-			if (this.move_state === "move_down")
-			{
-				this.move_state = "move_right";
-				let a = new Base("sys","move_right");
-				a.run();
-			}else
-			if (this.move_state === "move_right")
-			{
-				this.move_state = "move_up";
-				let a = new Base("sys","move_up");
-				a.run();
-			}
-		}	
-		else
-		if (this.cur.name === "move") 
-		{
-			if (this.move_state === "null" || this.move_state === "move_up")
-			{
-				this.move_state = "move_up";
-				let a = new Base("sys","move_up");
-				a.run();
-			}
-			else
-			if (this.move_state === "move_left")
-			{
-				this.move_state = "move_left";
-				let a = new Base("sys","move_left");
-				a.run();
-			}else
-			if (this.move_state === "move_down")
-			{
-				this.move_state = "move_down";
-				let a = new Base("sys","move_down");
-				a.run();
-			}else
-			if (this.move_state === "move_right")
-			{
-				this.move_state = "move_right";
-				let a = new Base("sys","move_right");
-				a.run();
-			}
 
-		}
-		else
-		{
-			this.cur.run();
-		}
-					
-	}
+        }
+        else
+        if (this.cur.name === "turn_left")
+        {
+            if (this.move_state === "null" || this.move_state === "move_up")
+            {
+                this.move_state = "move_left";
+                let a = new Base("sys","move_left");
+                a.run();
+            }else
+            if (this.move_state === "move_left")
+            {
+                this.move_state = "move_down";
+                let a = new Base("sys","move_down");
+                a.run();
+            }else
+            if (this.move_state === "move_down")
+            {
+                this.move_state = "move_right";
+                let a = new Base("sys","move_right");
+                a.run();
+            }else
+            if (this.move_state === "move_right")
+            {
+                this.move_state = "move_up";
+                let a = new Base("sys","move_up");
+                a.run();
+            }
+        }
+        else
+        if (this.cur.name === "move")
+        {
+            if (this.move_state === "null" || this.move_state === "move_up")
+            {
+                this.move_state = "move_up";
+                let a = new Base("sys","move_up");
+                a.run();
+            }
+            else
+            if (this.move_state === "move_left")
+            {
+                this.move_state = "move_left";
+                let a = new Base("sys","move_left");
+                a.run();
+            }else
+            if (this.move_state === "move_down")
+            {
+                this.move_state = "move_down";
+                let a = new Base("sys","move_down");
+                a.run();
+            }else
+            if (this.move_state === "move_right")
+            {
+                this.move_state = "move_right";
+                let a = new Base("sys","move_right");
+                a.run();
+            }
 
-	check_move()
+        }
+        else
+        {
+            this.cur.run();
+        }
+
+    }
+
+    check_move()
 	{
 		if (this.cur.name === "loop") {return "movelist";}
 		if (this.cur.name === "do_while") {return "movelist";}
