@@ -30,19 +30,37 @@ const styles = theme => ({
 
 const currencies = [
     {
-        value: '10',
-        label: 'S (10 * 10)',
+        value: 8,
+        label: 'S (8 * 8)',
     },
     {
-        value: '15',
-        label: 'M (15 * 15)',
+        value: 10,
+        label: 'M (10 * 10)',
     },
     {
-        value: '20',
-        label: 'L (20 * 20)',
+        value: 12,
+        label: 'L (12 * 12)',
     },
 ];
 
+const elements = [
+    {
+        value: 0,
+        label: 'Background',
+    },
+    {
+        value: 1,
+        label: 'Wall',
+    },
+    {
+        value: 2,
+        label: 'Coin',
+    },
+    {
+        value: 9,
+        label: 'Role',
+    },
+];
 /**
  * The MapEditor
  */
@@ -57,6 +75,8 @@ class MapEditor extends React.Component
     {
         super(props);
         this.canvasSize = 420;
+        this.lastX = -1;
+        this.lastY = -1;
         this.stage = null;
         this.state = {};
     }
@@ -66,6 +86,7 @@ class MapEditor extends React.Component
         this.stage = new EaselJS.Stage(this.refs.canvasMapEditor);
         this.background = new Background(this.stage, this.canvasSize, this.state.mapSize);
         this.element = new Element(this.stage, this.canvasSize, this.state.mapSize, false);
+        this.role = new Role(this.stage, this.canvasSize, this.state.mapSize);
     }
 
     handleChange(name, event)
@@ -75,25 +96,45 @@ class MapEditor extends React.Component
         }, () => this.updateState(name));
     };
 
+    reset()
+    {
+        this.background.reset();
+        this.element.reset();
+        this.role.reset();
+        this.lastX = -1;
+        this.lastY = -1;
+    }
+
     updateState(name)
     {
         if (name === "mapSize")
         {
             this.map = new Map(this.state.mapSize, this.state.mapSize);
             this.map.editInit();
-            this.background.reset();
+            this.reset();
             this.background.updateN(this.state.mapSize);
-            this.element.reset();
             this.element.updateN(this.state.mapSize);
-            this.background.update(this.map);
-            this.element.update(this.map);
+            this.role.updateN(this.state.mapSize);
+            this.background.init(this.map);
+            this.element.init(this.map);
+            if (this.lastX !== -1) this.role.init(this.lastX, this.lastY);
         }
         if (name === "map")
         {
             this.background.reset();
             this.element.reset();
-            this.background.update(this.map);
-            this.element.update(this.map);
+            this.role.reset();
+            this.background.init(this.map);
+            this.element.init(this.map);
+            if (this.lastX !== -1) this.role.init(this.lastX, this.lastY);
+        }
+        if (name === "reset")
+        {
+            this.reset();
+            this.map = new Map(this.state.mapSize, this.state.mapSize);
+            this.map.editInit();
+            this.background.init(this.map);
+            this.element.init(this.map);
         }
         this.stage.update();
     }
@@ -128,10 +169,22 @@ class MapEditor extends React.Component
         {
             block_size = 10;
         }
-        let b_x = Math.floor(Number(x / c_max_x * block_size));
-        let b_y = Math.floor(Number(y / c_max_y * block_size));
+        let b_y = Math.floor(Number(x / c_max_x * block_size));
+        let b_x = Math.floor(Number(y / c_max_y * block_size));
 
-        this.map.block_list[b_y][b_x].info = (1 + this.map.block_list[b_y][b_x].info) % 3;
+        let current = Number(this.state.element);
+        if (this.lastY === b_y && this.lastX === b_x)
+        {
+            this.lastX = -1;
+            this.lastY = -1;
+        }
+        this.map.block_list[b_x][b_y].info = current;
+        if (current === 9)
+        {
+            if (this.lastX !== -1) this.map.block_list[this.lastX][this.lastY].info = 0;
+            this.lastX = b_x;
+            this.lastY = b_y;
+        }
         this.map.print();
         this.updateState("map");
     }
@@ -158,7 +211,7 @@ class MapEditor extends React.Component
                                 select
                                 label = "Size select"
                                 className = {classes.textField}
-                                ref = "select"
+                                ref = "selectSize"
                                 value = {this.state.mapSize}
                                 onChange = {(e) => this.handleChange('mapSize', e)}
                                 SelectProps = {{
@@ -177,6 +230,32 @@ class MapEditor extends React.Component
                                 ))}
 
                             </TextField>
+
+                            <TextField
+                                id = "select-element"
+                                select
+                                label = "Element select"
+                                className = {classes.textField}
+                                ref = "selectElement"
+                                value = {this.state.element}
+                                onChange = {(e) => this.handleChange('element', e)}
+                                SelectProps = {{
+                                    native: true,
+                                    MenuProps: {
+                                        className: classes.menu,
+                                    },
+                                }}
+                                helperText = "Please select one element to insert into the map"
+                                margin = "normal"
+                            >
+                                {elements.map(option => (
+                                    <option key = {option.value} value = {option.value}>
+                                        {option.label}
+                                    </option>
+                                ))}
+
+                            </TextField>
+
                             <div>
                                 <canvas
                                     id = "canvasMapEditor"
@@ -189,6 +268,9 @@ class MapEditor extends React.Component
                         </div>
                 </DialogContent>
                 <DialogActions className = {classes.actions}>
+                    <Button onClick = {() => this.updateState("reset")} color = "primary">
+                        Clear
+                    </Button>
                     <Button onClick = {() => this.handleFinishEditing()} color = "primary">
                         Start
                     </Button>
@@ -202,7 +284,7 @@ class MapEditor extends React.Component
 
     componentDidMount()
     {
-        this.setState({"mapSize": 10});
+        this.setState({"mapSize": 10, "element": 0});
         this.map = new Map(10, 10);
         this.map.editInit();
     }

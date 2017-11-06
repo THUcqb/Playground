@@ -14,6 +14,13 @@ class Role
         this.container = null;
     }
 
+    updateN(n)
+    {
+        this.size = this.size * this.n;
+        this.n = n;
+        this.size = this.size / this.n;
+    }
+
     init(nowX, nowY)
     {
         this.container = new EaselJS.Container();

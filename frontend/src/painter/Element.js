@@ -9,8 +9,8 @@ class Element
         this.size = size / n;
         this.n = n;
         this.wall = preloader.getResult("wall");
-        this.animation = animation;
         this.coin = preloader.getResult("coin");
+        this.animation = animation;
         this.stage = stage;
         this.reset()
     }
@@ -29,6 +29,7 @@ class Element
         this.container = new EaselJS.Container();
         this.stage.addChild(this.container);
 
+        this.coins = new EaselJS.Shape();
         const info_arr = map.eData();
         const size_x = map.SIZE_X;
         const size_y = map.SIZE_Y;
@@ -42,9 +43,12 @@ class Element
                 {
                     this.paintWall(screen_x, screen_y);
                 }
+                if (info_arr[i][j] === 2)
+                {
+                    this.paintCoin(screen_x, screen_y);
+                }
             }
         }
-        this.coins = new EaselJS.Shape();
         this.coins.cursor = "pointer";
         if (this.animation)
         {
@@ -75,8 +79,14 @@ class Element
             for (let j = 0; j < size_y; j++)
             {
                 const screen_x = this.size * j;
+                if (info_arr[i][j] === 1)
+                {
+                    this.paintWall(screen_x, screen_y);
+                }
                 if (info_arr[i][j] === 2)
+                {
                     this.paintCoin(screen_x, screen_y);
+                }
             }
         }
     }
@@ -133,7 +143,6 @@ class Element
         m.translate(screen_x, screen_y);
         m.scale(this.size / this.coin.width, this.size / this.coin.height);
         this.coins.graphics.beginBitmapFill(this.coin, "no-repeat", m);
-
         this.coins.graphics.drawCircle(screen_x + this.size / 2, screen_y + this.size / 2, this.size / 4);
     }
 }

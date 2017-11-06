@@ -264,7 +264,11 @@ class Map
                 }
                 else if (test === 1)
                 {
-                    out = "#"
+                    out = "#";
+                }
+                else if (test === 9)
+                {
+                    out = 's';
                 }
                 else out = " ";
                 str += out;
