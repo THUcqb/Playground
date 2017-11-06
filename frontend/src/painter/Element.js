@@ -32,7 +32,7 @@ class Element
         this.container = new createjs.Container();
         this.stage.addChild(this.container);
 
-        const info_arr = map.Edata();
+        const info_arr = map.eData();
         const size_x = map.SIZE_X;
         const size_y = map.SIZE_Y;
         for (let i = 0; i < size_x; i++)
@@ -65,7 +65,7 @@ class Element
         }
 
         this.coins.graphics.clear();
-        const info_arr = map.Edata();
+        const info_arr = map.eData();
         const size_x = map.SIZE_X;
         const size_y = map.SIZE_Y;
 

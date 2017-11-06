@@ -82,7 +82,6 @@ class Trajectory
 
     newTrajectory(nowX, nowY)
     {
-        console.log("newTrajectory");
         this.drawingCanvas.alpha = 0;
         let tween = TweenJS.Tween.get(this.drawingCanvas).to({ alpha: 1 }, this.time).call(() => this.complete(nowX, nowY));
         this.length = 0;
@@ -93,7 +92,6 @@ class Trajectory
     {
         this.nowX = nowX;
         this.nowY = nowY;
-        console.log(nowX, nowY, "inin");
     }
 
     change(nowX, nowY)

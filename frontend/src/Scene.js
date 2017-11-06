@@ -52,15 +52,15 @@ class Scene extends Component
     {
         return (
             <div>
-            <div className="levelsDiv">
+            <div className="levelOptions">
                 <Toolbar color="primary">
                     <LevelButton
                         onChooseLevel={(levelNum) => this.handleChooseLevel(levelNum)}
-                    />
+                    />&nbsp;&nbsp;
+                    <MapEditorButton color="primary" />
                 </Toolbar>
             </div>
             <div className="CanvasDiv" ref="CanvasDiv">
-                <MapEditorButton/>
                 <canvas id="canvas" ref="canvas" width="600" height="600" />
             </div>
             </div>
@@ -76,7 +76,7 @@ class Scene extends Component
     {
         if (data.count === 0)
         {
-            let status = data.controller.current_state();
+            let status = data.controller.currentState();
             // if (status === "runnable")
             // {
                 data.background.update(data.controller.getMap());
