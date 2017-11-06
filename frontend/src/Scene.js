@@ -44,8 +44,8 @@ class Scene extends Component
     {
         this.setState({nowLevel: levelNum});
         this.stage.removeAllChildren();
-        this.controller.getSnake().init(5, 5);
-        this.controller.getMap().load(levelNum);
+        this.controller.switch_level(levelNum);
+        //this.controller.getSnake().init(5, 5);
         loadToolbox(levelNum);
         this.background.reset();
         this.element.reset();
@@ -112,7 +112,6 @@ class Scene extends Component
                     <canvas id="canvas" ref="canvas" width="600" height="600" />
                     <OverDialog
                         open={this.state.open}
-                        //onRequestClose={() => this.handleRequestClose()}
                         dialogTitle={this.state.dialogTitle}
                         onNext={() => this.handleNextLevel()}
                         onLevels={() => {
