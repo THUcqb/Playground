@@ -63,25 +63,31 @@ def login(request):
         response_data = {}
         try:
             userinfo = UserInfo.objects.get(username = d['username'])
-            if userinfo.password == d['password']:
-                issuetime = time.time()
-                expiretime = issuetime + 604800
-                payload_dict = {
-                    'iat':issuetime,
-                    'exp':expiretime,
-                    'iss':'admin',
-                    'username':userinfo.username
-                }
-                payload_str = json.dumps(payload_dict)
-                payload = base64.b64encode(payload_str.encode(encoding = "utf-8"))
-                response_data["token"] = payload.decode()
-                response_data["status"] = "Successful"
-                return HttpResponse(json.dumps(response_data),content_type="application/json")
-            else:
-                response_data["status"] = "PasswordError"
-                return HttpResponse(json.dumps(response_data),content_type="application/json")
         except UserInfo.DoesNotExist:
-            response_data["status"] = "NotExisted"
+            try:
+                userinfo = UserInfo.objects.get(email = d['username'])
+            except UserInfo.DoesNotExist:
+                try:
+                    userinfo = UserInfo.objects.get(phonenumber = d['username'])
+                except UserInfo.DoesNotExist:
+                    response_data["status"] = "NotExisted"
+                    return HttpResponse(json.dumps(response_data),content_type="application/json")
+        if userinfo.password == d['password']:
+            issuetime = time.time()
+            expiretime = issuetime + 604800
+            payload_dict = {
+                'iat':issuetime,
+                'exp':expiretime,
+                'iss':'admin',
+                'username':userinfo.username
+            }
+            payload_str = json.dumps(payload_dict)
+            payload = base64.b64encode(payload_str.encode(encoding = "utf-8"))
+            response_data["token"] = payload.decode()
+            response_data["status"] = "Successful"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        else:
+            response_data["status"] = "PasswordError"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 @csrf_exempt
