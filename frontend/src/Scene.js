@@ -24,10 +24,10 @@ const styles = theme => ({
  */
 class Scene extends Component
 {
+
     constructor()
     {
         super();
-        this.controller = Controller.controller;
         this.handleResize = this.handleResize.bind(this);
         this.state = {
             open: false,
@@ -44,17 +44,17 @@ class Scene extends Component
     {
         this.setState({nowLevel: levelNum});
         this.stage.removeAllChildren();
-        this.controller.switch_level(levelNum);
-        //this.controller.getSnake().init(5, 5);
+        Controller.controller.switch_level(levelNum);
+        //Controller.controller.getSnake().init(5, 5);
         loadToolbox(levelNum);
         this.background.reset();
         this.element.reset();
         this.trajectory.reset();
         this.role.reset();
-        this.background.update(this.controller.getMap());
-        this.trajectory.update(this.controller.getSnake());
-        this.element.update(this.controller.getMap());
-        this.role.update(this.controller.getSnake());
+        this.background.update(Controller.controller.getMap());
+        this.trajectory.update(Controller.controller.getSnake());
+        this.element.update(Controller.controller.getMap());
+        this.role.update(Controller.controller.getSnake());
     }
 
     handleGameOver() {
@@ -76,7 +76,7 @@ class Scene extends Component
     }
 
     handleNextLevel() {
-        if (this.state.nowLevel < 4) {
+        if (this.state.nowLevel < 5) {
             this.handleChooseLevel(this.state.nowLevel + 1);
         }
         this.handleRequestClose();
@@ -129,34 +129,30 @@ class Scene extends Component
         );
     }
 
-    /**
-     * Tick function
-     * @param event
-     * @param data consist of essential information
-     */
-    static tick(event, data)
+    tick()
     {
-        if (data.count === 0)
+        if (this.count === 0)
         {
-            let status = data.controller.current_state();
+            const controller = Controller.controller;
+            const status = controller.current_state();
             if (status === "runnable")
             {
-                data.background.update(data.controller.getMap());
-                data.trajectory.update(data.controller.getSnake());
-                data.element.update(data.controller.getMap());
-                data.role.update(data.controller.getSnake());
+                this.background.update(controller.getMap());
+                this.trajectory.update(controller.getSnake());
+                this.element.update(controller.getMap());
+                this.role.update(controller.getSnake());
             }
             else if (status === "fail")
             {
-                data.handleGameOver();
+                this.handleGameOver();
             }
             else if (status === "success")
             {
-                data.handleSuccess();
+                this.handleSuccess();
             }
         }
-        data.count = (data.count + 1) % 30;
-        data.stage.update();
+        this.count = (this.count + 1) % 30;
+        this.stage.update();
     }
 
     /**
@@ -191,19 +187,8 @@ class Scene extends Component
         this.trajectory = new Trajectory(this.stage);
         this.element = new Element(this.stage);
         this.role = new Role(this.stage);
-        let count = 0;
-        let data = {
-            background: this.background,
-            trajectory: this.trajectory,
-            element: this.element,
-            role: this.role,
-            stage: this.stage,
-            controller: this.controller,
-            count: count,
-            handleGameOver: () => this.handleGameOver(),
-            handleSuccess: () => this.handleSuccess(),
-        };
-        EaselJS.Ticker.on("tick", Scene.tick, null, false, data);
+        this.count = 0;
+        EaselJS.Ticker.addEventListener("tick", () => this.tick());
         EaselJS.Ticker.framerate = 60;
         EaselJS.Ticker.timingMode = EaselJS.Ticker.RAF;
         this.handleChooseLevel(1);
