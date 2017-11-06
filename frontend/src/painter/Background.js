@@ -1,11 +1,12 @@
-import createjs from "masteryodaeaseljs";
-import { N, startPos, delta } from "../Constant";
+import EaselJS from "masteryodaeaseljs";
 import { preloader } from "../index";
 
 class Background
 {
-    constructor(stage)
+    constructor(stage, size, n)
     {
+        this.size = size / n;
+        this.n = n;
         this.square = preloader.getResult("square");
         this.stage = stage;
         this.reset()
@@ -18,7 +19,7 @@ class Background
 
     init(map)
     {
-        this.container = new createjs.Container();
+        this.container = new EaselJS.Container();
         this.stage.addChild(this.container);
 
         this.paintGround();
@@ -32,17 +33,22 @@ class Background
         }
     }
 
+    updateN(n)
+    {
+        this.size = this.size * this.n;
+        this.n = n;
+        this.size = this.size / n;
+    }
+
     paintGround()
     {
-        const ground = new createjs.Shape();
-        const m = new createjs.Matrix2D();
-        m.scale(delta * N / this.square.width, delta * N / this.square.height);
+        const ground = new EaselJS.Shape();
+        const m = new EaselJS.Matrix2D();
+        m.scale(this.size * this.n / this.square.width, this.size * this.n / this.square.height);
         ground.graphics.beginBitmapFill(this.square, "no-repeat", m);
 
-        ground.graphics.drawRect(0, 0, delta * N, delta * N);
-        ground.x = startPos;
-        ground.y = startPos;
-        ground.cache(0, 0, delta * N, delta * N);
+        ground.graphics.drawRect(0, 0, this.size * this.n, this.size * this.n);
+        ground.cache(0, 0, this.size * this.n, this.size * this.n);
         this.container.addChild(ground);
     }
 }

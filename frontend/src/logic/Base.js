@@ -211,7 +211,7 @@ export class Base {
 				__x = Base.bsnake.body[0].x;
 				__y = Base.bsnake.body[0].y;
 				Base.bmap.setTail(__x,__y);
-				if (Base.bmap.state == "down")
+				if (Base.bmap.state === "down")
 					Base.bmap.setSlot(_x,_y);
 				Base.bmap.setHead(_x,_y);
 			}

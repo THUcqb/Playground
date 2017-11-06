@@ -15,6 +15,9 @@ import Trajectory from "./painter/Trajectory";
  */
 class Scene extends Component
 {
+    canvasScene;
+    CanvasDiv;
+
     constructor()
     {
         super();
@@ -52,17 +55,17 @@ class Scene extends Component
     {
         return (
             <div>
-            <div className="levelOptions">
-                <Toolbar color="primary">
-                    <LevelButton
-                        onChooseLevel={(levelNum) => this.handleChooseLevel(levelNum)}
-                    />&nbsp;&nbsp;
-                    <MapEditorButton color="primary" />
-                </Toolbar>
-            </div>
-            <div className="CanvasDiv" ref="CanvasDiv">
-                <canvas id="canvas" ref="canvas" width="600" height="600" />
-            </div>
+                <div className="levelOptions">
+                    <Toolbar color="primary">
+                        <LevelButton
+                            onChooseLevel={(levelNum) => this.handleChooseLevel(levelNum)}
+                        />&nbsp;&nbsp;
+                        <MapEditorButton color="primary" />
+                    </Toolbar>
+                </div>
+                <div className="CanvasDiv" ref="CanvasDiv">
+                    <canvas id="canvasScene" ref="canvasScene" width="600" height="600" />
+                </div>
             </div>
         );
     }
@@ -96,7 +99,7 @@ class Scene extends Component
     handleResize(event)
     {
         let fatherDiv = this.refs.CanvasDiv;
-        let stage = this.refs.canvas;
+        let stage = this.refs.canvasScene;
         
         let width = fatherDiv.offsetWidth;
         let height = fatherDiv.offsetHeight;
@@ -113,14 +116,15 @@ class Scene extends Component
      */
     componentDidMount()
     {
+        const element = this.refs.canvasScene;
         window.addEventListener("resize", this.handleResize, false);
         this.handleResize();
-        this.stage = new EaselJS.Stage("canvas");
+        this.stage = new EaselJS.Stage(element);
         this.stage.enableMouseOver(10);
-        this.background = new Background(this.stage);
-        this.trajectory = new Trajectory(this.stage);
-        this.element = new Element(this.stage);
-        this.role = new Role(this.stage);
+        this.background = new Background(this.stage, element.height, 10);
+        this.trajectory = new Trajectory(this.stage, element.height, 10);
+        this.element = new Element(this.stage, element.height, 10, true);
+        this.role = new Role(this.stage, element.height, 10);
         let count = 0;
         let data = {
             background: this.background,

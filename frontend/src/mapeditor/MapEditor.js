@@ -1,5 +1,9 @@
 import React from 'react';
 import Map from '../logic/Map';
+import EaselJS from "masteryodaeaseljs";
+import Background from "../painter/Background";
+import Element from "../painter/Element";
+import Role from "../painter/Role";
 import TextField from 'material-ui/TextField';
 import Dialog, {
     DialogTitle,
@@ -27,15 +31,15 @@ const styles = theme => ({
 const currencies = [
     {
         value: '10',
-        label: 'S',
-    },
-    {
-        value: '20',
-        label: 'L',
+        label: 'S (10 * 10)',
     },
     {
         value: '15',
-        label: 'M',
+        label: 'M (15 * 15)',
+    },
+    {
+        value: '20',
+        label: 'L (20 * 20)',
     },
 ];
 
@@ -44,6 +48,7 @@ const currencies = [
  */
 class MapEditor extends React.Component
 {
+    canvasMapEditor;
 
     /**
      * Constructor
@@ -51,26 +56,45 @@ class MapEditor extends React.Component
     constructor(props)
     {
         super(props);
-        this.map = new Map(10, 10);
-        this.map.editInit();
-        this.state = {}
+        this.canvasSize = 420;
+        this.state = {};
     }
 
-    /**
-     * Triggered when the user clicks SAVE button.
-     */
-    handleChange = name => event =>
+    handleChange(name, event)
     {
         this.setState({
             [name]: event.target.value,
-        });
+        }, () => this.updateState(name));
+    };
+
+    updateState(name)
+    {
+        if (this.stage === null)
+        {
+            this.stage = new EaselJS.Stage(this.refs.canvasMapEditor);
+            this.background = new Background(this.stage, this.canvasSize, this.state.mapSize);
+            this.element = new Element(this.stage, this.canvasSize, this.state.mapSize, false);
+        }
         if (name === "mapSize")
         {
             this.map = new Map(this.state.mapSize, this.state.mapSize);
             this.map.editInit();
+            this.background.reset();
+            this.background.updateN(this.state.mapSize);
+            this.element.reset();
+            this.element.updateN(this.state.mapSize);
+            this.background.update(this.map);
+            this.element.update(this.map);
         }
-
-    };
+        if (name === "map")
+        {
+            this.background.reset();
+            this.element.reset();
+            this.background.update(this.map);
+            this.element.update(this.map);
+        }
+        this.stage.update();
+    }
 
     handleFinishEditing()
     {
@@ -81,7 +105,7 @@ class MapEditor extends React.Component
 
     handleClick(e)
     {
-        const element = this.refs.canvas;
+        const element = this.refs.canvasMapEditor;
         let rect = element.getBoundingClientRect();
         let x = e.clientX - rect.left;
         let y = e.clientY - rect.top;
@@ -99,10 +123,9 @@ class MapEditor extends React.Component
         let b_x = Math.floor(Number(x / c_max_x * block_size));
         let b_y = Math.floor(Number(y / c_max_y * block_size));
 
-
         this.map.block_list[b_y][b_x].info = (1 + this.map.block_list[b_y][b_x].info) % 3;
         this.map.print();
-        alert(this.state.mapSize + ":" + 'pos:(' + x + " : " + y + ")" + "block:(" + b_x + " : " + b_y + ")"); // eslint-disable-line no-alert
+        this.updateState("map");
     }
 
     render()
@@ -111,59 +134,56 @@ class MapEditor extends React.Component
 
         return (
             <Dialog
-                open={this.props.open}
-                onRequestClose={this.props.onRequestClose}
+                open = {this.props.open}
+                onRequestClose = {this.props.onRequestClose}
             >
                 <DialogTitle>Map Editor</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         Explore and create your own map !
                     </DialogContentText>
-                    {/*TODO: Map Editor body here */
                         <div>
 
                             <TextField
-                                id="select-size"
+                                id = "select-size"
                                 select
-                                label="Size select"
-                                className={classes.textField}
-                                ref="select"
-                                value={this.state.mapSize}
-                                onChange={this.handleChange('mapSize')}
-                                SelectProps={{
+                                label = "Size select"
+                                className = {classes.textField}
+                                ref = "select"
+                                value = {this.state.mapSize}
+                                onChange = {(e) => this.handleChange('mapSize', e)}
+                                SelectProps = {{
                                     native: true,
                                     MenuProps: {
                                         className: classes.menu,
                                     },
                                 }}
-                                helperText="Please select your Map size"
-                                margin="normal"
+                                helperText = "Please select your map's size"
+                                margin = "normal"
                             >
                                 {currencies.map(option => (
-                                    <option key={option.value} value={option.value}>
+                                    <option key = {option.value} value = {option.value}>
                                         {option.label}
                                     </option>
                                 ))}
 
                             </TextField>
                             <div>
-                                {this.state.mapSize}
                                 <canvas
-                                    id="canvas"
-                                    ref="canvas"
-                                    width="400"
-                                    height="400"
-                                    onClick={(e) => this.handleClick(e)}
+                                    id = "canvasMapEditor"
+                                    ref = "canvasMapEditor"
+                                    width = {this.canvasSize}
+                                    height = {this.canvasSize}
+                                    onClick = {(e) => this.handleClick(e)}
                                 />
                             </div>
                         </div>
-                    }
                 </DialogContent>
-                <DialogActions className={classes.actions}>
-                    <Button onClick={() => this.handleFinishEditing()} color="primary">
+                <DialogActions className = {classes.actions}>
+                    <Button onClick = {() => this.handleFinishEditing()} color = "primary">
                         Start
                     </Button>
-                    <Button onClick={() => this.handleFinishEditing()} color="primary">
+                    <Button onClick = {() => this.handleFinishEditing()} color = "primary">
                         Save
                     </Button>
                 </DialogActions>
@@ -173,9 +193,10 @@ class MapEditor extends React.Component
 
     componentDidMount()
     {
-        const select = this.refs.select;
-        // const index = select.selectedIndex;
-        // alert(select.options[index].value);
+        this.setState({"mapSize": 10});
+        this.map = new Map(10, 10);
+        this.map.editInit();
+        this.stage = null;
     }
 }
 

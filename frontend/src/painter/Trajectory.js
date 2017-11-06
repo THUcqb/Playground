@@ -1,13 +1,14 @@
 import EaselJS from "masteryodaeaseljs";
 import TweenJS from "masteryodatweenjs";
-import { N, startPos, delta } from "../Constant";
 import { preloader } from "../index";
 
 class Trajectory
 {
-    constructor(stage)
+    constructor(stage, size, n)
     {
-        this.width = delta / 3;
+        this.size = size / n;
+        this.n = n;
+        this.width = this.size / 3;
         this.time = 480;
         this.totalLength = 10;
         this.stage = stage;
@@ -33,27 +34,27 @@ class Trajectory
         this.picHeight = img.height;
         let blurFilter = new EaselJS.BlurFilter(6, 6, 3);
         this.blur.filters = [blurFilter, new EaselJS.ColorMatrixFilter(new EaselJS.ColorMatrix(60, 0, 0, 0))];
-        this.blur.setTransform(startPos, startPos, delta * N / this.picWidth, delta * N / this.picHeight);
+        this.blur.setTransform(0, 0, this.size * this.n / this.picWidth, this.size * this.n / this.picHeight);
         this.blur.cache(0, 0, this.picWidth, this.picHeight);
 
         this.drawingCanvas = new EaselJS.Shape();
         this.drawingCanvas.cache(0, 0, this.picWidth, this.picHeight);
-        this.drawingCanvas.setTransform(startPos, startPos, delta * N / this.picWidth, delta * N / this.picHeight);
+        this.drawingCanvas.setTransform(0, 0, this.size * this.n / this.picWidth, this.size * this.n / this.picHeight);
 
         this.bitmap = new EaselJS.Bitmap(img);
         let maskFilter = new EaselJS.AlphaMaskFilter(this.drawingCanvas.cacheCanvas);
-        this.bitmap.setTransform(startPos, startPos, delta * N / this.picWidth, delta * N / this.picHeight);
+        this.bitmap.setTransform(0, 0, this.size * this.n / this.picWidth, this.size * this.n / this.picHeight);
         this.bitmap.filters = [maskFilter];
         this.bitmap.cache(0, 0, this.picWidth, this.picHeight);
         this.nowX = x;
         this.nowY = y;
 
-        this.deltaWidth = this.picWidth / N;
-        this.deltaHeight = this.picHeight / N;
-        this.edgeWidth = (delta - this.width) / 2 * this.picWidth / delta / N;
-        this.edgeHeight = (delta - this.width) / 2 * this.picHeight / delta / N;
-        this.widthW = this.width * this.picWidth / delta / N;
-        this.widthH = this.width * this.picHeight / delta / N;
+        this.deltaWidth = this.picWidth / this.n;
+        this.deltaHeight = this.picHeight / this.n;
+        this.edgeWidth = (this.size - this.width) / 2 * this.picWidth / this.size / this.n;
+        this.edgeHeight = (this.size - this.width) / 2 * this.picHeight / this.size / this.n;
+        this.widthW = this.width * this.picWidth / this.size / this.n;
+        this.widthH = this.width * this.picHeight / this.size / this.n;
 
         this.container.addChild(this.blur, this.bitmap);
 

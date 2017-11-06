@@ -67,7 +67,7 @@ export class Base_state{
 			}
 			this.tr_run();
 
-			if (Base.bmap.candy == 0)
+			if (Base.bmap.candy === 0)
 			{
 				this.state = "success";
 			}

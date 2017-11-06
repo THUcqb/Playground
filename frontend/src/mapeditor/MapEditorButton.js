@@ -26,7 +26,7 @@ class MapEditorButton extends React.Component {
     render() {
         return (
             <div>
-                <Button raised color = "primary" onClick={() => this.handleClickOpen()}>Open MapEditor</Button>
+                <Button raised color = "primary" onClick={() => this.handleClickOpen()}>Open Map Editor</Button>
                 <MapEditor
                     open={this.state.open}
                     onRequestClose={() => this.handleRequestClose()}
