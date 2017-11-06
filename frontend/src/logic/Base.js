@@ -97,161 +97,161 @@ export class Base {
         else
         if (str === "check_move_up") {
             let _x = Base.bsnake.x-1 ;
-			let _y = Base.bsnake.y ;
-			s = this.runnable(_x,_y);
-		}
-		else
-		if (str === "check_move_down") {
-			let _x = Base.bsnake.x+1;
-			let _y = Base.bsnake.y ;
-			s = this.runnable(_x,_y);
-		}
-		else
-		if (str === "check_move_left") {
-			let _x = Base.bsnake.x ;
-			let _y = Base.bsnake.y-1 ;
-			s = this.runnable(_x,_y);
-		}
-		else
-		if (str === "check_move_right") {
-			let _x = Base.bsnake.x ;
-			let _y = Base.bsnake.y+1 ;
-			s = this.runnable(_x,_y);
-		}
-		else
-		if (str === "check_aim") {	
-			let _x = Base.bsnake.x ;
-			let _y = Base.bsnake.y ;
-			s = this.runnable(_x,_y);
-			if (s === 'candy') {return 'runnable';}
-			return 'null';
-		}
-		else
-		if (str === "check_toaim") {}
-		else
-		if (str === "check_vtoaim") {}
+            let _y = Base.bsnake.y ;
+            s = this.runnable(_x,_y);
+        }
+        else
+        if (str === "check_move_down") {
+            let _x = Base.bsnake.x+1;
+            let _y = Base.bsnake.y ;
+            s = this.runnable(_x,_y);
+        }
+        else
+        if (str === "check_move_left") {
+            let _x = Base.bsnake.x ;
+            let _y = Base.bsnake.y-1 ;
+            s = this.runnable(_x,_y);
+        }
+        else
+        if (str === "check_move_right") {
+            let _x = Base.bsnake.x ;
+            let _y = Base.bsnake.y+1 ;
+            s = this.runnable(_x,_y);
+        }
+        else
+        if (str === "check_aim") {    
+            let _x = Base.bsnake.x ;
+            let _y = Base.bsnake.y ;
+            s = this.runnable(_x,_y);
+            if (s === 'candy') {return 'runnable';}
+            return 'null';
+        }
+        else
+        if (str === "check_toaim") {}
+        else
+        if (str === "check_vtoaim") {}
 
-		if (s === 'runnable') {return s;}
-		if (s === 'candy') {return 'runnable';}
-		return 'null';
+        if (s === 'runnable') {return s;}
+        if (s === 'candy') {return 'runnable';}
+        return 'null';
 
-	}
-	/**
-	 * run the Base unit tasklist base on do while
-	 */
-	do_while(){
-		try{
-			do{
-				for (let variable in this.task.tasklist){ 
-					if (this.task.tasklist.hasOwnProperty(variable))
-						this.task.tasklist[variable].run()
-				}
-			}
-			while (Base.Check(check) === "runnable")
-		}
-		catch(err){
-			console.log(err)
-		}
-	}
-	/**
-	 * run the Base unit tasklist base on while do 
-	 */
-	while_do(){
-		try{
-			while (Base.Check(check)){
-				for (let variable in this.task.tasklist){ 
-					if (this.task.tasklist.hasOwnProperty(variable))
-						this.task.tasklist[variable].run()
-				}
-			}
-		
-		}
-		catch(err){
-			console.log(err)
-		}
-	}
-	/**
-	 * run the Base unit tasklist base on for loop
-	 */
-	loop(){
-		for (let i = 0; i < this.time; i++){
-			for (let variable in this.task.tasklist){ 
+    }
+    /**
+     * run the Base unit tasklist base on do while
+     */
+    do_while(){
+        try{
+            do{
+                for (let variable in this.task.tasklist){ 
+                    if (this.task.tasklist.hasOwnProperty(variable))
+                        this.task.tasklist[variable].run()
+                }
+            }
+            while (Base.Check(check) === "runnable")
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+    /**
+     * run the Base unit tasklist base on while do 
+     */
+    while_do(){
+        try{
+            while (Base.Check(check)){
+                for (let variable in this.task.tasklist){ 
+                    if (this.task.tasklist.hasOwnProperty(variable))
+                        this.task.tasklist[variable].run()
+                }
+            }
+        
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+    /**
+     * run the Base unit tasklist base on for loop
+     */
+    loop(){
+        for (let i = 0; i < this.time; i++){
+            for (let variable in this.task.tasklist){ 
 
-				if (this.task.tasklist.hasOwnProperty(variable))
-					this.task.tasklist[variable].run()
-			}
-		}
-	}
+                if (this.task.tasklist.hasOwnProperty(variable))
+                    this.task.tasklist[variable].run()
+            }
+        }
+    }
 
-	/**
-	 * base_move change snake and map info by task
-	 */
+    /**
+     * base_move change snake and map info by task
+     */
 
-	base_move(_x,_y){
-		if (this.runnable(_x,_y) === 'candy') {
-			
-			Base.bmap.set_body(Base.bsnake.x,Base.bsnake.y);
-			let __x = Base.bsnake.body[0].x;
-			let __y = Base.bsnake.body[0].y;
-			Base.bmap.set_tail(__x,__y);
-			Base.bsnake.add_head(_x,_y);
-			if (Base.bmap.state === "down")
-				Base.bmap.set_slot(_x,_y);
-			Base.bmap.set_head(_x,_y);
-			Base.bmap.candy -- ;
-		}
-		else
-			if (this.runnable(_x,_y) === 'runnable') {
-				Base.bmap.set_body(Base.bsnake.x,Base.bsnake.y);
-				let __x = Base.bsnake.body[0].x;
-				let __y = Base.bsnake.body[0].y;
-				Base.bmap.set_empty(__x,__y);
-				Base.bsnake.add_head(_x,_y);
-				Base.bsnake.del_tail();
-				__x = Base.bsnake.body[0].x;
-				__y = Base.bsnake.body[0].y;
-				Base.bmap.set_tail(__x,__y);
-				if (Base.bmap.state == "down")
-					Base.bmap.set_slot(_x,_y);
-				Base.bmap.set_head(_x,_y);
-			}
-			else this.type = "fail";
-	}
-	/**
-	 *  snake move up one step
-	 */
+    base_move(_x,_y){
+        if (this.runnable(_x,_y) === 'candy') {
+            
+            Base.bmap.set_body(Base.bsnake.x,Base.bsnake.y);
+            let __x = Base.bsnake.body[0].x;
+            let __y = Base.bsnake.body[0].y;
+            Base.bmap.set_tail(__x,__y);
+            Base.bsnake.add_head(_x,_y);
+            if (Base.bmap.state === "down")
+                Base.bmap.set_slot(_x,_y);
+            Base.bmap.set_head(_x,_y);
+            Base.bmap.candy -- ;
+        }
+        else
+            if (this.runnable(_x,_y) === 'runnable') {
+                Base.bmap.set_body(Base.bsnake.x,Base.bsnake.y);
+                let __x = Base.bsnake.body[0].x;
+                let __y = Base.bsnake.body[0].y;
+                Base.bmap.set_empty(__x,__y);
+                Base.bsnake.add_head(_x,_y);
+                Base.bsnake.del_tail();
+                __x = Base.bsnake.body[0].x;
+                __y = Base.bsnake.body[0].y;
+                Base.bmap.set_tail(__x,__y);
+                if (Base.bmap.state == "down")
+                    Base.bmap.set_slot(_x,_y);
+                Base.bmap.set_head(_x,_y);
+            }
+            else this.type = "fail";
+    }
+    /**
+     *  snake move up one step
+     */
 
-	move_up(){
-		let _x = Base.bsnake.x-1 ;
-		let _y = Base.bsnake.y ;
-		this.base_move(_x,_y);
-	}
-	/**
-	 *  snake move down one step
-	 */
+    move_up(){
+        let _x = Base.bsnake.x-1 ;
+        let _y = Base.bsnake.y ;
+        this.base_move(_x,_y);
+    }
+    /**
+     *  snake move down one step
+     */
 
-	move_down(){
-		let _x = Base.bsnake.x+1;
-		let _y = Base.bsnake.y ;
-		this.base_move(_x,_y);
-	}
-	/**
-	 *  snake move left one step
-	 */
+    move_down(){
+        let _x = Base.bsnake.x+1;
+        let _y = Base.bsnake.y ;
+        this.base_move(_x,_y);
+    }
+    /**
+     *  snake move left one step
+     */
 
-	move_left(){
-		let _x = Base.bsnake.x ;
-		let _y = Base.bsnake.y-1 ;
-		this.base_move(_x,_y);
-	}
-	/**
-	 *  snake move right one step
-	 */
+    move_left(){
+        let _x = Base.bsnake.x ;
+        let _y = Base.bsnake.y-1 ;
+        this.base_move(_x,_y);
+    }
+    /**
+     *  snake move right one step
+     */
 
-	move_right(){
-		let _x = Base.bsnake.x ;
-		let _y = Base.bsnake.y+1;
-		this.base_move(_x,_y);
+    move_right(){
+        let _x = Base.bsnake.x ;
+        let _y = Base.bsnake.y+1;
+        this.base_move(_x,_y);
     }
     /**
      * Base unit will run it's tasklist automatically untill finshed
