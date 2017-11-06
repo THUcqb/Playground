@@ -46,8 +46,12 @@ class Background
         const m = new EaselJS.Matrix2D();
         m.scale(this.size * this.n / this.square.width, this.size * this.n / this.square.height);
         ground.graphics.beginBitmapFill(this.square, "no-repeat", m);
-
         ground.graphics.drawRect(0, 0, this.size * this.n, this.size * this.n);
+        for (let i = 1; i < this.n; i++)
+        {
+            ground.graphics.beginFill("rgba(200, 200, 200, 0.8)").drawRect(i * this.size - 0.5, 0, 1, this.size * this.n);
+            ground.graphics.beginFill("rgba(200, 200, 200, 0.8)").drawRect(0, i * this.size - 0.5, this.size * this.n, 1);
+        }
         ground.cache(0, 0, this.size * this.n, this.size * this.n);
         this.container.addChild(ground);
     }

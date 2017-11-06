@@ -44,7 +44,7 @@ const currencies = [
 ];
 
 /**
- * The MapEditor.
+ * The MapEditor
  */
 class MapEditor extends React.Component
 {
@@ -57,7 +57,15 @@ class MapEditor extends React.Component
     {
         super(props);
         this.canvasSize = 420;
+        this.stage = null;
         this.state = {};
+    }
+
+    initialize()
+    {
+        this.stage = new EaselJS.Stage(this.refs.canvasMapEditor);
+        this.background = new Background(this.stage, this.canvasSize, this.state.mapSize);
+        this.element = new Element(this.stage, this.canvasSize, this.state.mapSize, false);
     }
 
     handleChange(name, event)
@@ -69,12 +77,6 @@ class MapEditor extends React.Component
 
     updateState(name)
     {
-        if (this.stage === null)
-        {
-            this.stage = new EaselJS.Stage(this.refs.canvasMapEditor);
-            this.background = new Background(this.stage, this.canvasSize, this.state.mapSize);
-            this.element = new Element(this.stage, this.canvasSize, this.state.mapSize, false);
-        }
         if (name === "mapSize")
         {
             this.map = new Map(this.state.mapSize, this.state.mapSize);
@@ -94,6 +96,12 @@ class MapEditor extends React.Component
             this.element.update(this.map);
         }
         this.stage.update();
+    }
+
+    onEnter()
+    {
+        this.initialize();
+        this.updateState("mapSize");
     }
 
     handleFinishEditing()
@@ -136,6 +144,7 @@ class MapEditor extends React.Component
             <Dialog
                 open = {this.props.open}
                 onRequestClose = {this.props.onRequestClose}
+                onEnter = {() => this.onEnter()}
             >
                 <DialogTitle>Map Editor</DialogTitle>
                 <DialogContent>
@@ -196,7 +205,6 @@ class MapEditor extends React.Component
         this.setState({"mapSize": 10});
         this.map = new Map(10, 10);
         this.map.editInit();
-        this.stage = null;
     }
 }
 
