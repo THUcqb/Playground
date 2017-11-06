@@ -5,93 +5,93 @@ import {level0,level1,level2,level3,level4} from './Maplevel';
 import {Base,Base_task} from './Base';
 
 class MapInfo{
-	constructor(level,maps)
-	{
-		this.level = level;
-		this.maps = maps;
-		this.candy= 0;
-	}
+    constructor(level,maps)
+    {
+        this.level = level;
+        this.maps = maps;
+        this.candy= 0;
+    }
 }
 
 class Map {
-	constructor(SIZE_X, SIZE_Y) {
-		this.SIZE_X = SIZE_X;
-		this.SIZE_Y = SIZE_Y;
-	}
-	/**
-	 * init map with empty block_list
-	 */
-	editinit()
-	{
-		let block_list = [];
-		let slot_map = [];
-		for (let i = 0; i < this.SIZE_X; i++) {
-			block_list[i] = [];
-			slot_map[i] = [];
-			for (let n = 0; n < this.SIZE_Y; n++) {
-				block_list[i][n] = new Block(i,n);
-				slot_map[i][n] = 0;
-			}
-		}
-		this.block_list = block_list;
-	}
+    constructor(SIZE_X, SIZE_Y) {
+        this.SIZE_X = SIZE_X;
+        this.SIZE_Y = SIZE_Y;
+    }
+    /**
+     * init map with empty block_list
+     */
+    editinit()
+    {
+        let block_list = [];
+        let slot_map = [];
+        for (let i = 0; i < this.SIZE_X; i++) {
+            block_list[i] = [];
+            slot_map[i] = [];
+            for (let n = 0; n < this.SIZE_Y; n++) {
+                block_list[i][n] = new Block(i,n);
+                slot_map[i][n] = 0;
+            }
+        }
+        this.block_list = block_list;
+    }
 
-	/**
-	 * init map info and set the birth place of snake
-	 * @param  {[int]} x 
-	 * @param  {[int]} y 
-	 */
-	testinit(x,y) {
-		let block_list = [];
-		let slot_map = [];
-		for (let i = 0; i < this.SIZE_X; i++) {
-			block_list[i] = [];
-			slot_map[i] = [];
-			for (let n = 0; n < this.SIZE_Y; n++) {
-				block_list[i][n] = new Block(i,n);
-				slot_map[i][n] = 0;
-			}
-		}
-		this.block_list = block_list;
-		this.loacalmap = [];
-		this.loacalmap[0] = (level0);
-		this.loacalmap[1] = (level1);
-		this.loacalmap[2] = (level2);
-		this.loacalmap[3] = (level3);
-		this.loacalmap[4] = (level4);
-		// console.log(this.loacalmap);
-		this.set_head(x,y);
-	}
+    /**
+     * init map info and set the birth place of snake
+     * @param  {[int]} x
+     * @param  {[int]} y
+     */
+    testinit(x,y) {
+        let block_list = [];
+        let slot_map = [];
+        for (let i = 0; i < this.SIZE_X; i++) {
+            block_list[i] = [];
+            slot_map[i] = [];
+            for (let n = 0; n < this.SIZE_Y; n++) {
+                block_list[i][n] = new Block(i,n);
+                slot_map[i][n] = 0;
+            }
+        }
+        this.block_list = block_list;
+        this.loacalmap = [];
+        this.loacalmap[0] = (level0);
+        this.loacalmap[1] = (level1);
+        this.loacalmap[2] = (level2);
+        this.loacalmap[3] = (level3);
+        this.loacalmap[4] = (level4);
+        // console.log(this.loacalmap);
+        this.set_head(x,y);
+    }
 
-	/**
-	 * set point(x,y) state empty 
-	 */
-	set_empty(x,y)
-	{
-		this.block_list[x][y].info = 0;//空地
-	}
-	/**
-	 * set point(x,y) state block
-	 */
-	set_block(x,y)
-	{
-		this.block_list[x][y].info = 1;//占据
-	}
-	/**
-	 * set point(x,y) state candy 
-	 */
-	set_candy(x,y)
-	{
-		this.block_list[x][y].info = 2;//表示积分
-	}
+    /**
+     * set point(x,y) state empty
+     */
+    set_empty(x,y)
+    {
+        this.block_list[x][y].info = 0;//空地
+    }
+    /**
+     * set point(x,y) state block
+     */
+    set_block(x,y)
+    {
+        this.block_list[x][y].info = 1;//占据
+    }
+    /**
+     * set point(x,y) state candy
+     */
+    set_candy(x,y)
+    {
+        this.block_list[x][y].info = 2;//表示积分
+    }
 
-	/**
-	 * set the head of snake
-	 */
-	set_head(x,y)
-	{
-		this.block_list[x][y].info = 3;//头
-	}
+    /**
+     * set the head of snake
+     */
+    set_head(x,y)
+    {
+        this.block_list[x][y].info = 3;//头
+    }
 	/**
 	 * set the boday of snake
 	 */
