@@ -176,96 +176,96 @@ export class Base_state{
     }
 
     check_move()
-	{
-		if (this.cur.name === "loop") {return "movelist";}
-		if (this.cur.name === "do_while") {return "movelist";}
-		if (this.cur.name === "while_do") {return "movelist";}
-		if (this.cur.name === "judge") {return "movelist";}
-		if (this.cur.type === "user") {return "movelist";}
+    {
+        if (this.cur.name === "loop") {return "movelist";}
+        if (this.cur.name === "do_while") {return "movelist";}
+        if (this.cur.name === "while_do") {return "movelist";}
+        if (this.cur.name === "judge") {return "movelist";}
+        if (this.cur.type === "user") {return "movelist";}
 
-		if (this.cur.name === "move_up") { this.move_state = "move_up";return "move";}
-		if (this.cur.name === "move_down") { this.move_state = "move_down";return "move";}
-		if (this.cur.name === "move_left") {this.move_state = "move_left";return "move";}
-		if (this.cur.name === "move_right") {this.move_state = " move_right";return "move";}
-		if (this.cur.name === "turn_left") {return "move";}
-		if (this.cur.name === "turn_right") {return "move";}
-		if (this.cur.name === "move") {return "move";}
+        if (this.cur.name === "move_up") { this.move_state = "move_up";return "move";}
+        if (this.cur.name === "move_down") { this.move_state = "move_down";return "move";}
+        if (this.cur.name === "move_left") {this.move_state = "move_left";return "move";}
+        if (this.cur.name === "move_right") {this.move_state = " move_right";return "move";}
+        if (this.cur.name === "turn_left") {return "move";}
+        if (this.cur.name === "turn_right") {return "move";}
+        if (this.cur.name === "move") {return "move";}
 
-		return "end";
-	}
+        return "end";
+    }
 
-	tr_check()
-	{
-		if (this.cur.check === "move") 
-		{
-			if (this.move_state === "move_up"||this.move_state === "null") {return "check_move_up"}
-			if (this.move_state === "move_down") {return "check_move_down"}
-			if (this.move_state === "move_left") {return "check_move_left"}
-			if (this.move_state === "move_right") {return "check_move_right"}
-		}
+    tr_check()
+    {
+        if (this.cur.check === "move") 
+        {
+            if (this.move_state === "move_up"||this.move_state === "null") {return "check_move_up"}
+            if (this.move_state === "move_down") {return "check_move_down"}
+            if (this.move_state === "move_left") {return "check_move_left"}
+            if (this.move_state === "move_right") {return "check_move_right"}
+        }
 
-		return this.cur.check;
-	}
+        return this.cur.check;
+    }
 
-	next_move()
-	{
-		while (this.check_move() === "movelist")
-		{
-			if (Number(this.cur.time) === 0) 
-			{
-				this.cur = this.cur.next
-			}
-			else if (this.cur.time > 0)
-			{
-				this.cur.time -= 1;
-				
-				if (this.cur.name === "loop" || this.cur.type === "user" ) 
-				{
-					this.cur = this.cur.task.tasklist[0];
-					this.cur.time = this.cur.cur_time;
-				}
-				else
-				if (this.cur.name === "judge")
-				{
-					if (this.cur.Check(this.tr_check()) === "runnable") 
-					{
-						this.cur = this.cur.task.tasklist[0];
-						this.cur.time = this.cur.cur_time;	
-					}
-					else
-					{
-						this.cur = this.cur.else_task.tasklist[0];
-						this.cur.time = this.cur.cur_time;	
-					}
-				}
-				else
-				if (this.cur.name === "while_do") 
-				{
-					if (this.cur.Check(this.tr_check()) === "runnable")
-					{
-						this.cur.time = 1;
-						this.cur = this.cur.task.tasklist[0];
-						this.cur.time = this.cur.cur_time;
-					}
-					else
-					{
-						this.cur.time = 0;
-						this.cur = this.cur.next
-					}
-				}
-				else
-					if (this.cur.name === "do_while")
-					{
-						this.cur.name = "while_do"
-						this.cur.time = 1;
-						this.cur = this.cur.task.tasklist[0];
-					}
-				
-			}else 
-			{
-				this.cur = this.cur.task.tasklist[0];
-				this.cur.time = this.cur.cur_time;
-			}
-		}
-	}
+    next_move()
+    {
+        while (this.check_move() === "movelist")
+        {
+            if (Number(this.cur.time) === 0) 
+            {
+                this.cur = this.cur.next
+            }
+            else if (this.cur.time > 0)
+            {
+                this.cur.time -= 1;
+                
+                if (this.cur.name === "loop" || this.cur.type === "user" ) 
+                {
+                    this.cur = this.cur.task.tasklist[0];
+                    this.cur.time = this.cur.cur_time;
+                }
+                else
+                if (this.cur.name === "judge")
+                {
+                    if (this.cur.Check(this.tr_check()) === "runnable") 
+                    {
+                        this.cur = this.cur.task.tasklist[0];
+                        this.cur.time = this.cur.cur_time;    
+                    }
+                    else
+                    {
+                        this.cur = this.cur.else_task.tasklist[0];
+                        this.cur.time = this.cur.cur_time;    
+                    }
+                }
+                else
+                if (this.cur.name === "while_do") 
+                {
+                    if (this.cur.Check(this.tr_check()) === "runnable")
+                    {
+                        this.cur.time = 1;
+                        this.cur = this.cur.task.tasklist[0];
+                        this.cur.time = this.cur.cur_time;
+                    }
+                    else
+                    {
+                        this.cur.time = 0;
+                        this.cur = this.cur.next
+                    }
+                }
+                else
+                    if (this.cur.name === "do_while")
+                    {
+                        this.cur.name = "while_do"
+                        this.cur.time = 1;
+                        this.cur = this.cur.task.tasklist[0];
+                    }
+                
+            }else 
+            {
+                this.cur = this.cur.task.tasklist[0];
+                this.cur.time = this.cur.cur_time;
+            }
+        }
+    }
 }
