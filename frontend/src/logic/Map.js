@@ -189,101 +189,101 @@ class Map {
      */
     tsetload(filename)
     {
-	
-		
-		let str = "1111000000"      
-				+ "1000020000"
-				+ "1001000021"
-				+ "1000020001"
-				+ "0000000001"
-				+ "1020000000"
-				+ "0000000200"
-				+ "0200100000"
-				+ "0000200101"
-				+ "0000000021";
+    
+        
+        let str = "1111000000"      
+                + "1000020000"
+                + "1001000021"
+                + "1000020001"
+                + "0000000001"
+                + "1020000000"
+                + "0000000200"
+                + "0200100000"
+                + "0000200101"
+                + "0000000021";
 
-		for (let i = 0; i < this.SIZE_X; i++) {
-			for (let n = 0; n < this.SIZE_Y; n++) {
-				this.block_list[i][n].info = Number(str[i*this.SIZE_X+n]);
-			}
-		}
-		
-	}
-	/**
-	 * used for test
-	 */
-	print()
-	{
-		let a = this.Ddata();
-		console.log(this.SIZE_X + " " + this.SIZE_Y);
-		let str = "";
-		for (let i = 0; i < this.SIZE_X; i++) {
-			for (let n = 0; n < this.SIZE_Y; n++) {
-				let test = (a[i][n]);
-				let out = "";
-				if (test === 2) {out = "@";}
-				else
-				if (test === 3) {out = "X";}
-				else
-				if (test === 4) {out = "*";}
-				else
-				if (test === 5) {out = ".";}
-				else
-				if (test === 1) {out = "#"}
-				else out = " "
-				str += out;
-			}
-			str +="\n";
-		}
-		console.log(str);
-	}
-	/**
-	 * (string list)return map info with snake
-	 */
-	Ddata()
-	{
-		let block_list = [];
-		for (let i = 0; i < this.SIZE_X; i++) {
-			block_list[i] = [];
-			for (let n = 0; n < this.SIZE_Y; n++) {
-				block_list[i][n] = this.block_list[i][n].info;
+        for (let i = 0; i < this.SIZE_X; i++) {
+            for (let n = 0; n < this.SIZE_Y; n++) {
+                this.block_list[i][n].info = Number(str[i*this.SIZE_X+n]);
+            }
+        }
+        
+    }
+    /**
+     * used for test
+     */
+    print()
+    {
+        let a = this.Ddata();
+        console.log(this.SIZE_X + " " + this.SIZE_Y);
+        let str = "";
+        for (let i = 0; i < this.SIZE_X; i++) {
+            for (let n = 0; n < this.SIZE_Y; n++) {
+                let test = (a[i][n]);
+                let out = "";
+                if (test === 2) {out = "@";}
+                else
+                if (test === 3) {out = "X";}
+                else
+                if (test === 4) {out = "*";}
+                else
+                if (test === 5) {out = ".";}
+                else
+                if (test === 1) {out = "#"}
+                else out = " "
+                str += out;
+            }
+            str +="\n";
+        }
+        console.log(str);
+    }
+    /**
+     * (string list)return map info with snake
+     */
+    Ddata()
+    {
+        let block_list = [];
+        for (let i = 0; i < this.SIZE_X; i++) {
+            block_list[i] = [];
+            for (let n = 0; n < this.SIZE_Y; n++) {
+                block_list[i][n] = this.block_list[i][n].info;
 
-			}
-		}
+            }
+        }
 
-		return block_list;
-	}
-	/**
-	 * (string list)return map info without snake
-	 */
-	Edata()
-	{
-		let block_list = [];
-		for (let i = 0; i < this.SIZE_X; i++) {
-			block_list[i] = [];
-			for (let n = 0; n < this.SIZE_Y; n++) {
-				block_list[i][n] = this.block_list[i][n].info;
-				if (block_list[i][n] >= 3 && block_list[i][n] <= 5 ) 
-				{
-					block_list[i][n] = 0;
-				}
-			}	
-		}
+        return block_list;
+    }
+    /**
+     * (string list)return map info without snake
+     */
+    Edata()
+    {
+        let block_list = [];
+        for (let i = 0; i < this.SIZE_X; i++) {
+            block_list[i] = [];
+            for (let n = 0; n < this.SIZE_Y; n++) {
+                block_list[i][n] = this.block_list[i][n].info;
+                if (block_list[i][n] >= 3 && block_list[i][n] <= 5 ) 
+                {
+                    block_list[i][n] = 0;
+                }
+            }    
+        }
 
-		return block_list;
-	}
-	/**
-	 * return map Basic info
-	 */
-	Data()
-	{
-		return this.block_list;
-	}
+        return block_list;
+    }
+    /**
+     * return map Basic info
+     */
+    Data()
+    {
+        return this.block_list;
+    }
 
-	SlotData()
-	{
-		return this.slot_map;
-	}
+    SlotData()
+    {
+        return this.slot_map;
+    }
 }
 
 export default Map;
