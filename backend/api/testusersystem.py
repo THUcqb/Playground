@@ -72,6 +72,18 @@ class UsersystemTest(TestCase):
         text_1 = json.loads(res_1.content.decode('utf-8'))
         self.assertEqual(text_1['status'], 'Successful')
         
+        data_1 = {'username':'110', 'password':'waitlove'}
+        json_data_1 = json.dumps(data_1)
+        res_1 = self.client.post(login_url, json_data_1, content_type = 'application/json')
+        text_1 = json.loads(res_1.content.decode('utf-8'))
+        self.assertEqual(text_1['status'], 'Successful')
+        
+        data_1 = {'username':'zuohaojia@example.com', 'password':'waitlove'}
+        json_data_1 = json.dumps(data_1)
+        res_1 = self.client.post(login_url, json_data_1, content_type = 'application/json')
+        text_1 = json.loads(res_1.content.decode('utf-8'))
+        self.assertEqual(text_1['status'], 'Successful')
+        
         data_2 = {'username':'zuohaojia', 'password':'wait5683'}
         json_data_2 = json.dumps(data_2)
         res_2 = self.client.post(login_url, json_data_2, content_type = 'application/json')
