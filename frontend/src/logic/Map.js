@@ -92,103 +92,103 @@ class Map {
     {
         this.block_list[x][y].info = 3;//头
     }
-	/**
-	 * set the boday of snake
-	 */
-	set_body(x,y)
-	{
-		this.block_list[x][y].info = 4;//身体
-	}
-	/**
-	 * set the tail of snake
-	 */
-	set_tail(x,y)
-	{
-		this.block_list[x][y].info = 5;//尾巴
-	}
-	/**
-	 * draw slot of snake head
-	 */
-	set_slot(x,y)
-	{
-		this.slot_map[x][y].info = 1;
-	}
-	
-	/**
-	 * save map
-	 * (int)level the level of map 
-	 * (String) maps : map info 
-	 */
-	save(level,maps)
-	{
-		return axios.post(URL + SAVEMAP,
-		{
-			level,
-			maps,
-		})
-		.then(function (response) {
-			return response.data;
-		})
-		.catch(function (error){
-			throw error;
-		});
-	}
-	/**
-	 * load map by level 
-	 * (int)level the level of map
-	 */
+    /**
+     * set the boday of snake
+     */
+    set_body(x,y)
+    {
+        this.block_list[x][y].info = 4;//身体
+    }
+    /**
+     * set the tail of snake
+     */
+    set_tail(x,y)
+    {
+        this.block_list[x][y].info = 5;//尾巴
+    }
+    /**
+     * draw slot of snake head
+     */
+    set_slot(x,y)
+    {
+        this.slot_map[x][y].info = 1;
+    }
 
-	load(level) 
-	{
-		let str = this.loacalmap[level];
-		for (let i = 0; i < this.SIZE_X; i++) {
-				for (let n = 0; n < this.SIZE_Y; n++) {
-					let info = Number(str[i*this.SIZE_X+n]);
+    /**
+     * save map
+     * (int)level the level of map
+     * (String) maps : map info
+     */
+    save(level,maps)
+    {
+        return axios.post(URL + SAVEMAP,
+        {
+            level,
+            maps,
+        })
+        .then(function (response) {
+            return response.data;
+        })
+        .catch(function (error){
+            throw error;
+        });
+    }
+    /**
+     * load map by level
+     * (int)level the level of map
+     */
 
-					this.block_list[i][n].info = info;
-					if (info == 2) 
-					{
-						this.candy+=1;
-					}
-					if (info == 9)
-					{
-						Base.bsnake.init(i,n);
-					}
-				}
-			}
+    load(level)
+    {
+        let str = this.loacalmap[level];
+        for (let i = 0; i < this.SIZE_X; i++) {
+                for (let n = 0; n < this.SIZE_Y; n++) {
+                    let info = Number(str[i*this.SIZE_X+n]);
+
+                    this.block_list[i][n].info = info;
+                    if (info == 2)
+                    {
+                        this.candy+=1;
+                    }
+                    if (info == 9)
+                    {
+                        Base.bsnake.init(i,n);
+                    }
+                }
+            }
 
 
-		// return axios.post(URL + LOADMAP,
-		// {
-		// 	level,
-		// })
-		// .then(function (response) {
+        // return axios.post(URL + LOADMAP,
+        // {
+        //     level,
+        // })
+        // .then(function (response) {
 
-		// 	let str = response.data;
-		// 	this.candy = 0;
-		// 	for (let i = 0; i < this.SIZE_X; i++) {
-		// 		for (let n = 0; n < this.SIZE_Y; n++) {
-		// 			let info = Number(str[i*this.SIZE_X+n]);
+        //     let str = response.data;
+        //     this.candy = 0;
+        //     for (let i = 0; i < this.SIZE_X; i++) {
+        //         for (let n = 0; n < this.SIZE_Y; n++) {
+        //             let info = Number(str[i*this.SIZE_X+n]);
 
-		// 				this.block_list[i][n].info = info;
-		// 				if (info == 2) 
-		// 				{
-		// 					this.candy+=1;
-		// 				}
-		// 		}
-		// 	}
-		// 	return response.data
-		// })
-		// .catch(function (error){
-		// 	throw error;
-		// });
+        //                 this.block_list[i][n].info = info;
+        //                 if (info == 2)
+        //                 {
+        //                     this.candy+=1;
+        //                 }
+        //         }
+        //     }
+        //     return response.data
+        // })
+        // .catch(function (error){
+        //     throw error;
+        // });
 
-	}
-	/**
-	 * used for test
-	 */
-	tsetload(filename)
-	{
+    }
+    /**
+     * used for test
+     */
+    tsetload(filename)
+    {
 	
 		
 		let str = "1111000000"      

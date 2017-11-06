@@ -6,4 +6,4 @@ export class Block {
         this.info = 0;
         this.detial_info = 0; 
     }
-} 
+}
