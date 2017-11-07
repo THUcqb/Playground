@@ -4,8 +4,7 @@ import Map from './Map';
 import Snake from './Snake';
 
 
-export class Controller
-{
+export class Controller {
     constructor()
     {
         this.begin = Base.begin;

@@ -4,8 +4,7 @@ import {URL, SAVEMAP, LOADMAP} from '../config/Api';
 import {level0, level1, level2, level3, level4, level5} from './Maplevel';
 import {Base, Base_task} from './Base';
 
-class MapInfo
-{
+class MapInfo {
     constructor(level, maps)
     {
         this.level = level;
@@ -14,8 +13,7 @@ class MapInfo
     }
 }
 
-class Map
-{
+class Map {
     constructor(SIZE_X, SIZE_Y)
     {
         this.SIZE_X = SIZE_X;
@@ -183,27 +181,27 @@ class Map
 
         // return axios.post(URL + LOADMAP,
         // {
-        // 	level,
+        //     level,
         // })
         // .then(function (response) {
 
-        // 	let str = response.data;
-        // 	this.candy = 0;
-        // 	for (let i = 0; i < this.SIZE_X; i++) {
-        // 		for (let n = 0; n < this.SIZE_Y; n++) {
-        // 			let info = Number(str[i*this.SIZE_X+n]);
+        //     let str = response.data;
+        //     this.candy = 0;
+        //     for (let i = 0; i < this.SIZE_X; i++) {
+        //         for (let n = 0; n < this.SIZE_Y; n++) {
+        //             let info = Number(str[i*this.SIZE_X+n]);
 
-        // 				this.block_list[i][n].info = info;
-        // 				if (info == 2)
-        // 				{
-        // 					this.candy+=1;
-        // 				}
-        // 		}
-        // 	}
-        // 	return response.data
+        //                 this.block_list[i][n].info = info;
+        //                 if (info == 2)
+        //                 {
+        //                     this.candy+=1;
+        //                 }
+        //         }
+        //     }
+        //     return response.data
         // })
         // .catch(function (error){
-        // 	throw error;
+        //     throw error;
         // });
 
     }
