@@ -20,5 +20,6 @@ urlpatterns = [
     url(r'^blockly/load_toolbox$', sources.load_toolbox),
     url(r'^maps/save_maps$', usermaps.save_mapsinfo),
     url(r'^maps/get_maps$', usermaps.get_mapsinfo),
+    url(r'^maps/get_solution$', usermaps.get_solution),
 ]
 

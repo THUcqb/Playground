@@ -37,6 +37,7 @@ class AMap(models.Model):
     level = models.CharField(max_length = 2, default = '')
     stars = models.CharField(max_length = 1, default = '')
     unlock = models.BooleanField(default = False)
+    solution = models.TextField(default = '')
 
 class ToolBox(models.Model):
     '''

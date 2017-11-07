@@ -91,3 +91,38 @@ def get_mapsinfo(request):
             response_data["status"] = "NotExisted"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
 
+@csrf_exempt
+def get_solution(request):
+    '''
+    Get a user's single map solution.
+    
+    :method: POST
+    :param param1: token
+    :param param2: level
+    :returns: if succeed, return {"status":"Successful", "solution":solution}
+              else if the token is out of date, return {"status":"Expiration"}
+              else if the user doesn't exist, return {"status":"NotExisted"}
+    '''
+    if request.method == 'POST':
+        response_data = {}
+        d = json.loads(request.body.decode('utf-8'))
+        token_byte = d['token']
+        token_str = token_byte.encode(encoding = "utf-8")
+        token_info = base64.b64decode(token_str)
+        token = token_info.decode('utf-8','ignore')
+        user_info = json.loads(token)
+        username = user_info['username']
+        level = d['level']
+        now = time.time()
+        expire = user_info['exp']
+        if expire < now:
+            response_data["status"] = "Expiration"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        try:
+            amap = AMap.objects.get(username = username, level = str(level))
+            response_data["solution"] = amap.solution
+            response_data["status"] = "Successful"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        except AMap.DoesNotExist:
+            response_data["status"] = "NotExisted"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
