@@ -25,8 +25,8 @@ class GameActions extends Component {
         }
     }
 
-    handleReset() {
-        this.props.reset();
+    handleClear() {
+        this.props.clear();
     };
 
     handleView() {
@@ -37,57 +37,22 @@ class GameActions extends Component {
         this.props.submit();
     };
 
-    /**
-     * Open the move menu to show operations
-     * @param ev
-     */
-    handleMoveOpen(ev) {
-        this.setState({
-            moveOpen: true,
-            anchorEl: ev.currentTarget,
-        });
-    }
-
-    /**
-     * close the move menu.
-     */
-    handleMoveClose() {
-        this.setState({moveOpen: false});
-    }
-
     render() {
         const { classes } = this.props;
 
         return (
             <Toolbar color="primary">
                 <Button raised className={classes.button}
-                        onClick={(ev) => this.handleMoveOpen(ev)}
-                >
-                    Move
-                </Button>
-                <Menu
-                    open={this.state.moveOpen}
-                    onRequestClose={() => this.handleMoveClose()}
-                    anchorEl={this.state.anchorEl}
-                >
-
-                    <MenuItem onClick={() => move('left')}>Left</MenuItem>
-                    <MenuItem onClick={() => move('right')}>Right</MenuItem>
-                    <MenuItem onClick={() => move('up')}>Up</MenuItem>
-                    <MenuItem onClick={() => move('down')}>Down</MenuItem>
-
-                </Menu>
-                <Button raised className={classes.button}
-                        onClick={() => this.handleReset()}>
-                    Reset
+                        onClick={() => this.handleClear()}>
+                    Clear
                 </Button>
                 <Button raised className={classes.button}
                         onClick={() => this.handleView()}>
-                    View Code
+                    View
                 </Button>
                 <Button raised className={classes.button}
                         onClick={() => this.handleSubmit()}>
-                    Submit Code
+                    Submit
                 </Button>
             </Toolbar>
         )

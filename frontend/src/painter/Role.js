@@ -1,5 +1,6 @@
 import EaselJS from "masteryodaeaseljs";
 import TweenJS from "masteryodatweenjs";
+import HintBar from './Hints';
 
 class Role
 {
@@ -30,7 +31,28 @@ class Role
         this.nowX = nowX;
         this.nowY = nowY;
         this.role = new EaselJS.Shape();
+        this.role.shadow = new EaselJS.Shadow('#4518ff', 2, 2, 12);
+        this.role.cursor = "pointer";
+
+        TweenJS.Tween.get(this.role, {loop: true})
+            .to({
+                alpha: 0.5,
+            }, 1000)
+            .to({
+                alpha: 1
+            }, 300);
+
+        // if (this.animation)
+        // {
+            this.role.on("mousedown", (ev) => {
+                HintBar.show('role');
+            });
+        // }
+
         this.container.addChild(this.role);
+
+        this.role.filters = [new EaselJS.ColorFilter(1,1,0,1)];
+
         this.drawPic();
     }
 
@@ -48,19 +70,19 @@ class Role
         this.drawPic();
         if (x === this.nowX + 1)
         {
-            TweenJS.Tween.get(this.role, { override: true }).to({ y: this.role.y + this.size }, this.time);
+            TweenJS.Tween.get(this.role).to({ y: this.role.y + this.size }, this.time);
         }
         else if (x === this.nowX - 1)
         {
-            TweenJS.Tween.get(this.role, { override: true }).to({ y: this.role.y - this.size }, this.time);
+            TweenJS.Tween.get(this.role).to({ y: this.role.y - this.size }, this.time);
         }
         else if (y === this.nowY + 1)
         {
-            TweenJS.Tween.get(this.role, { override: true }).to({ x: this.role.x + this.size }, this.time);
+            TweenJS.Tween.get(this.role).to({ x: this.role.x + this.size }, this.time);
         }
         else if (y === this.nowY - 1)
         {
-            TweenJS.Tween.get(this.role, { override: true }).to({ x: this.role.x - this.size }, this.time);
+            TweenJS.Tween.get(this.role).to({ x: this.role.x - this.size }, this.time);
         }
         this.updatePos(x, y);
     }

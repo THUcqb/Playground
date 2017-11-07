@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import GameActions from './GameActions';
 import Blockly from 'node-blockly/browser';
 import './BlocklyDef';
-import run, { reset } from './LogicApi';
+import { run } from './LogicApi';
 
 /**
  * The gamepad field which consists of a action bar and the blocklyDiv.
@@ -13,7 +13,7 @@ class Gamepad extends Component {
 
     constructor(props) {
         super(props);
-        this.resetWorkspace.bind(this);
+        this.clearWorkspace.bind(this);
         this.submitWorkspace.bind(this);
     }
 
@@ -38,8 +38,8 @@ class Gamepad extends Component {
     /**
      * Clear the coding workspace.
      */
-    resetWorkspace() {
-        reset();
+    clearWorkspace() {
+        Gamepad.workspace.clear();
     }
 
     /**
@@ -62,7 +62,7 @@ class Gamepad extends Component {
         return (
             <div className="Operation">
                 <GameActions
-                    reset={this.resetWorkspace}
+                    clear={this.clearWorkspace}
                     view={this.viewWorkspace}
                     submit={this.submitWorkspace}
                 />

@@ -21,7 +21,7 @@ export function reset() {
     //  TODO: properly reset the map.
 }
 
-export default function run(code) {
+export function run(code) {
     // Blockly.JavaScript.addReservedWords('code');
     reset();
     try {
