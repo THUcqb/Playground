@@ -51,7 +51,7 @@ class Element
             }
         }
         this.coins.cursor = "pointer";
-        this.coins.shadow = new EaselJS.Shadow('#000', 2, 2, 8);
+        this.coins.shadow = new EaselJS.Shadow('#ffcb3d', 0, 0, 8);
 
         if (this.animation)
         {
@@ -64,7 +64,14 @@ class Element
                     }, 1000)
                     .to({
                         alpha: 1
+                    }, 300)
+                    .to({
+                        alpha: 0.5,
+                    }, 1000)
+                    .to({
+                        alpha: 1
                     }, 300);
+
             });
         }
         this.container.addChild(this.coins);

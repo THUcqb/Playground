@@ -39,7 +39,8 @@ class HintBar extends React.Component {
 
         const msg = {
             wall: 'You should avoid these blocks to get the coins.',
-            coin: 'Take these coins to get stars.'
+            coin: 'Take these coins to get stars.',
+            role: 'This is you!',
         };
 
         return (
