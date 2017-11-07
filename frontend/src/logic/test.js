@@ -5,43 +5,43 @@ import {Controller} from './Controller';
 const readline = require('readline');
 
 const rl = readline.createInterface({
-	input: process.stdin,
-	output: process.stdout
+    input: process.stdin,
+    output: process.stdout
 });
 
 class test{
-	constructor(class_name,number)
-	{
-		this.class_name = class_name;
-		this.number = number;
-	}
+    constructor(class_name,number)
+    {
+        this.class_name = class_name;
+        this.number = number;
+    }
 
-	run(input,except)
-	{
-		if (input == except) {return "ok"}
-	}
+    run(input,except)
+    {
+        if (input == except) {return "ok"}
+    }
 
-	runGame(loop)
-	{
-		console.log(loop);
-		if(loop <= 20)
-		{
-			var op = "";
-			// console.log(loop)
-			rl.on('line', (input) => {
-				  console.log(`Received: ${input}`);
-				   op = input;
-				   loop +=1;
-				   // rl.close();
-				 	console.log(">"+op);
-				 	if (op === 'w'|| op === 'W') 
-					{
-						let b1 = new Base("sys","move_up","move");
-						b1.run();
-					}
-					if (op === 's'|| op === 'S') 
-					{
-						let b3 = new Base("sys","move_down","move");
+    runGame(loop)
+    {
+        console.log(loop);
+        if(loop <= 20)
+        {
+            var op = "";
+            // console.log(loop)
+            rl.on('line', (input) => {
+                  console.log(`Received: ${input}`);
+                   op = input;
+                   loop +=1;
+                   // rl.close();
+                     console.log(">"+op);
+                     if (op === 'w'|| op === 'W')
+                    {
+                        let b1 = new Base("sys","move_up","move");
+                        b1.run();
+                    }
+                    if (op === 's'|| op === 'S')
+                    {
+                        let b3 = new Base("sys","move_down","move");
 						b3.run();
 					}
 					if (op === 'a'|| op === 'A') 
