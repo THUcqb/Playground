@@ -1,8 +1,10 @@
-import {Base, Base_task} from './Base';
-export class Base_state {
+import {Base} from './Base';
+
+export class Base_state
+{
 
     /**
-     * move_state return runstate
+     * move_state return run state
      * snake_state
      *      up:    draw
      *      down:
@@ -45,10 +47,8 @@ export class Base_state {
         }
         else if (this.cur.type === "sys")
         {
-            {
-                this.cur = this.cur.next;
-                this.next_move();
-            }
+            this.cur = this.cur.next;
+            this.next_move();
         }
         else if (this.cur.type === "success")
         {

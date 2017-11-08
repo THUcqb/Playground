@@ -1,10 +1,7 @@
 import {Base, Base_task} from './Base';
-import {Base_state} from './Base_state';
-import Map from './Map';
-import Snake from './Snake';
 
-
-export class Controller {
+export class Controller
+{
     constructor()
     {
         this.begin = Base.begin;
@@ -12,12 +9,10 @@ export class Controller {
         Base.bmap.load(0);
         //将任务列表指向初始节点
         this.begin.task = new Base_task(this.begin);
-        this.emap = new Map(10, 10);
-        this.snake = Base.bsnake;
     }
 
     /**
-     * usertask is main function
+     * user_task is main function
      * task is based on user's blockly
      */
     init(task)
@@ -27,19 +22,8 @@ export class Controller {
         this.begin.task = user_task;
     }
 
-    setSnakeState(state)
+    switchLevel(level)
     {
-        this.snake = Base.bsnake.state = state;
-    }
-
-    getSlotMap()
-    {
-        return Base.bmap.slotData();
-    }
-
-    switch_level(level)
-    {
-        console.log("fuck you!!");
         this.begin = Base.begin;
         Base.begin.time = 1;
         this.begin.type = "user";
@@ -47,7 +31,6 @@ export class Controller {
         Base.bmap.load(level);
         //将任务列表指向初始节点
         this.begin.task = new Base_task(this.begin);
-        this.snake = Base.bsnake;
         Base.run_state.state = "runnable";
         Base.run_state.cur = Base.begin;
     }
@@ -55,7 +38,7 @@ export class Controller {
     /**
      * return map info
      */
-    getMap()
+    static getMap()
     {
         return Base.bmap;
     }
@@ -63,24 +46,52 @@ export class Controller {
     /**
      * return Snake info
      */
-    getSnake()
+    static getSnake()
     {
         return Base.bsnake;
     }
 
-    editNewMap()
+    editNewMap(map)
     {
-        return this.emap;
+
+        this.begin = Base.begin;
+        Base.begin.time = 1;
+        this.begin.type = "user";
+        this.state = "edit";
+        Base.bmap.reloadEditorMap(map);
+        //将任务列表指向初始节点
+        this.begin.task = new Base_task(this.begin);
+        Base.run_state.state = "runnable";
+        Base.run_state.cur = Base.begin;
+
     }
 
-    step()
+    save(map)
+    {
+
+    }
+
+    static step()
     {
         Base.run_state.next();
     }
 
     currentState()
     {
-        return Base.run_state.state;
+        if (this.state === "runnable")
+        {
+            console.log("current state : " + Base.run_state.state);
+            return Base.run_state.state;
+        }
+        else
+        {
+            return this.state;
+        }
+    }
+
+    setState(state)
+    {
+        this.state = state;
     }
 }
 

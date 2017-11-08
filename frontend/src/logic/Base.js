@@ -32,12 +32,12 @@ export class Base
         this.name = name;
         this.time = 1;
         this.cur_time = 1;
-        this.check = check;
+        Base.check = check;
     }
 
     /**
      * link current task to next task
-     * @param  {Base} next : naxt task
+     * @param  {Base} next
      */
     link(next)
     {
@@ -66,11 +66,11 @@ export class Base
     /**
      * set else branch for Base unit
      * "if...else do else_tasklist "
-     * @param {[Base_task]} else_tasklist [description]
+     * @param {Base_task} else_task [description]
      */
-    set_else(else_tasklist)
+    set_else(else_task)
     {
-        this.else_task = else_tasklist;
+        this.else_task = else_task;
     }
 
     /**
@@ -78,15 +78,15 @@ export class Base
      * see also the function Check()
      * @param {[String]} check
      */
-    set_check(check)
+    static set_check(check)
     {
-        this.check = check;
+        Base.check = check;
     }
 
     /**
-     * chek point(x,y) if "runnable" or have "candy"
+     * check point(x,y) if "runnable" or have "candy"
      */
-    runnable(x, y)
+    static runnable(x, y)
     {
         if (x < 0 || x >= 10)
         {
@@ -112,7 +112,7 @@ export class Base
      * runnable : the check info is right
      * null: current state is missing or wrong
      */
-    check(str)
+    static check(str)
     {
         let s = "";
         if (str === "true")
@@ -127,31 +127,31 @@ export class Base
         {
             let _x = Base.bsnake.x - 1;
             let _y = Base.bsnake.y;
-            s = this.runnable(_x, _y);
+            s = Base.runnable(_x, _y);
         }
         else if (str === "check_move_down")
         {
             let _x = Base.bsnake.x + 1;
             let _y = Base.bsnake.y;
-            s = this.runnable(_x, _y);
+            s = Base.runnable(_x, _y);
         }
         else if (str === "check_move_left")
         {
             let _x = Base.bsnake.x;
             let _y = Base.bsnake.y - 1;
-            s = this.runnable(_x, _y);
+            s = Base.runnable(_x, _y);
         }
         else if (str === "check_move_right")
         {
             let _x = Base.bsnake.x;
             let _y = Base.bsnake.y + 1;
-            s = this.runnable(_x, _y);
+            s = Base.runnable(_x, _y);
         }
         else if (str === "check_aim")
         {
             let _x = Base.bsnake.x;
             let _y = Base.bsnake.y;
-            s = this.runnable(_x, _y);
+            s = Base.runnable(_x, _y);
             if (s === 'candy')
             {
                 return 'runnable';
@@ -281,7 +281,7 @@ export class Base
      */
     base_move(_x, _y)
     {
-        if (this.runnable(_x, _y) === 'candy')
+        if (Base.runnable(_x, _y) === 'candy')
         {
 
             // Base.bmap.set_body(Base.bsnake.x,Base.bsnake.y);
@@ -309,7 +309,7 @@ export class Base
 
             Base.bmap.candy--;
         }
-        else if (this.runnable(_x, _y) === 'runnable')
+        else if (Base.runnable(_x, _y) === 'runnable')
         {
             Base.bmap.setBody(Base.bsnake.x, Base.bsnake.y);
             let __x = Base.bsnake.body[0].x;
@@ -328,8 +328,8 @@ export class Base
     }
 
     /**
-     * Base unit will run it's tasklist automatically untill finshed
-     * Warning: if you want to move one step you'd better use next() in Base__state
+     * Base unit will run its tasklist automatically until finished
+     * Warning: if you want to move one step you'd better use next() in Base_state
      */
     run()
     {
