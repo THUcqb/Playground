@@ -5,7 +5,7 @@ import Element from './painter/Element';
 import Background from './painter/Background';
 import Role from './painter/Role';
 import MapEditorButton from './mapeditor/MapEditorButton';
-import LevelButton from './gameflow/LevelChoose';
+import LevelDialog from './gameflow/LevelDialog';
 import OverDialog from './gameflow/OverDialog';
 import Button from 'material-ui/Button';
 import {withStyles} from 'material-ui/styles';
@@ -33,7 +33,8 @@ class Scene extends Component
         super();
         this.handleResize = this.handleResize.bind(this);
         this.state = {
-            open: false,
+            overDialogOpen: false,
+            levelDialogOpen: false,
             nowLevel: 1,
             dialogTitle: "Game Over",
         };
@@ -62,23 +63,20 @@ class Scene extends Component
 
     handleGameOver()
     {
+        this.isOver = true;
         this.setState({
-            open: true,
+            overDialogOpen: true,
             dialogTitle: "Game Over"
         });
     }
 
     handleSuccess()
     {
+        this.isOver = true;
         this.setState({
-            open: true,
+            overDialogOpen: true,
             dialogTitle: "Success!"
         });
-    }
-
-    handleRequestClose()
-    {
-        this.setState({open: false});
     }
 
     handleNextLevel()
@@ -87,7 +85,7 @@ class Scene extends Component
         {
             this.handleChooseLevel(this.state.nowLevel + 1);
         }
-        this.handleRequestClose();
+        this.setState({overDialogOpen: false});
     }
 
     /**
@@ -101,9 +99,19 @@ class Scene extends Component
         return (
             <div className = "CanvasDiv" ref = "CanvasDiv">
                 <Toolbar color = "primary">
-                    <LevelButton className = {classes.button}
-                                 ref = "levelButton"
-                                 onChooseLevel = {(levelNum) => this.handleChooseLevel(levelNum)}
+                    <Button raised
+                            className = {classes.button}
+                            color="primary"
+                            onClick={() => this.setState({levelDialogOpen: true})}>
+                        Levels
+                    </Button>
+                    <LevelDialog
+                        open={this.state.levelDialogOpen}
+                        onRequestClose={() => this.setState({levelDialogOpen: false})}
+                        onChooseLevel={(levelNum) => {
+                            this.handleChooseLevel(levelNum);
+                            this.setState({levelDialogOpen: false});
+                        }}
                     />
                     <Button raised className = {classes.button}
                             color = "primary"
@@ -115,17 +123,18 @@ class Scene extends Component
                 </Toolbar>
                 <canvas id = "canvasScene" ref = "canvasScene" width = "600" height = "600"/>
                 <OverDialog
-                    open = {this.state.open}
+                    open = {this.state.overDialogOpen}
                     dialogTitle = {this.state.dialogTitle}
                     onNext = {() => this.handleNextLevel()}
                     onLevels = {() =>
-                    {
-                        this.handleRequestClose();
-                        this.refs.levelButton.handleClickOpen();
-                    }}
+                        this.setState({
+                            overDialogOpen: false,
+                            levelDialogOpen: true
+                        })
+                    }
                     onReplay = {() =>
                     {
-                        this.handleRequestClose();
+                        this.setState({overDialogOpen: false});
                         this.handleChooseLevel(this.state.nowLevel);
                     }}
                 />
@@ -146,14 +155,21 @@ class Scene extends Component
                 this.trajectory.update(controller.getSnake());
                 this.element.update(controller.getMap());
                 this.role.update(controller.getSnake());
+                this.isOver = false;
             }
             else if (status === "fail")
             {
-                this.handleGameOver();
+                if (!this.isOver)
+                {
+                    this.handleGameOver();
+                }
             }
             else if (status === "success")
             {
-                this.handleSuccess();
+                if (!this.isOver)
+                {
+                    this.handleSuccess();
+                }
             }
         }
         this.count = (this.count + 1) % 30;
