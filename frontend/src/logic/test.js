@@ -18,7 +18,7 @@ class test{
 
     run(input,except)
     {
-        if (input == except) {return "ok"}
+        if (input === except) {return "ok"}
     }
 
     runGame(loop)
@@ -26,7 +26,7 @@ class test{
         console.log(loop);
         if(loop <= 20)
         {
-            var op = "";
+            let op = "";
             // console.log(loop)
             rl.on('line', (input) => {
                   console.log(`Received: ${input}`);

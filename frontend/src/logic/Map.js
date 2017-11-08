@@ -68,7 +68,6 @@ class Map {
         this.loacalmap[3] = (level3);
         this.loacalmap[4] = (level4);
         this.loacalmap[5] = (level5);
-        // console.log(this.loacalmap);
         this.setHead(x, y);
     }
 
