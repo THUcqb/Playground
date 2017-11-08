@@ -2,9 +2,10 @@ import {Block} from './Block';
 import axios from 'axios';
 import {URL, SAVEMAP, LOADMAP} from '../config/Api';
 import {level0, level1, level2, level3, level4, level5} from './Maplevel';
-import {Base, Base_task} from './Base';
+import {Base} from './Base';
 
-class MapInfo {
+class MapInfo
+{
     constructor(level, maps)
     {
         this.level = level;
@@ -13,7 +14,8 @@ class MapInfo {
     }
 }
 
-class Map {
+class Map
+{
     constructor(SIZE_X, SIZE_Y)
     {
         this.SIZE_X = SIZE_X;
@@ -158,21 +160,21 @@ class Map {
     /**
      * load map after
      */
-    
+
     reload_editor_map(map)
     {
         this.block_list = map.block_list;
         this.SIZE_X = map.SIZE_X;
         this.SIZE_Y = map.SIZE_Y;
         this.candy = 0;
-        
+
         let slot_map = [];
         for (let i = 0; i < this.SIZE_X; i++)
         {
             slot_map[i] = [];
             for (let n = 0; n < this.SIZE_Y; n++)
             {
-                if (this.block_list[i][n].info == 9)
+                if (this.block_list[i][n].info === 9)
                 {
                     Base.bsnake.init(i, n);
                     this.setHead(i, n);
@@ -184,7 +186,6 @@ class Map {
 
         this.slot_map = slot_map;
     }
-
 
 
     /**
@@ -305,6 +306,10 @@ class Map {
                 {
                     out = "#"
                 }
+                else if (test === 9)
+                {
+                    out = "s"
+                }
                 else out = " ";
                 str += out;
             }
@@ -382,7 +387,7 @@ class Map {
         return this.slot_map;
     }
 
-   
+
 }
 
 export default Map;

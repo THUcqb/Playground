@@ -39,6 +39,18 @@ class Scene extends Component
         };
     }
 
+    reset()
+    {
+        this.background.reset();
+        this.element.reset();
+        this.trajectory.reset();
+        this.role.reset();
+        this.background.update(Controller.getMap());
+        this.trajectory.update(Controller.getSnake());
+        this.element.update(Controller.getMap());
+        this.role.update(Controller.getSnake());
+    }
+
     /**
      * Change the game level and update the scene
      * @param levelNum number representation of a game level
@@ -47,17 +59,10 @@ class Scene extends Component
     {
         this.setState({nowLevel: levelNum});
         this.stage.removeAllChildren();
-        Controller.controller.switch_level(levelNum);
+        Controller.controller.switchLevel(levelNum);
         //Controller.controller.getSnake().init(5, 5);
         loadToolbox(levelNum);
-        this.background.reset();
-        this.element.reset();
-        this.trajectory.reset();
-        this.role.reset();
-        this.background.update(Controller.controller.getMap());
-        this.trajectory.update(Controller.controller.getSnake());
-        this.element.update(Controller.controller.getMap());
-        this.role.update(Controller.controller.getSnake());
+        this.reset();
     }
 
     handleGameOver()
@@ -142,10 +147,15 @@ class Scene extends Component
             const status = controller.currentState();
             if (status === "runnable")
             {
-                this.background.update(controller.getMap());
-                this.trajectory.update(controller.getSnake());
-                this.element.update(controller.getMap());
-                this.role.update(controller.getSnake());
+                this.background.update(Controller.getMap());
+                this.trajectory.update(Controller.getSnake());
+                this.element.update(Controller.getMap());
+                this.role.update(Controller.getSnake());
+            }
+            else if (status === "edit")
+            {
+                this.reset();
+                Controller.controller.setState("runnable");
             }
             else if (status === "fail")
             {

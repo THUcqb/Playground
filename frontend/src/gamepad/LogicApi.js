@@ -11,7 +11,7 @@ export async function move(op) {
     Controller.controller.begin.task.add(new Base('sys', 'move_' + op));
     await sleep(500 * historyStep++);
     //  TODO: move the await to painter if paint continuously.
-    Controller.controller.step();
+    Controller.step();
 }
 
 export function reset() {
