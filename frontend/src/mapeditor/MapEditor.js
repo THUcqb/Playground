@@ -15,6 +15,8 @@ import PropTypes from 'prop-types';
 import {withStyles} from 'material-ui/styles';
 import Button from 'material-ui/Button';
 
+import {Controller} from '../logic/Controller';
+
 const styles = theme => ({
     container: {
         display: 'flex',
@@ -25,6 +27,7 @@ const styles = theme => ({
         marginRight: theme.spacing.unit,
         width: 200,
     },
+
 
 });
 
@@ -145,11 +148,24 @@ class MapEditor extends React.Component
         this.updateState("mapSize");
     }
 
-    handleFinishEditing()
+    handleFinishEditing(op)
     {
         //TODO: to something including save the map and close the dialog.
-
-        alert(this.state.mapSize);
+        if (op == "Start")
+            {
+                Controller.controller.editNewMap(this.map);
+                alert("Start!");
+            }
+        if (op == "Save")
+            {
+                var name=prompt("Map name","My Map");
+                if (name != null && name != "") 
+                {
+                    Controller.controller.save(name,this.map);
+                }
+                else
+                    alert("Please add name!");
+            }
     }
 
     handleClick(e)
@@ -271,10 +287,10 @@ class MapEditor extends React.Component
                     <Button onClick = {() => this.updateState("reset")} color = "primary">
                         Clear
                     </Button>
-                    <Button onClick = {() => this.handleFinishEditing()} color = "primary">
+                    <Button onClick = {() => this.handleFinishEditing("Start")} color = "primary">
                         Start
                     </Button>
-                    <Button onClick = {() => this.handleFinishEditing()} color = "primary">
+                    <Button onClick = {() => this.handleFinishEditing("Save")} color = "primary">
                         Save
                     </Button>
                 </DialogActions>

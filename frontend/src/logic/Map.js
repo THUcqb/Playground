@@ -129,14 +129,14 @@ class Map {
 
     /**
      * save map
-     * (int)level the level of map
+     * (String)name the name of map
      * (String) maps : map info
      */
-    save(level, maps)
+    save(name, maps)
     {
         return axios.post(URL + SAVEMAP,
             {
-                level,
+                name,
                 maps,
             })
             .then(function (response)
@@ -148,6 +148,44 @@ class Map {
                 throw error;
             });
     }
+
+    editSave(name, maps)
+    {
+
+        this.save(name, maps.sData);
+    }
+
+    /**
+     * load map after
+     */
+    
+    reload_editor_map(map)
+    {
+        this.block_list = map.block_list;
+        this.SIZE_X = map.SIZE_X;
+        this.SIZE_Y = map.SIZE_Y;
+        this.candy = 0;
+        
+        let slot_map = [];
+        for (let i = 0; i < this.SIZE_X; i++)
+        {
+            slot_map[i] = [];
+            for (let n = 0; n < this.SIZE_Y; n++)
+            {
+                if (this.block_list[i][n].info == 9)
+                {
+                    Base.bsnake.init(i, n);
+                    this.setHead(i, n);
+                }
+
+                slot_map[i][n] = 0;
+            }
+        }
+
+        this.slot_map = slot_map;
+    }
+
+
 
     /**
      * load map by level
@@ -294,6 +332,21 @@ class Map {
         return block_list;
     }
 
+    sData()
+    {
+        let block_list = "";
+        for (let i = 0; i < this.SIZE_X; i++)
+        {
+            for (let n = 0; n < this.SIZE_Y; n++)
+            {
+                block_list += this.block_list[i][n].info.toString();
+
+            }
+        }
+
+        return block_list;
+    }
+
     /**
      * (string list)return map info without snake
      */
@@ -328,6 +381,8 @@ class Map {
     {
         return this.slot_map;
     }
+
+   
 }
 
 export default Map;

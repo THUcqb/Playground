@@ -39,7 +39,6 @@ export class Controller {
 
     switch_level(level)
     {
-        console.log("fuck you!!");
         this.begin = Base.begin;
         Base.begin.time = 1;
         this.begin.type = "user";
@@ -68,9 +67,24 @@ export class Controller {
         return Base.bsnake;
     }
 
-    editNewMap()
+    editNewMap(map)
     {
-        return this.emap;
+
+        this.begin = Base.begin;
+        Base.begin.time = 1;
+        this.begin.type = "user";
+        this.state = "edit";
+        Base.bmap.reload_editor_map(map);
+        //将任务列表指向初始节点
+        this.begin.task = new Base_task(this.begin);
+        this.snake = Base.bsnake;
+        Base.run_state.state = "runnable";
+        Base.run_state.cur = Base.begin;
+        
+    }
+    save(map)
+    {
+
     }
 
     step()
@@ -80,7 +94,14 @@ export class Controller {
 
     currentState()
     {
-        return Base.run_state.state;
+        if (this.state === "runnable") 
+        {
+            return Base.run_state.state;
+        }
+        else
+        {
+            return this.state;
+        }
     }
 }
 
