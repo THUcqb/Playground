@@ -2,7 +2,8 @@ import Snake from './Snake';
 import {Base_state} from './Base_state';
 import Map from './Map';
 
-export class Base_task {
+export class Base_task
+{
     constructor(begin)
     {
         this.begin = begin;
@@ -10,10 +11,6 @@ export class Base_task {
         this.size = 0;
     }
 
-    /**
-     * add a task in tasklist
-     * @param {[Base]}
-     */
     add(task)
     {
         this.tasklist[this.size] = task;
@@ -27,7 +24,8 @@ export class Base_task {
     }
 }
 
-export class Base {
+export class Base
+{
     constructor(type, name, check)
     {
         this.type = type;
@@ -39,7 +37,7 @@ export class Base {
 
     /**
      * link current task to next task
-     * @param  {Function} next : naxt task
+     * @param  {Base} next : naxt task
      */
     link(next)
     {
@@ -48,11 +46,11 @@ export class Base {
 
     /**
      * add tasklist for Base unit
-     * @param {[Base_task]} tasklist
+     * @param {[Base_task]} task
      */
-    set_task(tasklist)
+    set_task(task)
     {
-        this.task = tasklist;
+        this.task = task;
     }
 
     /**
@@ -114,7 +112,7 @@ export class Base {
      * runnable : the check info is right
      * null: current state is missing or wrong
      */
-    Check(str)
+    check(str)
     {
         let s = "";
         if (str === "true")
@@ -179,66 +177,67 @@ export class Base {
 
     }
 
-    /**
-     * run the Base unit tasklist base on do while
-     */
-    do_while()
-    {
-        try
-        {
-            do {
-                for (let variable in this.task.tasklist)
-                {
-                    if (this.task.tasklist.hasOwnProperty(variable))
-                        this.task.tasklist[variable].run()
-                }
-            }
-            while (Base.Check(check) === "runnable")
-        }
-        catch (err)
-        {
-            console.log(err)
-        }
-    }
+    // /**
+    //  * run the Base unit tasklist base on do while
+    //  */
+    // do_while()
+    // {
+    //     try
+    //     {
+    //         do
+    //         {
+    //             for (let variable in this.task.tasklist)
+    //             {
+    //                 if (this.task.tasklist.hasOwnProperty(variable))
+    //                     this.task.tasklist[variable].run()
+    //             }
+    //         }
+    //         while (Base.check(check) === "runnable")
+    //     }
+    //     catch (err)
+    //     {
+    //         console.log(err)
+    //     }
+    // }
 
-    /**
-     * run the Base unit tasklist base on while do
-     */
-    while_do()
-    {
-        try
-        {
-            while (Base.Check(check))
-            {
-                for (let variable in this.task.tasklist)
-                {
-                    if (this.task.tasklist.hasOwnProperty(variable))
-                        this.task.tasklist[variable].run()
-                }
-            }
-
-        }
-        catch (err)
-        {
-            console.log(err)
-        }
-    }
-
-    /**
-     * run the Base unit tasklist base on for loop
-     */
-    loop()
-    {
-        for (let i = 0; i < this.time; i++)
-        {
-            for (let variable in this.task.tasklist)
-            {
-
-                if (this.task.tasklist.hasOwnProperty(variable))
-                    this.task.tasklist[variable].run()
-            }
-        }
-    }
+    // /**
+    //  * run the Base unit tasklist base on while do
+    //  */
+    // while_do()
+    // {
+    //     try
+    //     {
+    //         while (Base.check(check))
+    //         {
+    //             for (let variable in this.task.tasklist)
+    //             {
+    //                 if (this.task.tasklist.hasOwnProperty(variable))
+    //                     this.task.tasklist[variable].run()
+    //             }
+    //         }
+    //
+    //     }
+    //     catch (err)
+    //     {
+    //         console.log(err)
+    //     }
+    // }
+    //
+    // /**
+    //  * run the Base unit tasklist base on for loop
+    //  */
+    // loop()
+    // {
+    //     for (let i = 0; i < this.time; i++)
+    //     {
+    //         for (let variable in this.task.tasklist)
+    //         {
+    //
+    //             if (this.task.tasklist.hasOwnProperty(variable))
+    //                 this.task.tasklist[variable].run()
+    //         }
+    //     }
+    // }
 
     /**
      *  snake move up one step
@@ -280,9 +279,11 @@ export class Base {
     /**
      * base_move change snake and map info by task
      */
-    base_move(_x,_y){
-        if (this.runnable(_x,_y) === 'candy') {
-            
+    base_move(_x, _y)
+    {
+        if (this.runnable(_x, _y) === 'candy')
+        {
+
             // Base.bmap.set_body(Base.bsnake.x,Base.bsnake.y);
             // let __x = Base.bsnake.body[0].x;
             // let __y = Base.bsnake.body[0].y;
@@ -292,47 +293,46 @@ export class Base {
             //     Base.bmap.set_slot(_x,_y);
             // Base.bmap.set_head(_x,_y);
             // 
-            
-            Base.bmap.set_body(Base.bsnake.x,Base.bsnake.y);
+
+            Base.bmap.setBody(Base.bsnake.x, Base.bsnake.y);
             let __x = Base.bsnake.body[0].x;
             let __y = Base.bsnake.body[0].y;
-            Base.bmap.set_empty(__x,__y);
-            Base.bsnake.add_head(_x,_y);
+            Base.bmap.setEmpty(__x, __y);
+            Base.bsnake.add_head(_x, _y);
             Base.bsnake.del_tail();
             __x = Base.bsnake.body[0].x;
             __y = Base.bsnake.body[0].y;
-            Base.bmap.set_tail(__x,__y);
-            if (Base.bmap.state == "down")
-                Base.bmap.set_slot(_x,_y);
-            Base.bmap.set_head(_x,_y);
-                
-            Base.bmap.candy -- ;
+            Base.bmap.setTail(__x, __y);
+            if (Base.bmap.state === "down")
+                Base.bmap.setSlot(_x, _y);
+            Base.bmap.setHead(_x, _y);
+
+            Base.bmap.candy--;
         }
-        else
-            if (this.runnable(_x,_y) === 'runnable') {
-                Base.bmap.set_body(Base.bsnake.x,Base.bsnake.y);
-                let __x = Base.bsnake.body[0].x;
-                let __y = Base.bsnake.body[0].y;
-                Base.bmap.set_empty(__x,__y);
-                Base.bsnake.add_head(_x,_y);
-                Base.bsnake.del_tail();
-                __x = Base.bsnake.body[0].x;
-                __y = Base.bsnake.body[0].y;
-                Base.bmap.set_tail(__x,__y);
-                if (Base.bmap.state == "down")
-                    Base.bmap.set_slot(_x,_y);
-                Base.bmap.set_head(_x,_y);
-            }
-            else this.type = "fail";
+        else if (this.runnable(_x, _y) === 'runnable')
+        {
+            Base.bmap.setBody(Base.bsnake.x, Base.bsnake.y);
+            let __x = Base.bsnake.body[0].x;
+            let __y = Base.bsnake.body[0].y;
+            Base.bmap.setEmpty(__x, __y);
+            Base.bsnake.add_head(_x, _y);
+            Base.bsnake.del_tail();
+            __x = Base.bsnake.body[0].x;
+            __y = Base.bsnake.body[0].y;
+            Base.bmap.setTail(__x, __y);
+            if (Base.bmap.state === "down")
+                Base.bmap.setSlot(_x, _y);
+            Base.bmap.setHead(_x, _y);
+        }
+        else this.type = "fail";
     }
 
     /**
      * Base unit will run it's tasklist automatically untill finshed
-     * Woring: if you want to move one step you'd better use next() in Base__state
+     * Warning: if you want to move one step you'd better use next() in Base__state
      */
     run()
     {
-        // console.log("run: > "+this.name)
         if (this.type === "sys")
         {
             if (this.name === "move_up")
@@ -359,44 +359,45 @@ export class Base {
             // if (this.name === "vmove_left"){}
             // else
             // if (this.name === "vmove_right"){}
-            else if (this.name === "loop")
-            {
-                this.loop();
-            }
-            else if (this.name === "do_while")
-            {
-                this.do_while();
-            }
-            else if (this.name === "while_do")
-            {
-                this.while_do();
-            }
-            else if (this.name === "judge")
-            {
-                if (Base.Check(this.check) === "runnable")
-                {
-                    for (let variable in this.task.tasklist)
-                    {
-                        if (this.task.tasklist.hasOwnProperty(variable))
-                            this.task.tasklist[variable].run()
-                    }
-                }
-                else
-                {
-                    for (let variable in this.else_task.tasklist)
-                    {
-                        if (this.task.tasklist.hasOwnProperty(variable))
-                            this.task.tasklist[variable].run()
-                    }
-                }
-            }
-
-        } else if (this.type === "user")
-        {
-            for (let variable in this.task.tasklist)
-            {
-                this.task.tasklist[variable].run()
-            }
+            //     else if (this.name === "loop")
+            //     {
+            //         this.loop();
+            //     }
+            //     else if (this.name === "do_while")
+            //     {
+            //         this.do_while();
+            //     }
+            //     else if (this.name === "while_do")
+            //     {
+            //         this.while_do();
+            //     }
+            //     else if (this.name === "judge")
+            //     {
+            //         if (Base.Check(this.check) === "runnable")
+            //         {
+            //             for (let variable in this.task.tasklist)
+            //             {
+            //                 if (this.task.tasklist.hasOwnProperty(variable))
+            //                     this.task.tasklist[variable].run()
+            //             }
+            //         }
+            //         else
+            //         {
+            //             for (let variable in this.else_task.tasklist)
+            //             {
+            //                 if (this.task.tasklist.hasOwnProperty(variable))
+            //                     this.task.tasklist[variable].run()
+            //             }
+            //         }
+            //     }
+            //
+            // } else if (this.type === "user")
+            // {
+            //     for (let variable in this.task.tasklist)
+            //     {
+            //         this.task.tasklist[variable].run()
+            //     }
+            // }
         }
 
         Base.bmap.print();

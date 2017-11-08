@@ -74,11 +74,11 @@ export class Base_state {
 
         console.log(this.cur.name);
         console.log(this.cur.type);
-        if (this.cur.type == "fail")
+        if (this.cur.type === "fail")
         {
             this.state = "fail";
         }
-        console.log(Base.bmap.candy)
+        console.log(Base.bmap.candy);
         console.log(this.state);
     }
 
@@ -271,7 +271,7 @@ export class Base_state {
                 }
                 else if (this.cur.name === "judge")
                 {
-                    if (this.cur.Check(this.tr_check()) === "runnable")
+                    if (this.cur.check(this.tr_check()) === "runnable")
                     {
                         this.cur = this.cur.task.tasklist[0];
                         this.cur.time = this.cur.cur_time;
@@ -284,7 +284,7 @@ export class Base_state {
                 }
                 else if (this.cur.name === "while_do")
                 {
-                    if (this.cur.Check(this.tr_check()) === "runnable")
+                    if (this.cur.check(this.tr_check()) === "runnable")
                     {
                         this.cur.time = 1;
                         this.cur = this.cur.task.tasklist[0];
@@ -298,7 +298,7 @@ export class Base_state {
                 }
                 else if (this.cur.name === "do_while")
                 {
-                    this.cur.name = "while_do"
+                    this.cur.name = "while_do";
                     this.cur.time = 1;
                     this.cur = this.cur.task.tasklist[0];
                 }
