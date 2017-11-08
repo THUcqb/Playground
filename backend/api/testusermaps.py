@@ -33,19 +33,25 @@ class UserMapsTest(TestCase):
         log_res = self.client.post(login_url, log_json_data, content_type = 'application/json')
         log_text = json.loads(log_res.content.decode('utf-8'))
         
-        the_data = {'token':log_text['token'], 'level':'1', 'stars':'3'}
+        the_data = {'token':log_text['token'], 'level':'1', 'stars':'3', 'solution':'while'}
         the_json_data = json.dumps(the_data)
         the_res = self.client.post(the_url, the_json_data, content_type = 'application/json')
         the_text = json.loads(the_res.content.decode('utf-8'))
         self.assertEqual(the_text['status'], 'Successful')
         
-        the_data_3 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwNzk5MzUyMC42OTIsICJ1c2VybmFtZSI6ICJoZWppZSIsICJleHAiOiAxNTA4NTk4MzIwLjY5Mn0=', 'level':1, 'stars':3}
+        the_data = {'token':log_text['token'], 'level':'12', 'stars':'3', 'solution':'while'}
+        the_json_data = json.dumps(the_data)
+        the_res = self.client.post(the_url, the_json_data, content_type = 'application/json')
+        the_text = json.loads(the_res.content.decode('utf-8'))
+        self.assertEqual(the_text['status'], 'NotExisted')
+        
+        the_data_3 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwNzk5MzUyMC42OTIsICJ1c2VybmFtZSI6ICJoZWppZSIsICJleHAiOiAxNTA4NTk4MzIwLjY5Mn0=', 'level':1, 'stars':3, 'solution':'while'}
         the_json_data_3 = json.dumps(the_data_3)
         the_res_3 = self.client.post(the_url, the_json_data_3, content_type = 'application/json')
         the_text_3 = json.loads(the_res_3.content.decode('utf-8'))
         self.assertEqual(the_text_3['status'], 'Expiration')
         
-        the_data_4 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwODkxMjc5Mi4yMTEsICJ1c2VybmFtZSI6ICJoZWxsbyIsICJleHAiOiAxNTQwNDQ4NzkyLjIxMX0=', 'level':1, 'stars':3}
+        the_data_4 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwODkxMjc5Mi4yMTEsICJ1c2VybmFtZSI6ICJoZWxsbyIsICJleHAiOiAxNTQwNDQ4NzkyLjIxMX0=', 'level':1, 'stars':3, 'solution':'while'}
         the_json_data_4 = json.dumps(the_data_4)
         the_res_4 = self.client.post(the_url, the_json_data_4, content_type = 'application/json')
         the_text_4 = json.loads(the_res_4.content.decode('utf-8'))
@@ -84,4 +90,43 @@ class UserMapsTest(TestCase):
         the_res_4 = self.client.post(the_url, the_json_data_4, content_type = 'application/json')
         the_text_4 = json.loads(the_res_4.content.decode('utf-8'))
         self.assertEqual(the_text_4['status'], 'NotExisted')
-
+    
+    def test_getsolution(self):
+        '''
+        Test the get_solution API in usersystem.
+        '''
+        login_url = '/users/login'
+        the_url = '/maps/get_solution'
+        UserInfo.objects.create(username = 'zuohaojia', password = 'waitlove', phonenumber = '110', email = 'zuohaojia@example.com')
+        AMap.objects.create(username = 'zuohaojia', level = '1', unlock = True, solution = 'while')
+        for i in range(1, 10):
+            AMap.objects.create(level = str(i + 1), username = 'zuohaojia')
+        
+        login_data = {'username':'zuohaojia', 'password':'waitlove'}
+        log_json_data = json.dumps(login_data)
+        log_res = self.client.post(login_url, log_json_data, content_type = 'application/json')
+        log_text = json.loads(log_res.content.decode('utf-8'))
+        
+        the_data = {'token':log_text['token'], 'level':'1'}
+        the_json_data = json.dumps(the_data)
+        the_res = self.client.post(the_url, the_json_data, content_type = 'application/json')
+        the_text = json.loads(the_res.content.decode('utf-8'))
+        self.assertEqual(the_text['status'], 'Successful')
+        
+        the_data = {'token':log_text['token'], 'level':'12'}
+        the_json_data = json.dumps(the_data)
+        the_res = self.client.post(the_url, the_json_data, content_type = 'application/json')
+        the_text = json.loads(the_res.content.decode('utf-8'))
+        self.assertEqual(the_text['status'], 'NotExisted')
+        
+        the_data_3 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwNzk5MzUyMC42OTIsICJ1c2VybmFtZSI6ICJoZWppZSIsICJleHAiOiAxNTA4NTk4MzIwLjY5Mn0=', 'level':1}
+        the_json_data_3 = json.dumps(the_data_3)
+        the_res_3 = self.client.post(the_url, the_json_data_3, content_type = 'application/json')
+        the_text_3 = json.loads(the_res_3.content.decode('utf-8'))
+        self.assertEqual(the_text_3['status'], 'Expiration')
+        
+        the_data_4 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwODkxMjc5Mi4yMTEsICJ1c2VybmFtZSI6ICJoZWxsbyIsICJleHAiOiAxNTQwNDQ4NzkyLjIxMX0=', 'level':1}
+        the_json_data_4 = json.dumps(the_data_4)
+        the_res_4 = self.client.post(the_url, the_json_data_4, content_type = 'application/json')
+        the_text_4 = json.loads(the_res_4.content.decode('utf-8'))
+        self.assertEqual(the_text_4['status'], 'NotExisted')

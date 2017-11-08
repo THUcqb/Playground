@@ -20,6 +20,7 @@ def save_mapsinfo(request):
     :param param1: token
     :param param2: level
     :param param3: stars
+    :param param4: solution
     :returns: if the token is out of date, return {"status":"Expiration"}
               else if the user doesn't exist, return {"status":"NotExisted"}
               else if succeed, return {"status":"Successful"}
@@ -41,12 +42,15 @@ def save_mapsinfo(request):
         try:
             level = d['level']
             stars = d['stars']
-            amap = AMap.objects.get(username = username, level = level)
+            solution = d['solution']
+            amap = AMap.objects.get(username = username, level = str(level))
             amap.stars = stars
+            amap.solution = solution
             amap.save()
-            nmap = AMap.objects.get(username = username, level = str(int(level) + 1))
-            nmap.unlock = True
-            nmap.save()
+            if int(level) < 10:
+                nmap = AMap.objects.get(username = username, level = str(int(level) + 1))
+                nmap.unlock = True
+                nmap.save()
             response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         except AMap.DoesNotExist:
