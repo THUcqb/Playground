@@ -241,43 +241,6 @@ export class Base {
     }
 
     /**
-     * base_move change snake and map info by task
-     */
-
-    base_move(_x, _y)
-    {
-        if (this.runnable(_x, _y) === 'candy')
-        {
-
-            Base.bmap.setBody(Base.bsnake.x, Base.bsnake.y);
-            let __x = Base.bsnake.body[0].x;
-            let __y = Base.bsnake.body[0].y;
-            Base.bmap.setTail(__x, __y);
-            Base.bsnake.add_head(_x, _y);
-            if (Base.bmap.state === "down")
-                Base.bmap.setSlot(_x, _y);
-            Base.bmap.setHead(_x, _y);
-            Base.bmap.candy--;
-        }
-        else if (this.runnable(_x, _y) === 'runnable')
-        {
-            Base.bmap.setBody(Base.bsnake.x, Base.bsnake.y);
-            let __x = Base.bsnake.body[0].x;
-            let __y = Base.bsnake.body[0].y;
-            Base.bmap.setEmpty(__x, __y);
-            Base.bsnake.add_head(_x, _y);
-            Base.bsnake.del_tail();
-            __x = Base.bsnake.body[0].x;
-            __y = Base.bsnake.body[0].y;
-            Base.bmap.setTail(__x, __y);
-            if (Base.bmap.state === "down")
-                Base.bmap.setSlot(_x, _y);
-            Base.bmap.setHead(_x, _y);
-        }
-        else this.type = "fail";
-    }
-
-    /**
      *  snake move up one step
      */
     move_up()
@@ -297,9 +260,6 @@ export class Base {
         this.base_move(_x, _y);
     }
 
-    /**
-     *  snake move left one step
-     */
     move_left()
     {
         let _x = Base.bsnake.x;
@@ -315,6 +275,55 @@ export class Base {
         let _x = Base.bsnake.x;
         let _y = Base.bsnake.y + 1;
         this.base_move(_x, _y);
+    }
+
+    /**
+     * base_move change snake and map info by task
+     */
+    base_move(_x,_y){
+        if (this.runnable(_x,_y) === 'candy') {
+            
+            // Base.bmap.set_body(Base.bsnake.x,Base.bsnake.y);
+            // let __x = Base.bsnake.body[0].x;
+            // let __y = Base.bsnake.body[0].y;
+            // Base.bmap.set_tail(__x,__y);
+            // Base.bsnake.add_head(_x,_y);
+            // if (Base.bmap.state === "down")
+            //     Base.bmap.set_slot(_x,_y);
+            // Base.bmap.set_head(_x,_y);
+            // 
+            
+            Base.bmap.set_body(Base.bsnake.x,Base.bsnake.y);
+            let __x = Base.bsnake.body[0].x;
+            let __y = Base.bsnake.body[0].y;
+            Base.bmap.set_empty(__x,__y);
+            Base.bsnake.add_head(_x,_y);
+            Base.bsnake.del_tail();
+            __x = Base.bsnake.body[0].x;
+            __y = Base.bsnake.body[0].y;
+            Base.bmap.set_tail(__x,__y);
+            if (Base.bmap.state == "down")
+                Base.bmap.set_slot(_x,_y);
+            Base.bmap.set_head(_x,_y);
+                
+            Base.bmap.candy -- ;
+        }
+        else
+            if (this.runnable(_x,_y) === 'runnable') {
+                Base.bmap.set_body(Base.bsnake.x,Base.bsnake.y);
+                let __x = Base.bsnake.body[0].x;
+                let __y = Base.bsnake.body[0].y;
+                Base.bmap.set_empty(__x,__y);
+                Base.bsnake.add_head(_x,_y);
+                Base.bsnake.del_tail();
+                __x = Base.bsnake.body[0].x;
+                __y = Base.bsnake.body[0].y;
+                Base.bmap.set_tail(__x,__y);
+                if (Base.bmap.state == "down")
+                    Base.bmap.set_slot(_x,_y);
+                Base.bmap.set_head(_x,_y);
+            }
+            else this.type = "fail";
     }
 
     /**
