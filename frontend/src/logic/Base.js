@@ -190,14 +190,29 @@ export class Base {
 	base_move(_x,_y){
 		if (this.runnable(_x,_y) === 'candy') {
 			
+			// Base.bmap.set_body(Base.bsnake.x,Base.bsnake.y);
+			// let __x = Base.bsnake.body[0].x;
+			// let __y = Base.bsnake.body[0].y;
+			// Base.bmap.set_tail(__x,__y);
+			// Base.bsnake.add_head(_x,_y);
+			// if (Base.bmap.state === "down")
+			// 	Base.bmap.set_slot(_x,_y);
+			// Base.bmap.set_head(_x,_y);
+			// 
+			
 			Base.bmap.set_body(Base.bsnake.x,Base.bsnake.y);
 			let __x = Base.bsnake.body[0].x;
 			let __y = Base.bsnake.body[0].y;
-			Base.bmap.set_tail(__x,__y);
+			Base.bmap.set_empty(__x,__y);
 			Base.bsnake.add_head(_x,_y);
-			if (Base.bmap.state === "down")
+			Base.bsnake.del_tail();
+			__x = Base.bsnake.body[0].x;
+			__y = Base.bsnake.body[0].y;
+			Base.bmap.set_tail(__x,__y);
+			if (Base.bmap.state == "down")
 				Base.bmap.set_slot(_x,_y);
 			Base.bmap.set_head(_x,_y);
+				
 			Base.bmap.candy -- ;
 		}
 		else
