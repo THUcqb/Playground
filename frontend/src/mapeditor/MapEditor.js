@@ -14,7 +14,7 @@ import Dialog, {
 import PropTypes from 'prop-types';
 import {withStyles} from 'material-ui/styles';
 import Button from 'material-ui/Button';
-
+import HintBar from '../painter/Hints';
 import {Controller} from '../logic/Controller';
 
 const styles = theme => ({
@@ -96,7 +96,7 @@ class MapEditor extends React.Component
         this.stage = new EaselJS.Stage(this.refs.canvasMapEditor);
         this.background = new Background(this.stage, this.canvasSize, this.state.mapSize);
         this.element = new Element(this.stage, this.canvasSize, this.state.mapSize, false);
-        this.role = new Role(this.stage, this.canvasSize, this.state.mapSize);
+        this.role = new Role(this.stage, this.canvasSize, this.state.mapSize, false);
     }
 
     handleChange(name, event)
@@ -206,6 +206,10 @@ class MapEditor extends React.Component
                 this.lastY = b_y;
             }
         }
+        else
+        {
+            HintBar.show('removeRole');
+        }
         this.map.print();
         this.updateState("map");
     }
@@ -300,11 +304,6 @@ class MapEditor extends React.Component
                 </DialogActions>
             </Dialog>
         );
-    }
-
-    componentDidMount()
-    {
-
     }
 }
 

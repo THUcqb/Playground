@@ -1,5 +1,7 @@
 import {Base, Base_task} from './Base';
-export class Base_state {
+
+export class Base_state
+{
 
     /**
      * move_state return runstate

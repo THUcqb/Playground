@@ -4,8 +4,9 @@ import HintBar from './Hints';
 
 class Role
 {
-    constructor(stage, size, n)
+    constructor(stage, size, n, animation)
     {
+        this.animation = animation;
         this.size = size / n;
         this.n = n;
         this.stage = stage;
@@ -42,12 +43,12 @@ class Role
                 alpha: 1
             }, 300);
 
-        // if (this.animation)
-        // {
+        if (this.animation)
+        {
             this.role.on("mousedown", (ev) => {
                 HintBar.show('role');
             });
-        // }
+        }
 
         this.container.addChild(this.role);
 

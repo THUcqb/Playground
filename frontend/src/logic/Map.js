@@ -134,7 +134,7 @@ class Map
      * (String)name the name of map
      * (String) maps : map info
      */
-    save(name, maps)
+    static save(name, maps)
     {
         return axios.post(URL + SAVEMAP,
             {
@@ -151,17 +151,17 @@ class Map
             });
     }
 
-    editSave(name, maps)
+    static editSave(name, maps)
     {
 
-        this.save(name, maps.sData);
+        Map.save(name, maps.sData);
     }
 
     /**
      * load map after
      */
 
-    reload_editor_map(map)
+    reloadEditorMap(map)
     {
         this.block_list = map.block_list;
         this.SIZE_X = map.SIZE_X;
@@ -179,7 +179,10 @@ class Map
                     Base.bsnake.init(i, n);
                     this.setHead(i, n);
                 }
-
+                if (this.block_list[i][n].info === 2)
+                {
+                    this.candy += 1;
+                }
                 slot_map[i][n] = 0;
             }
         }

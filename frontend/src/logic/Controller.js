@@ -58,7 +58,7 @@ export class Controller
         Base.begin.time = 1;
         this.begin.type = "user";
         this.state = "edit";
-        Base.bmap.reload_editor_map(map);
+        Base.bmap.reloadEditorMap(map);
         //将任务列表指向初始节点
         this.begin.task = new Base_task(this.begin);
         Base.run_state.state = "runnable";
@@ -80,6 +80,7 @@ export class Controller
     {
         if (this.state === "runnable")
         {
+            console.log("current state : " + Base.run_state.state);
             return Base.run_state.state;
         }
         else

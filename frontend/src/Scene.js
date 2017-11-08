@@ -202,7 +202,7 @@ class Scene extends Component
         this.background = new Background(this.stage, 600, 10);
         this.trajectory = new Trajectory(this.stage, 600, 10);
         this.element = new Element(this.stage, 600, 10, true);
-        this.role = new Role(this.stage, 600, 10);
+        this.role = new Role(this.stage, 600, 10, true);
         this.count = 0;
         EaselJS.Ticker.addEventListener("tick", () => this.tick());
         EaselJS.Ticker.framerate = 60;
