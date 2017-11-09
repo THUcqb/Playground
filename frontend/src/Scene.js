@@ -180,6 +180,10 @@ class Scene extends Component {
             }
             else if (status === "success")
             {
+                this.background.update(Controller.getMap());
+                this.trajectory.update(Controller.getSnake());
+                this.element.update(Controller.getMap());
+                this.role.update(Controller.getSnake());
                 this.isFail = false;
                 if (!this.isOver)
                 {
