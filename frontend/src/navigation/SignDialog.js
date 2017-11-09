@@ -1,9 +1,9 @@
 import React from 'react';
 import Dialog, {
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
 } from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import PropTypes from 'prop-types';

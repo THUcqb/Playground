@@ -19,27 +19,27 @@ import MessageBar from '../utils/MessageBar';
 import { alerts as configMsgAlerts} from "../config/msg";
 
 const styles = theme => ({
-  appBar: {
-    position: 'absolute',
-    textAlign: 'center',
-  },
-  flex: {
-    flex: 1,
-  },
-  drawerPaper: {
-    position: 'relative',
-    height: '100%',
-    width: 240,
-  },
-  drawerHeader: {
-    'text-align': 'center',
-    display: 'flex',
-    alignItems: 'center',
-    padding: '0 8px',
-  },
-  avatar: {
-    backgroundColor: deepOrange[300],
-  }
+    appBar: {
+        position: 'absolute',
+        textAlign: 'center',
+    },
+    flex: {
+        flex: 1,
+    },
+    drawerPaper: {
+        position: 'relative',
+        height: '100%',
+        width: 240,
+    },
+    drawerHeader: {
+        'text-align': 'center',
+        display: 'flex',
+        alignItems: 'center',
+        padding: '0 8px',
+    },
+    avatar: {
+        backgroundColor: deepOrange[300],
+    }
 
 });
 
@@ -88,76 +88,78 @@ class Navigation extends React.Component {
      * @returns {XML} Navigation - consists of a AppBar which have
      * a title and a button, and a Drawer.
      */
-  render() {
-    const { classes, theme } = this.props;
+    render() {
+        const { classes, theme } = this.props;
 
-    let userInfo = null;
+        let userInfo = null;
 
-    if (!this.state.loggedIn)
-        userInfo = (
-            <CookiesProvider>
-                <SignButton loggedIn={(username, justSet) => this.handleLoggedIn(username, justSet)}/>
-            </CookiesProvider>
-        );
-    else
-        userInfo = (<Avatar className={classes.avatar}>{this.state.username}</Avatar>);
+        if (!this.state.loggedIn) {
+            userInfo = (
+                <CookiesProvider>
+                    <SignButton loggedIn={(username, justSet) => this.handleLoggedIn(username, justSet)}/>
+                </CookiesProvider>
+            );
+        }
+        else {
+            userInfo = (<Avatar className={classes.avatar}>{this.state.username}</Avatar>);
+        }
 
-    const appbar = (
-      <AppBar className={classes.appBar}>
-        <Toolbar>
-          <IconButton
-            color="contrast"
-            aria-label="open drawer"
-            onClick={this.handleDrawerOpen}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography type="title" color="inherit" className={classes.flex}>
-            FootMark
-          </Typography>
-          {userInfo}
-          <MessageBar/>
-        </Toolbar>
-      </AppBar>
+        const appbar = (
+            <AppBar className={classes.appBar}>
+                <Toolbar>
+                    <IconButton
+                        color="contrast"
+                        aria-label="open drawer"
+                        onClick={this.handleDrawerOpen}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography type="title" color="inherit" className={classes.flex}>
+                        FootMark
+                    </Typography>
+                    {userInfo}
+                    <MessageBar/>
+                </Toolbar>
+            </AppBar>
     );
 
     const drawer = (
-      <Drawer
-        style={{width:0}}
-        type="temporary"
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-        open={this.state.open}
-        onRequestClose={this.handleDrawerClose}
-      >
-        <div className={classes.drawerInner}>
-          <div className={classes.drawerHeader}>
-            <HomeIcon/>
-            <Typography type="title" color="inherit" className={classes.flex}>
-              Home
-            </Typography>
-            <IconButton onClick={this.handleDrawerClose}>
-              {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-            </IconButton>
-          </div>
-          <Divider />
-        </div>
-      </Drawer>
+        <Drawer
+            style={{width:0}}
+            type="temporary"
+            classes={{
+                paper: classes.drawerPaper,
+            }}
+            open={this.state.open}
+            onRequestClose={this.handleDrawerClose}
+        >
+            <div className={classes.drawerInner}>
+                <div className={classes.drawerHeader}>
+                    <HomeIcon/>
+                    <Typography type="title" color="inherit" className={classes.flex}>
+                        Home
+                    </Typography>
+                    <IconButton onClick={this.handleDrawerClose}>
+                        {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                        </IconButton>
+                </div>
+                <Divider />
+            </div>
+        </Drawer>
     );
 
     return (
         <div>
-          {appbar}
-          {drawer}
+            {appbar}
+            {drawer}
         </div>
     );
   }
 }
 
 Navigation.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
+    classes: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles, { withTheme: true })(Navigation);
