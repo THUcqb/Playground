@@ -34,18 +34,16 @@ function startPreload()
 
 function handleFileProgress(event)
 {
-    console.log(preloader.progress);
+//    TODO: handleFileProgress
 }
 
 function loadError(event)
 {
-    console.log("Error!", event.text);
-    alert("Error");
+    //    TODO: handleLoadError
 }
 
 function loadComplete(event)
 {
-    console.log("Finished Loading Assets");
     ReactDOM.render(<CookiesProvider><App /></CookiesProvider>,
         document.getElementById('root')
     );
