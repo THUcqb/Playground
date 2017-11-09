@@ -26,6 +26,5 @@ export function run(code) {
     try {
         eval(code);
     } catch (e) {
-        alert(e);
     }
 }

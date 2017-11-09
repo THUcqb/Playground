@@ -46,7 +46,8 @@ class Gamepad extends Component {
      * View the code converted from blockly in the workspace.
      */
     viewWorkspace() {
-        alert(Blockly.JavaScript.workspaceToCode(Gamepad.workspace));
+        //TODO: show the code of the workspace properly
+        // Blockly.JavaScript.workspaceToCode(Gamepad.workspace);
     }
 
     /**
