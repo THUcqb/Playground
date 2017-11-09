@@ -23,8 +23,7 @@ const styles = theme => ({
 /**
  * The app's scene part
  */
-class Scene extends Component
-{
+class Scene extends Component {
     canvasScene;
     CanvasDiv;
 
@@ -50,6 +49,11 @@ class Scene extends Component
         this.trajectory.update(Controller.getSnake());
         this.element.update(Controller.getMap());
         this.role.update(Controller.getSnake());
+    }
+
+    isNextLevelAvailable()
+    {
+        return (this.state.nowLevel < 5 && !this.isFail);
     }
 
     /**
@@ -90,6 +94,10 @@ class Scene extends Component
         {
             this.handleChooseLevel(this.state.nowLevel + 1);
         }
+        else
+        {
+            this.handleChooseLevel(this.state.nowLevel);
+        }
         this.setState({overDialogOpen: false});
     }
 
@@ -102,10 +110,10 @@ class Scene extends Component
     {
         const {classes} = this.props;
         return (
-            <div className = "CanvasDiv" ref = "CanvasDiv">
-                <Toolbar color = "primary">
+            <div className="CanvasDiv" ref="CanvasDiv">
+                <Toolbar color="primary">
                     <Button raised
-                            className = {classes.button}
+                            className={classes.button}
                             color="primary"
                             onClick={() => this.setState({levelDialogOpen: true})}>
                         Levels
@@ -113,31 +121,25 @@ class Scene extends Component
                     <LevelDialog
                         open={this.state.levelDialogOpen}
                         onRequestClose={() => this.setState({levelDialogOpen: false})}
-                        onChooseLevel={(levelNum) => {
+                        onChooseLevel={(levelNum) =>
+                        {
                             this.handleChooseLevel(levelNum);
-                            this.setState({levelDialogOpen: false});
+                            this.setState({
+                                overDialogOpen: false,
+                                levelDialogOpen: false
+                            });
                         }}
                     />
-                    <Button raised className = {classes.button}
-                            color = "primary"
-                            onClick = {() => this.handleGameOver()}
-                    >
-                        Test Game Over
-                    </Button>
-                    <MapEditorButton color = "primary"/>
+                    <MapEditorButton color="primary"/>
                 </Toolbar>
-                <canvas id = "canvasScene" ref = "canvasScene" width = "600" height = "600"/>
+                <canvas id="canvasScene" ref="canvasScene" width="600" height="600"/>
                 <OverDialog
-                    open = {this.state.overDialogOpen}
-                    dialogTitle = {this.state.dialogTitle}
-                    onNext = {() => this.handleNextLevel()}
-                    onLevels = {() =>
-                        this.setState({
-                            overDialogOpen: false,
-                            levelDialogOpen: true
-                        })
-                    }
-                    onReplay = {() =>
+                    open={this.state.overDialogOpen}
+                    dialogTitle={this.state.dialogTitle}
+                    nextAvail={this.isNextLevelAvailable()}
+                    onNext={() => this.handleNextLevel()}
+                    onLevels={() => this.setState({levelDialogOpen: true})}
+                    onReplay={() =>
                     {
                         this.setState({overDialogOpen: false});
                         this.handleChooseLevel(this.state.nowLevel);
@@ -161,6 +163,7 @@ class Scene extends Component
                 this.element.update(Controller.getMap());
                 this.role.update(Controller.getSnake());
                 this.isOver = false;
+                this.isFail = true;
             }
             else if (status === "edit")
             {
@@ -169,6 +172,7 @@ class Scene extends Component
             }
             else if (status === "fail")
             {
+                this.isFail = true;
                 if (!this.isOver)
                 {
                     this.handleGameOver();
@@ -176,6 +180,7 @@ class Scene extends Component
             }
             else if (status === "success")
             {
+                this.isFail = false;
                 if (!this.isOver)
                 {
                     this.handleSuccess();
