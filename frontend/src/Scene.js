@@ -183,6 +183,10 @@ class Scene extends Component {
                 this.isFail = false;
                 if (!this.isOver)
                 {
+                    this.background.update(Controller.getMap());
+                    this.trajectory.update(Controller.getSnake());
+                    this.element.update(Controller.getMap());
+                    this.role.update(Controller.getSnake());
                     this.handleSuccess();
                 }
             }
