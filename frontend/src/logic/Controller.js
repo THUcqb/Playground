@@ -5,6 +5,7 @@ export class Controller
     constructor()
     {
         this.begin = Base.begin;
+        this.switchLevelTime = 0;
         this.state = "runnable";
         Base.bmap.load(0);
         //将任务列表指向初始节点
@@ -22,9 +23,18 @@ export class Controller
         this.begin.task = user_task;
     }
 
+    /**
+     * Get how many times have we switch the level.
+     * @returns {*}
+     */
+    static getLevelTime() {
+        return Controller.controller.switchLevelTime;
+    }
+
     switchLevel(level)
     {
         this.begin = Base.begin;
+        this.switchLevelTime++;
         Base.begin.time = 1;
         this.begin.type = "user";
         this.state = "runnable";
