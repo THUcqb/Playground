@@ -20,6 +20,5 @@ Blockly.Blocks['action_move'] = {
 Blockly.JavaScript['action_move'] = function(block) {
     let dropdown_op = block.getFieldValue('OP');
     // TODO: Assemble JavaScript into code variable.
-    let code = 'move' + '("' + dropdown_op + '");\n';
-    return code;
+    return `move("${dropdown_op}");`;
 };

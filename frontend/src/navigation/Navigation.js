@@ -14,8 +14,9 @@ import MenuIcon from 'material-ui-icons/Menu';
 import HomeIcon from 'material-ui-icons/Home'
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import ChevronRightIcon from 'material-ui-icons/ChevronRight';
-import CookieAlertBar from './CookieAlert';
 import { CookiesProvider } from 'react-cookie';
+import MessageBar from '../utils/MessageBar';
+import { alerts as configMsgAlerts} from "../config/msg";
 
 const styles = theme => ({
   appBar: {
@@ -52,7 +53,6 @@ class Navigation extends React.Component {
             open: false,
             loggedIn: false,
             username: '',
-            cookieAlertOpen: false,
         }
     }
 
@@ -79,9 +79,7 @@ class Navigation extends React.Component {
             username
         });
         if (justSet) {
-            this.setState({
-                cookieAlertOpen: true
-            });
+            MessageBar.show(configMsgAlerts.cookies);
         }
     }
 
@@ -98,7 +96,7 @@ class Navigation extends React.Component {
     if (!this.state.loggedIn)
         userInfo = (
             <CookiesProvider>
-                <SignButton loggedIn={(username) => this.handleLoggedIn(username)}/>
+                <SignButton loggedIn={(username, justSet) => this.handleLoggedIn(username, justSet)}/>
             </CookiesProvider>
         );
     else
@@ -118,7 +116,7 @@ class Navigation extends React.Component {
             FootMark
           </Typography>
           {userInfo}
-          <CookieAlertBar open={this.state.cookieAlertOpen}/>
+          <MessageBar/>
         </Toolbar>
       </AppBar>
     );

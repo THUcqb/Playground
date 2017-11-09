@@ -1,6 +1,7 @@
 import EaselJS from "masteryodaeaseljs";
 import TweenJS from "masteryodatweenjs";
-import HintBar from './Hints';
+import MessageBar from '../utils/MessageBar';
+import { hints as configMsgHints } from '../config/msg';
 
 class Role
 {
@@ -48,7 +49,7 @@ class Role
         if (this.animation)
         {
             this.role.on("mousedown", (ev) => {
-                HintBar.show('role');
+                MessageBar.show(configMsgHints.clickRole);
                 this.colorNum = (this.colorNum + 1) % this.color.length;
                 this.drawPic();
             });

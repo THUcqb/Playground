@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { URL, SIGNIN, SIGNUP, GETINFO } from '../config/Api';
+import { URL, SIGNIN, SIGNUP, GETINFO } from '../config/api';
 
 export function InvalidCredentialsException(message) {
     this.message = message;

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
-import Button from 'material-ui/Button';
 import Snackbar from 'material-ui/Snackbar';
 import IconButton from 'material-ui/IconButton';
 import CloseIcon from 'material-ui-icons/Close';
@@ -13,18 +12,27 @@ const styles = theme => ({
     },
 });
 
-class CookieAlertBar extends React.Component {
+class MessageBar extends React.Component {
+    constructor(props) {
+        super(props);
+        MessageBar.singleton = this;
+    }
+
     state = {
-        open: true,
+        open: false,
+        msg: '',
     };
 
     handleRequestClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
         }
-
         this.setState({ open: false });
     };
+
+    static show(msg) {
+        MessageBar.singleton.setState({ open: true, msg: msg });
+    }
 
     render() {
         const { classes } = this.props;
@@ -36,21 +44,15 @@ class CookieAlertBar extends React.Component {
                         vertical: 'bottom',
                         horizontal: 'center',
                     }}
-                    open={this.state.open && this.props.open}
-                    autoHideDuration={3000}
+                    open={this.state.open}
+                    autoHideDuration={1000}
                     onRequestClose={this.handleRequestClose}
-                    SnackbarContentProps={{
-                        'aria-describedby': 'message-id',
-                    }}
-                    message={<span id="message-id">Our website uses cookies to improve your experience.</span>}
+                    message={<span id="message-id">{this.state.msg}</span>}
                     action={[
-                        <Button key="undo" color="accent" dense onClick={this.handleRequestClose}>
-                            UNDO
-                        </Button>,
                         <IconButton
                             key="close"
                             aria-label="Close"
-                            color="inherit"
+                            color="accent"
                             className={classes.close}
                             onClick={this.handleRequestClose}
                         >
@@ -63,8 +65,8 @@ class CookieAlertBar extends React.Component {
     }
 }
 
-CookieAlertBar.propTypes = {
+MessageBar.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(CookieAlertBar);
+export default withStyles(styles)(MessageBar);

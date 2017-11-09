@@ -1,7 +1,8 @@
 import EaselJS from "masteryodaeaseljs";
 import TweenJS from "masteryodatweenjs";
 import {preloader} from "../index";
-import HintBar from './Hints';
+import MessageBar from '../utils/MessageBar';
+import { hints as configMsgHints } from '../config/msg';
 
 class Element
 {
@@ -56,22 +57,15 @@ class Element
         if (this.animation)
         {
             this.coins.on("mousedown", (ev) => {
-                HintBar.show('coin');
+                MessageBar.show(configMsgHints.clickWall);
                 let coins = ev.target;
-                TweenJS.Tween.get(coins)
-                    .to({
-                        alpha: 0.5,
-                    }, 1000)
-                    .to({
-                        alpha: 1
-                    }, 300)
+                TweenJS.Tween.get(coins, {loop: 2})
                     .to({
                         alpha: 0.5,
                     }, 1000)
                     .to({
                         alpha: 1
                     }, 300);
-
             });
         }
         this.container.addChild(this.coins);
@@ -126,7 +120,7 @@ class Element
         if (this.animation)
         {
             wall.on("mousedown", (ev) => {
-                HintBar.show('wall');
+                MessageBar.show(configMsgHints.clickWall);
                 let clickedWall = ev.target;
                 TweenJS.Tween.get(clickedWall)
                     .to({

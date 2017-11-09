@@ -1,6 +1,6 @@
 import {Block} from './Block';
 import axios from 'axios';
-import {URL, SAVEMAP, LOADMAP} from '../config/Api';
+import {URL, SAVEMAP, LOADMAP} from '../config/api';
 import {level0, level1, level2, level3, level4, level5} from './Maplevel';
 import {Base} from './Base';
 

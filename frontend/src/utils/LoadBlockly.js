@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { URL, LOADTOOLBOX} from '../config/Api';
+import { URL, LOADTOOLBOX} from '../config/api';
 import Gamepad from "../gamepad/Gamepad";
 
 /**
