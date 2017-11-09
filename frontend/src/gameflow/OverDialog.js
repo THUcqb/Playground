@@ -52,9 +52,10 @@ class OverDialog extends React.Component {
                         <ReplayIcon/>
                     </Button>
                     <Button fab className={classes.button}
-                        onClick={() => this.props.onNext()}
-                        color="primary"
-                        aria-label="next"
+                            disabled={!this.props.nextAvail}
+                            onClick={() => this.props.onNext()}
+                            color="primary"
+                            aria-label="next"
                     >
                         <NextIcon/>
                     </Button>
