@@ -20,7 +20,6 @@ const styles = theme => ({
 class LevelDialog extends React.Component {
     state = {
         chipData: [
-            { key: 0, label: "Level0" },
             { key: 1, label: "Level1" },
             { key: 2, label: "Level2" },
             { key: 3, label: "Level3" },
