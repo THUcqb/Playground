@@ -73,7 +73,8 @@ export class Controller
 
     static step()
     {
-        Base.run_state.next();
+        if (Controller.controller.currentState() == "runnable")
+            Base.run_state.next();
     }
 
     currentState()

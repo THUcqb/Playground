@@ -3,7 +3,6 @@ import Button from 'material-ui/Button';
 import Toolbar from 'material-ui/Toolbar';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import { withStyles } from 'material-ui/styles';
-import { move } from './LogicApi';
 
 const styles = ({
     button: {
