@@ -13,14 +13,14 @@ export function InvalidCredentialsException(message) {
  * @returns {Promise.<T>}
  */
 export function signin(username, password) {
-  return axios
-    .post(URL + SIGNIN, {
-      username,
-      password,
-    })
-    .then(function (response) {
-      return {OK: (response.data.status === 'Successful'), token: response.data.token};
-    })
+    return axios
+        .post(URL + SIGNIN, {
+            username,
+            password,
+        })
+        .then(function (response) {
+            return {OK: (response.data.status === 'Successful'), token: response.data.token};
+        })
 }
 
 /**
