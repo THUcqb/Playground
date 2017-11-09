@@ -1,27 +1,25 @@
-"""backend URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/1.11/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  url(r'^$', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.conf.urls import url, include
-    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
-"""
 from django.conf.urls import url, include
 from django.contrib import admin
-import rest_framework
-from usersystem import views
+from api import usersystem, sources, usermaps
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-	url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-	url(r'^login/$', views.user_login),
-	url(r'^regist/$', views.user_reg),
-	url(r'^logout/$', views.user_logout),
+    url(r'^api/', include('api.urls')),
+    url(r'^users/register$', usersystem.register),
+    url(r'^users/login$', usersystem.login),
+    url(r'^users/logout$', usersystem.logout),
+    url(r'^users/getinfo$', usersystem.get_userinfo),
+    url(r'^users/change_password$', usersystem.change_password),
+    url(r'^users/retrieve_password$', usersystem.retrieve_password),
+    url(r'^users/retrieve_response$', usersystem.retrieve_response),
+    url(r'^users/email_auth$', usersystem.email_auth),
+    url(r'^users/auth_response$', usersystem.auth_response),
+    url(r'^sources/save_maps$', sources.save_maps),
+    url(r'^sources/load_maps$', sources.load_maps),
+    url(r'^blockly/save_toolbox$', sources.save_toolbox),
+    url(r'^blockly/load_toolbox$', sources.load_toolbox),
+    url(r'^maps/save_maps$', usermaps.save_mapsinfo),
+    url(r'^maps/get_maps$', usermaps.get_mapsinfo),
+    url(r'^maps/get_solution$', usermaps.get_solution),
 ]
+

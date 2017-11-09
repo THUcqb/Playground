@@ -2,8 +2,9 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
-from .models import *
+from .models import UserInfo, AMap
 
 # Register your models here.
 
-admin.site.register(User)
+admin.site.register(UserInfo)
+admin.site.register(AMap)
