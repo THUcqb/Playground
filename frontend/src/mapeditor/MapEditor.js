@@ -14,7 +14,8 @@ import Dialog, {
 import PropTypes from 'prop-types';
 import {withStyles} from 'material-ui/styles';
 import Button from 'material-ui/Button';
-import HintBar from '../painter/Hints';
+import MessageBar from '../utils/MessageBar';
+import { hints as configMsgHints } from '../config/msg';
 import {Controller} from '../logic/Controller';
 
 const styles = theme => ({
@@ -208,7 +209,7 @@ class MapEditor extends React.Component
         }
         else
         {
-            HintBar.show('removeRole');
+            MessageBar.show(configMsgHints.removeRole);
         }
         this.map.print();
         this.updateState("map");

@@ -12,7 +12,7 @@ import {withStyles} from 'material-ui/styles';
 import {Controller} from './logic/Controller';
 import {loadToolbox} from "./utils/LoadBlockly";
 import Trajectory from "./painter/Trajectory";
-import HintBar from './painter/Hints';
+import MessageBar from './utils/MessageBar';
 
 const styles = theme => ({
     button: {
@@ -145,7 +145,7 @@ class Scene extends Component {
                         this.handleChooseLevel(this.state.nowLevel);
                     }}
                 />
-                <HintBar/>
+                <MessageBar/>
             </div>
         );
     }

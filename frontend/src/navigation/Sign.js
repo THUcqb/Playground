@@ -22,7 +22,6 @@ class SignButton extends React.Component {
     this.state = {
       open: false,
       isSignUp: false,
-      cookieAlertOpen: false,
       textStatus: {
         disabled: false,
         usernameError: false,
@@ -69,7 +68,7 @@ class SignButton extends React.Component {
         .then(SignInStatus => {
           if (SignInStatus.OK)
           {
-            this.setState({open: false, cookieAlertOpen: true});
+            this.setState({open: false});
             this.props.loggedIn(username, true);
             this.props.cookies.set('token', SignInStatus.token, { path: '/', maxAge: 600});
           }

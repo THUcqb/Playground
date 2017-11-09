@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Button from 'material-ui/Button';
 import Toolbar from 'material-ui/Toolbar';
-import Menu, { MenuItem } from 'material-ui/Menu';
 import { withStyles } from 'material-ui/styles';
 
 const styles = ({
