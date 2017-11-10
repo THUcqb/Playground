@@ -11,6 +11,20 @@ import base64
 import time
 from random import Random
 
+def analyze_token(token_byte):
+    '''
+    Analyze the token received.
+    
+    :param param1: token_byte
+    :returns: user_info
+    '''
+    token_str = token_byte.encode(encoding = "utf-8")
+    token_info = base64.b64decode(token_str)
+    token = token_info.decode('utf-8','ignore')
+    user_info = json.loads(token)
+    
+    return user_info
+
 @csrf_exempt
 def save_mapsinfo(request):
     '''
@@ -29,10 +43,7 @@ def save_mapsinfo(request):
         response_data = {}
         d = json.loads(request.body.decode('utf-8'))
         token_byte = d['token']
-        token_str = token_byte.encode(encoding = "utf-8")
-        token_info = base64.b64decode(token_str)
-        token = token_info.decode('utf-8','ignore')
-        user_info = json.loads(token)
+        user_info = analyze_token(token_byte)
         username = user_info['username']
         now = time.time()
         expire = user_info['exp']
@@ -69,16 +80,13 @@ def get_mapsinfo(request):
               else if the user doesn't exist, return {"status":"NotExisted"}
     '''
     if request.method == 'POST':
-        response_data = {}
         d = json.loads(request.body.decode('utf-8'))
         token_byte = d['token']
-        token_str = token_byte.encode(encoding = "utf-8")
-        token_info = base64.b64decode(token_str)
-        token = token_info.decode('utf-8','ignore')
-        user_info = json.loads(token)
-        username = user_info['username']
         now = time.time()
+        user_info = analyze_token(token_byte)
+        username = user_info['username']
         expire = user_info['exp']
+        response_data = {}
         if expire < now:
             response_data["status"] = "Expiration"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
@@ -108,16 +116,13 @@ def get_solution(request):
               else if the user doesn't exist, return {"status":"NotExisted"}
     '''
     if request.method == 'POST':
-        response_data = {}
         d = json.loads(request.body.decode('utf-8'))
         token_byte = d['token']
-        token_str = token_byte.encode(encoding = "utf-8")
-        token_info = base64.b64decode(token_str)
-        token = token_info.decode('utf-8','ignore')
-        user_info = json.loads(token)
+        user_info = analyze_token(token_byte)
+        response_data = {}
+        now = time.time()
         username = user_info['username']
         level = d['level']
-        now = time.time()
         expire = user_info['exp']
         if expire < now:
             response_data["status"] = "Expiration"
