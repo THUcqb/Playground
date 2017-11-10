@@ -212,17 +212,17 @@ class UsersystemTest(TestCase):
         log_res_1 = self.client.post(login_url, log_json_data_1, content_type = 'application/json')
         log_text_1 = json.loads(log_res_1.content.decode('utf-8'))
         
-        the_data_2 = {'token':log_text_1['token']}
-        the_json_data_2 = json.dumps(the_data_2)
-        the_res_2 = self.client.post(the_url, the_json_data_2, content_type = 'application/json')
-        the_text_2 = json.loads(the_res_2.content.decode('utf-8'))
-        self.assertEqual(the_text_2['status'], 'Actived')
-        
         the_data_3 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwNzk5MzUyMC42OTIsICJ1c2VybmFtZSI6ICJoZWppZSIsICJleHAiOiAxNTA4NTk4MzIwLjY5Mn0='}
         the_json_data_3 = json.dumps(the_data_3)
         the_res_3 = self.client.post(the_url, the_json_data_3, content_type = 'application/json')
         the_text_3 = json.loads(the_res_3.content.decode('utf-8'))
         self.assertEqual(the_text_3['status'], 'Expiration')
+        
+        the_data_2 = {'token':log_text_1['token']}
+        the_json_data_2 = json.dumps(the_data_2)
+        the_res_2 = self.client.post(the_url, the_json_data_2, content_type = 'application/json')
+        the_text_2 = json.loads(the_res_2.content.decode('utf-8'))
+        self.assertEqual(the_text_2['status'], 'Actived')
         
         the_data_4 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwODkxMjc5Mi4yMTEsICJ1c2VybmFtZSI6ICJoZWxsbyIsICJleHAiOiAxNTQwNDQ4NzkyLjIxMX0='}
         the_json_data_4 = json.dumps(the_data_4)

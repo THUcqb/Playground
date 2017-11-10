@@ -73,6 +73,12 @@ class UserMapsTest(TestCase):
         log_res = self.client.post(login_url, log_json_data, content_type = 'application/json')
         log_text = json.loads(log_res.content.decode('utf-8'))
         
+        the_data_4 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwODkxMjc5Mi4yMTEsICJ1c2VybmFtZSI6ICJoZWxsbyIsICJleHAiOiAxNTQwNDQ4NzkyLjIxMX0='}
+        the_json_data_4 = json.dumps(the_data_4)
+        the_res_4 = self.client.post(the_url, the_json_data_4, content_type = 'application/json')
+        the_text_4 = json.loads(the_res_4.content.decode('utf-8'))
+        self.assertEqual(the_text_4['status'], 'NotExisted')
+        
         the_data = {'token':log_text['token']}
         the_json_data = json.dumps(the_data)
         the_res = self.client.post(the_url, the_json_data, content_type = 'application/json')
@@ -84,12 +90,6 @@ class UserMapsTest(TestCase):
         the_res_3 = self.client.post(the_url, the_json_data_3, content_type = 'application/json')
         the_text_3 = json.loads(the_res_3.content.decode('utf-8'))
         self.assertEqual(the_text_3['status'], 'Expiration')
-        
-        the_data_4 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwODkxMjc5Mi4yMTEsICJ1c2VybmFtZSI6ICJoZWxsbyIsICJleHAiOiAxNTQwNDQ4NzkyLjIxMX0='}
-        the_json_data_4 = json.dumps(the_data_4)
-        the_res_4 = self.client.post(the_url, the_json_data_4, content_type = 'application/json')
-        the_text_4 = json.loads(the_res_4.content.decode('utf-8'))
-        self.assertEqual(the_text_4['status'], 'NotExisted')
     
     def test_getsolution(self):
         '''
