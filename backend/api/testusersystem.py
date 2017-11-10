@@ -26,10 +26,10 @@ class ModelTest(TestCase):
         '''
         Test the function of '__str__(self)' in UserInfo in Models.
         '''
-        First = UserInfo.objects.get(username = 'First')
-        Second = UserInfo.objects.get(username = 'Second')
-        self.assertEqual(First.__str__(), 'First')
-        self.assertEqual(Second.__str__(), 'Second')
+        first = UserInfo.objects.get(username = 'First')
+        second = UserInfo.objects.get(username = 'Second')
+        self.assertEqual(first.__str__(), 'First')
+        self.assertEqual(second.__str__(), 'Second')
         
     def test_str_2(self):
         '''

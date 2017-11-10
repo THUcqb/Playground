@@ -13,6 +13,20 @@ from random import Random
 from django.core.mail import send_mail
 from backend.settings import EMAIL_FROM
 
+def analyze_token(token_byte):
+    '''
+    Analyze the token received.
+    
+    :param param1: token_byte
+    :returns: user_info
+    '''
+    token_str = token_byte.encode(encoding = "utf-8")
+    token_info = base64.b64decode(token_str)
+    token = token_info.decode('utf-8','ignore')
+    user_info = json.loads(token)
+    
+    return user_info
+
 @csrf_exempt
 def register(request):
     '''
@@ -117,13 +131,10 @@ def get_userinfo(request):
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
         token_byte = d['token']
-        token_str = token_byte.encode(encoding = "utf-8")
-        token_info = base64.b64decode(token_str)
-        token = token_info.decode('utf-8','ignore')
-        user_info = json.loads(token)
+        now = time.time()
+        user_info = analyze_token(token_byte)
         username = user_info['username']
         response_data = {}
-        now = time.time()
         expire = user_info['exp']
         if expire < now:
             response_data["status"] = "Expiration"
@@ -157,10 +168,7 @@ def change_password(request):
         response_data = {}
         d = json.loads(request.body.decode('utf-8'))
         token_byte = d['token']
-        token_str = token_byte.encode(encoding = "utf-8")
-        token_info = base64.b64decode(token_str)
-        token = token_info.decode('utf-8','ignore')
-        user_info = json.loads(token)
+        user_info = analyze_token(token_byte)
         username = user_info['username']
         old_password = d['old_password']
         new_password = d['new_password']
@@ -198,6 +206,17 @@ def create_code(randomlength = 8):
         res += chars[random.randint(0, length)]
     return res
 
+def emailsend(userinfo):
+    code = create_code()
+    userinfo.auth_code = code
+    userinfo.save()
+    email = userinfo.email
+    email_title = 'Code'
+    email_body = 'Your code is: ' + code
+    send_mail(email_title, email_body, EMAIL_FROM, [email])
+    
+    return code
+
 @csrf_exempt
 def email_auth(request):
     '''
@@ -214,13 +233,10 @@ def email_auth(request):
         response_data = {}
         d = json.loads(request.body.decode('utf-8'))
         token_byte = d['token']
-        token_str = token_byte.encode(encoding = "utf-8")
-        token_info = base64.b64decode(token_str)
-        token = token_info.decode('utf-8','ignore')
-        user_info = json.loads(token)
-        username = user_info['username']
         now = time.time()
+        user_info = analyze_token(token_byte)
         expire = user_info['exp']
+        username = user_info['username']
         if expire < now:
             response_data["status"] = "Expiration"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
@@ -229,13 +245,7 @@ def email_auth(request):
             if userinfo.is_active == True:
                 response_data["status"] = "Actived"
                 return HttpResponse(json.dumps(response_data),content_type="application/json")
-            code = create_code()
-            userinfo.auth_code = code
-            userinfo.save()
-            email = userinfo.email
-            email_title = 'Code'
-            email_body = 'Your code is: ' + code
-            send_mail(email_title, email_body, EMAIL_FROM, [email])
+            code = emailsend(userinfo)
             response_data["status"] = "Successful"
             response_data["code"] = code
             return HttpResponse(json.dumps(response_data),content_type="application/json")
@@ -257,13 +267,10 @@ def auth_response(request):
               else if the user doesn't exist, return {"status":"NotExisted"}
     '''
     if request.method == 'POST':
-        response_data = {}
         d = json.loads(request.body.decode('utf-8'))
+        response_data = {}
         token_byte = d['token']
-        token_str = token_byte.encode(encoding = "utf-8")
-        token_info = base64.b64decode(token_str)
-        token = token_info.decode('utf-8','ignore')
-        user_info = json.loads(token)
+        user_info = analyze_token(token_byte)
         username = user_info['username']
         now = time.time()
         expire = user_info['exp']
@@ -308,13 +315,7 @@ def retrieve_password(request):
             if userinfo.is_active == False:
                 response_data["status"] = "EmailNotActived"
                 return HttpResponse(json.dumps(response_data),content_type="application/json")
-            code = create_code()
-            userinfo.auth_code = code
-            userinfo.save()
-            email = userinfo.email
-            email_title = 'Code'
-            email_body = 'Your code is: ' + code
-            send_mail(email_title, email_body, EMAIL_FROM, [email])
+            code = emailsend(userinfo)
             response_data["status"] = "Successful"
             response_data["code"] = code
             return HttpResponse(json.dumps(response_data),content_type="application/json")
