@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response
 from django.shortcuts import render
 from django.template import Template, Context
 from django.views.decorators.csrf import csrf_exempt
-from .models import AMap
+from .models import AMap, DIYMaps
 import json
 import base64
 import time
@@ -135,3 +135,55 @@ def get_solution(request):
         except AMap.DoesNotExist:
             response_data["status"] = "NotExisted"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
+            
+@csrf_exempt
+def save_diymap(request):
+    '''
+    Save the maps edited by the users.
+    
+    :method: POST
+    :param param1: token
+    :param param2: mapinfo
+    :param param3: mapname
+    :param param4: solution
+    :returns: if succeed, return {"status":"Successful"}
+              else if the token is out of date, return {"status":"Expiration"}
+    '''
+    if request.method == 'POST':
+        d = json.loads(request.body.decode('utf-8'))
+        token_byte = d['token']
+        now = time.time()
+        user_info = analyze_token(token_byte)
+        response_data = {}
+        username = user_info['username']
+        mapname = d['mapname']
+        solution = d['solution']
+        mapinfo = d['mapinfo']
+        expire = user_info['exp']
+        if expire < now:
+            response_data["status"] = "Expiration"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        try:
+            diymap = DIYMaps.objects.get(username = username, mapname = mapname)
+            diymap.solution = solution
+            diymap.mapinfo = mapinfo
+            diymap.save()
+            response_data["status"] = "Successful"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        except DIYMaps.DoesNotExist:
+            diymap = DIYMaps.objects.create(username = username, mapname = mapname, solution = solution, mapinfo = mapinfo)
+            response_data["status"] = "Successful"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+           
+@csrf_exempt
+def get_diysolution(request):
+    '''
+    Save the maps edited by the users.
+    
+    :method: POST
+    :param param1: token
+    :param param2: mapname
+    :returns: if succeed, return {"status":"Successful", "solution":solution}
+              else if the token is out of date, return {"status":"Expiration"}
+              else if the map doesn't exist, return {"status":"NotExisted"}
+    '''
