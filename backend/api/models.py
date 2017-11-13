@@ -43,5 +43,14 @@ class ToolBox(models.Model):
     '''
     Store the toolbox of each level.
     '''
-    level = models.CharField(max_length = 2, default = '')
+    level = models.CharField(max_length = 2, default = '') 
     toolbox = models.TextField(default = '')
+    
+class DIYMaps(models.Model):
+    '''
+    Store the maps edited by the users.
+    '''
+    username = models.CharField(max_length = 100, default = '')
+    mapinfo = models.CharField(max_length = 100, default = '')
+    mapname = models.CharField(max_length = 100, default = '')
+    solution = models.TextField(max_length = 100, default = '')
