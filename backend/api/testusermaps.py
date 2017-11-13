@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.test import TestCase
 import unittest
-from api.models import AMap, UserInfo
+from api.models import AMap, UserInfo, DIYMaps
 from django.test import Client
 import json
 
@@ -130,3 +130,99 @@ class UserMapsTest(TestCase):
         the_res_4 = self.client.post(the_url, the_json_data_4, content_type = 'application/json')
         the_text_4 = json.loads(the_res_4.content.decode('utf-8'))
         self.assertEqual(the_text_4['status'], 'NotExisted')
+        
+    def test_savediymap(self):
+        '''
+        Test the save_diyma API in usersystem.
+        '''
+        login_url = '/users/login'
+        the_url = '/diymaps/save_diymap'
+        UserInfo.objects.create(username = 'master', password = 'wait5683', phonenumber = '119', email = 'master@example.com', is_active = True)
+        log_data = {'username':'master', 'password':'wait5683'}
+        log_json_data = json.dumps(log_data)
+        log_res = self.client.post(login_url, log_json_data, content_type = 'application/json')
+        log_text = json.loads(log_res.content.decode('utf-8'))
+        
+        data1 = {'token':log_text['token'], 'mapinfo':'1111000000100002000010010000211000020001000000000110200000000000000200020010000000002001010000000021', 'mapname':'mymap', 'solution':'while', 'mapid':'null'}
+        jdata1 = json.dumps(data1)
+        res1 = self.client.post(the_url, jdata1, content_type = 'application/json')
+        text1 = json.loads(res1.content.decode('utf-8'))
+        self.assertEqual(text1['status'], 'Successful')
+        
+        data2 = {'token':log_text['token'], 'mapinfo':'1111000000100002000010010000211000020001010000000110200000000000000200020010000000002001010000000021', 'mapname':'yourmap', 'solution':'case', 'mapid':'1'}
+        jdata2 = json.dumps(data2)
+        res2 = self.client.post(the_url, jdata2, content_type = 'application/json')
+        text2 = json.loads(res2.content.decode('utf-8'))
+        self.assertEqual(text2['status'], 'Successful')
+        
+        data3 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwNzk5MzUyMC42OTIsICJ1c2VybmFtZSI6ICJoZWppZSIsICJleHAiOiAxNTA4NTk4MzIwLjY5Mn0=', 'mapinfo':'1111000000100002000010010000211000020001010000000110200000000000000200020010000000002001010000000021', 'mapname':'yourmap', 'solution':'case', 'mapid':'1'}
+        jdata3 = json.dumps(data3)
+        res3 = self.client.post(the_url, jdata3, content_type = 'application/json')
+        text3 = json.loads(res3.content.decode('utf-8'))
+        self.assertEqual(text3['status'], 'Expiration')
+        
+    def test_getdiysolution(self):
+        '''
+        Test the get_diysolution API in usermaps.
+        '''
+        login_url = '/users/login'
+        the_url = '/diymaps/get_solution'
+        UserInfo.objects.create(username = 'master', password = 'wait5683', phonenumber = '119', email = 'master@example.com', is_active = True)
+        DIYMaps.objects.create(username = 'master', mapinfo = '1111000000100002000010010000211000020001010000000110200000000000000200020010000000002001010000000021', mapname = 'mastermap', solution = 'hello')
+        DIYMaps.objects.create(username = 'master', mapinfo = '1111000000100002000010010000211000020121010000000110200000000000000200020010000000002001010000000021', mapname = 'amap', solution = 'hello')
+        log_data = {'username':'master', 'password':'wait5683'}
+        log_json_data = json.dumps(log_data)
+        log_res = self.client.post(login_url, log_json_data, content_type = 'application/json')
+        log_text = json.loads(log_res.content.decode('utf-8'))
+        
+        data1 = {'token':log_text['token'], 'mapid':'1'}
+        jdata1 = json.dumps(data1)
+        res1 = self.client.post(the_url, jdata1, content_type = 'application/json')
+        text1 = json.loads(res1.content.decode('utf-8'))
+        self.assertEqual(text1['solution'], 'hello')
+        
+        data2 = {'token':log_text['token'], 'mapid':'12'}
+        jdata2 = json.dumps(data2)
+        res2 = self.client.post(the_url, jdata2, content_type = 'application/json')
+        text2 = json.loads(res2.content.decode('utf-8'))
+        self.assertEqual(text2['status'], 'NotExisted')
+        
+        data2 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwNzk5MzUyMC42OTIsICJ1c2VybmFtZSI6ICJoZWppZSIsICJleHAiOiAxNTA4NTk4MzIwLjY5Mn0=', 'mapid':'1'}
+        jdata2 = json.dumps(data2)
+        res2 = self.client.post(the_url, jdata2, content_type = 'application/json')
+        text2 = json.loads(res2.content.decode('utf-8'))
+        self.assertEqual(text2['status'], 'Expiration')
+        
+    def test_getdiymaps(self):
+        '''
+        Test the get_diymaps API in usermaps.
+        '''
+        login_url = '/users/login'
+        the_url = '/diymaps/get_diymaps'
+        UserInfo.objects.create(username = 'master', password = 'wait5683', phonenumber = '119', email = 'master@example.com', is_active = True)
+        DIYMaps.objects.create(username = 'master', mapinfo = '1111000000100102000010010010211000020001010000000110200000000000000200020010000000002001010000000021', mapname = 'mastermap', solution = 'hello')
+        DIYMaps.objects.create(username = 'master', mapinfo = '1111000000100202000010010020211000020001010000000110200000000000000200020010000000002001010000000021', mapname = 'mastermap', solution = 'world')
+        DIYMaps.objects.create(username = 'master', mapinfo = '1111000000100002000010010000211000020001010002000110200000000000000200020000000000002001010000000021', mapname = 'mastermap', solution = 'if-else')
+        
+        log_data = {'username':'master', 'password':'wait5683'}
+        log_json_data = json.dumps(log_data)
+        log_res = self.client.post(login_url, log_json_data, content_type = 'application/json')
+        log_text = json.loads(log_res.content.decode('utf-8'))
+        
+        data1 = {'token':log_text['token']}
+        jdata1 = json.dumps(data1)
+        res1 = self.client.post(the_url, jdata1, content_type = 'application/json')
+        text1 = json.loads(res1.content.decode('utf-8'))
+        self.assertEqual(text1['status'], 'Successful')
+        
+        data2 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwODkxMjc5Mi4yMTEsICJ1c2VybmFtZSI6ICJoZWxsbyIsICJleHAiOiAxNTQwNDQ4NzkyLjIxMX0='}
+        jdata2 = json.dumps(data2)
+        res2 = self.client.post(the_url, jdata2, content_type = 'application/json')
+        text2 = json.loads(res2.content.decode('utf-8'))
+        self.assertEqual(text2['status'], 'Successful')
+        
+        data3 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwNzk5MzUyMC42OTIsICJ1c2VybmFtZSI6ICJoZWppZSIsICJleHAiOiAxNTA4NTk4MzIwLjY5Mn0='}
+        jdata3 = json.dumps(data3)
+        res3 = self.client.post(the_url, jdata3, content_type = 'application/json')
+        text3 = json.loads(res3.content.decode('utf-8'))
+        self.assertEqual(text3['status'], 'Expiration')
