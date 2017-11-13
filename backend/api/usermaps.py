@@ -207,4 +207,35 @@ def get_diysolution(request):
         except DIYMaps.DoesNotExist:
             response_data["status"] = "NotExisted"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
-        
+
+@csrf_exempt
+def get_diymaps(request):
+    '''
+    Save the maps edited by the users.
+    
+    :method: POST
+    :param param1: token
+    :returns: if succeed, return {"status":"Successful", mapname:mapname, ...}
+              else if the token is out of date, return {"status":"Expiration"}
+              else if the map doesn't exist, return {"status":"NotExisted"}
+    '''
+    if request.method == 'POST':
+        d = json.loads(request.body.decode('utf-8'))
+        token_byte = d['token']
+        response_data = {}
+        user_info = analyze_token(token_byte)
+        username = user_info['username']
+        now = time.time()
+        expire = user_info['exp']
+        if expire < now:
+            response_data["status"] = "Expiration"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        try:
+            maps = DIYMaps.objects.filter(username = username)
+            for i in range(len(maps)):
+                response_data[maps[i].mapname] = maps[i].mapinfo
+            response_data["status"] = "Successful"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        except DIYMaps.DoesNotExist:
+            response_data["status"] = "NotExisted"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")    

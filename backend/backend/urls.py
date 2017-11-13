@@ -21,5 +21,7 @@ urlpatterns = [
     url(r'^maps/save_maps$', usermaps.save_mapsinfo),
     url(r'^maps/get_maps$', usermaps.get_mapsinfo),
     url(r'^maps/get_solution$', usermaps.get_solution),
+    url(r'^diymaps/save_diymap$', usermaps.save_diymap),
+    url(r'^diymaps/get_solution$', usermaps.get_diysolution),
 ]
 
