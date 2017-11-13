@@ -3,6 +3,7 @@ import axios from 'axios';
 import {URL, SAVEMAP, LOADMAP} from '../config/api';
 import {level0, level1, level2, level3, level4, level5} from './Maplevel';
 import {Base} from './Base';
+import {BaseMapInfo,SlotMapInfo} from './ConstInfo';
 
 class MapInfo
 {
@@ -78,7 +79,7 @@ class Map
      */
     setEmpty(x, y)
     {
-        this.block_list[x][y].info = 0;//空地
+        this.block_list[x][y].info = BaseMapInfo.getElementsByTagName('empty');//空地
     }
 
     /**
@@ -86,7 +87,7 @@ class Map
      */
     setBlock(x, y)
     {
-        this.block_list[x][y].info = 1;//占据
+        this.block_list[x][y].info = BaseMapInfo.getElementsByTagName('block');//占据
     }
 
     /**
@@ -94,7 +95,7 @@ class Map
      */
     setCandy(x, y)
     {
-        this.block_list[x][y].info = 2;//表示积分
+        this.block_list[x][y].info = BaseMapInfo.getElementsByTagName('gold');;//表示积分
     }
 
     /**
@@ -102,15 +103,15 @@ class Map
      */
     setHead(x, y)
     {
-        this.block_list[x][y].info = 3;//头
+        this.block_list[x][y].info = BaseMapInfo.getElementsByTagName('head');//头
     }
 
     /**
-     * set the boday of snake
+     * set the body of snake
      */
     setBody(x, y)
     {
-        this.block_list[x][y].info = 4;//身体
+        this.block_list[x][y].info = BaseMapInfo.getElementsByTagName('body');//身体
     }
 
     /**
@@ -118,7 +119,7 @@ class Map
      */
     setTail(x, y)
     {
-        this.block_list[x][y].info = 5;//尾巴
+        this.block_list[x][y].info = BaseMapInfo.getElementsByTagName('tail');//尾巴
     }
 
     /**
@@ -126,7 +127,7 @@ class Map
      */
     setSlot(x, y)
     {
-        this.slot_map[x][y].info = 1;
+        this.slot_map[x][y].info = SlotMapInfo.getElementsByTagName('block');
     }
 
     /**
@@ -174,12 +175,12 @@ class Map
             slot_map[i] = [];
             for (let n = 0; n < this.SIZE_Y; n++)
             {
-                if (this.block_list[i][n].info === 9)
+                if (this.block_list[i][n].info === BaseMapInfo.getElementsByTagName('birthplace'))
                 {
                     Base.bsnake.init(i, n);
                     this.setHead(i, n);
                 }
-                if (this.block_list[i][n].info === 2)
+                if (this.block_list[i][n].info === BaseMapInfo.getElementsByTagName('gold'))
                 {
                     this.candy += 1;
                 }
