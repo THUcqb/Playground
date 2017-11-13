@@ -1,4 +1,5 @@
 import {Base, Base_task} from './Base';
+import {Map} from './Map';
 
 export class Controller
 {
@@ -60,6 +61,14 @@ export class Controller
     {
         return Base.bsnake;
     }
+    
+    copyBaseMap()
+    {
+        let tempMap = new Map(Base.bmap.SIZE_X,Base.bmap.SIZE_Y);
+        tempMap.editInit();
+        tempMap.copyBlocklist(Base.bmap);
+        return tempMap;
+    }
 
     editNewMap(map)
     {
@@ -76,9 +85,9 @@ export class Controller
 
     }
 
-    save(map)
+    save(name, map)
     {
-
+        Map.editSave(name,map);
     }
 
     static step()
@@ -91,7 +100,6 @@ export class Controller
     {
         if (this.state === "runnable")
         {
-            console.log("current state : " + Base.run_state.state);
             return Base.run_state.state;
         }
         else

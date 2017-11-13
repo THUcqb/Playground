@@ -1,5 +1,5 @@
 import {Base,Base_task} from './Base';
-import {Base_state} from "./Base_state";
+import {Base_tate} from "./Base_state";
 import {Controller} from './Controller';
 
 const readline = require('readline');
@@ -27,12 +27,10 @@ class test{
         if(loop <= 20)
         {
             let op = "";
-            // console.log(loop)
             rl.on('line', (input) => {
                   console.log(`Received: ${input}`);
                    op = input;
                    loop +=1;
-                   // rl.close();
                      console.log(">"+op);
                      if (op === 'w'|| op === 'W')
                     {
@@ -54,7 +52,6 @@ class test{
                         let b4 = new Base("sys","move_right","move");
                         b4.run();
                     }
-                  // this.runGame(loop);
                 });
         }
     }
@@ -133,22 +130,11 @@ class test{
 
 var controller = new Controller();
 
-console.log('----test-basic_move----')
 /*
 *地图编辑的接口见Map.js Controller
 */
-console.log('----test-my_function----')
-
-console.log('-----test-loop---')
-
-// controller.testInit();
-console.log('-----test-check---')
-
 
 let t = new test()
 t.testGameOver();
 
-// console.log('-----test-while---')
-
-// console.log('-----test-AI---')
 
