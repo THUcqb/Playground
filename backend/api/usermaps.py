@@ -187,3 +187,24 @@ def get_diysolution(request):
               else if the token is out of date, return {"status":"Expiration"}
               else if the map doesn't exist, return {"status":"NotExisted"}
     '''
+    if request.method == 'POST':
+        d = json.loads(request.body.decode('utf-8'))
+        token_byte = d['token']
+        user_info = analyze_token(token_byte)
+        username = user_info['username']
+        now = time.time()
+        response_data = {}
+        mapname = d['mapname']
+        expire = user_info['exp']
+        if expire < now:
+            response_data["status"] = "Expiration"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        try:
+            themap = DIYMaps.objects.get(username = username, mapname = mapname)
+            response_data["solution"] = themap.solution
+            response_data["status"] = "Successful"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        except DIYMaps.DoesNotExist:
+            response_data["status"] = "NotExisted"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        
