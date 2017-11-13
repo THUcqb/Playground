@@ -17,7 +17,7 @@ import Button from 'material-ui/Button';
 import MessageBar from '../utils/MessageBar';
 import { hints as configMsgHints } from '../config/msg';
 import {Controller} from '../logic/Controller';
-
+import {BaseMapInfo} from '../logic/ConstInfo';
 const styles = theme => ({
     container: {
         display: 'flex',
@@ -87,9 +87,14 @@ class MapEditor extends React.Component
             "mapSize": 10,
             "element": 0
         };
-        this.map = new Map(10, 10);
-        this.map.editInit();
-        this.map.block_list[0][0].info = 9;
+
+        if (this.map == null)
+        {
+            this.map = new Map(10, 10);
+            this.map.editInit();
+            this.map.block_list[0][0].info = BaseMapInfo.getElementsByTagName('birthplace');
+        }
+       
     }
 
     initialize()
@@ -111,7 +116,7 @@ class MapEditor extends React.Component
     {
         this.map = new Map(this.state.mapSize, this.state.mapSize);
         this.map.editInit();
-        this.map.block_list[0][0].info = 9;
+        this.map.block_list[0][0].info = BaseMapInfo.getElementsByTagName('birthplace');
         this.lastX = 0;
         this.lastY = 0;
         this.background.reset();
@@ -197,12 +202,12 @@ class MapEditor extends React.Component
         let b_x = Math.floor(Number(y / c_max_y * block_size));
 
         let current = Number(this.state.element);
-        if (this.map.block_list[b_x][b_y].info !== 9)
+        if (this.map.block_list[b_x][b_y].info !== BaseMapInfo.getElementsByTagName('birthplace'))
         {
             this.map.block_list[b_x][b_y].info = current;
-            if (current === 9)
+            if (current === BaseMapInfo.getElementsByTagName('birthplace'))
             {
-                if (this.lastX !== -1) this.map.block_list[this.lastX][this.lastY].info = 0;
+                if (this.lastX !== -1) this.map.block_list[this.lastX][this.lastY].info = BaseMapInfo.getElementsByTagName('empty');
                 this.lastX = b_x;
                 this.lastY = b_y;
             }

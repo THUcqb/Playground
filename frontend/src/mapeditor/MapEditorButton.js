@@ -20,6 +20,7 @@ class MapEditorButton extends React.Component
 
     handleClickOpen()
     {
+        
         this.setState({open: true});
     }
 

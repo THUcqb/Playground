@@ -15,7 +15,7 @@ class MapInfo
     }
 }
 
-class Map
+export class Map
 {
     constructor(SIZE_X, SIZE_Y)
     {
@@ -155,13 +155,36 @@ class Map
     static editSave(name, maps)
     {
 
-        Map.save(name, maps.sData);
+        Map.save(name, maps.stringData);
     }
 
     /**
      * load map after
      */
+    copyBlocklist(map)
+    {
+        this.candy = 0;
+        let str = map.stringData;
+        for (let i = 0; i < this.SIZE_X; i++)
+        {
+            for (let n = 0; n < this.SIZE_Y; n++)
+            {
+                let info = Number(str[i * this.SIZE_X + n]);
 
+                this.block_list[i][n].info = info;
+                if (info === BaseMapInfo.getElementsByTagName('gold'))
+                {
+                    this.candy += 1;
+                }
+                if (info === BaseMapInfo.getElementsByTagName('head'))
+                {
+                    Base.bsnake.init(i, n);
+                    this.setHead(i, n);
+                }
+            }
+        }
+    }
+    
     reloadEditorMap(map)
     {
         this.block_list = map.block_list;
@@ -281,8 +304,7 @@ class Map
      */
     print()
     {
-        let a = this.dData();
-        console.log(this.SIZE_X + " " + this.SIZE_Y);
+        let a = this.detialData();
         let str = "";
         for (let i = 0; i < this.SIZE_X; i++)
         {
@@ -325,7 +347,7 @@ class Map
     /**
      * (string list)return map info with snake
      */
-    dData()
+    detialData()
     {
         let block_list = [];
         for (let i = 0; i < this.SIZE_X; i++)
@@ -341,7 +363,7 @@ class Map
         return block_list;
     }
 
-    sData()
+    stringData()
     {
         let block_list = "";
         for (let i = 0; i < this.SIZE_X; i++)
@@ -381,11 +403,7 @@ class Map
     /**
      * return map Basic info
      */
-    data()
-    {
-        return this.block_list;
-    }
-
+   
     slotData()
     {
         return this.slot_map;
