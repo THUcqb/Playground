@@ -155,6 +155,12 @@ class UserMapsTest(TestCase):
         text2 = json.loads(res2.content.decode('utf-8'))
         self.assertEqual(text2['status'], 'Successful')
         
+        data2 = {'token':log_text['token'], 'mapinfo':'1111000000100002000010010000211000020001010000000110200000000000000200020010000000002001010000000021', 'mapname':'yourmap', 'solution':'case', 'mapid':'12'}
+        jdata2 = json.dumps(data2)
+        res2 = self.client.post(the_url, jdata2, content_type = 'application/json')
+        text2 = json.loads(res2.content.decode('utf-8'))
+        self.assertEqual(text2['status'], 'NotExisted')
+        
         data3 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwNzk5MzUyMC42OTIsICJ1c2VybmFtZSI6ICJoZWppZSIsICJleHAiOiAxNTA4NTk4MzIwLjY5Mn0=', 'mapinfo':'1111000000100002000010010000211000020001010000000110200000000000000200020010000000002001010000000021', 'mapname':'yourmap', 'solution':'case', 'mapid':'1'}
         jdata3 = json.dumps(data3)
         res3 = self.client.post(the_url, jdata3, content_type = 'application/json')

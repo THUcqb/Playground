@@ -149,6 +149,7 @@ def save_diymap(request):
     :param param5: mapid
     :returns: if succeed, return {"status":"Successful"}
               else if the token is out of date, return {"status":"Expiration"}
+              else if the map hasn't been created, return {"status":"NotEixsted"}
     '''
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
@@ -179,7 +180,8 @@ def save_diymap(request):
                 response_data["status"] = "Successful"
                 return HttpResponse(json.dumps(response_data),content_type="application/json")
             except DIYMaps.DoesNotExist:
-                pass            
+                response_data["status"] = "NotExisted"
+                return HttpResponse(json.dumps(response_data),content_type="application/json")            
            
 @csrf_exempt
 def get_diysolution(request):
@@ -236,15 +238,11 @@ def get_diymaps(request):
         if expire < now:
             response_data["status"] = "Expiration"
             return HttpResponse(json.dumps(response_data), content_type="application/json")
-        try:
-            maps = DIYMaps.objects.filter(username = username)
-            for i in range(len(maps)):
-                themap = {}
-                themap["mapinfo"] = maps[i].mapinfo
-                themap["mapid"] = str(maps[i].id)
-                response_data[maps[i].mapname] = themap
-            response_data["status"] = "Successful"
-            return HttpResponse(json.dumps(response_data),content_type="application/json")
-        except DIYMaps.DoesNotExist:
-            response_data["status"] = "NotExisted"
-            return HttpResponse(json.dumps(response_data),content_type="application/json")    
+        maps = DIYMaps.objects.filter(username = username)
+        for i in range(len(maps)):
+            themap = {}
+            themap["mapinfo"] = maps[i].mapinfo
+            themap["mapid"] = str(maps[i].id)
+            response_data[maps[i].mapname] = themap
+        response_data["status"] = "Successful"
+        return HttpResponse(json.dumps(response_data),content_type="application/json")
