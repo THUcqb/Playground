@@ -44,7 +44,7 @@ function initApi(interpreter, scope) {
 }
 
 /**
- * step
+ * automatic executing
  */
 function autoStep(runTime) {
     if (runTime === Controller.getLevelTime() && interpreter.step()) {
@@ -57,8 +57,21 @@ function autoStep(runTime) {
  * @param code
  */
 export function run(code) {
-    Blockly.JavaScript.addReservedWords('code');
+    window.LoopTrap = 1000;
+    Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if(--window.LoopTrap == 0) throw "Infinite loop.";\n';
 
     interpreter = new Interpreter(code, initApi);
     autoStep(Controller.getLevelTime());
+}
+
+/**
+ * Execute single step
+ * @returns {boolean} - if nothing to run, return false
+ */
+export function singleStep() {
+    return interpreter.step();
+}
+
+export function prepareDebug(code) {
+    interpreter = new Interpreter(code, initApi);
 }

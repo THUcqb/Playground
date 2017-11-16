@@ -2,7 +2,26 @@ import React, { Component } from 'react';
 import GameActions from './GameActions';
 import Blockly from 'node-blockly/browser';
 import './BlocklyDef';
-import { run } from './LogicApi';
+import { run, prepareDebug, singleStep } from './GamepadLogic';
+
+const blocklyWorkspaceXml = {
+    toolbox: "<xml><category name=\"Action\" colour=\"#935ba5\"></category></xml>",
+    grid: {
+        spacing: 20,
+        length: 3,
+        colour: '#ccc',
+        snap: true
+    },
+    zoom:
+        {
+            controls: true,
+            wheel: true,
+            startScale: 1.0,
+            maxScale: 3,
+            minScale: 0.3,
+            scaleSpeed: 1.2
+        },
+};
 
 /**
  * The gamepad field which consists of a action bar and the blocklyDiv.
@@ -13,28 +32,13 @@ class Gamepad extends Component {
 
     constructor(props) {
         super(props);
-        Gamepad.clearWorkspace.bind(this);
-        Gamepad.submitWorkspace.bind(this);
         Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
         Blockly.JavaScript.addReservedWords('highlightBlock');
+        Blockly.JavaScript.addReservedWords('code');
     }
 
     componentDidMount() {
-        Gamepad.workspace = Blockly.inject('blocklyDiv', {
-            toolbox: "<xml><category name=\"Action\" colour=\"#935ba5\"></category></xml>",
-            grid: {spacing: 20,
-                    length: 3,
-                    colour: '#ccc',
-                    snap: true},
-            zoom:
-                {controls: true,
-                    wheel: true,
-                    startScale: 1.0,
-                    maxScale: 3,
-                    minScale: 0.3,
-                    scaleSpeed: 1.2},
-
-        });
+        Gamepad.workspace = Blockly.inject('blocklyDiv', blocklyWorkspaceXml);
     }
 
     /**
@@ -48,16 +52,28 @@ class Gamepad extends Component {
      * Submit and run the code.
      */
     static submitWorkspace() {
-        window.LoopTrap = 1000;
-        Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if(--window.LoopTrap == 0) throw "Infinite loop.";\n';
         run(Blockly.JavaScript.workspaceToCode(Gamepad.workspace));
+    }
+
+    /**
+     * handle debug start and stop
+     */
+    static debugWorkspace(debugging) {
+        //  If start debuggin
+        if (debugging) {
+            prepareDebug(Blockly.JavaScript.workspaceToCode(Gamepad.workspace));
+        }
+        //  Stop debugging
+        else {
+
+        }
     }
 
     /**
      * Single step mode
      */
-    static singleStep() {
-
+    static debugStep() {
+        singleStep();
     }
 
     /**
@@ -94,7 +110,8 @@ class Gamepad extends Component {
                 <GameActions
                     clear={Gamepad.clearWorkspace}
                     submit={Gamepad.submitWorkspace}
-                    step={Gamepad.singleStep}
+                    debug={(debugging) => Gamepad.debugWorkspace(debugging)}
+                    step={Gamepad.debugStep}
                 />
                 <div id="blocklyDiv" style={{height: "70vh", width: "100%"}}/>
             </div>
