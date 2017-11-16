@@ -27,10 +27,10 @@ class LevelDialog extends React.Component {
             { key: 5, label: "Level5" },
         ],
     };
-    
+
     render() {
         const { classes } = this.props;
-        
+
         return (
             <Dialog
                 open={this.props.open}
@@ -45,7 +45,9 @@ class LevelDialog extends React.Component {
                                     label={data.label}
                                     key={data.key}
                                     className={classes.chip}
-                                    onClick={() => this.props.onChooseLevel(data.key)}
+                                    onClick={this.props.levelsInfo[data.key.toString()].unlock
+                                        ? () => this.props.onChooseLevel(data.key)
+                                        : null}
                                 />
                             );
                         })}

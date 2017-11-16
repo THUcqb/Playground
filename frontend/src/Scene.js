@@ -13,7 +13,7 @@ import {Controller} from './logic/Controller';
 import Trajectory from "./painter/Trajectory";
 import MessageBar from './utils/MessageBar';
 import {loadToolbox} from "./utils/LoadBlockly";
-import {loadLevelSolution, saveLevelInfo} from "./utils/LevelInfo";
+import {loadLevelsInfo, loadLevelSolution, saveLevelInfo} from "./utils/LevelInfo";
 
 const styles = theme => ({
     button: {
@@ -38,6 +38,13 @@ class Scene extends Component {
             nowLevel: 1,
             dialogTitle: "Game Over",
         };
+        this.levelsInfo = {
+            '1': {unlock: true, stars: '0'},
+            '2': {unlock: false, stars: '0'},
+            '3': {unlock: false, stars: '0'},
+            '4': {unlock: false, stars: '0'},
+            '5': {unlock: false, stars: '0'},
+        }
     }
 
     reset()
@@ -71,6 +78,18 @@ class Scene extends Component {
         loadLevelSolution(levelNum);
 
         this.reset();
+    }
+
+    handleOpenLevelDialog()
+    {
+        loadLevelsInfo()
+            .then((response) => {
+                if (response.OK)
+                {
+                    this.levelsInfo = response.levelsInfo;
+                    this.setState({levelDialogOpen: true});
+                }
+            });
     }
 
     handleGameOver()
@@ -120,11 +139,12 @@ class Scene extends Component {
                     <Button raised
                             className={classes.button}
                             color="primary"
-                            onClick={() => this.setState({levelDialogOpen: true})}>
+                            onClick={() => this.handleOpenLevelDialog()}>
                         Levels
                     </Button>
                     <LevelDialog
                         open={this.state.levelDialogOpen}
+                        levelsInfo={this.levelsInfo}
                         onRequestClose={() => this.setState({levelDialogOpen: false})}
                         onChooseLevel={(levelNum) =>
                         {
@@ -143,7 +163,7 @@ class Scene extends Component {
                     dialogTitle={this.state.dialogTitle}
                     nextAvail={this.isNextLevelAvailable()}
                     onNext={() => this.handleNextLevel()}
-                    onLevels={() => this.setState({levelDialogOpen: true})}
+                    onLevels={() => this.handleOpenLevelDialog()}
                     onReplay={() =>
                     {
                         this.setState({overDialogOpen: false});
