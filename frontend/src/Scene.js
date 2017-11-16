@@ -8,6 +8,7 @@ import MapEditorButton from './mapeditor/MapEditorButton';
 import LevelDialog from './gameflow/LevelDialog';
 import OverDialog from './gameflow/OverDialog';
 import Button from 'material-ui/Button';
+import ReplayIcon from 'material-ui-icons/Replay';
 import {withStyles} from 'material-ui/styles';
 import {Controller} from './logic/Controller';
 import Trajectory from "./painter/Trajectory";
@@ -123,19 +124,29 @@ class Scene extends Component {
                             onClick={() => this.setState({levelDialogOpen: true})}>
                         Levels
                     </Button>
-                    <LevelDialog
-                        open={this.state.levelDialogOpen}
-                        onRequestClose={() => this.setState({levelDialogOpen: false})}
-                        onChooseLevel={(levelNum) =>
-                        {
-                            this.handleChooseLevel(levelNum);
-                            this.setState({
-                                overDialogOpen: false,
+                        <LevelDialog
+                            open={this.state.levelDialogOpen}
+                            onRequestClose={() => this.setState({levelDialogOpen: false})}
+                            onChooseLevel={(levelNum) =>
+                            {
+                                this.handleChooseLevel(levelNum);
+                                this.setState({
+                                    overDialogOpen: false,
                                 levelDialogOpen: false
-                            });
-                        }}
-                    />
+                                });
+                            }}
+                        />
                     <MapEditorButton color="primary"/>
+                    <Button fab className={classes.button}
+                            onClick={() => {
+                                this.setState({overDialogOpen: false});
+                                this.handleChooseLevel(this.state.nowLevel);
+                            }}
+                            color="primary"
+                            aria-label="replay"
+                    >
+                        <ReplayIcon/>
+                    </Button>
                 </Toolbar>
                 <canvas id="canvasScene" ref="canvasScene" width="600" height="600"/>
                 <OverDialog
