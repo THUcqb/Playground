@@ -16,6 +16,8 @@ class Gamepad extends Component {
         super(props);
         Gamepad.clearWorkspace.bind(this);
         Gamepad.submitWorkspace.bind(this);
+        Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
+        Blockly.JavaScript.addReservedWords('highlightBlock');
     }
 
     componentDidMount() {
@@ -47,7 +49,6 @@ class Gamepad extends Component {
      * View the code converted from blockly in the workspace.
      */
     static viewWorkspace() {
-        //TODO: show the code of the workspace properly
         let code = Blockly.JavaScript.workspaceToCode(Gamepad.workspace);
         MessageBar.show(code);
     }
@@ -59,6 +60,13 @@ class Gamepad extends Component {
         window.LoopTrap = 1000;
         Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if(--window.LoopTrap == 0) throw "Infinite loop.";\n';
         run(Blockly.JavaScript.workspaceToCode(Gamepad.workspace));
+    }
+
+    /**
+     * Single step mode
+     */
+    static singleStep() {
+
     }
 
     /**
@@ -96,6 +104,7 @@ class Gamepad extends Component {
                     clear={Gamepad.clearWorkspace}
                     view={Gamepad.viewWorkspace}
                     submit={Gamepad.submitWorkspace}
+                    step={Gamepad.singleStep}
                 />
                 <div id="blocklyDiv" style={{height: "70vh", width: "100%"}}/>
             </div>

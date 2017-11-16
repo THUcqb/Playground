@@ -35,6 +35,10 @@ class GameActions extends Component {
         this.props.submit();
     };
 
+    handleStep() {
+        this.props.step();
+    }
+
     render() {
         const { classes } = this.props;
 
@@ -51,6 +55,10 @@ class GameActions extends Component {
                 <Button raised className={classes.button}
                         onClick={() => this.handleSubmit()}>
                     Submit
+                </Button>
+                <Button raised className={classes.button}
+                        onClick={() => this.handleStep()}>
+                    Step
                 </Button>
             </Toolbar>
         )
