@@ -62,7 +62,7 @@ export class Controller
         return Base.bsnake;
     }
     
-    copyBaseMap()
+    static copyBaseMap()
     {
         let tempMap = new Map(Base.bmap.SIZE_X,Base.bmap.SIZE_Y);
         tempMap.editInit();
@@ -85,14 +85,14 @@ export class Controller
 
     }
 
-    save(name, map)
+    static save(name, map)
     {
-        Map.editSave(name,map);
+        Map.editSave(name, map);
     }
 
     static step()
     {
-        if (Controller.controller.currentState() == "runnable")
+        if (Controller.controller.currentState() === "runnable")
             Base.run_state.next();
     }
 

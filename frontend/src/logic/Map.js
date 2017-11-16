@@ -3,7 +3,7 @@ import axios from 'axios';
 import {URL, SAVEMAP, LOADMAP} from '../config/api';
 import {level0, level1, level2, level3, level4, level5} from './Maplevel';
 import {Base} from './Base';
-import {BaseMapInfo,SlotMapInfo} from './ConstInfo';
+import {BaseMapInfo, SlotMapInfo} from './ConstInfo';
 
 class MapInfo
 {
@@ -95,7 +95,7 @@ export class Map
      */
     setCandy(x, y)
     {
-        this.block_list[x][y].info = BaseMapInfo.getElementsByTagName('gold');;//表示积分
+        this.block_list[x][y].info = BaseMapInfo.getElementsByTagName('gold');//表示积分
     }
 
     /**
@@ -164,7 +164,7 @@ export class Map
     copyBlocklist(map)
     {
         this.candy = 0;
-        let str = map.stringData;
+        let str = map.stringData();
         for (let i = 0; i < this.SIZE_X; i++)
         {
             for (let n = 0; n < this.SIZE_Y; n++)
@@ -184,7 +184,7 @@ export class Map
             }
         }
     }
-    
+
     reloadEditorMap(map)
     {
         this.block_list = map.block_list;
@@ -304,7 +304,7 @@ export class Map
      */
     print()
     {
-        let a = this.detialData();
+        let a = this.detailData();
         let str = "";
         for (let i = 0; i < this.SIZE_X; i++)
         {
@@ -347,7 +347,7 @@ export class Map
     /**
      * (string list)return map info with snake
      */
-    detialData()
+    detailData()
     {
         let block_list = [];
         for (let i = 0; i < this.SIZE_X; i++)
@@ -403,7 +403,7 @@ export class Map
     /**
      * return map Basic info
      */
-   
+
     slotData()
     {
         return this.slot_map;
