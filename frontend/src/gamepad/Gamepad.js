@@ -61,6 +61,34 @@ class Gamepad extends Component {
         run(Blockly.JavaScript.workspaceToCode(Gamepad.workspace));
     }
 
+    /**
+     * Export the current blockly workspace
+     * @returns {string}
+     */
+    static dumpWorkspace() {
+        let xml = Blockly.Xml.workspaceToDom(Gamepad.workspace);
+        let xml_text = Blockly.Xml.domToText(xml);
+        return xml_text;
+    }
+
+    /**
+     * Load workspace from saved text in xml form
+     * @param xml_text
+     */
+    static loadWorkspace(xml_text) {
+        Gamepad.clearWorkspace();
+        let xml = Blockly.Xml.textToDom(xml_text);
+        Blockly.Xml.domToWorkspace(xml, Gamepad.workspace);
+    }
+
+    /**
+     * Return the score of the current workspace
+     * @returns {number}
+     */
+    static getScore() {
+        return 1;
+    }
+
     render() {
         return (
             <div className="Operation">

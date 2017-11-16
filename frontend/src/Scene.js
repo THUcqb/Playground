@@ -13,6 +13,9 @@ import {Controller} from './logic/Controller';
 import {loadToolbox} from "./utils/LoadBlockly";
 import Trajectory from "./painter/Trajectory";
 import MessageBar from './utils/MessageBar';
+import { getCookie } from "./utils/Auth";
+import { loadLevelsInfo, loadLevelSolution, saveLevelInfo} from "./utils/LevelInfo";
+import Gamepad from "./gamepad/Gamepad";
 
 const styles = theme => ({
     button: {
@@ -65,13 +68,16 @@ class Scene extends Component {
         this.setState({nowLevel: levelNum});
         this.stage.removeAllChildren();
         Controller.controller.switchLevel(levelNum);
-        //Controller.controller.getSnake().init(5, 5);
+
         loadToolbox(levelNum);
+        loadLevelSolution(levelNum);
+
         this.reset();
     }
 
     handleGameOver()
     {
+        saveLevelInfo(this.state.nowLevel);
         this.isOver = true;
         this.setState({
             overDialogOpen: true,
@@ -81,6 +87,7 @@ class Scene extends Component {
 
     handleSuccess()
     {
+        saveLevelInfo(this.state.nowLevel);
         this.isOver = true;
         this.setState({
             overDialogOpen: true,
