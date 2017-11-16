@@ -3,6 +3,7 @@ import Interpreter from 'js-interpreter';
 import { Controller }from '../logic/Controller';
 import { Base } from "../logic/Base";
 import Gamepad from './Gamepad';
+import { Scene } from '../Scene';
 
 /**
  * To stop adding things when map status reloaded.
@@ -48,7 +49,7 @@ function initApi(interpreter, scope) {
  */
 function autoStep(runTime) {
     if (runTime === Controller.getLevelTime() && interpreter.step()) {
-        window.setTimeout(() => autoStep(runTime), 20);
+        window.setTimeout(() => autoStep(runTime), 30);
     }
 }
 
@@ -61,6 +62,7 @@ export function run(code) {
     Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if(--window.LoopTrap == 0) throw "Infinite loop.";\n';
 
     interpreter = new Interpreter(code, initApi);
+    Scene.handleRestart();
     autoStep(Controller.getLevelTime());
 }
 
@@ -69,9 +71,17 @@ export function run(code) {
  * @returns {boolean} - if nothing to run, return false
  */
 export function singleStep() {
+    //  Increase step granularity.
+    for (let i = 0; i < 10; i++)
+        interpreter.step();
     return interpreter.step();
 }
 
 export function prepareDebug(code) {
     interpreter = new Interpreter(code, initApi);
+    Scene.handleRestart();
+}
+
+export function finishDebug(code) {
+    Scene.handleRestart();
 }

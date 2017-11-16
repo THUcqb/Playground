@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import GameActions from './GameActions';
 import Blockly from 'node-blockly/browser';
 import './BlocklyDef';
-import { run, prepareDebug, singleStep } from './GamepadLogic';
+import { run, prepareDebug, singleStep, finishDebug } from './GamepadLogic';
 
 const blocklyWorkspaceXml = {
     toolbox: "<xml><category name=\"Action\" colour=\"#935ba5\"></category></xml>",
@@ -59,13 +59,11 @@ class Gamepad extends Component {
      * handle debug start and stop
      */
     static debugWorkspace(debugging) {
-        //  If start debuggin
         if (debugging) {
             prepareDebug(Blockly.JavaScript.workspaceToCode(Gamepad.workspace));
         }
-        //  Stop debugging
         else {
-
+            finishDebug();
         }
     }
 

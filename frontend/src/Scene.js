@@ -25,13 +25,16 @@ const styles = theme => ({
 /**
  * The app's scene part
  */
-class Scene extends Component {
+export class Scene extends Component {
     canvasScene;
     CanvasDiv;
+
+    static singleton = null;
 
     constructor()
     {
         super();
+        Scene.singleton = this;
         this.handleResize = this.handleResize.bind(this);
         this.state = {
             overDialogOpen: false,
@@ -67,11 +70,20 @@ class Scene extends Component {
         this.setState({nowLevel: levelNum});
         this.stage.removeAllChildren();
         Controller.controller.switchLevel(levelNum);
+        this.reset();
 
         loadToolbox(levelNum);
         loadLevelSolution(levelNum);
+    }
 
-        this.reset();
+    /**
+     * Refresh the scene and reset the controller when the user click submit
+     */
+    static handleRestart()
+    {
+        Scene.singleton.stage.removeAllChildren();
+        Controller.controller.switchLevel(Scene.singleton.state.nowLevel);
+        Scene.singleton.reset();
     }
 
     handleGameOver()
