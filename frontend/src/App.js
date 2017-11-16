@@ -14,17 +14,20 @@ import { instanceOf } from 'prop-types';
 const styles = theme => ({
     root: {
         flexGrow: 1,
-        overflow: "hidden",
         marginTop: 64,
+        height: "100%",
     },
     container: {
-        bottom: 0,
+        margin: 0,
+        height: "90%",
+        display: "flex",
+    },
+    item: {
+        display: "flex",
     },
     paper: {
-        textAlign: 'center',
-        margin: theme.spacing.unit * 2,
-        padding: theme.spacing.unit * 2,
-        color: theme.palette.text.secondary,
+        display: "flex",
+        width: "100%",
     },
     landingPaper: {
         textAlign: 'center',
@@ -97,17 +100,17 @@ class App extends Component
             );
         else
             body = (
-                <div>
+                <div style={{height: "100%"}}>
                     <Navigation className={classes.appbar}/>
                     <Grid container className={classes.container}>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={6} className={classes.item}>
                             <Paper className={classes.paper}>
                                 <Scene/>
                             </Paper>
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={6} className={classes.item}>
                             <Paper className={classes.paper}>
-                                <Gamepad />
+                                <Gamepad/>
                             </Paper>
                         </Grid>
                     </Grid>

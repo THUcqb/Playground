@@ -128,7 +128,7 @@ export class Scene extends Component {
         const {classes} = this.props;
         return (
             <div className="CanvasDiv" ref="CanvasDiv">
-                <Toolbar color="primary">
+                <Toolbar color="primary" style={{padding: 0}}>
                     <Button raised
                             className={classes.button}
                             color="primary"

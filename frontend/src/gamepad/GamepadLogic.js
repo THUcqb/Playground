@@ -6,12 +6,6 @@ import Gamepad from './Gamepad';
 import { Scene } from '../Scene';
 
 /**
- * To stop adding things when map status reloaded.
- * @type {number}
- */
-let runTime = 0;
-
-/**
  * Move toward a function.
  * @param op
  */
