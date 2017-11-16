@@ -3,6 +3,7 @@ import GameActions from './GameActions';
 import Blockly from 'node-blockly/browser';
 import './BlocklyDef';
 import { run } from './LogicApi';
+import MessageBar from '../utils/MessageBar';
 
 /**
  * The gamepad field which consists of a action bar and the blocklyDiv.
@@ -13,8 +14,8 @@ class Gamepad extends Component {
 
     constructor(props) {
         super(props);
-        this.clearWorkspace.bind(this);
-        this.submitWorkspace.bind(this);
+        Gamepad.clearWorkspace.bind(this);
+        Gamepad.submitWorkspace.bind(this);
     }
 
     componentDidMount() {
@@ -38,34 +39,63 @@ class Gamepad extends Component {
     /**
      * Clear the coding workspace.
      */
-    clearWorkspace() {
+    static clearWorkspace() {
         Gamepad.workspace.clear();
     }
 
     /**
      * View the code converted from blockly in the workspace.
      */
-    viewWorkspace() {
+    static viewWorkspace() {
         //TODO: show the code of the workspace properly
-        // Blockly.JavaScript.workspaceToCode(Gamepad.workspace);
+        let code = Blockly.JavaScript.workspaceToCode(Gamepad.workspace);
+        MessageBar.show(code);
     }
 
     /**
      * Submit and run the code.
      */
-    submitWorkspace() {
+    static submitWorkspace() {
         window.LoopTrap = 1000;
         Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if(--window.LoopTrap == 0) throw "Infinite loop.";\n';
         run(Blockly.JavaScript.workspaceToCode(Gamepad.workspace));
+    }
+
+    /**
+     * Export the current blockly workspace
+     * @returns {string}
+     */
+    static dumpWorkspace() {
+        let xml = Blockly.Xml.workspaceToDom(Gamepad.workspace);
+        let xml_text = Blockly.Xml.domToText(xml);
+        return xml_text;
+    }
+
+    /**
+     * Load workspace from saved text in xml form
+     * @param xml_text
+     */
+    static loadWorkspace(xml_text) {
+        Gamepad.clearWorkspace();
+        let xml = Blockly.Xml.textToDom(xml_text);
+        Blockly.Xml.domToWorkspace(xml, Gamepad.workspace);
+    }
+
+    /**
+     * Return the score of the current workspace
+     * @returns {number}
+     */
+    static getScore() {
+        return 1;
     }
 
     render() {
         return (
             <div className="Operation">
                 <GameActions
-                    clear={this.clearWorkspace}
-                    view={this.viewWorkspace}
-                    submit={this.submitWorkspace}
+                    clear={Gamepad.clearWorkspace}
+                    view={Gamepad.viewWorkspace}
+                    submit={Gamepad.submitWorkspace}
                 />
                 <div id="blocklyDiv" style={{height: "70vh", width: "100%"}}/>
             </div>

@@ -10,9 +10,10 @@ import OverDialog from './gameflow/OverDialog';
 import Button from 'material-ui/Button';
 import {withStyles} from 'material-ui/styles';
 import {Controller} from './logic/Controller';
-import {loadToolbox} from "./utils/LoadBlockly";
 import Trajectory from "./painter/Trajectory";
 import MessageBar from './utils/MessageBar';
+import {loadToolbox} from "./utils/LoadBlockly";
+import {loadLevelSolution, saveLevelInfo} from "./utils/LevelInfo";
 
 const styles = theme => ({
     button: {
@@ -65,13 +66,16 @@ class Scene extends Component {
         this.setState({nowLevel: levelNum});
         this.stage.removeAllChildren();
         Controller.controller.switchLevel(levelNum);
-        //Controller.controller.getSnake().init(5, 5);
+
         loadToolbox(levelNum);
+        loadLevelSolution(levelNum);
+
         this.reset();
     }
 
     handleGameOver()
     {
+        saveLevelInfo(this.state.nowLevel);
         this.isOver = true;
         this.setState({
             overDialogOpen: true,
@@ -81,6 +85,7 @@ class Scene extends Component {
 
     handleSuccess()
     {
+        saveLevelInfo(this.state.nowLevel);
         this.isOver = true;
         this.setState({
             overDialogOpen: true,
