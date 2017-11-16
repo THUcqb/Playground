@@ -20,11 +20,14 @@ export function move(op) {
     Controller.step();
 }
 
+let highlighting = false;
+
 /**
  * Highlight the running block.
  * @param id
  */
 function highlightBlock(id) {
+    highlighting = true;
     Gamepad.workspace.highlightBlock(id);
 }
 
@@ -49,7 +52,10 @@ function initApi(interpreter, scope) {
  */
 function autoStep(runTime) {
     if (runTime === Controller.getLevelTime() && interpreter.step()) {
-        window.setTimeout(() => autoStep(runTime), 30);
+        while (!highlighting && interpreter.step())
+            ;
+        highlighting = false;
+        window.setTimeout(() => autoStep(runTime), 500);
     }
 }
 
@@ -61,7 +67,7 @@ export function run(code) {
     window.LoopTrap = 1000;
     Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if(--window.LoopTrap == 0) throw "Infinite loop.";\n';
 
-    interpreter = new Interpreter(code, initApi);
+    interpreter = new Interpreter(code + 'highlightBlock("xxx");', initApi);
     Scene.handleRestart();
     autoStep(Controller.getLevelTime());
 }
@@ -72,14 +78,17 @@ export function run(code) {
  */
 export function singleStep() {
     //  Increase step granularity.
-    for (let i = 0; i < 10; i++)
-        interpreter.step();
+    while (!highlighting && interpreter.step())
+        ;
+    highlighting = false;
     return interpreter.step();
 }
 
 export function prepareDebug(code) {
-    interpreter = new Interpreter(code, initApi);
+    interpreter = new Interpreter(code + 'highlightBlock("xxx");', initApi);
     Scene.handleRestart();
+    //  Move highlight to the first block
+    singleStep();
 }
 
 export function finishDebug(code) {

@@ -9,37 +9,41 @@ import Build from 'material-ui-icons/Build';
 import NavigateNext from 'material-ui-icons/NavigateNext';
 import Replay from 'material-ui-icons/Replay';
 
+const buttonStyle = theme => ({
+    margin: theme.spacing.unit,
+    marginLeft: 0,
+    color: 'white',
+});
+
 const styles = theme => ({
     clearButton: {
-        margin: theme.spacing.unit,
-        color: 'white',
+        ...buttonStyle(theme),
         background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
     },
     submitButton: {
-        margin: theme.spacing.unit,
-        color: 'white',
+        ...buttonStyle(theme),
         background: 'linear-gradient(45deg, #FF8E53 30%, #8BC34A 90%)',
     },
     debugButton: {
-        margin: theme.spacing.unit,
-        color: 'white',
+        ...buttonStyle(theme),
         background: 'linear-gradient(45deg, #8BC34A 30%, #03A9F4 90%)',
     },
     stepButton: {
-        margin: theme.spacing.unit,
-        color: 'white',
+        ...buttonStyle(theme),
         background: 'linear-gradient(45deg, #03A9F4 30%, #3F51B5 90%)',
     },
     restartDebugButton: {
-        margin: theme.spacing.unit,
-        color: 'white',
-        background: 'linear-gradient(45deg, #3F51B5 30%, #000000 90%)',
+        ...buttonStyle(theme),
+        background: 'linear-gradient(45deg, #03A9F4 30%, #000000 90%)',
     },
     leftIcon: {
         marginRight: theme.spacing.unit,
     },
     rightIcon: {
         marginLeft: theme.spacing.unit,
+    },
+    toolbar: {
+        padding: 0,
     },
 });
 
@@ -139,7 +143,7 @@ class GameActions extends Component {
 
         if (!this.state.debugging) {
             return (
-                <Toolbar color="primary">
+                <Toolbar className={classes.toolbar}>
                     {clearButton}
                     {submitButton}
                     {debugButton}
@@ -148,7 +152,7 @@ class GameActions extends Component {
         }
         else {
             return (
-                <Toolbar color="primary">
+                <Toolbar className={classes.toolbar}>
                     {debugButton}
                     {stepButton}
                     {restartDebugButton}
