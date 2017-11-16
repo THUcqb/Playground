@@ -3,7 +3,6 @@ import GameActions from './GameActions';
 import Blockly from 'node-blockly/browser';
 import './BlocklyDef';
 import { run } from './LogicApi';
-import MessageBar from '../utils/MessageBar';
 
 /**
  * The gamepad field which consists of a action bar and the blocklyDiv.
@@ -43,14 +42,6 @@ class Gamepad extends Component {
      */
     static clearWorkspace() {
         Gamepad.workspace.clear();
-    }
-
-    /**
-     * View the code converted from blockly in the workspace.
-     */
-    static viewWorkspace() {
-        let code = Blockly.JavaScript.workspaceToCode(Gamepad.workspace);
-        MessageBar.show(code);
     }
 
     /**
@@ -102,7 +93,6 @@ class Gamepad extends Component {
             <div className="Operation">
                 <GameActions
                     clear={Gamepad.clearWorkspace}
-                    view={Gamepad.viewWorkspace}
                     submit={Gamepad.submitWorkspace}
                     step={Gamepad.singleStep}
                 />
