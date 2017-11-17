@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response
 from django.shortcuts import render
 from django.template import Template, Context
 from django.views.decorators.csrf import csrf_exempt
-from .models import AMap, DIYMaps
+from .models import AMap, DIYMaps, ImmanentMaps
 import json
 import base64
 import time
@@ -282,7 +282,7 @@ def map_share(request):
             response_data["link"] = payload.decode()
             response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
-        elif type == 'common':
+        elif ttype == 'common':
             payloaddict = {}
             payloaddict['level'] = d['level']
             payloaddict['username'] = username
@@ -326,18 +326,18 @@ def share_response(request):
             mapid = link['mapid']
             themap = DIYMaps.objects.filter(username = username, id = mapid)
             response_data["status"] = "Successful"
-            response_data["mapinfo"] = themap.mapinfo
-            response_data["mapname"] = themap.mapname
-            response_data["solution"] = themap.solution
+            response_data["mapinfo"] = themap[0].mapinfo
+            response_data["mapname"] = themap[0].mapname
+            response_data["solution"] = themap[0].solution
             response_data["owner"] = username
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         elif link['type'] == 'common':
             level = link['level']
             amap = AMap.objects.filter(username = username, level = level)
-            themap = ImmanentMaps.objects.filter(level = level)
+            themap = ImmanentMaps.objects.filter(level = str(level))
             response_data["status"] = "Successful"
-            response_data["mapinfo"] = themap.immanentmap
-            response_data["solution"] = amap.solution
+            response_data["solution"] = amap[0].solution
             response_data["level"] = level
             response_data["owner"] = username
+            response_data["mapinfo"] = themap[0].immanentmap
             return HttpResponse(json.dumps(response_data),content_type="application/json")
