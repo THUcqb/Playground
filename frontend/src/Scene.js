@@ -301,6 +301,8 @@ export class Scene extends Component
         // let minSize = width;
         // if (height < width)
             // minSize = height;
+        width = Math.min(width, height * 1.3);
+        height = Math.min(height, width * 1.3);
         stage.style.width = width.toString() + 'px';
         stage.style.height = height.toString() + 'px';
     }
