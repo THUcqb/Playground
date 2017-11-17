@@ -60,8 +60,9 @@ def save_mapsinfo(request):
             amap.save()
             if int(level) < 10:
                 nmap = AMap.objects.get(username = username, level = str(int(level) + 1))
-                nmap.unlock = True
-                nmap.save()
+                if int(stars) > 0:
+                	nmap.unlock = True
+                	nmap.save()
             response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         except AMap.DoesNotExist:
@@ -246,3 +247,49 @@ def get_diymaps(request):
             response_data[maps[i].mapname] = themap
         response_data["status"] = "Successful"
         return HttpResponse(json.dumps(response_data),content_type="application/json")
+        
+@csrf_exempt
+def map_share(request):
+    '''
+    Create a share-link when the user wants to share his diy-maps or common-maps.
+    
+    :method: POST
+    :param param1: token
+    :param param2: type (diy or common)
+    :param param3: mapid(diy) or level(common)
+    :returns: if succeed, return {"status":"Successful", "link":link}
+              else if the token is out of date, return {"status":"Expiration"}
+    '''         
+    if request.method == 'POST':
+        d = json.loads(request.body.decode('utf-8'))
+        token_byte = d['token']
+        user_info = analyze_token(token_byte)
+        username = user_info['username']
+        now = time.time()
+        response_data = {}
+        type = d['type']
+        expire = user_info['exp']
+        if expire < now:
+            response_data["status"] = "Expiration"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        if type == 'diy':
+            payload_dict = {}
+            payload_dict['mapid'] = d['mapid']
+            payload_dict['type'] = 'diy'
+            payload_dict['username'] = username
+            payload_str = json.dumps(payload_dict)
+            payload = base64.b64encode(payload_str.encode(encoding = "utf-8"))
+            response_data["token"] = payload.decode()
+            response_data["status"] = "Successful"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        elif type == 'common':
+            payloaddict = {}
+            payloaddict['level'] = d['level']
+            payloaddict['username'] = username
+            payloaddict['type'] = 'common'
+            payload_str = json.dumps(payloaddict)
+            payload = base64.b64encode(payload_str.encode(encoding = "utf-8"))
+            response_data["token"] = payload.decode()
+            response_data["status"] = "Successful"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+            
