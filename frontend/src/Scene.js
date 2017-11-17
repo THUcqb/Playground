@@ -127,8 +127,9 @@ export class Scene extends Component {
     {
         const {classes} = this.props;
         return (
-            <div className="CanvasDiv" ref="CanvasDiv">
-                <Toolbar color="primary" style={{padding: 0}}>
+            <div className="CanvasDiv" ref="CanvasDiv" style={{width: "100%"}}>
+                <div ref="ToolbarDiv">
+                <Toolbar color="primary" ref="Toolbar" style={{padding: 0}}>
                     <Button raised
                             className={classes.button}
                             color="primary"
@@ -149,6 +150,7 @@ export class Scene extends Component {
                         />
                     <MapEditorButton color="primary"/>
                 </Toolbar>
+                </div>
                 <canvas id="canvasScene" ref="canvasScene" width="600" height="600"/>
                 <OverDialog
                     open={this.state.overDialogOpen}
@@ -224,15 +226,16 @@ export class Scene extends Component {
     {
         let fatherDiv = this.refs.CanvasDiv;
         let stage = this.refs.canvasScene;
+        let toolbar = this.refs.ToolbarDiv;
 
         let width = fatherDiv.offsetWidth;
-        let height = fatherDiv.offsetHeight;
+        let height = fatherDiv.offsetHeight - toolbar.offsetHeight;
 
-        let minSize = width;
-        if (height < width)
-            minSize = height;
-        stage.style.width = minSize.toString() + 'px';
-        stage.style.height = minSize.toString() + 'px';
+        // let minSize = width;
+        // if (height < width)
+            // minSize = height;
+        stage.style.width = width.toString() + 'px';
+        stage.style.height = height.toString() + 'px';
     }
 
     /**

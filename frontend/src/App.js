@@ -13,13 +13,12 @@ import { instanceOf } from 'prop-types';
 
 const styles = theme => ({
     root: {
-        flexGrow: 1,
+        display: "flex",
         marginTop: 64,
-        height: "100%",
+        height: "calc(100% - 64px)",
     },
     container: {
         margin: 0,
-        height: "90%",
         display: "flex",
     },
     item: {
@@ -100,7 +99,7 @@ class App extends Component
             );
         else
             body = (
-                <div style={{height: "100%"}}>
+                <div style={{display: "flex", height: "100%", width: "100%"}}>
                     <Navigation className={classes.appbar}/>
                     <Grid container className={classes.container}>
                         <Grid item xs={12} sm={6} className={classes.item}>
