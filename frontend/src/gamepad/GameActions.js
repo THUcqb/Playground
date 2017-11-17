@@ -11,7 +11,6 @@ import Replay from 'material-ui-icons/Replay';
 
 const buttonStyle = theme => ({
     margin: theme.spacing.unit,
-    marginLeft: 0,
     color: 'white',
 });
 
@@ -34,7 +33,7 @@ const styles = theme => ({
     },
     restartDebugButton: {
         ...buttonStyle(theme),
-        background: 'linear-gradient(45deg, #03A9F4 30%, #000000 90%)',
+        background: 'linear-gradient(45deg, #3F51B5 30%, #000000 90%)',
     },
     leftIcon: {
         marginRight: theme.spacing.unit,

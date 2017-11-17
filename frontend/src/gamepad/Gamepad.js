@@ -9,19 +9,17 @@ const blocklyWorkspaceXml = {
     grid: {
         spacing: 20,
         length: 3,
-        colour: '#ccc',
+        colour: '#FFF',
         snap: true
     },
-    zoom:
-        {
-            controls: true,
-            wheel: true,
-            startScale: 1.0,
-            maxScale: 3,
-            minScale: 0.3,
-            scaleSpeed: 1.2
-        },
+    zoom: {
+        startScale: 1.5,
+    }
 };
+
+const blocklyDivStyle = ({
+    position: "absolute",
+});
 
 /**
  * The gamepad field which consists of a action bar and the blocklyDiv.
@@ -39,6 +37,27 @@ class Gamepad extends Component {
 
     componentDidMount() {
         Gamepad.workspace = Blockly.inject('blocklyDiv', blocklyWorkspaceXml);
+        let blocklyArea = document.getElementById('blocklyArea');
+        let blocklyDiv = document.getElementById('blocklyDiv');
+        let onresize = function(e) {
+            // Compute the absolute coordinates and dimensions of blocklyArea.
+            let element = blocklyArea;
+            let x = 0;
+            let y = 0;
+            do {
+                x += element.offsetLeft;
+                y += element.offsetTop;
+                element = element.offsetParent;
+            } while (element);
+            // Position blocklyDiv over blocklyArea.
+            blocklyDiv.style.left = x + 'px';
+            blocklyDiv.style.top = y + 'px';
+            blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+            blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
+        };
+        window.addEventListener('resize', onresize, false);
+        onresize();
+        Blockly.svgResize(Gamepad.workspace);
     }
 
     /**
@@ -104,14 +123,17 @@ class Gamepad extends Component {
 
     render() {
         return (
-            <div className="Operation">
+            <div className="Gamepad" style={{width: "100%", display: "flex", flexDirection: "column"}}>
                 <GameActions
+                    style={{flex: 1}}
                     clear={Gamepad.clearWorkspace}
                     submit={Gamepad.submitWorkspace}
                     debug={(debugging) => Gamepad.debugWorkspace(debugging)}
                     step={Gamepad.debugStep}
                 />
-                <div id="blocklyDiv" style={{height: "70vh", width: "100%"}}/>
+                <div id="blocklyArea" style={{flex: 1}}>
+                    <div id="blocklyDiv" style={blocklyDivStyle}/>
+                </div>
             </div>
         );
     }

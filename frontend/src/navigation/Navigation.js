@@ -6,7 +6,6 @@ import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import SignButton from './Sign';
 import Avatar from 'material-ui/Avatar';
-import deepOrange from 'material-ui/colors/deepOrange';
 import Typography from 'material-ui/Typography';
 import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
@@ -38,7 +37,7 @@ const styles = theme => ({
         padding: '0 8px',
     },
     avatar: {
-        backgroundColor: deepOrange[300],
+        background: 'linear-gradient(45deg, #03A9F4 30%, #3F51B5 90%)',
     }
 
 });
@@ -101,7 +100,7 @@ class Navigation extends React.Component {
             );
         }
         else {
-            userInfo = (<Avatar className={classes.avatar}>{this.state.username}</Avatar>);
+            userInfo = (<Avatar className={classes.avatar}>{this.state.username[0]}</Avatar>);
         }
 
         const appbar = (
