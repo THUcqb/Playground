@@ -150,7 +150,7 @@ def save_diymap(request):
     :param param5: mapid
     :returns: if succeed, return {"status":"Successful"}
               else if the token is out of date, return {"status":"Expiration"}
-              else if the map hasn't been created, return {"status":"NotEixsted"}
+              else if the map hasn't been created but mapid is not null, return {"status":"NotEixsted"}
     '''
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))

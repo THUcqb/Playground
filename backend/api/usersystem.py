@@ -207,6 +207,9 @@ def create_code(randomlength = 8):
     return res
 
 def emailsend(userinfo):
+    '''
+    Send a Email.
+    '''
     code = create_code()
     userinfo.auth_code = code
     userinfo.save()
