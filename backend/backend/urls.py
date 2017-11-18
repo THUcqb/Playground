@@ -24,5 +24,7 @@ urlpatterns = [
     url(r'^diymaps/save_diymap$', usermaps.save_diymap),
     url(r'^diymaps/get_solution$', usermaps.get_diysolution),
     url(r'^diymaps/get_diymaps$', usermaps.get_diymaps),
+    url(r'^maps/share$', usermaps.map_share),
+    url(r'^maps/share_response$', usermaps.share_response),
 ]
 
