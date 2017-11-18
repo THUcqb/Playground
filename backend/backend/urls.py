@@ -14,6 +14,8 @@ urlpatterns = [
     url(r'^users/retrieve_response$', usersystem.retrieve_response),
     url(r'^users/email_auth$', usersystem.email_auth),
     url(r'^users/auth_response$', usersystem.auth_response),
+    url(r'^users/send_message$', usersystem.send_message),
+    url(r'^users/mobile_login$', usersystem.mobile_login),
     url(r'^sources/save_maps$', sources.save_maps),
     url(r'^sources/load_maps$', sources.load_maps),
     url(r'^blockly/save_toolbox$', sources.save_toolbox),

@@ -10,7 +10,6 @@ import json
 import base64
 import time
 import urllib
-import urllib2
 from random import Random
 from django.core.mail import send_mail
 from backend.settings import EMAIL_FROM
@@ -19,6 +18,23 @@ host = "106.ihuyi.com"
 sms_send_uri = "/webservice/sms.php?method=Submit"
 account = "C11382941"
 password = "d6ae09db9b0b48cd7cf9ff1ba862855d"
+
+def create_token(username):
+    '''
+    Create a token encode with base64.
+    '''
+    issuetime = time.time()
+    expiretime = issuetime + 604800
+    payload_dict = {
+        'iat':issuetime,
+        'exp':expiretime,
+        'iss':'admin',
+        'username':username
+    }
+    payload_str = json.dumps(payload_dict)
+    payload = base64.b64encode(payload_str.encode(encoding = "utf-8"))
+    
+    return payload.decode()
 
 def analyze_token(token_byte):
     '''
@@ -94,17 +110,8 @@ def login(request):
                     response_data["status"] = "NotExisted"
                     return HttpResponse(json.dumps(response_data),content_type="application/json")
         if userinfo.password == d['password']:
-            issuetime = time.time()
-            expiretime = issuetime + 604800
-            payload_dict = {
-                'iat':issuetime,
-                'exp':expiretime,
-                'iss':'admin',
-                'username':userinfo.username
-            }
-            payload_str = json.dumps(payload_dict)
-            payload = base64.b64encode(payload_str.encode(encoding = "utf-8"))
-            response_data["token"] = payload.decode()
+            token = create_token(userinfo.username)
+            response_data["token"] = token
             response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         else:
@@ -394,4 +401,33 @@ def send_message(request):
         except UserInfo.DoesNotExist:
             response_data["status"] = "NotExisted"
             return HttpResponse(json.dumps(response_data),content_type="application/json")    
-            
+
+@csrf_exempt
+def mobile_login(request):
+    '''
+    Handle the request of login by phone number and code.
+    
+    :method: post
+    :param param1: phonenumber
+    :param param2: code
+    :returns: if succeed, return {"status" : "Successful", "token" : token}
+              else if the user hasn't registered, return {"status" : "NotExisted"}
+              else if the code is wrong, return {"status" : "CodeError"}
+    '''
+    if request.method == 'POST':
+        d = json.loads(request.body.decode('utf-8'))
+        response_data = {}
+        try:
+            userinfo = UserInfo.objects.get(phonenumber = d['phonenumber'])
+            if code == userinfo.auth_code:
+                token = create_token(userinfo.username)
+                response_data["status"] = "Successful"
+                response_data["token"] = token
+                return HttpResponse(json.dumps(response_data),content_type="application/json")
+            else:
+                response_data["status"] = "CodeError"
+                return HttpResponse(json.dumps(response_data),content_type="application/json")
+        except UserInfo.DoesNotExist:
+            response_data["status"] = "NotExisted"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")     
+    
