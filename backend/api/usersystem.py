@@ -9,9 +9,16 @@ from .models import UserInfo, AMap
 import json
 import base64
 import time
+import urllib
+import urllib2
 from random import Random
 from django.core.mail import send_mail
 from backend.settings import EMAIL_FROM
+
+host = "106.ihuyi.com"
+sms_send_uri = "/webservice/sms.php?method=Submit"
+account = "C11382941"
+password = "d6ae09db9b0b48cd7cf9ff1ba862855d"
 
 def analyze_token(token_byte):
     '''
@@ -355,4 +362,36 @@ def retrieve_response(request):
         except UserInfo.DoesNotExist:
             response_data["status"] = "NotExisted"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
-
+            
+@csrf_exempt
+def send_message(request):
+    '''
+    Handle the request of getting code when login by mobile phone.
+    
+    :method: post
+    :param param1: phonenumber
+    :returns: if succeed, return {"status" : "Successful"}
+              else if the user hasn't registered, return {"status" : "NotExisted"}
+    '''
+    if request.method == 'POST':
+        d = json.loads(request.body.decode('utf-8'))
+        response_data = {}
+        try:
+            userinfo = UserInfo.objects.get(phonenumber = d['phonenumber'])
+            code = create_code(4)
+            userinfo.auth_code = code
+            userinfo.save()
+            text = "Your code is: " + code + ". For the safety of your account, please don't leak it to others."
+            params = urllib.urlencode({'account': account, 'password' : password, 'content': text, 'mobile':userinfo.phonenumber,'format':'json' })
+            headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
+            conn = httplib.HTTPConnection(host, port=80, timeout=30)
+            conn.request("POST", sms_send_uri, params, headers)
+            response = conn.getresponse()
+            res = response.read()
+            conn.close()
+            response_data["status"] = "Successful"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        except UserInfo.DoesNotExist:
+            response_data["status"] = "NotExisted"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")    
+            
