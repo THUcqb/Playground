@@ -13,10 +13,6 @@ export class Controller
         this.begin.task = new Base_task(this.begin);
     }
 
-    /**
-     * user_task is main function
-     * task is based on user's blockly
-     */
     init(task)
     {
         let user_task = new Base_task(this.begin);
@@ -24,10 +20,6 @@ export class Controller
         this.begin.task = user_task;
     }
 
-    /**
-     * Get how many times have we switch the level.
-     * @returns {*}
-     */
     static getLevelTime() {
         return Controller.controller.switchLevelTime;
     }
@@ -46,17 +38,11 @@ export class Controller
         Base.run_state.cur = Base.begin;
     }
 
-    /**
-     * return map info
-     */
     static getMap()
     {
         return Base.bmap;
     }
 
-    /**
-     * return Snake info
-     */
     static getSnake()
     {
         return Base.bsnake;
@@ -83,11 +69,6 @@ export class Controller
         Base.run_state.state = "runnable";
         Base.run_state.cur = Base.begin;
 
-    }
-
-    static save(name, map)
-    {
-        Map.editSave(name, map);
     }
 
     static step()

@@ -18,6 +18,8 @@ import MessageBar from '../utils/MessageBar';
 import { hints as configMsgHints } from '../config/msg';
 import {Controller} from '../logic/Controller';
 import {BaseMapInfo} from '../logic/ConstInfo';
+import {getCookie} from "../utils/Auth";
+import {saveDIYMap} from "../utils/LevelMap";
 const styles = theme => ({
     container: {
         display: 'flex',
@@ -191,13 +193,22 @@ class MapEditor extends React.Component
         }
         if (op === "save")
         {
-            let name = prompt("Map name", "My Map");
+            // let name = prompt("Map name", "My Map");
+            let name = "name";
             if (name !== null && name !== "")
             {
-                Controller.save(name, this.map);
+                saveDIYMap(name, this.map).then((response) =>
+                {
+                    if (response.OK)
+                    {
+                        alert("Save successfully!");
+                    }
+                })
             }
             else
+            {
                 alert("Please add name!");
+            }
         }
     }
 
@@ -207,7 +218,6 @@ class MapEditor extends React.Component
         let rect = element.getBoundingClientRect();
         let x = e.clientX - rect.left;
         let y = e.clientY - rect.top;
-
 
         let c_max_x = element.width;
         let c_max_y = element.height;
