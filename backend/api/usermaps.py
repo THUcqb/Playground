@@ -38,12 +38,17 @@ def save_mapsinfo(request):
     :returns: if the token is out of date, return {"status":"Expiration"}
               else if the user doesn't exist, return {"status":"NotExisted"}
               else if succeed, return {"status":"Successful"}
+              else if token is wrong, return {"status":"TokenError"}
     '''
     if request.method == 'POST':
         response_data = {}
         d = json.loads(request.body.decode('utf-8'))
         token_byte = d['token']
-        user_info = analyze_token(token_byte)
+        try:
+            user_info = analyze_token(token_byte)
+        except:
+            response_data["status"] = "TokenError"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
         username = user_info['username']
         now = time.time()
         expire = user_info['exp']
@@ -78,16 +83,21 @@ def get_mapsinfo(request):
     :param param1: token
     :returns: if succeed, return {"status":"Successful", level:{"stars":stars, "unlock":true or false}, level:{}, level:{}}
               else if the token is out of date, return {"status":"Expiration"}
+              else if token is wrong, return {"status":"TokenError"}
               else if the user doesn't exist, return {"status":"NotExisted"}
     '''
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
         token_byte = d['token']
+        response_data = {}
         now = time.time()
-        user_info = analyze_token(token_byte)
+        try:
+            user_info = analyze_token(token_byte)
+        except:
+            response_data["status"] = "TokenError"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
         username = user_info['username']
         expire = user_info['exp']
-        response_data = {}
         if expire < now:
             response_data["status"] = "Expiration"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
@@ -114,13 +124,18 @@ def get_solution(request):
     :param param2: level
     :returns: if succeed, return {"status":"Successful", "solution":solution}
               else if the token is out of date, return {"status":"Expiration"}
+              else if token is wrong, return {"status":"TokenError"}
               else if the user doesn't exist, return {"status":"NotExisted"}
     '''
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
         token_byte = d['token']
-        user_info = analyze_token(token_byte)
         response_data = {}
+        try:
+            user_info = analyze_token(token_byte)
+        except:
+            response_data["status"] = "TokenError"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
         now = time.time()
         username = user_info['username']
         level = d['level']
@@ -150,14 +165,19 @@ def save_diymap(request):
     :param param5: mapid
     :returns: if succeed, return {"status":"Successful"}
               else if the token is out of date, return {"status":"Expiration"}
+              else if token is wrong, return {"status":"TokenError"}
               else if the map hasn't been created, return {"status":"NotEixsted"}
     '''
     if request.method == 'POST':
+        response_data = {}
         d = json.loads(request.body.decode('utf-8'))
         token_byte = d['token']
         now = time.time()
-        user_info = analyze_token(token_byte)
-        response_data = {}
+        try:
+            user_info = analyze_token(token_byte)
+        except:
+            response_data["status"] = "TokenError"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
         username = user_info['username']
         mapname = d['mapname']
         solution = d['solution']
@@ -194,15 +214,20 @@ def get_diysolution(request):
     :param param2: mapid
     :returns: if succeed, return {"status":"Successful", "solution":solution}
               else if the token is out of date, return {"status":"Expiration"}
+              else if token is wrong, return {"status":"TokenError"}
               else if the map doesn't exist, return {"status":"NotExisted"}
     '''
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
+        response_data = {}
         token_byte = d['token']
-        user_info = analyze_token(token_byte)
+        try:
+            user_info = analyze_token(token_byte)
+        except:
+            response_data["status"] = "TokenError"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
         username = user_info['username']
         now = time.time()
-        response_data = {}
         mapid = d['mapid']
         expire = user_info['exp']
         if expire < now:
@@ -226,13 +251,18 @@ def get_diymaps(request):
     :param param1: token
     :returns: if succeed, return {"status":"Successful", mapname:{"mapinfo":mapinfo, "mapid":mapid}, ...}
               else if the token is out of date, return {"status":"Expiration"}
+              else if token is wrong, return {"status":"TokenError"}
               else if the map doesn't exist, return {"status":"NotExisted"}
     '''
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
         token_byte = d['token']
         response_data = {}
-        user_info = analyze_token(token_byte)
+        try:
+            user_info = analyze_token(token_byte)
+        except:
+            response_data["status"] = "TokenError"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
         username = user_info['username']
         now = time.time()
         expire = user_info['exp']
@@ -259,14 +289,19 @@ def map_share(request):
     :param param3: mapid(diy) or level(common)
     :returns: if succeed, return {"status":"Successful", "link":link}
               else if the token is out of date, return {"status":"Expiration"}
+              else if token is wrong, return {"status":"TokenError"}
     '''         
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
+        response_data = {}
         token_byte = d['token']
-        user_info = analyze_token(token_byte)
+        try:
+            user_info = analyze_token(token_byte)
+        except:
+            response_data["status"] = "TokenError"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
         username = user_info['username']
         now = time.time()
-        response_data = {}
         ttype = d['type']
         expire = user_info['exp']
         if expire < now:
@@ -305,16 +340,26 @@ def share_response(request):
     :returns: if it is diy map, return {"status":"Successful", "mapinfo":mapinfo, "owner":user, "solution":solution, "mapname":mapname}
               else if it is common map, return {"status":"Successful", "mapinfo":mapinfo, "owner":user, "solution":solution, "level":level}
               else if the token is out of date, return {"status":"Expiration"}
+              else if token is wrong, return {"status":"TokenError"}
+              else if the link is wrong, return {"status":"LinkError"}
     '''
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
         token_byte = d['token']
-        user_info = analyze_token(token_byte)
-        now = time.time()  
         response_data = {}
+        try:
+            user_info = analyze_token(token_byte)
+        except:
+            response_data["status"] = "TokenError"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        now = time.time()  
         link_byte = d['link']
         link_str = link_byte.encode(encoding = "utf-8")
-        link_info = base64.b64decode(link_str)
+        try:
+            link_info = base64.b64decode(link_str)
+        except:
+            response_data["status"] = "LinkError"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
         link = link_info.decode('utf-8','ignore')
         link = json.loads(link)
         username = link['username']
