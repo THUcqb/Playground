@@ -23,6 +23,9 @@ function setupManifest()
     }, {
         src: process.env.PUBLIC_URL + "/role.png",
         id: "role"
+    }, {
+        src: process.env.PUBLIC_URL + "/treasure.png",
+        id: "treasure"
     }
     ];
 }

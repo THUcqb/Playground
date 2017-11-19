@@ -3,6 +3,7 @@ import TweenJS from "masteryodatweenjs";
 import {preloader} from "../index";
 import MessageBar from '../utils/MessageBar';
 import { hints as configMsgHints } from '../config/msg';
+import { BaseMapInfo } from '../logic/ConstInfo';
 
 class Element
 {
@@ -12,6 +13,7 @@ class Element
         this.n = n;
         this.wall = preloader.getResult("wall");
         this.coin = preloader.getResult("coin");
+        this.treasure = preloader.getResult("treasure");
         this.animation = animation;
         this.stage = stage;
         this.reset()
@@ -32,6 +34,7 @@ class Element
         this.stage.addChild(this.container);
 
         this.coins = new EaselJS.Shape();
+        this.treasures = new EaselJS.Shape();
         const info_arr = map.eData();
         const size_x = map.SIZE_X;
         const size_y = map.SIZE_Y;
@@ -41,23 +44,30 @@ class Element
             for (let j = 0; j < size_y; j++)
             {
                 const screen_x = this.size * j;
-                if (info_arr[i][j] === 1)
+                if (info_arr[i][j] === BaseMapInfo.getElementsByTagName("block"))
                 {
                     this.paintWall(screen_x, screen_y);
                 }
-                if (info_arr[i][j] === 2)
+                else if (info_arr[i][j] === BaseMapInfo.getElementsByTagName("gold"))
                 {
                     this.paintCoin(screen_x, screen_y);
+                }
+                else if (info_arr[i][j] === BaseMapInfo.getElementsByTagName("end"))
+                {
+                    this.paintFinish(screen_x, screen_y);
                 }
             }
         }
         this.coins.cursor = "pointer";
         this.coins.shadow = new EaselJS.Shadow('#ffcb3d', 0, 0, 8);
 
+        this.treasures.cursor = "pointer";
+        this.treasures.shadow = new EaselJS.Shadow('#000000', 2, 2, 8);
+
         if (this.animation)
         {
             this.coins.on("mousedown", (ev) => {
-                MessageBar.show(configMsgHints.clickWall);
+                MessageBar.show(configMsgHints.clickCoin);
                 let coins = ev.target;
                 TweenJS.Tween.get(coins, {loop: 2})
                     .to({
@@ -67,8 +77,20 @@ class Element
                         alpha: 1
                     }, 300);
             });
+            this.treasures.on("mousedown", (ev) => {
+                MessageBar.show(configMsgHints.clickTreasure);
+                let treasure = ev.target;
+                TweenJS.Tween.get(treasure, {loop: 2})
+                    .to({
+                        alpha: 0.5,
+                    }, 1000)
+                    .to({
+                        alpha: 1
+                    }, 300);
+            });
         }
         this.container.addChild(this.coins);
+        this.container.addChild(this.treasures);
     }
 
     /**
@@ -93,9 +115,13 @@ class Element
             for (let j = 0; j < size_y; j++)
             {
                 const screen_x = this.size * j;
-                if (info_arr[i][j] === 2)
+                if (info_arr[i][j] === BaseMapInfo.getElementsByTagName("gold"))
                 {
                     this.paintCoin(screen_x, screen_y);
+                }
+                else if (info_arr[i][j] === BaseMapInfo.getElementsByTagName("end"))
+                {
+                    this.paintFinish(screen_x, screen_y);
                 }
             }
         }
@@ -155,7 +181,7 @@ class Element
     }
 
     /**
-     * paint a coin given its center
+     * paint a coin given the upper-left point of the block
      * @param screen_x horizontal ordinate of the center
      * @param screen_y vertical ordinate of the center
      */
@@ -168,6 +194,24 @@ class Element
         m.scale(this.size / this.coin.width, this.size / this.coin.height);
         this.coins.graphics.beginBitmapFill(this.coin, "no-repeat", m);
         this.coins.graphics.drawCircle(screen_x + this.size / 2, screen_y + this.size / 2, this.size / 4);
+    }
+
+    /**
+     * paint the finish point given the upper-left point of the block
+     * now it is painted as a treasure chest
+     * @param screen_x horizontal ordinate of the center
+     * @param screen_y vertical ordinate of the center
+     */
+    paintFinish(screen_x, screen_y)
+    {
+        const m = new EaselJS.Matrix2D();
+        const width = 0.7 * this.size;
+        const height = 0.7 * this.size;
+        m.translate(screen_x + (this.size - width) / 2, screen_y + (this.size - height) / 2);
+        m.scale(width / this.treasure.width, height / this.treasure.height);
+        this.treasures.graphics.beginBitmapFill(this.treasure, "no-repeat", m);
+
+        this.treasures.graphics.drawRect(screen_x + (this.size - width) / 2, screen_y + (this.size - height) / 2, width, height);
     }
 }
 
