@@ -10,3 +10,6 @@ export const LOADLEVELSOLUTION = "/maps/get_solution";
 // TODO: change to correct link
 export const SAVEMAP = "/maps/save_maps";
 export const LOADMAP = "/maps/load_maps";
+
+export const SAVEDIYMAP = "/diymaps/save_diymap";
+export const GETDIYMAPS = "/diymaps/get_diymaps";

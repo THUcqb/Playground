@@ -240,11 +240,12 @@ def get_diymaps(request):
             response_data["status"] = "Expiration"
             return HttpResponse(json.dumps(response_data), content_type="application/json")
         maps = DIYMaps.objects.filter(username = username)
+        response_data["map"] = {}
         for i in range(len(maps)):
             themap = {}
             themap["mapinfo"] = maps[i].mapinfo
-            themap["mapid"] = str(maps[i].id)
-            response_data[maps[i].mapname] = themap
+            themap["mapname"] = maps[i].mapname
+            response_data["map"][str(maps[i].id)] = themap
         response_data["status"] = "Successful"
         return HttpResponse(json.dumps(response_data),content_type="application/json")
         

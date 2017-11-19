@@ -14,6 +14,7 @@ import Trajectory from "./painter/Trajectory";
 import MessageBar from './utils/MessageBar';
 import {loadToolbox} from "./utils/LoadBlockly";
 import {loadLevelsInfo, loadLevelSolution, saveLevelInfo} from "./utils/LevelInfo";
+import {loadDIYMaps} from "./utils/LevelMap";
 
 const styles = theme => ({
     button: {
@@ -24,7 +25,8 @@ const styles = theme => ({
 /**
  * The app's scene part
  */
-export class Scene extends Component {
+export class Scene extends Component
+{
     canvasScene;
     CanvasDiv;
 
@@ -47,7 +49,9 @@ export class Scene extends Component {
             '3': {unlock: false, stars: '0'},
             '4': {unlock: false, stars: '0'},
             '5': {unlock: false, stars: '0'},
-        }
+        };
+        this.DIYMapsInfo = [];
+        this.DIYMaps = {};
     }
 
     reset()
@@ -83,6 +87,17 @@ export class Scene extends Component {
     }
 
     /**
+     *
+     * @param {String} id
+     */
+    handleChooseDIYLevel(id)
+    {
+        this.stage.removeAllChildren();
+        Controller.controller.switchDIYLevel(this.DIYMaps[id]);
+        this.reset();
+    }
+
+    /**
      * Refresh the scene and reset the controller when the user click submit
      */
     static handleRestart()
@@ -100,6 +115,25 @@ export class Scene extends Component {
                 {
                     this.levelsInfo = response.levelsInfo;
                     this.setState({levelDialogOpen: true});
+                }
+            });
+        loadDIYMaps()
+            .then((response) =>
+            {
+                this.DIYMapsInfo = [];
+                this.DIYMaps = {};
+                if (response.OK)
+                {
+                    for (let key in response.map)
+                    {
+                        let map = {
+                            id: key,
+                            name: response.map[key].mapname,
+                            info: response.map[key].mapinfo,
+                        };
+                        this.DIYMapsInfo.push(map);
+                        this.DIYMaps[map.id] = map;
+                    }
                 }
             });
     }
@@ -158,6 +192,7 @@ export class Scene extends Component {
                     <LevelDialog
                         open={this.state.levelDialogOpen}
                         levelsInfo={this.levelsInfo}
+                        DIYMapsInfo={this.DIYMapsInfo}
                         onRequestClose={() => this.setState({levelDialogOpen: false})}
                         onChooseLevel={(levelNum) =>
                         {
@@ -166,8 +201,16 @@ export class Scene extends Component {
                                 overDialogOpen: false,
                                 levelDialogOpen: false
                                 });
-                            }}
-                        />
+                        }}
+                        onChooseDIYMap={(id) =>
+                        {
+                            this.handleChooseDIYLevel(id);
+                            this.setState({
+                                overDialogOpen: false,
+                                levelDialogOpen: false
+                            });
+                        }}
+                    />
                     <MapEditorButton color="primary"/>
                 </Toolbar>
                 </div>
@@ -226,10 +269,6 @@ export class Scene extends Component {
                 this.isFail = false;
                 if (!this.isOver)
                 {
-                    this.background.update(Controller.getMap());
-                    this.trajectory.update(Controller.getSnake());
-                    this.element.update(Controller.getMap());
-                    this.role.update(Controller.getSnake());
                     this.handleSuccess();
                 }
             }

@@ -24,6 +24,8 @@ export class Map
         this.SIZE_Y = SIZE_Y;
         this.candy = 0;
         this.allcandy = 0;
+        this.id = "null";
+        this.solution = "";
     }
 
     /**
@@ -66,13 +68,13 @@ export class Map
             }
         }
         this.block_list = block_list;
-        this.loacalmap = [];
-        this.loacalmap[0] = (level0);
-        this.loacalmap[1] = (level1);
-        this.loacalmap[2] = (level2);
-        this.loacalmap[3] = (level3);
-        this.loacalmap[4] = (level4);
-        this.loacalmap[5] = (level5);
+        this.localMap = [];
+        this.localMap[0] = (level0);
+        this.localMap[1] = (level1);
+        this.localMap[2] = (level2);
+        this.localMap[3] = (level3);
+        this.localMap[4] = (level4);
+        this.localMap[5] = (level5);
         this.setHead(x, y);
     }
 
@@ -81,7 +83,7 @@ export class Map
      */
     setEmpty(x, y)
     {
-        this.block_list[x][y].info = BaseMapInfo.getElementsByTagName('empty');//空地
+        this.block_list[x][y].info = BaseMapInfo.getElementsByTagName('empty');
     }
 
     /**
@@ -89,7 +91,7 @@ export class Map
      */
     setBlock(x, y)
     {
-        this.block_list[x][y].info = BaseMapInfo.getElementsByTagName('block');//占据
+        this.block_list[x][y].info = BaseMapInfo.getElementsByTagName('block');
     }
 
     /**
@@ -97,7 +99,7 @@ export class Map
      */
     setCandy(x, y)
     {
-        this.block_list[x][y].info = BaseMapInfo.getElementsByTagName('gold');//表示积分
+        this.block_list[x][y].info = BaseMapInfo.getElementsByTagName('gold');
     }
 
     /**
@@ -105,7 +107,7 @@ export class Map
      */
     setHead(x, y)
     {
-        this.block_list[x][y].info = BaseMapInfo.getElementsByTagName('head');//头
+        this.block_list[x][y].info = BaseMapInfo.getElementsByTagName('head');
     }
 
     /**
@@ -113,7 +115,7 @@ export class Map
      */
     setBody(x, y)
     {
-        this.block_list[x][y].info = BaseMapInfo.getElementsByTagName('body');//身体
+        this.block_list[x][y].info = BaseMapInfo.getElementsByTagName('body');
     }
 
     /**
@@ -121,7 +123,7 @@ export class Map
      */
     setTail(x, y)
     {
-        this.block_list[x][y].info = BaseMapInfo.getElementsByTagName('tail');//尾巴
+        this.block_list[x][y].info = BaseMapInfo.getElementsByTagName('tail');
     }
 
     /**
@@ -132,33 +134,6 @@ export class Map
         this.slot_map[x][y].info = SlotMapInfo.getElementsByTagName('block');
     }
 
-    /**
-     * save map
-     * (String)name the name of map
-     * (String) maps : map info
-     */
-    static save(name, maps)
-    {
-        return axios.post(URL + SAVEMAP,
-            {
-                name,
-                maps,
-            })
-            .then(function (response)
-            {
-                return response.data;
-            })
-            .catch(function (error)
-            {
-                throw error;
-            });
-    }
-
-    static editSave(name, maps)
-    {
-
-        Map.save(name, maps.stringData);
-    }
 
     /**
      * load map after
@@ -219,20 +194,14 @@ export class Map
     }
 
 
-    /**
-     * load map by level
-     * (int)level the level of map
-     */
-
-    load(level)
+    loadFromString(string)
     {
         this.candy = 0;
-        let str = this.loacalmap[level];
         for (let i = 0; i < this.SIZE_X; i++)
         {
             for (let n = 0; n < this.SIZE_Y; n++)
             {
-                let info = Number(str[i * this.SIZE_X + n]);
+                let info = Number(string[i * this.SIZE_X + n]);
 
                 this.block_list[i][n].info = info;
                 if (info === BaseMapInfo.getElementsByTagName('gold')|info === BaseMapInfo.getElementsByTagName('end'))
@@ -247,35 +216,16 @@ export class Map
             }
         }
         this.allcandy = this.candy;
-        
-        
-        
+    }
 
-        // return axios.post(URL + LOADMAP,
-        // {
-        //     level,
-        // })
-        // .then(function (response) {
-
-        //     let str = response.data;
-        //     this.candy = 0;
-        //     for (let i = 0; i < this.SIZE_X; i++) {
-        //         for (let n = 0; n < this.SIZE_Y; n++) {
-        //             let info = Number(str[i*this.SIZE_X+n]);
-
-        //                 this.block_list[i][n].info = info;
-        //                 if (info == 2)
-        //                 {
-        //                     this.candy+=1;
-        //                 }
-        //         }
-        //     }
-        //     return response.data
-        // })
-        // .catch(function (error){
-        //     throw error;
-        // });
-
+    /**
+     * load map by level
+     * (int)level the level of map
+     */
+    load(level)
+    {
+        let str = this.localMap[level];
+        this.loadFromString(str);
     }
 
     /**
