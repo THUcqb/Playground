@@ -342,6 +342,7 @@ def share_response(request):
               else if the token is out of date, return {"status":"Expiration"}
               else if token is wrong, return {"status":"TokenError"}
               else if the link is wrong, return {"status":"LinkError"}
+              else if the map doesn't exist, return {"status":"NotExisted"}
     '''
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
@@ -368,21 +369,29 @@ def share_response(request):
             response_data["status"] = "Expiration"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         if link['type'] == 'diy':
-            mapid = link['mapid']
-            themap = DIYMaps.objects.filter(username = username, id = mapid)
+            try:
+                mapid = link['mapid']
+                themap = DIYMaps.objects.get(id = int(mapid))
+            except:
+                response_data["status"] = "NotExisted"
+                return HttpResponse(json.dumps(response_data),content_type="application/json")
             response_data["status"] = "Successful"
-            response_data["mapinfo"] = themap[0].mapinfo
-            response_data["mapname"] = themap[0].mapname
-            response_data["solution"] = themap[0].solution
+            response_data["mapinfo"] = themap.mapinfo
+            response_data["mapname"] = themap.mapname
+            response_data["solution"] = themap.solution
             response_data["owner"] = username
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         elif link['type'] == 'common':
-            level = link['level']
-            amap = AMap.objects.filter(username = username, level = level)
-            themap = ImmanentMaps.objects.filter(level = str(level))
+            try:
+                level = link['level']
+                amap = AMap.objects.get(username = username, level = str(level))
+                themap = ImmanentMaps.objects.get(level = str(level))
+            except:
+                response_data["status"] = "NotExisted"
+                return HttpResponse(json.dumps(response_data),content_type="application/json")
             response_data["status"] = "Successful"
-            response_data["solution"] = amap[0].solution
+            response_data["solution"] = amap.solution
             response_data["level"] = level
             response_data["owner"] = username
-            response_data["mapinfo"] = themap[0].immanentmap
+            response_data["mapinfo"] = themap.immanentmap
             return HttpResponse(json.dumps(response_data),content_type="application/json")

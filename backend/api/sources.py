@@ -25,9 +25,9 @@ def save_maps(request):
         level = d['level']
         immanentmap = d['maps']
         try:
-            exist_level = ImmanentMaps.objects.get(level = level)
+            exist_level = ImmanentMaps.objects.get(level = str(level))
         except ImmanentMaps.DoesNotExist:
-            the_map = ImmanentMaps.objects.create(level = level, immanentmap = immanentmap)
+            the_map = ImmanentMaps.objects.create(level = str(level), immanentmap = immanentmap)
             response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data), content_type = "application/json")
         response_data["status"] = "Existed"

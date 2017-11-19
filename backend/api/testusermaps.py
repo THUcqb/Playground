@@ -334,6 +334,11 @@ class UserMapsTest(TestCase):
         textf = json.loads(resf.content.decode('utf-8'))
         self.assertEqual(textf['status'], 'Successful')
         
+        dataf = {'token':log_text['token'], 'link':'eyJ1c2VybmFtZSI6ICJ5YW5saW1pbiIsICJ0eXBlIjogImRpeSIsICJtYXBpZCI6IDExMH0='}
+        resf = self.client.post(url2, json.dumps(dataf), content_type = 'application/json')
+        textf = json.loads(resf.content.decode('utf-8'))
+        self.assertEqual(textf['status'], 'NotExisted')
+        
         data2 = {'token':log_text['token'], 'type':'diy', 'mapid':'1'}
         res2 = self.client.post(url1, json.dumps(data2), content_type = 'application/json')
         text2 = json.loads(res2.content.decode('utf-8'))
@@ -342,6 +347,11 @@ class UserMapsTest(TestCase):
         ress = self.client.post(url2, json.dumps(datas), content_type = 'application/json')
         texts = json.loads(ress.content.decode('utf-8'))
         self.assertEqual(texts['status'], 'Successful')
+        
+        datas = {'token':log_text['token'], 'link':'eyJ1c2VybmFtZSI6ICJ5YW5saW1pbiIsICJ0eXBlIjogImNvbW1vbiIsICJsZXZlbCI6ICIxMTAifQ=='}
+        ress = self.client.post(url2, json.dumps(datas), content_type = 'application/json')
+        texts = json.loads(ress.content.decode('utf-8'))
+        self.assertEqual(texts['status'], 'NotExisted')
         
         data5 = {'token':log_text['token'], 'link':'lalala'}
         res5 = self.client.post(url2, json.dumps(data5), content_type = 'application/json')

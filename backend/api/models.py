@@ -25,6 +25,7 @@ class ImmanentMaps(models.Model):
     '''
     level = models.CharField(max_length = 3, default = '')
     immanentmap = models.CharField(max_length = 200, default = '')
+    standard = models.TextField(default = '')
     
     def __str__(self):
         return self.level
