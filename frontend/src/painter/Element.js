@@ -105,6 +105,7 @@ class Element
         }
 
         this.coins.graphics.clear();
+        this.treasures.graphics.clear();
         const info_arr = map.eData();
         const size_x = map.SIZE_X;
         const size_y = map.SIZE_Y;
