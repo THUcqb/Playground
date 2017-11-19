@@ -5,6 +5,7 @@ export class Controller
 {
     constructor()
     {
+        this.lastType = "";
         this.begin = Base.begin;
         this.switchLevelTime = 0;
         this.state = "runnable";
@@ -20,12 +21,14 @@ export class Controller
         this.begin.task = user_task;
     }
 
-    static getLevelTime() {
+    static getLevelTime()
+    {
         return Controller.controller.switchLevelTime;
     }
 
     switchLevel(level)
     {
+        this.lastType = "level";
         this.begin = Base.begin;
         this.switchLevelTime++;
         Base.begin.time = 1;
@@ -36,6 +39,27 @@ export class Controller
         this.begin.task = new Base_task(this.begin);
         Base.run_state.state = "runnable";
         Base.run_state.cur = Base.begin;
+    }
+
+    switchDIYLevel(map)
+    {
+        this.lastType = "diy";
+        this.begin = Base.begin;
+        this.switchLevelTime++;
+        Base.begin.time = 1;
+        this.begin.type = "user";
+        this.state = "runnable";
+        Base.bmap.loadFromString(map.info);
+        Base.bmap.name = map.name;
+        Base.bmap.id = map.id;
+        this.begin.task = new Base_task(this.begin);
+        Base.run_state.state = "runnable";
+        Base.run_state.cur = Base.begin;
+    }
+
+    getLastType()
+    {
+        return this.lastType;
     }
 
     static getMap()

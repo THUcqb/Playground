@@ -190,20 +190,14 @@ export class Map
     }
 
 
-    /**
-     * load map by level
-     * (int)level the level of map
-     */
-
-    load(level)
+    loadFromString(string)
     {
         this.candy = 0;
-        let str = this.localMap[level];
         for (let i = 0; i < this.SIZE_X; i++)
         {
             for (let n = 0; n < this.SIZE_Y; n++)
             {
-                let info = Number(str[i * this.SIZE_X + n]);
+                let info = Number(string[i * this.SIZE_X + n]);
 
                 this.block_list[i][n].info = info;
                 if (info === 2)
@@ -217,33 +211,16 @@ export class Map
                 }
             }
         }
+    }
 
-
-        // return axios.post(URL + LOADMAP,
-        // {
-        //     level,
-        // })
-        // .then(function (response) {
-
-        //     let str = response.data;
-        //     this.candy = 0;
-        //     for (let i = 0; i < this.SIZE_X; i++) {
-        //         for (let n = 0; n < this.SIZE_Y; n++) {
-        //             let info = Number(str[i*this.SIZE_X+n]);
-
-        //                 this.block_list[i][n].info = info;
-        //                 if (info == 2)
-        //                 {
-        //                     this.candy+=1;
-        //                 }
-        //         }
-        //     }
-        //     return response.data
-        // })
-        // .catch(function (error){
-        //     throw error;
-        // });
-
+    /**
+     * load map by level
+     * (int)level the level of map
+     */
+    load(level)
+    {
+        let str = this.localMap[level];
+        this.loadFromString(str);
     }
 
     /**

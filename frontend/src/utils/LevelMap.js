@@ -9,9 +9,12 @@ import {getCookie} from "./Auth";
 export function loadDIYMaps()
 {
     return axios
-        .post(URL + GETDIYMAPS, {})
+        .post(URL + GETDIYMAPS, {
+            token: getCookie("token"),
+        })
         .then(function (response)
         {
+            return {OK: (response.data.status === "Successful"), map: response.data.map};
         })
 }
 
