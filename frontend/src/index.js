@@ -20,6 +20,9 @@ function setupManifest()
     }, {
         src: process.env.PUBLIC_URL + "/coin.jpg",
         id: "coin"
+    }, {
+        src: process.env.PUBLIC_URL + "/role.png",
+        id: "role"
     }
     ];
 }
