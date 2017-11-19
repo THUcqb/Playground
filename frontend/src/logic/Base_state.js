@@ -78,6 +78,12 @@ export class Base_state
         {
             this.state = "fail";
         }
+
+        if (this.cur.type === "end")
+        {
+            this.state = "success";
+        }
+        
         console.log(Base.bmap.candy);
         console.log(this.state);
     }
