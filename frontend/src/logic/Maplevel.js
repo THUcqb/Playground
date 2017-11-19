@@ -9,7 +9,18 @@ export const level0 = "0000000000"  // move_up
                     + "0000000000"
                     + "0000000000";
 
-export const level0 = "0000000000"  // move ans: (move_up move_down) (move_down move_up ) (move_left move_right) move_rigth
+export const level1 = "0000000000"  // move_up
+                    + "0000000000"
+                    + "0000080000"
+                    + "0000000000"
+                    + "0000000000"
+                    + "0000090000"
+                    + "0000000000"
+                    + "0000000000"
+                    + "0000000000"
+                    + "0000000000";
+
+export const level2 = "0000000000"  // move ans: (move_up move_down) (move_down move_up ) (move_left move_right) move_rigth
                     + "0000000000"
                     + "0000000000"
                     + "0000000000"
@@ -20,8 +31,19 @@ export const level0 = "0000000000"  // move ans: (move_up move_down) (move_down 
                     + "0000000000"
                     + "0000000000";
 
+export const level3 = "0000000000" // while and check ans: move
+                    + "1000020210"
+                    + "1000001000"
+                    + "1000001000"
+                    + "1000021200"
+                    + "1000090000"
+                    + "1002180000"
+                    + "0000100000"
+                    + "0000100000"
+                    + "1002020000";
 
-export const level0 = "0200000002" // move for ans: for(move_up)=>9 for(move_right)=>9 for(move_down)=>9
+
+export const level4 = "0200000002" // move for ans: for(move_up)=>9 for(move_right)=>9 for(move_down)=>9
                     + "0000000000"
                     + "0000000000"
                     + "0000111000"
@@ -32,7 +54,7 @@ export const level0 = "0200000002" // move for ans: for(move_up)=>9 for(move_rig
                     + "0000000000"
                     + "0900000008";
 
-export const level0 = "0200000020" // move for while ans: for( while(check_move) move turn_right)=>4 
+export const level6 = "0200000020" // move for while ans: for( while[check_move] (move) turn_right)=>4 
                     + "0000000000"
                     + "0000000000"
                     + "0000111000"
@@ -43,7 +65,7 @@ export const level0 = "0200000020" // move for while ans: for( while(check_move)
                     + "0000000000"
                     + "0900000080";
 
-export const level0 = "0000000000"  // check ans: if can move move else turn right
+export const level5 = "0000000000"  //move for check ans:  for (if can move move else turn right)=>13
                     + "0001000000"
                     + "0002000210"
                     + "0000111000"
@@ -54,8 +76,7 @@ export const level0 = "0000000000"  // check ans: if can move move else turn rig
                     + "0000000000"
                     + "0000000000";
 
-
-export const level1 = "0000000000"  //for and check  ans:   for (move_down turn_right)=>3 for (move_down turn_left)=>3
+export const level7 = "0000000000"  //move for and check  ans:   for (move_down turn_right)=>3 for (move_down turn_left)=>3
                     + "0900002100"
                     + "0111020100"                  
                     + "0000200100"
@@ -66,7 +87,20 @@ export const level1 = "0000000000"  //for and check  ans:   for (move_down turn_
                     + "0000000810"
                     + "0000001110";
 
-export const level2 = "1111000000" // while and check ans: while true (if (check_move) move else turn_left)  
+
+export const level8 = "1111111111" // while and check ans: while[true](if[check_move] (move) esle turn_right)
+                    + "2000200201"
+                    + "0111111101"
+                    + "2120200101"
+                    + "0101110121"
+                    + "0121810101"
+                    + "2101002101"
+                    + "0121111101"
+                    + "0100000001"
+                    + "9111111111";
+
+
+export const level9 = "1111000000" // while and check ans: while [true] (if (check_move) move else turn_left)  
                     + "1000020000"
                     + "1001000081"
                     + "1000000001"
@@ -77,20 +111,7 @@ export const level2 = "1111000000" // while and check ans: while true (if (check
                     + "0000000101"
                     + "0000000021";
 
-export const level3 = "0900010111" 
-                    + "0100201000"
-                    + "0010010010"
-                    + "0100100100"
-                    + "1201201201"
-                    + "1001001000"
-                    + "0100180100"
-                    + "0012011001"
-                    + "0001000010"
-                    + "0000120101";
-           
-                   
-
-export const level4 = "0000000000"
+export const level10 = "0000000000"// move while and check ans: while[true](if(check_move) move else if(check_turn_left) turn_left else if(check_turn_right) turn_right)
                     + "0001000010"
                     + "0012020021"
                     + "0100010000"
@@ -99,17 +120,9 @@ export const level4 = "0000000000"
                     + "0120021000"
                     + "0090010010"
                     + "0000000001"
-                    + "8200000000";
+                    + "0008000000";
 
-export const level5 = "0200000000"
-                    + "0001110000"
-                    + "0100120010"
-                    + "2180000000"
-                    + "0001001110"
-                    + "0201000010"
-                    + "1111000000"
-                    + "2000000180"
-                    + "0001000111"
-                    + "9002100000";
+
+
 
 
