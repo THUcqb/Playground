@@ -83,7 +83,10 @@ export class Base_state
         {
             this.state = "success";
         }
-        
+        if (this.cur.type === "success")
+        {
+            this.state = "success";
+        }
         console.log(Base.bmap.candy);
         console.log(this.state);
     }
