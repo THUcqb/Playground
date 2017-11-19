@@ -135,7 +135,7 @@ class MapEditor extends React.Component
             for (let i = 0; i < this.state.mapSize; i++)
                 for (let j = 0; j < this.state.mapSize; j++)
                 {
-                    if (this.map.block_list[i][j].info === 3 || this.map.block_list[i][j].info === 9)
+                    if (this.map.block_list[i][j].info === BaseMapInfo.getElementsByTagName('head')  || this.map.block_list[i][j].info === BaseMapInfo.getElementsByTagName('birthplace') )
                     {
                         this.lastX = i;
                         this.lastY = j;
@@ -222,7 +222,7 @@ class MapEditor extends React.Component
         let b_x = Math.floor(Number(y / c_max_y * block_size));
 
         let current = Number(this.state.element);
-        if (this.map.block_list[b_x][b_y].info !== BaseMapInfo.getElementsByTagName('birthplace'))
+        if (this.map.block_list[b_x][b_y].info !== BaseMapInfo.getElementsByTagName('birthplace') && this.map.block_list[b_x][b_y].info !== BaseMapInfo.getElementsByTagName('head'))
         {
             this.map.block_list[b_x][b_y].info = current;
             if (current === BaseMapInfo.getElementsByTagName('birthplace'))
