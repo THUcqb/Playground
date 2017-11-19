@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response
 from django.shortcuts import render
 from django.template import Template, Context
 from django.views.decorators.csrf import csrf_exempt
-from .models import AMap, DIYMaps
+from .models import AMap, DIYMaps, ImmanentMaps
 import json
 import base64
 import time
@@ -60,8 +60,9 @@ def save_mapsinfo(request):
             amap.save()
             if int(level) < 10:
                 nmap = AMap.objects.get(username = username, level = str(int(level) + 1))
-                nmap.unlock = True
-                nmap.save()
+                if int(stars) > 0:
+                	nmap.unlock = True
+                	nmap.save()
             response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         except AMap.DoesNotExist:
@@ -246,3 +247,97 @@ def get_diymaps(request):
             response_data[maps[i].mapname] = themap
         response_data["status"] = "Successful"
         return HttpResponse(json.dumps(response_data),content_type="application/json")
+        
+@csrf_exempt
+def map_share(request):
+    '''
+    Create a share-link when the user wants to share his diy-maps or common-maps.
+    
+    :method: POST
+    :param param1: token
+    :param param2: type (diy or common)
+    :param param3: mapid(diy) or level(common)
+    :returns: if succeed, return {"status":"Successful", "link":link}
+              else if the token is out of date, return {"status":"Expiration"}
+    '''         
+    if request.method == 'POST':
+        d = json.loads(request.body.decode('utf-8'))
+        token_byte = d['token']
+        user_info = analyze_token(token_byte)
+        username = user_info['username']
+        now = time.time()
+        response_data = {}
+        ttype = d['type']
+        expire = user_info['exp']
+        if expire < now:
+            response_data["status"] = "Expiration"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        if ttype == 'diy':
+            payload_dict = {}
+            payload_dict['mapid'] = d['mapid']
+            payload_dict['type'] = 'diy'
+            payload_dict['username'] = username
+            payload_str = json.dumps(payload_dict)
+            payload = base64.b64encode(payload_str.encode(encoding = "utf-8"))
+            response_data["link"] = payload.decode()
+            response_data["status"] = "Successful"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        elif ttype == 'common':
+            payloaddict = {}
+            payloaddict['level'] = d['level']
+            payloaddict['username'] = username
+            payloaddict['type'] = 'common'
+            payload_str = json.dumps(payloaddict)
+            payload = base64.b64encode(payload_str.encode(encoding = "utf-8"))
+            response_data["link"] = payload.decode()
+            response_data["status"] = "Successful"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+            
+
+@csrf_exempt
+def share_response(request):
+    '''
+    Return the map when the user click the share link.
+    
+    :method: POST
+    :param param1: token
+    :param param2: link
+    :returns: if it is diy map, return {"status":"Successful", "mapinfo":mapinfo, "owner":user, "solution":solution, "mapname":mapname}
+              else if it is common map, return {"status":"Successful", "mapinfo":mapinfo, "owner":user, "solution":solution, "level":level}
+              else if the token is out of date, return {"status":"Expiration"}
+    '''
+    if request.method == 'POST':
+        d = json.loads(request.body.decode('utf-8'))
+        token_byte = d['token']
+        user_info = analyze_token(token_byte)
+        now = time.time()  
+        response_data = {}
+        link_byte = d['link']
+        link_str = link_byte.encode(encoding = "utf-8")
+        link_info = base64.b64decode(link_str)
+        link = link_info.decode('utf-8','ignore')
+        link = json.loads(link)
+        username = link['username']
+        expire = user_info['exp']
+        if expire < now:
+            response_data["status"] = "Expiration"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        if link['type'] == 'diy':
+            mapid = link['mapid']
+            themap = DIYMaps.objects.filter(username = username, id = mapid)
+            response_data["status"] = "Successful"
+            response_data["mapinfo"] = themap[0].mapinfo
+            response_data["mapname"] = themap[0].mapname
+            response_data["solution"] = themap[0].solution
+            response_data["owner"] = username
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        elif link['type'] == 'common':
+            level = link['level']
+            amap = AMap.objects.filter(username = username, level = level)
+            themap = ImmanentMaps.objects.filter(level = str(level))
+            response_data["status"] = "Successful"
+            response_data["solution"] = amap[0].solution
+            response_data["level"] = level
+            response_data["owner"] = username
+            response_data["mapinfo"] = themap[0].immanentmap
+            return HttpResponse(json.dumps(response_data),content_type="application/json")

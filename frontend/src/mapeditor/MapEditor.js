@@ -88,7 +88,7 @@ class MapEditor extends React.Component
             "element": 0
         };
 
-        if (this.map == null)
+        if (this.map === null)
         {
             this.map = new Map(10, 10);
             this.map.editInit();
@@ -126,6 +126,25 @@ class MapEditor extends React.Component
 
     updateState(name)
     {
+        if (name === "init")
+        {
+            this.background.updateN(this.state.mapSize);
+            this.element.updateN(this.state.mapSize);
+            this.role.updateN(this.state.mapSize);
+            this.map.print();
+            for (let i = 0; i < this.state.mapSize; i++)
+                for (let j = 0; j < this.state.mapSize; j++)
+                {
+                    if (this.map.block_list[i][j].info === 3 || this.map.block_list[i][j].info === 9)
+                    {
+                        this.lastX = i;
+                        this.lastY = j;
+                    }
+                }
+            this.background.init(this.map);
+            this.element.init(this.map);
+            this.role.init(this.lastX, this.lastY);
+        }
         if (name === "mapSize")
         {
             this.reset();
@@ -158,7 +177,8 @@ class MapEditor extends React.Component
     onEnter()
     {
         this.initialize();
-        this.updateState("mapSize");
+        this.map = Controller.copyBaseMap();
+        this.setState({ mapSize: this.map.SIZE_X }, () => this.updateState("init"));
     }
 
     handleFinishEditing(op)
@@ -174,7 +194,7 @@ class MapEditor extends React.Component
             let name = prompt("Map name", "My Map");
             if (name !== null && name !== "")
             {
-                Controller.controller.save(name, this.map);
+                Controller.save(name, this.map);
             }
             else
                 alert("Please add name!");

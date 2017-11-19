@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.test import TestCase
 import unittest
-from api.models import AMap, UserInfo, DIYMaps
+from api.models import AMap, UserInfo, DIYMaps, ImmanentMaps
 from django.test import Client
 import json
 
@@ -232,3 +232,77 @@ class UserMapsTest(TestCase):
         res3 = self.client.post(the_url, jdata3, content_type = 'application/json')
         text3 = json.loads(res3.content.decode('utf-8'))
         self.assertEqual(text3['status'], 'Expiration')
+        
+    def test_mapshare(self):
+        '''
+        Test the create share link API in usermaps.
+        '''
+        login_url = '/users/login'
+        the_url = '/maps/share'
+        UserInfo.objects.create(username = 'master', password = 'wait5683', phonenumber = '119', email = 'master@example.com', is_active = True)
+        
+        log = {'username':'master', 'password':'wait5683'}
+        log_json = json.dumps(log)
+        log_res = self.client.post(login_url, log_json, content_type = 'application/json')
+        log_text = json.loads(log_res.content.decode('utf-8'))
+        
+        data1 = {'token':log_text['token'], 'type':'diy', 'mapid':'1'}
+        data1j = json.dumps(data1)
+        res1 = self.client.post(the_url, data1j, content_type = 'application/json')
+        text1 = json.loads(res1.content.decode('utf-8'))
+        self.assertEqual(text1['status'], 'Successful')
+        
+        data2 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwNzk5MzUyMC42OTIsICJ1c2VybmFtZSI6ICJoZWppZSIsICJleHAiOiAxNTA4NTk4MzIwLjY5Mn0=', 'type':'diy', 'mapid':'1'}
+        data2j = json.dumps(data2)
+        res2 = self.client.post(the_url, data2j, content_type = 'application/json')
+        text2 = json.loads(res2.content.decode('utf-8'))
+        self.assertEqual(text2['status'], 'Expiration')
+        
+        data3 = {'token':log_text['token'], 'type':'common', 'level':'1'}
+        data3j = json.dumps(data3)
+        res3 = self.client.post(the_url, data3j, content_type = 'application/json')
+        text3 = json.loads(res3.content.decode('utf-8'))
+        self.assertEqual(text3['status'], 'Successful')
+        
+    def test_shareresponse(self):
+        '''
+        Test map share response in usermaps.
+        '''
+        login_url = '/users/login'
+        url1 = '/maps/share'
+        url2 = '/maps/share_response'
+        UserInfo.objects.create(username = 'master', password = 'wait5683', phonenumber = '119', email = 'master@example.com', is_active = True)
+        AMap.objects.create(username = 'master', level = '1', stars = '3', unlock = True, solution = 'while')
+        AMap.objects.create(username = 'master', level = '2', stars = '3', unlock = True, solution = 'case')
+        DIYMaps.objects.create(username = 'master', mapinfo = '1111000000100102000010010010211000020001010000000110200000000000000200020010000000002001010000000021', mapname = 'mastermap', solution = 'hello')
+        DIYMaps.objects.create(username = 'master', mapinfo = '1111000000100202000010010020211000020001010000000110200000000000000200020010000000002001010000000021', mapname = 'mastermap', solution = 'world')
+        ImmanentMaps.objects.create(level = '1', immanentmap = '1111000000100002000010010000211000020001000000000110200000000000000200020010000000002001010000000021')
+        
+        tlog = {'username':'master', 'password':'wait5683'}
+        tlog_json = json.dumps(tlog)
+        log_res = self.client.post(login_url, tlog_json, content_type = 'application/json')
+        log_text = json.loads(log_res.content.decode('utf-8'))
+        
+        data1 = {'token':log_text['token'], 'type':'common', 'level':'1'}
+        res1 = self.client.post(url1, json.dumps(data1), content_type = 'application/json')
+        text1 = json.loads(res1.content.decode('utf-8'))
+        
+        dataf = {'token':log_text['token'], 'link':text1['link']}
+        resf = self.client.post(url2, json.dumps(dataf), content_type = 'application/json')
+        textf = json.loads(resf.content.decode('utf-8'))
+        self.assertEqual(textf['status'], 'Successful')
+        
+        data2 = {'token':log_text['token'], 'type':'diy', 'mapid':'1'}
+        res2 = self.client.post(url1, json.dumps(data2), content_type = 'application/json')
+        text2 = json.loads(res2.content.decode('utf-8'))
+        
+        datas = {'token':log_text['token'], 'link':text2['link']}
+        ress = self.client.post(url2, json.dumps(datas), content_type = 'application/json')
+        texts = json.loads(ress.content.decode('utf-8'))
+        self.assertEqual(texts['status'], 'Successful')
+        
+        data3 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwNzk5MzUyMC42OTIsICJ1c2VybmFtZSI6ICJoZWppZSIsICJleHAiOiAxNTA4NTk4MzIwLjY5Mn0=', 'link':text2['link']}
+        res3 = self.client.post(url2, json.dumps(data3), content_type = 'application/json')
+        text3 = json.loads(res3.content.decode('utf-8'))
+        self.assertEqual(text3['status'], 'Expiration')
+        
