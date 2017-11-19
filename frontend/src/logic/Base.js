@@ -104,6 +104,10 @@ export class Base
         {
             return 'runnable';
         }
+        if (Number(Base.bmap.block_list[x][y].info) === 8)
+        {
+            return 'end';
+        }
         return 'err';
     }
 
@@ -158,15 +162,23 @@ export class Base
             }
             return 'null';
         }
-        else if (str === "check_toaim")
+        else if (str === "check_end")
         {
+            let _x = Base.bsnake.x;
+            let _y = Base.bsnake.y;
+            s = Base.runnable(_x, _y);
+            if (s === 'end') 
+            {
+                return 'runnable';
+            }
+            return 'null';
         }
-        else if (str === "check_vtoaim")
-        {
-        }
+        // else if (str === "check_vtoaim")
+        // {
+        // }
 
         if (s === 'runnable')
-        {
+        { 
             return s;
         }
         if (s === 'candy')
@@ -324,7 +336,27 @@ export class Base
                 Base.bmap.setSlot(_x, _y);
             Base.bmap.setHead(_x, _y);
         }
-        else this.type = "fail";
+        else 
+            if (Base.runnable(_x, _y) === 'end')
+            {
+                Base.bmap.setBody(Base.bsnake.x, Base.bsnake.y);
+                let __x = Base.bsnake.body[0].x;
+                let __y = Base.bsnake.body[0].y;
+                Base.bmap.setEmpty(__x, __y);
+                Base.bsnake.add_head(_x, _y);
+                Base.bsnake.del_tail();
+                __x = Base.bsnake.body[0].x;
+                __y = Base.bsnake.body[0].y;
+                Base.bmap.setTail(__x, __y);
+                if (Base.bmap.state === "down")
+                    Base.bmap.setSlot(_x, _y);
+                Base.bmap.setHead(_x, _y);
+
+                Base.bmap.candy--;
+                this.type = "success";
+            }
+            else
+            this.type = "fail";
     }
 
     /**

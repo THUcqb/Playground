@@ -19,7 +19,6 @@ export class BaseMapInfo
         {
            return 9;
         }
-
         if (name === "head")
         {
            return 3;

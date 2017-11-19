@@ -1,7 +1,7 @@
 import {Block} from './Block';
 import axios from 'axios';
 import {URL, SAVEMAP, LOADMAP} from '../config/api';
-import {level0, level1, level2, level3, level4, level5} from './Maplevel';
+import {level0, level1, level2, level3, level4, level5, level6, level7, level8, level9, level10} from './Maplevel';
 import {Base} from './Base';
 import {BaseMapInfo, SlotMapInfo} from './ConstInfo';
 
@@ -12,6 +12,7 @@ class MapInfo
         this.level = level;
         this.maps = maps;
         this.candy = 0;
+        this.allcandy = 0;
     }
 }
 
@@ -22,6 +23,7 @@ export class Map
         this.SIZE_X = SIZE_X;
         this.SIZE_Y = SIZE_Y;
         this.candy = 0;
+        this.allcandy = 0;
     }
 
     /**
@@ -183,6 +185,7 @@ export class Map
                 }
             }
         }
+        this.allcandy = this.candy;
     }
 
     reloadEditorMap(map)
@@ -210,7 +213,8 @@ export class Map
                 slot_map[i][n] = 0;
             }
         }
-
+        
+        this.allcandy = this.candy;
         this.slot_map = slot_map;
     }
 
@@ -231,18 +235,21 @@ export class Map
                 let info = Number(str[i * this.SIZE_X + n]);
 
                 this.block_list[i][n].info = info;
-                if (info === 2)
+                if (info === BaseMapInfo.getElementsByTagName('gold')|info === BaseMapInfo.getElementsByTagName('end'))
                 {
                     this.candy += 1;
                 }
-                if (info === 9)
+                if (info === BaseMapInfo.getElementsByTagName('birthplace'))
                 {
                     Base.bsnake.init(i, n);
                     this.setHead(i, n);
                 }
             }
         }
-
+        this.allcandy = this.candy;
+        
+        
+        
 
         // return axios.post(URL + LOADMAP,
         // {
@@ -313,27 +320,27 @@ export class Map
             {
                 let test = (a[i][n]);
                 let out = "";
-                if (test === 2)
+                if (test === BaseMapInfo.getElementsByTagName('gold'))
                 {
                     out = "@";
                 }
-                else if (test === 3)
+                else if (test === BaseMapInfo.getElementsByTagName('head'))
                 {
                     out = "X";
                 }
-                else if (test === 4)
+                else if (test === BaseMapInfo.getElementsByTagName('body'))
                 {
                     out = "*";
                 }
-                else if (test === 5)
+                else if (test === BaseMapInfo.getElementsByTagName('tail'))
                 {
                     out = ".";
                 }
-                else if (test === 1)
+                else if (test === BaseMapInfo.getElementsByTagName('block'))
                 {
                     out = "#"
                 }
-                else if (test === 9)
+                else if (test === BaseMapInfo.getElementsByTagName('birthplace'))
                 {
                     out = "s"
                 }
