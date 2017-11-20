@@ -335,3 +335,53 @@ class UsersystemTest(TestCase):
         the_res_3 = self.client.post(the_url_2, the_json_data_3, content_type = 'application/json')
         the_text_3 = json.loads(the_res_3.content.decode('utf-8'))
         self.assertEqual(the_text_3['status'], 'Successful')
+        
+    def test_sendmessage(self):
+        '''
+        Test the send message api in usersystem.
+        '''
+        url1 = '/users/send_message'
+        UserInfo.objects.create(username = 'yanlimin', password = 'waitlove', phonenumber = '13051312306', email = 'hejie_cq@163.com', is_active = True)
+        
+        data1 = {'phonenumber':'13051312306'}
+        jdata1 = json.dumps(data1)
+        res1 = self.client.post(url1, jdata1, content_type = 'application/json')
+        text1 = json.loads(res1.content.decode('utf-8'))
+        self.assertEqual(text1['status'], 'Successful')
+        
+        data = {'phonenumber':'110'}
+        jdata = json.dumps(data)
+        res = self.client.post(url1, jdata, content_type = 'application/json')
+        text = json.loads(res.content.decode('utf-8'))
+        self.assertEqual(text['status'], 'NotExisted')
+        
+    def test_mobilelogin(self):
+        '''
+        Test the login by phone number api in usersystem.
+        '''
+        url1 = '/users/send_message'
+        url2 = '/users/mobile_login'
+        UserInfo.objects.create(username = 'yanlimin', password = 'waitlove', phonenumber = '13051312306', email = 'hejie_cq@163.com', is_active = True)
+        
+        data1 = {'phonenumber':'13051312306'}
+        jdata1 = json.dumps(data1)
+        res1 = self.client.post(url1, jdata1, content_type = 'application/json')
+        text1 = json.loads(res1.content.decode('utf-8'))
+        
+        data2 = {'phonenumber':'13051312306', 'code':text1['code']}
+        jdata2 = json.dumps(data2)
+        res2 = self.client.post(url2, jdata2, content_type = 'application/json')
+        text2 = json.loads(res2.content.decode('utf-8'))
+        self.assertEqual(text2['status'], 'Successful')
+        
+        data3 = {'phonenumber':'130', 'code':text1['code']}
+        jdata3 = json.dumps(data3)
+        res3 = self.client.post(url2, jdata3, content_type = 'application/json')
+        text3 = json.loads(res3.content.decode('utf-8'))
+        self.assertEqual(text3['status'], 'NotExisted')
+        
+        data4 = {'phonenumber':'13051312306', 'code':'1111'}
+        jdata4 = json.dumps(data4)
+        res4 = self.client.post(url2, jdata4, content_type = 'application/json')
+        text4 = json.loads(res4.content.decode('utf-8'))
+        self.assertEqual(text4['status'], 'CodeError')
