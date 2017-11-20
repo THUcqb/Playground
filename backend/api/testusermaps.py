@@ -33,6 +33,12 @@ class UserMapsTest(TestCase):
         log_res = self.client.post(login_url, log_json_data, content_type = 'application/json')
         log_text = json.loads(log_res.content.decode('utf-8'))
         
+        data0 = {'token':'hahaha', 'level':'1', 'stars':'3', 'solution':'while'}
+        json_data0 = json.dumps(data0)
+        res0 = self.client.post(the_url, json_data0, content_type = 'application/json')
+        text0 = json.loads(res0.content.decode('utf-8'))
+        self.assertEqual(text0['status'], 'TokenError')
+        
         the_data = {'token':log_text['token'], 'level':'1', 'stars':'3', 'solution':'while'}
         the_json_data = json.dumps(the_data)
         the_res = self.client.post(the_url, the_json_data, content_type = 'application/json')
@@ -67,6 +73,12 @@ class UserMapsTest(TestCase):
         AMap.objects.create(username = 'zuohaojia', level = '1', unlock = True)
         for i in range(1, 10):
             AMap.objects.create(level = str(i + 1), username = 'zuohaojia')
+        
+        data0 = {'token':'hahaha'}
+        json_data0 = json.dumps(data0)
+        res0 = self.client.post(the_url, json_data0, content_type = 'application/json')
+        text0 = json.loads(res0.content.decode('utf-8'))
+        self.assertEqual(text0['status'], 'TokenError')
         
         login_data = {'username':'zuohaojia', 'password':'waitlove'}
         log_json_data = json.dumps(login_data)
@@ -107,6 +119,12 @@ class UserMapsTest(TestCase):
         log_res = self.client.post(login_url, log_json_data, content_type = 'application/json')
         log_text = json.loads(log_res.content.decode('utf-8'))
         
+        data0 = {'token':'hahaha', 'level':'1'}
+        json_data0 = json.dumps(data0)
+        res0 = self.client.post(the_url, json_data0, content_type = 'application/json')
+        text0 = json.loads(res0.content.decode('utf-8'))
+        self.assertEqual(text0['status'], 'TokenError')
+        
         the_data = {'token':log_text['token'], 'level':'1'}
         the_json_data = json.dumps(the_data)
         the_res = self.client.post(the_url, the_json_data, content_type = 'application/json')
@@ -142,6 +160,12 @@ class UserMapsTest(TestCase):
         log_json_data = json.dumps(log_data)
         log_res = self.client.post(login_url, log_json_data, content_type = 'application/json')
         log_text = json.loads(log_res.content.decode('utf-8'))
+        
+        data0 = {'token':'hahaha', 'mapinfo':'1111000000100002000010010000211000020001000000000110200000000000000200020010000000002001010000000021', 'mapname':'mymap', 'solution':'while', 'mapid':'null'}
+        json_data0 = json.dumps(data0)
+        res0 = self.client.post(the_url, json_data0, content_type = 'application/json')
+        text0 = json.loads(res0.content.decode('utf-8'))
+        self.assertEqual(text0['status'], 'TokenError')
         
         data1 = {'token':log_text['token'], 'mapinfo':'1111000000100002000010010000211000020001000000000110200000000000000200020010000000002001010000000021', 'mapname':'mymap', 'solution':'while', 'mapid':'null'}
         jdata1 = json.dumps(data1)
@@ -181,6 +205,12 @@ class UserMapsTest(TestCase):
         log_res = self.client.post(login_url, log_json_data, content_type = 'application/json')
         log_text = json.loads(log_res.content.decode('utf-8'))
         
+        data0 = {'token':'hahaha', 'mapid':'1'}
+        json_data0 = json.dumps(data0)
+        res0 = self.client.post(the_url, json_data0, content_type = 'application/json')
+        text0 = json.loads(res0.content.decode('utf-8'))
+        self.assertEqual(text0['status'], 'TokenError')
+        
         data1 = {'token':log_text['token'], 'mapid':'1'}
         jdata1 = json.dumps(data1)
         res1 = self.client.post(the_url, jdata1, content_type = 'application/json')
@@ -215,6 +245,12 @@ class UserMapsTest(TestCase):
         log_res = self.client.post(login_url, log_json_data, content_type = 'application/json')
         log_text = json.loads(log_res.content.decode('utf-8'))
         
+        data0 = {'token':'hahaha'}
+        json_data0 = json.dumps(data0)
+        res0 = self.client.post(the_url, json_data0, content_type = 'application/json')
+        text0 = json.loads(res0.content.decode('utf-8'))
+        self.assertEqual(text0['status'], 'TokenError')
+        
         data1 = {'token':log_text['token']}
         jdata1 = json.dumps(data1)
         res1 = self.client.post(the_url, jdata1, content_type = 'application/json')
@@ -245,6 +281,12 @@ class UserMapsTest(TestCase):
         log_json = json.dumps(log)
         log_res = self.client.post(login_url, log_json, content_type = 'application/json')
         log_text = json.loads(log_res.content.decode('utf-8'))
+        
+        data0 = {'token':'hahaha', 'type':'diy', 'mapid':'1'}
+        json_data0 = json.dumps(data0)
+        res0 = self.client.post(the_url, json_data0, content_type = 'application/json')
+        text0 = json.loads(res0.content.decode('utf-8'))
+        self.assertEqual(text0['status'], 'TokenError')
         
         data1 = {'token':log_text['token'], 'type':'diy', 'mapid':'1'}
         data1j = json.dumps(data1)
@@ -292,6 +334,11 @@ class UserMapsTest(TestCase):
         textf = json.loads(resf.content.decode('utf-8'))
         self.assertEqual(textf['status'], 'Successful')
         
+        dataf = {'token':log_text['token'], 'link':'eyJ1c2VybmFtZSI6ICJ5YW5saW1pbiIsICJ0eXBlIjogImRpeSIsICJtYXBpZCI6IDExMH0='}
+        resf = self.client.post(url2, json.dumps(dataf), content_type = 'application/json')
+        textf = json.loads(resf.content.decode('utf-8'))
+        self.assertEqual(textf['status'], 'NotExisted')
+        
         data2 = {'token':log_text['token'], 'type':'diy', 'mapid':'1'}
         res2 = self.client.post(url1, json.dumps(data2), content_type = 'application/json')
         text2 = json.loads(res2.content.decode('utf-8'))
@@ -301,8 +348,24 @@ class UserMapsTest(TestCase):
         texts = json.loads(ress.content.decode('utf-8'))
         self.assertEqual(texts['status'], 'Successful')
         
+        datas = {'token':log_text['token'], 'link':'eyJ1c2VybmFtZSI6ICJ5YW5saW1pbiIsICJ0eXBlIjogImNvbW1vbiIsICJsZXZlbCI6ICIxMTAifQ=='}
+        ress = self.client.post(url2, json.dumps(datas), content_type = 'application/json')
+        texts = json.loads(ress.content.decode('utf-8'))
+        self.assertEqual(texts['status'], 'NotExisted')
+        
+        data5 = {'token':log_text['token'], 'link':'lalala'}
+        res5 = self.client.post(url2, json.dumps(data5), content_type = 'application/json')
+        text5 = json.loads(res5.content.decode('utf-8'))
+        self.assertEqual(text5['status'], 'LinkError')
+        
         data3 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwNzk5MzUyMC42OTIsICJ1c2VybmFtZSI6ICJoZWppZSIsICJleHAiOiAxNTA4NTk4MzIwLjY5Mn0=', 'link':text2['link']}
         res3 = self.client.post(url2, json.dumps(data3), content_type = 'application/json')
         text3 = json.loads(res3.content.decode('utf-8'))
         self.assertEqual(text3['status'], 'Expiration')
+        
+        data0 = {'token':'hahaha', 'link':text2['link']}
+        json_data0 = json.dumps(data0)
+        res0 = self.client.post(url2, json_data0, content_type = 'application/json')
+        text0 = json.loads(res0.content.decode('utf-8'))
+        self.assertEqual(text0['status'], 'TokenError')
         
