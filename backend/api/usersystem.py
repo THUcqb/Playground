@@ -10,6 +10,7 @@ import json
 import base64
 import time
 import urllib
+import http.client
 from random import Random
 from django.core.mail import send_mail
 from backend.settings import EMAIL_FROM
@@ -377,7 +378,7 @@ def send_message(request):
     
     :method: post
     :param param1: phonenumber
-    :returns: if succeed, return {"status" : "Successful"}
+    :returns: if succeed, return {"status" : "Successful", 'code':code}
               else if the user hasn't registered, return {"status" : "NotExisted"}
     '''
     if request.method == 'POST':
@@ -389,14 +390,15 @@ def send_message(request):
             userinfo.auth_code = code
             userinfo.save()
             text = "Your code is: " + code + ". For the safety of your account, please don't leak it to others."
-            params = urllib.urlencode({'account': account, 'password' : password, 'content': text, 'mobile':userinfo.phonenumber,'format':'json' })
+            params = urllib.parse.urlencode({'account': account, 'password' : password, 'content': text, 'mobile':userinfo.phonenumber,'format':'json' })
             headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
-            conn = httplib.HTTPConnection(host, port=80, timeout=30)
+            conn = http.client.HTTPConnection(host, port=80, timeout=30)
             conn.request("POST", sms_send_uri, params, headers)
             response = conn.getresponse()
             res = response.read()
             conn.close()
             response_data["status"] = "Successful"
+            response_data["code"] = code
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         except UserInfo.DoesNotExist:
             response_data["status"] = "NotExisted"
@@ -417,6 +419,7 @@ def mobile_login(request):
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
         response_data = {}
+        code = d['code']
         try:
             userinfo = UserInfo.objects.get(phonenumber = d['phonenumber'])
             if code == userinfo.auth_code:
