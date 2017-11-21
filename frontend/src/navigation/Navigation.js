@@ -4,7 +4,6 @@ import { withStyles } from 'material-ui/styles';
 import Drawer from 'material-ui/Drawer';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
-import SignButton from './Sign';
 import Avatar from 'material-ui/Avatar';
 import Typography from 'material-ui/Typography';
 import Divider from 'material-ui/Divider';
@@ -14,6 +13,8 @@ import HomeIcon from 'material-ui-icons/Home'
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import ChevronRightIcon from 'material-ui-icons/ChevronRight';
 import { CookiesProvider } from 'react-cookie';
+import SignButton from './Sign';
+import ShareButton from './Share';
 import MessageBar from '../utils/MessageBar';
 import { alerts as configMsgAlerts} from "../config/msg";
 
@@ -91,7 +92,6 @@ class Navigation extends React.Component {
         const { classes, theme } = this.props;
 
         let userInfo = null;
-
         if (!this.state.loggedIn) {
             userInfo = (
                 <CookiesProvider>
@@ -116,8 +116,7 @@ class Navigation extends React.Component {
                     <Typography type="title" color="inherit" className={classes.flex}>
                         FootMark
                     </Typography>
-                    {userInfo}
-                    <MessageBar/>
+                    <ShareButton/>{userInfo}<MessageBar/>
                 </Toolbar>
             </AppBar>
     );

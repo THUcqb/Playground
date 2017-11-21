@@ -10,6 +10,7 @@ import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 import { withCookies, Cookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 
 const styles = theme => ({
     root: {
@@ -52,16 +53,7 @@ class App extends Component
 
     constructor(props) {
         super(props);
-        if (this.props.cookies.get('token')) {
-            this.state = {
-                welcome: false,
-            }
-        }
-        else {
-            this.state = {
-                welcome: true,
-            }
-        }
+        this.state = {welcome: (this.props.cookies.get('token') === undefined),}
     }
 
     handleWelcome() {
@@ -104,7 +96,7 @@ class App extends Component
                     <Grid container className={classes.container}>
                         <Grid item xs={12} sm={6} className={classes.item}>
                             <Paper className={classes.paper}>
-                                <Scene/>
+                                <Router><Route path="/" component={Scene}/></Router>
                             </Paper>
                         </Grid>
                         <Grid item xs={12} sm={6} className={classes.item}>

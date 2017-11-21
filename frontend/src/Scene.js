@@ -13,6 +13,7 @@ import {Controller} from './logic/Controller';
 import Trajectory from "./painter/Trajectory";
 import MessageBar from './utils/MessageBar';
 import {loadToolbox} from "./utils/LoadBlockly";
+import {shareGetContext} from "./utils/SharedLinks";
 import {loadLevelsInfo, loadLevelSolution, saveLevelInfo} from "./utils/LevelInfo";
 import {loadDIYMaps} from "./utils/LevelMap";
 
@@ -94,6 +95,13 @@ export class Scene extends Component
     {
         this.stage.removeAllChildren();
         Controller.controller.switchDIYLevel(this.DIYMaps[id]);
+        this.reset();
+    }
+
+    handleChooseSharedLevel(string)
+    {
+        this.stage.removeAllChildren();
+        Controller.controller.switchStringLevel(string);
         this.reset();
     }
 
@@ -297,6 +305,31 @@ export class Scene extends Component
         stage.style.height = height.toString() + 'px';
     }
 
+    loadSharedContext()
+    {
+        let sharedCode = this.props.location.pathname.substring(1);
+        shareGetContext(sharedCode)
+            .then((sharedContext) => {
+                if (sharedContext.OK) {
+                    let levelInfo = '';
+                    if (sharedContext.level) {
+                        levelInfo = `Level ${sharedContext.level}`;
+                    }
+                    else {
+                        levelInfo = `Level ${sharedContext.mapname}`;
+                    }
+
+                    MessageBar.show(
+                        `Successfully opened${levelInfo}shared by ${sharedContext.owner}`
+                    );
+                }
+                else {
+                    MessageBar.show('Oops! Link invalid!');
+                    this.handleChooseLevel(1);
+                }
+            })
+    }
+
     /**
      * This function executes when the component mounts
      */
@@ -315,7 +348,14 @@ export class Scene extends Component
         EaselJS.Ticker.addEventListener("tick", () => this.tick());
         EaselJS.Ticker.framerate = 60;
         EaselJS.Ticker.timingMode = EaselJS.Ticker.RAF;
-        this.handleChooseLevel(1);
+        if (this.props.location.pathname === '/')
+        {
+            this.handleChooseLevel(1);
+        }
+        else
+        {
+            this.loadSharedContext();
+        }
     }
 
     /**
