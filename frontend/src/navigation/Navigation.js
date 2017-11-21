@@ -4,7 +4,6 @@ import { withStyles } from 'material-ui/styles';
 import Drawer from 'material-ui/Drawer';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
-import Avatar from 'material-ui/Avatar';
 import Typography from 'material-ui/Typography';
 import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
@@ -37,9 +36,6 @@ const styles = theme => ({
         alignItems: 'center',
         padding: '0 8px',
     },
-    avatar: {
-        background: 'linear-gradient(45deg, #03A9F4 30%, #3F51B5 90%)',
-    }
 
 });
 
@@ -91,18 +87,6 @@ class Navigation extends React.Component {
     render() {
         const { classes, theme } = this.props;
 
-        let userInfo = null;
-        if (!this.state.loggedIn) {
-            userInfo = (
-                <CookiesProvider>
-                    <SignButton loggedIn={(username, justSet) => this.handleLoggedIn(username, justSet)}/>
-                </CookiesProvider>
-            );
-        }
-        else {
-            userInfo = (<Avatar className={classes.avatar}>{this.state.username[0]}</Avatar>);
-        }
-
         const appbar = (
             <AppBar className={classes.appBar}>
                 <Toolbar>
@@ -116,7 +100,15 @@ class Navigation extends React.Component {
                     <Typography type="title" color="inherit" className={classes.flex}>
                         FootMark
                     </Typography>
-                    <ShareButton/>{userInfo}<MessageBar/>
+                    <ShareButton/>
+                    <CookiesProvider>
+                        <SignButton
+                            isloggedIn={this.state.loggedIn}
+                            username={this.state.username}
+                            loggedIn={(username, justSet) => this.handleLoggedIn(username, justSet)}
+                        />
+                    </CookiesProvider>
+                <MessageBar/>
                 </Toolbar>
             </AppBar>
     );
