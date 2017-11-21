@@ -4,6 +4,7 @@ export const hints = {
     clickTreasure: 'Hint: Take this treasure to win the game!',
     clickRole: 'Hint: This is you!',
     removeRole: 'Hint: You are not allowed to remove the clickRole.',
+    removeTreasure: 'Hint: You are not allowed to remove the treasure chest.',
 };
 
 export const alerts = {

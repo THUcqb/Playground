@@ -63,6 +63,10 @@ const elements = [
         label: 'Coin',
     },
     {
+        value: 8,
+        label: "treasure",
+    },
+    {
         value: 9,
         label: 'Role',
     },
@@ -84,6 +88,8 @@ class MapEditor extends React.Component
         this.canvasSize = 420;
         this.lastX = 0;
         this.lastY = 0;
+        this.lastTreasureX = 0;
+        this.lastTreasureY = 1;
         this.stage = null;
         this.state = {
             "mapSize": 10,
@@ -119,8 +125,11 @@ class MapEditor extends React.Component
         this.map = new Map(this.state.mapSize, this.state.mapSize);
         this.map.editInit();
         this.map.block_list[0][0].info = BaseMapInfo.getElementsByTagName('birthplace');
+        this.map.block_list[0][1].info = BaseMapInfo.getElementsByTagName('end');
         this.lastX = 0;
         this.lastY = 0;
+        this.lastTreasureX = 0;
+        this.lastTreasureY = 1;
         this.background.reset();
         this.element.reset();
         this.role.reset();
@@ -141,6 +150,11 @@ class MapEditor extends React.Component
                     {
                         this.lastX = i;
                         this.lastY = j;
+                    }
+                    if (this.map.block_list[i][j].info === BaseMapInfo.getElementsByTagName('end'))
+                    {
+                        this.lastTreasureX = i;
+                        this.lastTreasureY = j;
                     }
                 }
             this.background.init(this.map);
@@ -185,7 +199,6 @@ class MapEditor extends React.Component
 
     handleFinishEditing(op)
     {
-        //TODO: to something including save the map and close the dialog.
         if (op === "start")
         {
             Controller.controller.editNewMap(this.map);
@@ -235,7 +248,15 @@ class MapEditor extends React.Component
         let b_x = Math.floor(Number(y / c_max_y * block_size));
 
         let current = Number(this.state.element);
-        if (this.map.block_list[b_x][b_y].info !== BaseMapInfo.getElementsByTagName('birthplace') && this.map.block_list[b_x][b_y].info !== BaseMapInfo.getElementsByTagName('head'))
+        if (this.map.block_list[b_x][b_y].info === BaseMapInfo.getElementsByTagName('birthplace') || this.map.block_list[b_x][b_y].info === BaseMapInfo.getElementsByTagName('head'))
+        {
+            MessageBar.show(configMsgHints.removeRole);
+        }
+        else if (this.map.block_list[b_x][b_y].info === BaseMapInfo.getElementsByTagName('end'))
+        {
+            MessageBar.show(configMsgHints.removeTreasure);
+        }
+        else
         {
             this.map.block_list[b_x][b_y].info = current;
             if (current === BaseMapInfo.getElementsByTagName('birthplace'))
@@ -244,10 +265,12 @@ class MapEditor extends React.Component
                 this.lastX = b_x;
                 this.lastY = b_y;
             }
-        }
-        else
-        {
-            MessageBar.show(configMsgHints.removeRole);
+            if (current === BaseMapInfo.getElementsByTagName('end'))
+            {
+                if (this.lastTreasureX !== -1) this.map.block_list[this.lastTreasureX][this.lastTreasureY].info = BaseMapInfo.getElementsByTagName('empty');
+                this.lastTreasureX = b_x;
+                this.lastTreasureY = b_y;
+            }
         }
         this.map.print();
         this.updateState("map");
