@@ -2,8 +2,17 @@ import React from 'react';
 import { withCookies, Cookies } from 'react-cookie';
 import Button from 'material-ui/Button';
 import SignDialog from './SignDialog';
-import { signin, signup, getInfoWithCookies } from '../utils/Auth';
+import { signin, signup, changePassword, getInfoWithCookies } from '../utils/Auth';
 import { instanceOf } from 'prop-types';
+import Avatar from 'material-ui/Avatar';
+import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui/styles';
+
+const style = theme => ({
+    avatar: {
+        background: 'linear-gradient(45deg, #03A9F4 30%, #3F51B5 90%)',
+    }
+});
 
 class SignButton extends React.Component {
 
@@ -21,7 +30,7 @@ class SignButton extends React.Component {
         super(props);
         this.state = {
             open: false,
-            isSignUp: false,
+            signingState: 'signin',
             textStatus: {
                 disabled: false,
                 usernameError: false,
@@ -57,9 +66,9 @@ class SignButton extends React.Component {
     * @param password
     */
     handleRequestSignIn(username, password) {
-        if (this.state.isSignUp)
+        if (this.state.signingState !== 'signin')
         {
-            this.setState({isSignUp: false});
+            this.setState({signingState: 'signin'});
         }
         else
         {
@@ -71,9 +80,7 @@ class SignButton extends React.Component {
                         this.props.loggedIn(username, true);
                         this.props.cookies.set('token', SignInStatus.token, {path: '/', maxAge: 1296000});
                     }
-                    else {
-                        this.setState({textStatus: {disabled: false, usernameError: true, passwordError: true}});
-                    }
+                    this.setState({textStatus: {disabled: false, usernameError: true, passwordError: true}});
                 });
         }
     }
@@ -86,8 +93,8 @@ class SignButton extends React.Component {
      * @param email
      */
     handleRequestSignUp(username, password, phonenumber, email) {
-        if (!this.state.isSignUp) {
-            this.setState({isSignUp: true});
+        if (this.state.signingState !== 'signup') {
+            this.setState({signingState: 'signup'});
         }
         else
         {
@@ -95,27 +102,74 @@ class SignButton extends React.Component {
             signup(username, password, phonenumber, email)
                 .then(status => {
                     if (status.OK)
-                        this.setState({isSignUp: false});
+                        this.setState({signingState: 'signin'});
                     this.setState({textStatus: {disabled: false, usernameError: true}});
                 })
         }
     }
 
+    /**
+     * When the user clicks change password
+     * @param oldPassword
+     * @param newPassword
+     */
+    handleRequestChangePassword(oldPassword, newPassword) {
+        if (this.state.signingState !== 'changepassword')
+        {
+            this.setState({signingState: 'changepassword'});
+        }
+        else
+        {
+            this.setState({textStatus: {disabled: true}});
+            changePassword(oldPassword, newPassword)
+                .then(SignInStatus => {
+                    if (SignInStatus.OK) {
+                        this.setState({open: false});
+                    }
+                    else {
+                        this.setState({textStatus: {disabled: false, usernameError: true, passwordError: true}});
+                    }
+                });
+        }
+    }
+
     render() {
+
+        const { classes, theme } = this.props;
+
+        let userOp = null;
+
+        if (this.props.isloggedIn)
+            userOp = (
+                <Avatar className={classes.avatar} onClick={() => this.handleClickOpen()}>
+                    {this.props.username[0]}
+                </Avatar>
+            );
+        else
+            userOp = (
+                <Button raised color="primary" onClick={() => this.handleClickOpen()}>Sign in</Button>
+            );
+
         return (
             <div>
-                <Button raised color="primary" onClick={() => this.handleClickOpen()}>Sign in</Button>
+                {userOp}
                 <SignDialog
                     open={this.state.open}
-                    isSignUp={this.state.isSignUp}
+                    signingState={this.state.signingState}
                     textStatus={this.state.textStatus}
                     onRequestClose={() => this.handleRequestClose()}
                     onRequestSignIn={(username, password) => this.handleRequestSignIn(username, password)}
                     onRequestSignUp={(username, password, phonenumber, email) => this.handleRequestSignUp(username, password, phonenumber, email)}
+                    onRequestChangePassword={(oldPasword, newPassword) => this.handleRequestChangePassword(oldPasword, newPassword)}
                 />
             </div>
         )
     }
 }
 
-export default withCookies(SignButton);
+SignButton.propTypes = {
+    classes: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
+};
+
+export default withStyles(style, { withTheme: true })(withCookies(SignButton));

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { URL, SIGNIN, SIGNUP, GETINFO } from '../config/api';
+import { URL, SIGNIN, SIGNUP, CHANGEPASSWORD, GETINFO } from '../config/api';
 
 export function InvalidCredentialsException(message) {
     this.message = message;
@@ -43,6 +43,22 @@ export function signup(username, password, phonenumber, email) {
         });
 }
 
+export function changePassword(old_password, new_password) {
+    return axios
+        .post(URL + CHANGEPASSWORD, {
+            token: getCookie('token'),
+            old_password,
+            new_password,
+        })
+        .then((response) => {
+            return {OK: (response.data.status === 'Successful')}
+        })
+}
+
+/** Get basic user information with the cookie stored
+ * @param token - the cookie
+ * @returns {Promise.<TResult>}
+ */
 export function getInfoWithCookies(token) {
     return axios
         .post(URL + GETINFO, {
@@ -59,6 +75,11 @@ export function getInfoWithCookies(token) {
 
 }
 
+/**
+ * The the required cookie
+ * @param cookiename - the name of the cookie, ex: token
+ * @returns {string}
+ */
 export function getCookie(cookiename)
 {
     // Get name followed by anything except a semicolon

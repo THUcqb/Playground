@@ -26,6 +26,8 @@ class SignDialog extends React.Component {
         password: '',
         phonenumber: '',
         email: '',
+        oldPassword: '',
+        newPassword: '',
     };
 
     handleChange = name => event => {
@@ -137,11 +139,44 @@ class SignDialog extends React.Component {
             </form>
         );
 
+        const changePasswordForm= (
+            <form className={classes.container} autoComplete="off">
+                <TextField
+                           id="oldPassword"
+                           label="oldPassword"
+                           margin="dense"
+                           type="password"
+                           fullWidth
+                           autoFocus
+                           value={this.state.oldPassword}
+                           onChange={this.handleChange('oldPassword')}
+                           onKeyPress={this.handleEnterKeyPress}
+                           disabled={this.props.textStatus.disabled}
+                           error={this.props.textStatus.usernameError}
+                />
+                <TextField
+                           id="newPassword"
+                           label="newPassword"
+                           margin="dense"
+                           fullWidth
+                           type="password"
+                           autoComplete="current-password"
+                           value={this.state.newPassword}
+                           onChange={this.handleChange('newPassword')}
+                           onKeyPress={this.handleEnterKeyPress}
+                           disabled={this.props.textStatus.disabled}
+                           error={this.props.textStatus.usernameError}
+                />
+            </form>
+        );
+
         let signForm = null;
-        if (this.props.isSignUp)
+        if (this.props.signingState === 'signup')
             signForm = signUpForm;
-        else
+        else if (this.props.signingState === 'signin')
             signForm = signInForm;
+        else
+            signForm = changePasswordForm;
 
         return (
             <Dialog
@@ -156,13 +191,18 @@ class SignDialog extends React.Component {
                     {signForm}
                 </DialogContent>
                 <DialogActions className={classes.actions}>
-                    <Button raised
-                            onClick={() => this.props.onRequestSignUp(this.state.username, this.state.password, this.state.phonenumber, this.state.email)}
-                            color="primary">
+                    <Button onClick={() => this.props.onRequestSignUp(
+                        this.state.username, this.state.password, this.state.phonenumber, this.state.email)}
+                            raised color="primary">
                         Sign up
                     </Button>
-                    <Button onClick={() => this.props.onRequestSignIn(this.state.username, this.state.password)} color="primary">
+                    <Button onClick={() => this.props.onRequestSignIn(
+                        this.state.username, this.state.password)} color="primary">
                         Sign in
+                    </Button>
+                    <Button onClick={() => this.props.onRequestChangePassword(
+                        this.state.oldPassword, this.state.newPassword)} color = "primary">
+                        Change Password
                     </Button>
                 </DialogActions>
             </Dialog>
