@@ -38,7 +38,7 @@ class LinkBar extends React.Component {
                     anchorOrigin={{vertical: 'center', horizontal: 'center',}}
                     open={this.state.open}
                     onRequestClose={this.handleRequestClose}
-                    message={<span id="message-id">{`Link:${this.state.msg}Please tap copy to clipboard!`}</span>}
+                    message={<span id="message-id">{`Link: Please tap copy to clipboard!`}</span>}
                     action={[
                         <IconButton
                             key="close" aria-label="Close" color="accent"
