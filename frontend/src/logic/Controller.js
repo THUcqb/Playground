@@ -28,7 +28,7 @@ export class Controller
 
     switchLevel(level)
     {
-        this.lastType = "level";
+        this.lastType = "common";
         this.begin = Base.begin;
         this.switchLevelTime++;
         Base.begin.time = 1;
@@ -57,9 +57,23 @@ export class Controller
         Base.run_state.cur = Base.begin;
     }
 
-    getLastType()
+    switchStringLevel(string)
     {
-        return this.lastType;
+        this.lastType = "diy";
+        this.begin = Base.begin;
+        this.switchLevelTime++;
+        Base.begin.time = 1;
+        this.begin.type = "user";
+        this.state = "runnable";
+        Base.bmap.loadFromString(string);
+        this.begin.task = new Base_task(this.begin);
+        Base.run_state.state = "runnable";
+        Base.run_state.cur = Base.begin;
+    }
+
+    static getLastType()
+    {
+        return Controller.controller.lastType;
     }
 
     static getMap()

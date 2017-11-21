@@ -98,6 +98,13 @@ export class Scene extends Component
         this.reset();
     }
 
+    handleChooseSharedLevel(string)
+    {
+        this.stage.removeAllChildren();
+        Controller.controller.switchStringLevel(string);
+        this.reset();
+    }
+
     /**
      * Refresh the scene and reset the controller when the user click submit
      */
