@@ -6,14 +6,17 @@ import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import Divider from 'material-ui/Divider';
+import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 import HomeIcon from 'material-ui-icons/Home'
+import PurchaseIcon from 'material-ui-icons/CreditCard';
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import ChevronRightIcon from 'material-ui-icons/ChevronRight';
 import { CookiesProvider } from 'react-cookie';
 import SignButton from './Sign';
 import ShareButton from './Share';
+import Purchase from './Purchase';
 import MessageBar from '../utils/MessageBar';
 import { alerts as configMsgAlerts} from "../config/msg";
 
@@ -49,6 +52,7 @@ class Navigation extends React.Component {
             open: false,
             loggedIn: false,
             username: '',
+            purchaseDialogOpen: false,
         }
     }
 
@@ -80,12 +84,33 @@ class Navigation extends React.Component {
     }
 
     /**
+     * When the user clicks purchase button
+     */
+    handlePurchaseDialogChange() {
+        this.setState((prevState) => ({
+            purchaseDialogOpen: !prevState.purchaseDialogOpen,
+        }))
+    }
+
+    /**
      * Render function
      * @returns {XML} Navigation - consists of a AppBar which have
      * a title and a button, and a Drawer.
      */
     render() {
         const { classes, theme } = this.props;
+
+        const purchase = (
+            <div>
+                <Button raised color="primary"
+                        onClick={() => this.handlePurchaseDialogChange()}>
+                    <PurchaseIcon/>
+                </Button>
+                <Purchase open={this.state.purchaseDialogOpen}
+                          onRequestClose={() => this.handlePurchaseDialogChange()}
+                />
+            </div>
+        );
 
         const appbar = (
             <AppBar className={classes.appBar}>
@@ -100,6 +125,7 @@ class Navigation extends React.Component {
                     <Typography type="title" color="inherit" className={classes.flex}>
                         FootMark
                     </Typography>
+                    {purchase}
                     <ShareButton/>
                     <CookiesProvider>
                         <SignButton

@@ -51,7 +51,7 @@ class SignButton extends React.Component
         const token = this.props.cookies.get('token');
         if (token)
         {
-            getInfoWithCookies(token)
+            getInfoWithCookies()
                 .then((response) =>
                 {
                     if (response.OK)
@@ -97,7 +97,7 @@ class SignButton extends React.Component
                 {
                     if (signInStatus.OK)
                     {
-                        getInfoWithCookies(signInStatus.token).then(response =>
+                        getInfoWithCookies().then(response =>
                         {
                             if (response.OK)
                             {
