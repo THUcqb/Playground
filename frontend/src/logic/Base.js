@@ -89,32 +89,32 @@ export class Base {
         }
         else if (str === "check_move_up")
         {
-            let _x = Base.bsnake.x - 1;
-            let _y = Base.bsnake.y;
+            const _x = Base.bsnake.x - 1;
+            const _y = Base.bsnake.y;
             s = Base.runnable(_x, _y);
         }
         else if (str === "check_move_down")
         {
-            let _x = Base.bsnake.x + 1;
-            let _y = Base.bsnake.y;
+            const _x = Base.bsnake.x + 1;
+            const _y = Base.bsnake.y;
             s = Base.runnable(_x, _y);
         }
         else if (str === "check_move_left")
         {
-            let _x = Base.bsnake.x;
-            let _y = Base.bsnake.y - 1;
+            const _x = Base.bsnake.x;
+            const _y = Base.bsnake.y - 1;
             s = Base.runnable(_x, _y);
         }
         else if (str === "check_move_right")
         {
-            let _x = Base.bsnake.x;
-            let _y = Base.bsnake.y + 1;
+            const _x = Base.bsnake.x;
+            const _y = Base.bsnake.y + 1;
             s = Base.runnable(_x, _y);
         }
         else if (str === "check_aim")
         {
-            let _x = Base.bsnake.x;
-            let _y = Base.bsnake.y;
+            const _x = Base.bsnake.x;
+            const _y = Base.bsnake.y;
             s = Base.runnable(_x, _y);
             if (s === 'candy')
             {
@@ -124,8 +124,8 @@ export class Base {
         }
         else if (str === "check_end")
         {
-            let _x = Base.bsnake.x;
-            let _y = Base.bsnake.y;
+            const _x = Base.bsnake.x;
+            const _y = Base.bsnake.y;
             s = Base.runnable(_x, _y);
             if (s === 'end')
             {
@@ -151,8 +151,8 @@ export class Base {
      */
     move_up()
     {
-        let _x = Base.bsnake.x - 1;
-        let _y = Base.bsnake.y;
+        const _x = Base.bsnake.x - 1;
+        const _y = Base.bsnake.y;
         this.base_move(_x, _y);
     }
 
@@ -161,15 +161,15 @@ export class Base {
      */
     move_down()
     {
-        let _x = Base.bsnake.x + 1;
-        let _y = Base.bsnake.y;
+        const _x = Base.bsnake.x + 1;
+        const _y = Base.bsnake.y;
         this.base_move(_x, _y);
     }
 
     move_left()
     {
-        let _x = Base.bsnake.x;
-        let _y = Base.bsnake.y - 1;
+        const _x = Base.bsnake.x;
+        const _y = Base.bsnake.y - 1;
         this.base_move(_x, _y);
     }
 
@@ -178,8 +178,8 @@ export class Base {
      */
     move_right()
     {
-        let _x = Base.bsnake.x;
-        let _y = Base.bsnake.y + 1;
+        const _x = Base.bsnake.x;
+        const _y = Base.bsnake.y + 1;
         this.base_move(_x, _y);
     }
 

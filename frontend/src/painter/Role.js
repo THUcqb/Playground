@@ -94,7 +94,7 @@ class Role
 
         if (this.animation)
         {
-            this.role.on("mousedown", (i) => {
+            this.role.on("mousedown", (ev) => {
                 MessageBar.show(configMsgHints.clickRole);
                 this.colorNum = (this.colorNum + 1) % this.color.length;
                 this.drawPic();
@@ -183,9 +183,9 @@ class Role
      */
     update(snake)
     {
-        let l = snake.size;
-        let x = snake.body[l - 1].x;
-        let y = snake.body[l - 1].y;
+        const l = snake.size;
+        const x = snake.body[l - 1].x;
+        const y = snake.body[l - 1].y;
         if (this.container === null)
         {
             this.init(x, y);

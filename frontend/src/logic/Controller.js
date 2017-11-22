@@ -88,7 +88,7 @@ export class Controller
     
     static copyMap(map)
     {
-        let tempMap = new Map(map.SIZE_X, map.SIZE_Y);
+        const tempMap = new Map(map.SIZE_X, map.SIZE_Y);
         tempMap.editInit();
         tempMap.copyBlockList(map);
         return tempMap;

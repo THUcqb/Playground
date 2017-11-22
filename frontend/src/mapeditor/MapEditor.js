@@ -180,7 +180,7 @@ class MapEditor extends React.Component
         }
         if (op === "save")
         {
-            let name = prompt("Map name", "My Map");
+            const name = prompt("Map name", "My Map");
             if (name !== null && name !== "")
             {
                 saveDIYMap(name, this.map).then(response =>
