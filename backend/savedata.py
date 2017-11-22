@@ -1,12 +1,12 @@
 import requests
 import json
 
-saveurl = "http://127.0.0.1:8000/blockly/save_toolbox"
+saveurl1 = "http://127.0.0.1:8000/blockly/save_toolbox"
 
 for i in range(1, 5):
     param = {"level":i}
     params = json.dumps(param)
-    res = requests.post(saveurl, params)
+    res = requests.post(saveurl1, params)
     print(res.text)
 
 level = []
@@ -30,4 +30,11 @@ for j in range(11):
     param = {'level':str(j), 'maps':level[j]}
     params = json.dumps(param)
     res = requests.post("http://127.0.0.1:8000/sources/save_maps", params)
+    print(res.text)
+
+saveurl2 = "http://127.0.0.1:8000/sources/save_standard"
+
+for m in range(1, 5):
+    param = {"level":m}
+    res = requests.post(saveurl2, json.dumps(param))
     print(res.text)
