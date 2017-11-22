@@ -311,16 +311,8 @@ export class Scene extends Component
         shareGetContext(sharedCode)
             .then((sharedContext) => {
                 if (sharedContext.OK) {
-                    let levelInfo = '';
-                    if (sharedContext.level) {
-                        levelInfo = `Level ${sharedContext.level}`;
-                    }
-                    else {
-                        levelInfo = `Level ${sharedContext.mapname}`;
-                    }
-
                     MessageBar.show(
-                        `Successfully opened${levelInfo}shared by ${sharedContext.owner}`
+                        `Successfully opened map shared by ${sharedContext.owner}!`
                     );
                 }
                 else {
