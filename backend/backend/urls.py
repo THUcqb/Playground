@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^users/mobile_login$', usersystem.mobile_login),
     url(r'^sources/save_maps$', sources.save_maps),
     url(r'^sources/load_maps$', sources.load_maps),
+    url(r'^sources/save_standard',sources.save_standard),
     url(r'^blockly/save_toolbox$', sources.save_toolbox),
     url(r'^blockly/load_toolbox$', sources.load_toolbox),
     url(r'^maps/save_maps$', usermaps.save_mapsinfo),
