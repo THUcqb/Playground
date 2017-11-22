@@ -1,10 +1,5 @@
 export class BaseMapInfo
 {
-    constructor()
-    {    
-
-    }
-
     static getElementsByTagName(name)
     {
         if (name === "empty") 
@@ -47,11 +42,6 @@ export class BaseMapInfo
 
 export class SlotMapInfo
 {
-    constructor()
-    {    
-
-    }
-
     static getElementsByTagName(name)
     {
         if (name === "empty") 

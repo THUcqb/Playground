@@ -10,7 +10,6 @@ class Trajectory
         this.n = n;
         this.width = this.size / 5 * 4;
         this.time = 480;
-        this.totalLength = 10;
         this.stage = stage;
         this.nowX = 0;
         this.nowY = 0;
@@ -99,7 +98,6 @@ class Trajectory
     change(nowX, nowY)
     {
         let alpha = this.drawingCanvas.alpha;
-        // let alpha = this.length / (this.totalLength - 1);
         this.length++;
         this.drawingCanvas.graphics.clear().beginFill("rgba(0, 0, 0, 1)");
         if (nowX === this.nowX + 1)

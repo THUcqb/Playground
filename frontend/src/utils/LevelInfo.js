@@ -2,7 +2,6 @@ import axios from 'axios';
 import { URL, LOADLEVELINFO, SAVELEVELINFO, LOADLEVELSOLUTION} from '../config/api';
 import { getCookie } from "./Auth";
 import Gamepad from '../gamepad/Gamepad';
-import {Scene} from '../Scene';
 
 export function loadLevelsInfo() {
     return axios

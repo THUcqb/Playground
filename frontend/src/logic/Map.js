@@ -311,17 +311,6 @@ export class Map
         }
         return block_list;
     }
-
-    /**
-     * return map Basic info
-     */
-
-    slotData()
-    {
-        return this.slot_map;
-    }
-
-
 }
 
 Map.localMap = [];

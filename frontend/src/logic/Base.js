@@ -2,8 +2,7 @@ import Snake from './Snake';
 import {Base_state} from './Base_state';
 import Map from './Map';
 
-export class Base_task
-{
+export class Base_task {
     constructor(begin)
     {
         this.begin = begin;
@@ -24,8 +23,7 @@ export class Base_task
     }
 }
 
-export class Base
-{
+export class Base {
     constructor(type, name, check)
     {
         this.type = type;
@@ -44,44 +42,6 @@ export class Base
         this.next = next;
     }
 
-    /**
-     * add tasklist for Base unit
-     * @param {[Base_task]} task
-     */
-    set_task(task)
-    {
-        this.task = task;
-    }
-
-    /**
-     * set run time for tasklist
-     * @param {[int]} time
-     */
-    set_time(time)
-    {
-        this.time = time;
-        this.cur_time = time;
-    }
-
-    /**
-     * set else branch for Base unit
-     * "if...else do else_tasklist "
-     * @param {Base_task} else_task [description]
-     */
-    set_else(else_task)
-    {
-        this.else_task = else_task;
-    }
-
-    /**
-     * set check info "move" "check_move_up" ...
-     * see also the function Check()
-     * @param {[String]} check
-     */
-     set_check(check)
-    {
-        this.checkinfo = check;
-    }
 
     /**
      * check point(x,y) if "runnable" or have "candy"
@@ -116,7 +76,7 @@ export class Base
      * runnable : the check info is right
      * null: current state is missing or wrong
      */
-     check(str)
+    check(str)
     {
         let s = "";
         if (str === "true")
@@ -167,18 +127,15 @@ export class Base
             let _x = Base.bsnake.x;
             let _y = Base.bsnake.y;
             s = Base.runnable(_x, _y);
-            if (s === 'end') 
+            if (s === 'end')
             {
                 return 'runnable';
             }
             return 'null';
         }
-        // else if (str === "check_vtoaim")
-        // {
-        // }
 
         if (s === 'runnable')
-        { 
+        {
             return s;
         }
         if (s === 'candy')
@@ -188,68 +145,6 @@ export class Base
         return 'null';
 
     }
-
-    // /**
-    //  * run the Base unit tasklist base on do while
-    //  */
-    // do_while()
-    // {
-    //     try
-    //     {
-    //         do
-    //         {
-    //             for (let variable in this.task.tasklist)
-    //             {
-    //                 if (this.task.tasklist.hasOwnProperty(variable))
-    //                     this.task.tasklist[variable].run()
-    //             }
-    //         }
-    //         while (Base.check(check) === "runnable")
-    //     }
-    //     catch (err)
-    //     {
-    //         console.log(err)
-    //     }
-    // }
-
-    // /**
-    //  * run the Base unit tasklist base on while do
-    //  */
-    // while_do()
-    // {
-    //     try
-    //     {
-    //         while (Base.check(check))
-    //         {
-    //             for (let variable in this.task.tasklist)
-    //             {
-    //                 if (this.task.tasklist.hasOwnProperty(variable))
-    //                     this.task.tasklist[variable].run()
-    //             }
-    //         }
-    //
-    //     }
-    //     catch (err)
-    //     {
-    //         console.log(err)
-    //     }
-    // }
-    //
-    // /**
-    //  * run the Base unit tasklist base on for loop
-    //  */
-    // loop()
-    // {
-    //     for (let i = 0; i < this.time; i++)
-    //     {
-    //         for (let variable in this.task.tasklist)
-    //         {
-    //
-    //             if (this.task.tasklist.hasOwnProperty(variable))
-    //                 this.task.tasklist[variable].run()
-    //         }
-    //     }
-    // }
 
     /**
      *  snake move up one step
@@ -295,17 +190,6 @@ export class Base
     {
         if (Base.runnable(_x, _y) === 'candy')
         {
-
-            // Base.bmap.set_body(Base.bsnake.x,Base.bsnake.y);
-            // let __x = Base.bsnake.body[0].x;
-            // let __y = Base.bsnake.body[0].y;
-            // Base.bmap.set_tail(__x,__y);
-            // Base.bsnake.add_head(_x,_y);
-            // if (Base.bmap.state === "down")
-            //     Base.bmap.set_slot(_x,_y);
-            // Base.bmap.set_head(_x,_y);
-            // 
-
             Base.bmap.setBody(Base.bsnake.x, Base.bsnake.y);
             let __x = Base.bsnake.body[0].x;
             let __y = Base.bsnake.body[0].y;
@@ -336,37 +220,34 @@ export class Base
                 Base.bmap.setSlot(_x, _y);
             Base.bmap.setHead(_x, _y);
         }
-        else 
-            if (Base.runnable(_x, _y) === 'end')
-            {
-                Base.bmap.setBody(Base.bsnake.x, Base.bsnake.y);
-                let __x = Base.bsnake.body[0].x;
-                let __y = Base.bsnake.body[0].y;
-                Base.bmap.setEmpty(__x, __y);
-                Base.bsnake.add_head(_x, _y);
-                Base.bsnake.del_tail();
-                __x = Base.bsnake.body[0].x;
-                __y = Base.bsnake.body[0].y;
-                Base.bmap.setTail(__x, __y);
-                if (Base.bmap.state === "down")
-                    Base.bmap.setSlot(_x, _y);
-                Base.bmap.setHead(_x, _y);
+        else if (Base.runnable(_x, _y) === 'end')
+        {
+            Base.bmap.setBody(Base.bsnake.x, Base.bsnake.y);
+            let __x = Base.bsnake.body[0].x;
+            let __y = Base.bsnake.body[0].y;
+            Base.bmap.setEmpty(__x, __y);
+            Base.bsnake.add_head(_x, _y);
+            Base.bsnake.del_tail();
+            __x = Base.bsnake.body[0].x;
+            __y = Base.bsnake.body[0].y;
+            Base.bmap.setTail(__x, __y);
+            if (Base.bmap.state === "down")
+                Base.bmap.setSlot(_x, _y);
+            Base.bmap.setHead(_x, _y);
 
-                Base.bmap.candy--;
-                this.type = "success";
-            }
-            else
+            Base.bmap.candy--;
+            this.type = "success";
+        }
+        else
             this.type = "fail";
     }
 
     /**
-     * Base unit will run its tasklist automatically until finished
+     * Base unit will run its task list automatically until finished
      * Warning: if you want to move one step you'd better use next() in Base_state
      */
     run()
     {
-
-        console.log(this.name)
         if (this.type === "sys")
         {
             if (this.name === "move_up")
@@ -385,53 +266,6 @@ export class Base
             {
                 this.move_right();
             }
-            // else
-            // if (this.name === "vmove_up"){}
-            // else
-            // if (this.name === "vmove_down"){}
-            // else
-            // if (this.name === "vmove_left"){}
-            // else
-            // if (this.name === "vmove_right"){}
-            //     else if (this.name === "loop")
-            //     {
-            //         this.loop();
-            //     }
-            //     else if (this.name === "do_while")
-            //     {
-            //         this.do_while();
-            //     }
-            //     else if (this.name === "while_do")
-            //     {
-            //         this.while_do();
-            //     }
-            //     else if (this.name === "judge")
-            //     {
-            //         if (Base.Check(this.check) === "runnable")
-            //         {
-            //             for (let variable in this.task.tasklist)
-            //             {
-            //                 if (this.task.tasklist.hasOwnProperty(variable))
-            //                     this.task.tasklist[variable].run()
-            //             }
-            //         }
-            //         else
-            //         {
-            //             for (let variable in this.else_task.tasklist)
-            //             {
-            //                 if (this.task.tasklist.hasOwnProperty(variable))
-            //                     this.task.tasklist[variable].run()
-            //             }
-            //         }
-            //     }
-            //
-            // } else if (this.type === "user")
-            // {
-            //     for (let variable in this.task.tasklist)
-            //     {
-            //         this.task.tasklist[variable].run()
-            //     }
-            // }
         }
         Base.bmap.print();
     }
