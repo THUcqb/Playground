@@ -45,7 +45,7 @@ class MessageBar extends React.Component {
                         horizontal: 'center',
                     }}
                     open={this.state.open}
-                    autoHideDuration={1000}
+                    autoHideDuration={2000}
                     onRequestClose={this.handleRequestClose}
                     message={<span id="message-id">{this.state.msg}</span>}
                     action={[

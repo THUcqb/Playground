@@ -35,21 +35,6 @@ const styles = theme => ({
 
 });
 
-const currencies = [
-    {
-        value: 8,
-        label: 'S (8 * 8)',
-    },
-    {
-        value: 10,
-        label: 'M (10 * 10)',
-    },
-    {
-        value: 12,
-        label: 'L (12 * 12)',
-    },
-];
-
 const elements = [
     {
         value: 0,
@@ -158,16 +143,6 @@ class MapEditor extends React.Component
                         this.lastTreasureY = j;
                     }
                 }
-            this.background.init(this.map);
-            this.element.init(this.map);
-            this.role.init(this.lastX, this.lastY);
-        }
-        if (name === "mapSize")
-        {
-            this.reset();
-            this.background.updateN(this.state.mapSize);
-            this.element.updateN(this.state.mapSize);
-            this.role.updateN(this.state.mapSize);
             this.background.init(this.map);
             this.element.init(this.map);
             this.role.init(this.lastX, this.lastY);
@@ -292,32 +267,6 @@ class MapEditor extends React.Component
                         Explore and create your own map !
                     </DialogContentText>
                     <div>
-
-                        <TextField
-                            id = "select-size"
-                            select
-                            label = "Size select"
-                            className = {classes.textField}
-                            ref = "selectSize"
-                            value = {this.state.mapSize}
-                            onChange = {(e) => this.handleChange('mapSize', e)}
-                            SelectProps = {{
-                                native: true,
-                                MenuProps: {
-                                    className: classes.menu,
-                                },
-                            }}
-                            helperText = "Please select your map's size"
-                            margin = "normal"
-                        >
-                            {currencies.map(option => (
-                                <option key = {option.value} value = {option.value}>
-                                    {option.label}
-                                </option>
-                            ))}
-
-                        </TextField>
-
                         <TextField
                             id = "select-element"
                             select
