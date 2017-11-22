@@ -12,27 +12,8 @@ export class Base_state
     constructor(cur)
     {
         this.cur = cur;
-        this.pre = null;
-        this.loop_time = 0;
         this.state = "runnable";
         this.move_state = "null";
-        this.snake_state = "up";
-    }
-
-    /**
-     * return pre state
-     */
-    get_pre()
-    {
-        return this.pre;
-    }
-
-    /**
-     * return current state
-     */
-    get_cur()
-    {
-        return this.cur;
     }
 
     /**
@@ -40,7 +21,6 @@ export class Base_state
      */
     next()
     {
-        this.pre = this.cur;
         if (this.cur.type === "user")
         {
             this.next_move();
