@@ -23,7 +23,7 @@ export function loadLevelSolution(level, ifLoad) {
         .then(function (response) {
             if (response.data.status === 'Successful' && ifLoad)
                 Gamepad.loadWorkspace(response.data.solution);
-            return {OK: response.data.status === 'Successful', solution: response.data.solution, stdSolution: response.data.solution}
+            return {OK: response.data.status === 'Successful', solution: response.data.solution, stdSolution: response.data.standard}
         })
 }
 
