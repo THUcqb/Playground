@@ -17,6 +17,13 @@ const blocklyWorkspaceXml = {
     }
 };
 
+const gamepadStyle = {
+    width: "100%",
+    minHeight: "256px",
+    display: "flex",
+    flexDirection: "column"
+};
+
 const blocklyDivStyle = ({
     position: "absolute",
 });
@@ -123,7 +130,7 @@ class Gamepad extends Component {
 
     render() {
         return (
-            <div className="Gamepad" style={{width: "100%", minHeight: "256px", display: "flex", flexDirection: "column"}}>
+            <div style={gamepadStyle}>
                 <GameActions
                     style={{flex: 1}}
                     clear={Gamepad.clearWorkspace}

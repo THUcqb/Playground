@@ -2,6 +2,7 @@ import axios from 'axios';
 import { URL, LOADLEVELINFO, SAVELEVELINFO, LOADLEVELSOLUTION} from '../config/api';
 import { getCookie } from "./Auth";
 import Gamepad from '../gamepad/Gamepad';
+import {Scene} from '../Scene';
 
 export function loadLevelsInfo() {
     return axios
@@ -22,6 +23,17 @@ export function loadLevelSolution(level) {
         .then(function (response) {
             if (response.data.status === 'Successful')
                 Gamepad.loadWorkspace(response.data.solution);
+        })
+}
+
+export function loadLevelStandardSolution() {
+    return axios
+        .post(URL + LOADLEVELSOLUTION, {
+            token: getCookie('token'),
+            level: Scene.singleton.state.nowLevel,
+        })
+        .then(function (response) {
+            return {OK: response.data.status === 'Successful', solution: response.data.solution}
         })
 }
 
