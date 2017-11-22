@@ -153,7 +153,7 @@ class UserMapsTest(TestCase):
         
     def test_savediymap(self):
         '''
-        Test the save_diyma API in usersystem.
+        Test the save_diymap API in usersystem.
         '''
         login_url = '/users/login'
         the_url = '/diymaps/save_diymap'
@@ -192,6 +192,41 @@ class UserMapsTest(TestCase):
         res3 = self.client.post(the_url, jdata3, content_type = 'application/json')
         text3 = json.loads(res3.content.decode('utf-8'))
         self.assertEqual(text3['status'], 'Expiration')
+    
+    def test_deletediymap(self):
+        '''
+        Test the delete_diymap API in usersystem.
+        '''
+        DIYMaps.objects.create(username = 'master', mapinfo = '1111000000100002000010010000211000020121010000000110200000000000000200020010000000002001010000000021', mapname = 'amap', solution = 'hello')
+        UserInfo.objects.create(username = 'master', password = 'wait5683', phonenumber = '119', email = 'master@example.com', is_active = True)
+        DIYMaps.objects.create(username = 'master', mapinfo = '1111000000100002000010010000211000020001010000000110200000000000000200020010000000002001010000000021', mapname = 'mastermap', solution = 'hello')
+        loginurl = '/users/login'
+        theurl = '/diymaps/delete_diymap'
+        
+        logdata = {'username':'master', 'password':'wait5683'}
+        logjson_data = json.dumps(logdata)
+        logres = self.client.post(loginurl, logjson_data, content_type = 'application/json')
+        logtext = json.loads(logres.content.decode('utf-8'))
+        
+        data = {'token':logtext['token'], 'mapid':'1'}
+        res = self.client.post(theurl, json.dumps(data), content_type = 'application/json')
+        text = json.loads(res.content.decode('utf-8'))
+        self.assertEqual(text['status'], 'Successful')
+        
+        data = {'token':logtext['token'], 'mapid':'1'}
+        res = self.client.post(theurl, json.dumps(data), content_type = 'application/json')
+        text = json.loads(res.content.decode('utf-8'))
+        self.assertEqual(text['status'], 'NotExisted')
+        
+        data = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwNzk5MzUyMC42OTIsICJ1c2VybmFtZSI6ICJoZWppZSIsICJleHAiOiAxNTA4NTk4MzIwLjY5Mn0=', 'mapid':'1'}
+        res = self.client.post(theurl, json.dumps(data), content_type = 'application/json')
+        text = json.loads(res.content.decode('utf-8'))
+        self.assertEqual(text['status'], 'Expiration')
+        
+        data = {'token':'haha', 'mapid':'1'}
+        res = self.client.post(theurl, json.dumps(data), content_type = 'application/json')
+        text = json.loads(res.content.decode('utf-8'))
+        self.assertEqual(text['status'], 'TokenError')
         
     def test_getdiysolution(self):
         '''

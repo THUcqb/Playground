@@ -205,6 +205,43 @@ def save_diymap(request):
             except DIYMaps.DoesNotExist:
                 response_data["status"] = "NotExisted"
                 return HttpResponse(json.dumps(response_data),content_type="application/json")            
+
+@csrf_exempt
+def delete_diymap(request):
+    '''
+    Save the maps edited by the users.
+    
+    :method: POST
+    :param param1: token
+    :param param2: mapid
+    :returns: if succeed, return {"status":"Successful"}
+              else if the token is out of date, return {"status":"Expiration"}
+              else if token is wrong, return {"status":"TokenError"}
+              else if the mapid doesn't exist, return {"status":"NotEixsted"}
+    '''
+    if request.method == 'POST':
+        now = time.time()
+        d = json.loads(request.body.decode('utf-8'))
+        response_data = {}
+        token_byte = d['token']
+        try:
+            user_info = analyze_token(token_byte)
+            expire = user_info['exp']
+        except:
+            response_data["status"] = "TokenError"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        mapid = d['mapid']
+        if expire < now:
+            response_data["status"] = "Expiration"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        try:
+            diymap = DIYMaps.objects.get(id = int(mapid))
+            diymap.delete()
+            response_data["status"] = "Successful"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        except DIYMaps.DoesNotExist:
+            response_data["status"] = "NotExisted"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
            
 @csrf_exempt
 def get_diysolution(request):
