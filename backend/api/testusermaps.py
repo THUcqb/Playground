@@ -39,6 +39,12 @@ class UserMapsTest(TestCase):
         text0 = json.loads(res0.content.decode('utf-8'))
         self.assertEqual(text0['status'], 'TokenError')
         
+        the_data = {'token':log_text['token'], 'level':'1', 'stars':'1', 'solution':'while'}
+        the_json_data = json.dumps(the_data)
+        the_res = self.client.post(the_url, the_json_data, content_type = 'application/json')
+        the_text = json.loads(the_res.content.decode('utf-8'))
+        self.assertEqual(the_text['status'], 'Successful')
+        
         the_data = {'token':log_text['token'], 'level':'1', 'stars':'3', 'solution':'while'}
         the_json_data = json.dumps(the_data)
         the_res = self.client.post(the_url, the_json_data, content_type = 'application/json')
