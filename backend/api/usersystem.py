@@ -159,7 +159,7 @@ def get_userinfo(request):
             response_data["username"] = userinfo.username
             response_data["phonenumber"] = userinfo.phonenumber
             response_data["email"] = userinfo.email
-            if now > userinfo.VIPtime:
+            if userinfo.VIPtime < now:
                 response_data["VIPtype"] = "NotVIP"
             else:
                 response_data["VIPtype"] = userinfo.VIPtype
@@ -176,7 +176,7 @@ def recharge(request):
     
     :method: post
     :param param1: token
-    :param param2: VIPtype
+    :param param2: VIPtype (Month/Season/Year)
     :returns: if succeed, return {"status":"Successful"}
               else if the token is out of date, return {"status":"Expiration"}
               else if the user doesn't exist, return {"status":"NotExisted"}
@@ -195,14 +195,17 @@ def recharge(request):
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         try:
             userinfo = UserInfo.objects.get(username = username)
-            if userinfo.VIPtime == 0:
+            if userinfo.VIPtime < now:
                 userinfo.VIPtime = now
-            if VIPtype == 'month':
+            if VIPtype == 'Month':
                 userinfo.VIPtime += 2592000
-            elif VIPtype == 'season':
+                userinfo.VIPtype = 'Month'
+            elif VIPtype == 'Season':
                 userinfo.VIPtime += 7776000
-            elif VIPtype == 'year':
+                userinfo.VIPtype = 'Season'
+            elif VIPtype == 'Year':
                 userinfo.VIPtime += 31104000
+                userinfo.VIPtype = 'Year'
             userinfo.save()
             response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
@@ -210,7 +213,6 @@ def recharge(request):
             response_data["status"] = "NotExisted"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         
-  
 @csrf_exempt
 def change_password(request):
     '''
