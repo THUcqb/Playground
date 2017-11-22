@@ -34,6 +34,8 @@ class SignButton extends React.Component {
             textStatus: {
                 disabled: false,
                 usernameError: false,
+                phoneNumberError: false,
+                verificationCodeError: false,
                 passwordError: false,
             }
         };
