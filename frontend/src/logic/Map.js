@@ -1,7 +1,5 @@
 import {Block} from './Block';
-import axios from 'axios';
-import {URL, SAVEMAP, LOADMAP} from '../config/api';
-import {level0, level1, level2, level3, level4, level5, level6, level7, level8, level9, level10} from './Maplevel';
+import { numberOfLevels, level } from './Maplevel';
 import {Base} from './Base';
 import {BaseMapInfo, SlotMapInfo} from './ConstInfo';
 
@@ -364,11 +362,9 @@ export class Map
 }
 
 Map.localMap = [];
-Map.localMap[0] = (level0);
-Map.localMap[1] = (level1);
-Map.localMap[2] = (level2);
-Map.localMap[3] = (level3);
-Map.localMap[4] = (level4);
-Map.localMap[5] = (level5);
+for (let i = 0; i < numberOfLevels; i++)
+{
+    Map.localMap[i] = level[i];
+}
 
 export default Map;
