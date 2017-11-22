@@ -232,9 +232,11 @@ export class Base_state
         return "end";
     }
 
-    tr_check()
+    tr_check(op)
     {
-        if (this.cur.check === "move")
+
+        if (op === "self") {
+        if (this.cur.checkinfo === "move")
         {
             if (this.move_state === "move_up" || this.move_state === "null")
             {
@@ -254,7 +256,78 @@ export class Base_state
             }
         }
 
-        return this.cur.check;
+        return this.cur.checkinfo;
+        }
+        else
+        {
+                    if (op === "turn_right")
+                    {
+                        if (this.move_state === "null" ||this.move_state === "move_up")
+                        {
+                            return"check_move_right";
+                           
+                        } else if (this.move_state === "move_right")
+                        {
+                            return"check_move_down";
+                            
+                        } else if ( this.move_state === "move_down")
+                        {
+                            return"check_move_left";
+                           
+                        } else if (this.move_state === "move_left")
+                        {
+                            return"check_move_up";
+                            
+                        }
+
+
+                    }
+                    else if (this.cur.name === "turn_left")
+                    {
+                        if (this.move_state === "null" ||this.move_state === "move_up")
+                        {
+                            return"check_move_left";
+                            
+                        } else if (this.move_state === "move_left")
+                        {
+                            return"check_move_down";
+                            
+                        } else if ( this.move_state === "move_down")
+                        {
+                            return"check_move_right";
+                            
+                        } else if (this.move_state === "move_right")
+                        {
+                            return"check_move_up";
+                           
+                        }
+                    }
+                    else if (this.cur.name === "move")
+                    {
+                        if ( this.move_state === "move_down")
+                        {
+                            return"check_move_down";
+                        }
+                        else if (this.move_state === "move_left")
+                        {
+                            return"check_move_left";
+                            
+                        } else if (this.move_state === "null" ||this.move_state === "move_up")
+                        {
+                            return"check_move_up";
+                            
+                        } else if (this.move_state === "move_right")
+                        {
+                            return"check_move_right";
+                        }
+
+                    }
+                    else
+                    {
+                        return op;
+                    }
+        }
+       
     }
 
     next_move()
@@ -276,20 +349,21 @@ export class Base_state
                 }
                 else if (this.cur.name === "judge")
                 {
-                    if (this.cur.check(this.tr_check()) === "runnable")
+                    if (this.cur.check(this.tr_check("self")) === "runnable")
                     {
                         this.cur = this.cur.task.tasklist[0];
                         this.cur.time = this.cur.cur_time;
                     }
                     else
                     {
+                       
                         this.cur = this.cur.else_task.tasklist[0];
                         this.cur.time = this.cur.cur_time;
                     }
                 }
                 else if (this.cur.name === "while_do")
                 {
-                    if (this.cur.check(this.tr_check()) === "runnable")
+                    if (this.cur.check(this.tr_check("self")) === "runnable")
                     {
                         this.cur.time = 1;
                         this.cur = this.cur.task.tasklist[0];
