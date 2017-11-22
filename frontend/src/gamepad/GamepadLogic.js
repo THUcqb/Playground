@@ -10,9 +10,25 @@ import { Scene } from '../Scene';
  * @param op
  */
 export function move(op) {
-    Controller.controller.begin.task.add(new Base('sys', 'move_' + op));
+
+    if (op === 'forward') {
+        Controller.controller.begin.task.add(new Base('sys', 'move'));
+    }
+    else {
+        Controller.controller.begin.task.add(new Base('sys', 'move_' + op));
+    }
+
     Controller.step();
 }
+
+export function turn(op) {
+
+   
+    Controller.controller.begin.task.add(new Base('sys', 'turn_' + op));
+    
+    Controller.step();
+}
+
 
 let highlighting = false;
 

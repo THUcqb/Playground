@@ -62,7 +62,7 @@ class test{
         console.log(`Received: ${input}`);
         op = input;
         console.log(">"+op);
-        controller.step();
+        Controller.step();
         });
     }
 
@@ -74,7 +74,7 @@ class test{
             let false_task = new Base_task(judge);
 
             true_task.add(new Base("sys","move"));
-            false_task.add(new Base("sys","trun_left"));
+            false_task.add(new Base("sys","turn_left"));
 
             judge.set_task(true_task);
             judge.set_else(false_task);
@@ -97,7 +97,7 @@ class test{
             let false_task = new Base_task(judge);
 
             true_task.add(new Base("sys","move"));
-            false_task.add(new Base("sys","trun_left"));
+            false_task.add(new Base("sys","turn_left"));
 
             judge.set_task(true_task);
             judge.set_else(false_task);
@@ -118,7 +118,10 @@ class test{
         let loop = new Base("sys","loop");
             loop.set_time(200);
             let loop_task = new Base_task(loop);
-            loop_task.add(new Base("sys","move_up"));
+           
+            loop_task.add(new Base("sys","turn_left"));
+            loop_task.add(new Base("sys","move"));
+
             loop.set_task(loop_task);
             
         usertask.add(loop);//向任务列表添加函数
@@ -130,6 +133,7 @@ class test{
 
 var controller = new Controller();
 
+controller.switchLevel(1)
 /*
 *地图编辑的接口见Map.js Controller
 */

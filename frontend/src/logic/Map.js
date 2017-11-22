@@ -290,6 +290,10 @@ export class Map
                 {
                     out = "#"
                 }
+                else if (test === BaseMapInfo.getElementsByTagName('end'))
+                {
+                    out = "E"
+                }
                 else if (test === BaseMapInfo.getElementsByTagName('birthplace'))
                 {
                     out = "s"
