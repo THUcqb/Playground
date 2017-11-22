@@ -3,6 +3,9 @@
     <block type="action_move">
       <field name="OP">forward</field>
     </block>
+    <block type="action_turn">
+      <field name="OP">left</field>
+    </block>
   </category>
   <category name="Logic" colour="#5C81A6">
     <block type="controls_if"></block>
