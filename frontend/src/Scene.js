@@ -225,6 +225,7 @@ export class Scene extends Component
                 <OverDialog
                     open={this.state.overDialogOpen}
                     dialogTitle={this.state.dialogTitle}
+                    starNum={this.nowScore}
                     nextAvail={this.isNextLevelAvailable()}
                     onNext={() => this.handleNextLevel()}
                     onLevels={() => this.handleOpenLevelDialog()}
