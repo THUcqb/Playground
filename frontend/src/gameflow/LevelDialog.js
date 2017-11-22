@@ -7,6 +7,7 @@ import {withStyles} from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import Star from 'material-ui-icons/Star';
 import StarBorder from 'material-ui-icons/StarBorder';
+import {numberOfLevels} from '../logic/Maplevel';
 
 const styles = theme => ({
     button: {
@@ -25,20 +26,15 @@ const styles = theme => ({
 
 class LevelDialog extends React.Component
 {
-    state = {
-        chipData: [
-            {key: 1, label: "Level1"},
-            {key: 2, label: "Level2"},
-            {key: 3, label: "Level3"},
-            {key: 4, label: "Level4"},
-            {key: 5, label: "Level5"},
-            {key: 6, label: "Level6"},
-            {key: 7, label: "Level7"},
-            {key: 8, label: "Level8"},
-            {key: 9, label: "Level9"},
-            {key: 10, label: "Level10"},
-        ],
-    };
+    constructor()
+    {
+        super();
+        this.buttonData = [];
+        for (let i = 1; i <= numberOfLevels; i++)
+        {
+            this.buttonData.push({key: i, label: "Level" + i.toString()});
+        }
+    }
 
     render()
     {
@@ -52,7 +48,7 @@ class LevelDialog extends React.Component
                 <DialogContent>
                     Default levels
                     <div className = {classes.row}>
-                        {this.state.chipData.map(data =>
+                        {this.buttonData.map(data =>
                         {
                             const star = <Star/>;
                             const starBorder = <StarBorder/>;
