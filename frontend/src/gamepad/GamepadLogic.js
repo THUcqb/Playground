@@ -11,7 +11,7 @@ import { Scene } from '../Scene';
  */
 export function move(op) {
 
-    if (op === 'forward') {
+    if (String(op) === 'forward') {
         Controller.controller.begin.task.add(new Base('sys', 'move'));
     }
     else {
@@ -23,7 +23,6 @@ export function move(op) {
 
 export function turn(op) {
 
-   
     Controller.controller.begin.task.add(new Base('sys', 'turn_' + op));
     
     Controller.step();
