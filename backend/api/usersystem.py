@@ -139,7 +139,7 @@ def get_userinfo(request):
     
     :method: post
     :param param1: token
-    :returns: if succeed, return {"username":username, "phonenumber": phonenumber, "email":email, "status":"Successful"}
+    :returns: if succeed, return {"username":username, "phonenumber": phonenumber, "email":email, "VIPtype":VIPtype, "status":"Successful"}
               else if the token is out of date, return {"status":"Expiration"}
               else if the user doesn't exist, return {"status":"NotExisted"}
     '''
@@ -159,6 +159,57 @@ def get_userinfo(request):
             response_data["username"] = userinfo.username
             response_data["phonenumber"] = userinfo.phonenumber
             response_data["email"] = userinfo.email
+            if userinfo.VIPtime < now:
+                response_data["VIPtype"] = "NotVIP"
+            else:
+                response_data["VIPtype"] = userinfo.VIPtype
+            response_data["status"] = "Successful"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        except UserInfo.DoesNotExist:
+            response_data["status"] = "NotExisted"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+
+@csrf_exempt
+def recharge(request):
+    '''
+    Handle the request of recharge to be VIP.
+    
+    :method: post
+    :param param1: token
+    :param param2: VIPtype (Month/Season/Year)
+    :returns: if succeed, return {"status":"Successful"}
+              else if the token is out of date, return {"status":"Expiration"}
+              else if the user doesn't exist, return {"status":"NotExisted"}
+    '''
+    if request.method == 'POST':
+        d = json.loads(request.body.decode('utf-8'))
+        response_data = {}
+        token_byte = d['token']
+        VIPtype = d['VIPtype']
+        now = time.time()
+        user_info = analyze_token(token_byte)
+        username = user_info['username']
+        expire = user_info['exp']
+        if expire < now:
+            response_data["status"] = "Expiration"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        try:
+            userinfo = UserInfo.objects.get(username = username)
+            if userinfo.VIPtime < now:
+                userinfo.VIPtime = now
+                userinfo.VIPtype = ''
+            if VIPtype == 'Month':
+                userinfo.VIPtime += 2592000
+                if userinfo.VIPtype == '':
+                    userinfo.VIPtype = 'Month'
+            elif VIPtype == 'Season':
+                userinfo.VIPtime += 7776000
+                if userinfo.VIPtype != 'Year': 
+                    userinfo.VIPtype = 'Season'
+            elif VIPtype == 'Year':
+                userinfo.VIPtime += 31104000
+                userinfo.VIPtype = 'Year'
+            userinfo.save()
             response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         except UserInfo.DoesNotExist:

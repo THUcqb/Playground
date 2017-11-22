@@ -15,6 +15,8 @@ class UserInfo(models.Model):
     email = models.EmailField()
     is_active = models.BooleanField(default = False)
     auth_code = models.CharField(max_length = 50, default = '')
+    VIPtime = models.IntegerField(default = 0)
+    VIPtype = models.CharField(max_length = 50, default = '')
 
     def __str__(self):
         return self.username

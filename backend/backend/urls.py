@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^users/auth_response$', usersystem.auth_response),
     url(r'^users/send_message$', usersystem.send_message),
     url(r'^users/mobile_login$', usersystem.mobile_login),
+    url(r'^users/recharge$', usersystem.recharge),
     url(r'^sources/save_maps$', sources.save_maps),
     url(r'^sources/load_maps$', sources.load_maps),
     url(r'^sources/save_standard',sources.save_standard),

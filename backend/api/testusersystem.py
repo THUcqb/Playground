@@ -136,7 +136,34 @@ class UsersystemTest(TestCase):
         get_res_3 = self.client.post(get_url, get_json_data_3, content_type = 'application/json')
         get_text_3 = json.loads(get_res_3.content.decode('utf-8'))
         self.assertEqual(get_text_3['status'], 'NotExisted')
+    
+    def test_recharge(self):
+        '''
+        Test the recharge API in usersystem.
+        '''
+        the_url = '/users/recharge'
+        login_url = '/users/login'
+        UserInfo.objects.create(username = 'zuohaojia', password = 'waitlove', phonenumber = '13051312306', email = 'zuohaojia@163.com', is_active = True)
         
+        login_data = {'username':'zuohaojia', 'password':'waitlove'}
+        log_res = self.client.post(login_url, json.dumps(login_data), content_type = 'application/json')
+        log_text = json.loads(log_res.content.decode('utf-8'))
+        
+        param = {'token':log_text['token'], 'VIPtype':'month'}
+        res = self.client.post(the_url, json.dumps(param), content_type = 'application/json')
+        text = json.loads(res.content.decode('utf-8'))
+        self.assertEqual(text['status'], 'Successful')
+        
+        param = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwNzk5MzUyMC42OTIsICJ1c2VybmFtZSI6ICJoZWppZSIsICJleHAiOiAxNTA4NTk4MzIwLjY5Mn0=', 'VIPtype':'month'}
+        res = self.client.post(the_url, json.dumps(param), content_type = 'application/json')
+        text = json.loads(res.content.decode('utf-8'))
+        self.assertEqual(text['status'], 'Expiration')
+        
+        param = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwODkxMjc5Mi4yMTEsICJ1c2VybmFtZSI6ICJoZWxsbyIsICJleHAiOiAxNTQwNDQ4NzkyLjIxMX0=', 'VIPtype':'month'}
+        res = self.client.post(the_url, json.dumps(param), content_type = 'application/json')
+        text = json.loads(res.content.decode('utf-8'))
+        self.assertEqual(text['status'], 'NotExisted')
+    
     def test_changepassword(self):
         '''
         Test the changepassword API in usersystem.
@@ -385,3 +412,4 @@ class UsersystemTest(TestCase):
         res4 = self.client.post(url2, jdata4, content_type = 'application/json')
         text4 = json.loads(res4.content.decode('utf-8'))
         self.assertEqual(text4['status'], 'CodeError')
+        
