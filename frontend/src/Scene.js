@@ -16,6 +16,7 @@ import {loadToolbox} from "./utils/LoadBlockly";
 import {shareGetContext} from "./utils/SharedLinks";
 import {loadLevelsInfo, loadLevelSolution, saveLevelInfo} from "./utils/LevelInfo";
 import {loadDIYMaps} from "./utils/LevelMap";
+import {numberOfLevels} from "./logic/Maplevel";
 
 const styles = theme => ({
     button: {
@@ -44,13 +45,12 @@ export class Scene extends Component
             nowLevel: 1,
             dialogTitle: "Game Over",
         };
-        this.levelsInfo = {
-            '1': {unlock: true, stars: '0'},
-            '2': {unlock: false, stars: '0'},
-            '3': {unlock: false, stars: '0'},
-            '4': {unlock: false, stars: '0'},
-            '5': {unlock: false, stars: '0'},
-        };
+        this.levelsInfo = {};
+        for (let i = 1; i <= numberOfLevels; i++)
+        {
+            this.levelsInfo[i.toString()] = {unlock: false, stars: '0'};
+        }
+        this.levelsInfo['1'] = {unlock: true, stars: 0};
         this.DIYMapsInfo = [];
         this.DIYMaps = {};
     }
@@ -69,7 +69,7 @@ export class Scene extends Component
 
     isNextLevelAvailable()
     {
-        return (this.state.nowLevel < 5 && !this.isFail);
+        return (this.state.nowLevel < numberOfLevels && !this.isFail);
     }
 
     /**
@@ -111,7 +111,8 @@ export class Scene extends Component
     static handleRestart()
     {
         Scene.singleton.stage.removeAllChildren();
-        Controller.controller.switchLevel(Scene.singleton.state.nowLevel);
+        // Controller.controller.switchLevel(Scene.singleton.state.nowLevel);
+        Controller.controller.restart();
         Scene.singleton.reset();
     }
 
@@ -168,7 +169,7 @@ export class Scene extends Component
 
     handleNextLevel()
     {
-        if (this.state.nowLevel < 5)
+        if (this.state.nowLevel < numberOfLevels)
         {
             this.handleChooseLevel(this.state.nowLevel + 1);
         }
@@ -232,7 +233,7 @@ export class Scene extends Component
                     onReplay={() =>
                     {
                         this.setState({overDialogOpen: false});
-                        this.handleChooseLevel(this.state.nowLevel);
+                        Scene.handleRestart();
                     }}
                 />
                 <MessageBar/>

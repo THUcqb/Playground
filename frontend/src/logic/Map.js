@@ -1,7 +1,5 @@
 import {Block} from './Block';
-import axios from 'axios';
-import {URL, SAVEMAP, LOADMAP} from '../config/api';
-import {level0, level1, level2, level3, level4, level5, level6, level7, level8, level9, level10} from './Maplevel';
+import { numberOfLevels, level } from './Maplevel';
 import {Base} from './Base';
 import {BaseMapInfo, SlotMapInfo} from './ConstInfo';
 
@@ -68,13 +66,6 @@ export class Map
             }
         }
         this.block_list = block_list;
-        this.localMap = [];
-        this.localMap[0] = (level0);
-        this.localMap[1] = (level1);
-        this.localMap[2] = (level2);
-        this.localMap[3] = (level3);
-        this.localMap[4] = (level4);
-        this.localMap[5] = (level5);
         this.setHead(x, y);
     }
 
@@ -224,7 +215,7 @@ export class Map
      */
     load(level)
     {
-        let str = this.localMap[level];
+        let str = Map.localMap[level];
         this.loadFromString(str);
     }
 
@@ -373,7 +364,10 @@ export class Map
 
 }
 
+Map.localMap = [];
+for (let i = 0; i < numberOfLevels; i++)
+{
+    Map.localMap[i] = level[i];
+}
+
 export default Map;
-
-
-

@@ -26,6 +26,11 @@ class LevelDialog extends React.Component
             {key: 3, label: "Level3"},
             {key: 4, label: "Level4"},
             {key: 5, label: "Level5"},
+            {key: 6, label: "Level6"},
+            {key: 7, label: "Level7"},
+            {key: 8, label: "Level8"},
+            {key: 9, label: "Level9"},
+            {key: 10, label: "Level10"},
         ],
     };
 
