@@ -72,8 +72,6 @@ export class Base_state
             this.state = "success";
         }
 
-        console.log(this.cur.name);
-        console.log(this.cur.type);
         if (this.cur.type === "fail")
         {
             this.state = "fail";
@@ -87,8 +85,6 @@ export class Base_state
         {
             this.state = "success";
         }
-        console.log(Base.bmap.candy);
-        console.log(this.state);
     }
 
     tr_run()

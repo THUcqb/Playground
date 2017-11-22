@@ -299,7 +299,6 @@ export class Map
             }
             str += "\n";
         }
-        console.log(str);
     }
 
     /**
