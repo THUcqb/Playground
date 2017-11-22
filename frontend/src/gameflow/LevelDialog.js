@@ -4,16 +4,22 @@ import Dialog, {
     DialogContent
 } from 'material-ui/Dialog';
 import {withStyles} from 'material-ui/styles';
-import Chip from 'material-ui/Chip';
+import Button from 'material-ui/Button';
+import Star from 'material-ui-icons/Star';
+import StarBorder from 'material-ui-icons/StarBorder';
 
 const styles = theme => ({
-    chip: {
+    button: {
         margin: theme.spacing.unit / 2,
     },
     row: {
         display: 'flex',
-        justifyContent: 'center',
+        justifyContent: 'left',
         flexWrap: 'wrap',
+    },
+    buttonContent: {
+        flex: 1,
+        flexDirection: 'column',
     },
 });
 
@@ -48,15 +54,31 @@ class LevelDialog extends React.Component
                     <div className = {classes.row}>
                         {this.state.chipData.map(data =>
                         {
+                            const star = <Star/>;
+                            const starBorder = <StarBorder/>;
+                            let stars = [starBorder, starBorder, starBorder];
+                            for (let i = 0; i < Number(this.props.levelsInfo[data.key.toString()].stars); i++)
+                            {
+                                stars[i] = star;
+                            }
+
                             return (
-                                <Chip
-                                    label = {data.label}
+                                <Button raised
+                                    color="primary"
                                     key = {data.key}
-                                    className = {classes.chip}
-                                    onClick = {this.props.levelsInfo[data.key.toString()].unlock
-                                        ? () => this.props.onChooseLevel(data.key)
-                                        : null}
-                                />
+                                    className = {classes.button}
+                                    disabled={!this.props.levelsInfo[data.key.toString()].unlock}
+                                    onClick = {() => this.props.onChooseLevel(data.key)}
+                                >
+                                    <div className={classes.buttonContent}>
+                                        {data.label}
+                                        <div>
+                                            {stars[0]}
+                                            {stars[1]}
+                                            {stars[2]}
+                                        </div>
+                                    </div>
+                                </Button>
                             );
                         })}
                     </div>
@@ -65,12 +87,14 @@ class LevelDialog extends React.Component
                         {this.props.DIYMapsInfo.map(data =>
                         {
                             return (
-                                <Chip
-                                    label = {data.name}
+                                <Button raised
+                                    color="primary"
                                     key = {data.id}
-                                    className = {classes.chip}
+                                    className = {classes.button}
                                     onClick = {() => this.props.onChooseDIYMap(data.id)}
-                                />
+                                >
+                                    {data.name}
+                                </Button>
                             );
                         })}
                     </div>
