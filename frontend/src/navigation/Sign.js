@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import {withStyles} from 'material-ui/styles';
 import {sendSMS} from "../utils/Auth";
 
-const style = theme => ({
+const style = i => ({
     avatar: {
         background: 'linear-gradient(45deg, #03A9F4 30%, #3F51B5 90%)',
     }
@@ -226,7 +226,7 @@ class SignButton extends React.Component
                     sendButtonState={this.state.sendButtonState}
                     onRequestClose={() => this.handleRequestClose()}
                     onRequestSignIn={(username, password, phoneNumber, verificationCode) => this.handleRequestSignIn(username, password, phoneNumber, verificationCode)}
-                    onRequestSignUp={(username, password, phoneNumber, email) => this.handleRequestSignUp(username, password, phoneNumber, email)}
+                    onRequestSignUp={(username, password, phonenumber, email) => this.handleRequestSignUp(username, password, phonenumber, email)}
                     onRequestChangePassword={(oldPassword, newPassword) => this.handleRequestChangePassword(oldPassword, newPassword)}
                     onRequestSendSMS={(phoneNumber) => this.handleRequestSendSMS(phoneNumber)}
                     onRequestSwitch={(checked) => this.handleRequestSwitch(checked)}

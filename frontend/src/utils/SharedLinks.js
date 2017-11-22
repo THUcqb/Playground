@@ -6,9 +6,9 @@ import {Scene} from "../Scene";
 import Gamepad from "../gamepad/Gamepad";
 
 export function shareGenerateLink() {
-    let currentMapType = Controller.getLastType();
+    const currentMapType = Controller.getLastType();
 
-    let postData = {
+    const postData = {
         token: getCookie('token'),
         type: currentMapType,
     };

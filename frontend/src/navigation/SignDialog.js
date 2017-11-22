@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import {withStyles} from 'material-ui/styles';
 import Button from 'material-ui/Button';
 
-const styles = theme => ({
+const styles = i => ({
     container: {
         display: 'flex',
         flexWrap: 'wrap',
@@ -131,7 +131,7 @@ class SignDialog extends React.Component
 
         let signInType = null;
         let message = "";
-        let option = "Switch to change mode.";
+        const option = "Switch to change mode.";
         if (this.props.SMS)
         {
             signInType = phoneNumberType;

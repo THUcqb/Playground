@@ -20,7 +20,7 @@ import Purchase from './Purchase';
 import MessageBar from '../utils/MessageBar';
 import { alerts as configMsgAlerts} from "../config/msg";
 
-const styles = theme => ({
+const styles = i => ({
     appBar: {
         position: 'absolute',
         textAlign: 'center',

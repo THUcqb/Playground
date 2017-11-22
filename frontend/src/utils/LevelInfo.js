@@ -30,8 +30,8 @@ export function saveLevelInfo(level, stars) {
     return axios
         .post(URL + SAVELEVELINFO, {
             token: getCookie('token'),
-            level,
-            stars,
+            level: level,
+            stars: stars,
             solution: Gamepad.dumpWorkspace(),
         })
         .then(function (response) {

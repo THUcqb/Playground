@@ -105,7 +105,7 @@ class GameActions extends Component {
     render() {
         const { classes } = this.props;
 
-        let debugText = this.state.debugging ? "Stop" : "Debug";
+        const debugText = this.state.debugging ? "Stop" : "Debug";
 
         const clearButton = (
             <Button raised className={classes.clearButton}

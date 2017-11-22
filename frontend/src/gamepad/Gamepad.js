@@ -44,9 +44,9 @@ class Gamepad extends Component {
 
     componentDidMount() {
         Gamepad.workspace = Blockly.inject('blocklyDiv', blocklyWorkspaceXml);
-        let blocklyArea = document.getElementById('blocklyArea');
-        let blocklyDiv = document.getElementById('blocklyDiv');
-        let onresize = function(e) {
+        const blocklyArea = document.getElementById('blocklyArea');
+        const blocklyDiv = document.getElementById('blocklyDiv');
+        const onresize = function(i) {
             // Compute the absolute coordinates and dimensions of blocklyArea.
             let element = blocklyArea;
             let x = 0;
@@ -105,7 +105,7 @@ class Gamepad extends Component {
      * @returns {string}
      */
     static dumpWorkspace() {
-        let xml = Blockly.Xml.workspaceToDom(Gamepad.workspace);
+        const xml = Blockly.Xml.workspaceToDom(Gamepad.workspace);
         return Blockly.Xml.domToText(xml);
     }
 
@@ -115,7 +115,7 @@ class Gamepad extends Component {
      */
     static loadWorkspace(xml_text) {
         Gamepad.clearWorkspace();
-        let xml = Blockly.Xml.textToDom(xml_text);
+        const xml = Blockly.Xml.textToDom(xml_text);
         Blockly.Xml.domToWorkspace(xml, Gamepad.workspace);
     }
 

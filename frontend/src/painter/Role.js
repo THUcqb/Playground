@@ -94,8 +94,7 @@ class Role
 
         if (this.animation)
         {
-            this.role.on("mousedown", (ev) => {
-                ev = null;
+            this.role.on("mousedown", (i) => {
                 MessageBar.show(configMsgHints.clickRole);
                 this.colorNum = (this.colorNum + 1) % this.color.length;
                 this.drawPic();
@@ -111,8 +110,8 @@ class Role
 
     drawPic()
     {
-        let x = this.nowX * this.size + (this.size - this.width) / 2;
-        let y = this.nowY * this.size + (this.size - this.width) / 2;
+        const x = this.nowX * this.size + (this.size - this.width) / 2;
+        const y = this.nowY * this.size + (this.size - this.width) / 2;
         this.role.setTransform(y, x, this.scaleX, this.scaleY);
         this.role.shadow = new EaselJS.Shadow(this.color[this.colorNum], 2, 2, 12);
     }
@@ -120,7 +119,6 @@ class Role
     move(x, y)
     {
         TweenJS.Tween.removeTweens(this);
-        // this.role.graphics.clear();
         this.drawPic();
         if (x === this.nowX + 1)
         {
