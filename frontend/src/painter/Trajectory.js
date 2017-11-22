@@ -61,7 +61,6 @@ class Trajectory
         this.drawingCanvas.graphics.clear().beginFill("#000000");
         this.drawingCanvas.graphics.alpha = 0.3;
         this.drawingCanvas.graphics.drawRect(y * this.deltaWidth + this.edgeWidth, x * this.deltaHeight + this.edgeHeight, this.widthW, this.widthH);
-        console.log(this.widthW, this.widthH);
 
         this.drawingCanvas.updateCache("source-over");
         this.bitmap.updateCache();
@@ -119,7 +118,6 @@ class Trajectory
         {
             this.drawingCanvas.graphics.drawRect(this.nowY * this.deltaWidth + this.edgeWidth, this.nowX * this.deltaHeight + this.edgeHeight, -this.deltaWidth * alpha, this.widthH);
         }
-        console.log("in updating", this.widthW, this.widthH);
         this.drawingCanvas.updateCache("source-over");
         this.bitmap.updateCache();
     }

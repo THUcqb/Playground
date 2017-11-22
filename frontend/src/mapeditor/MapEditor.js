@@ -200,17 +200,17 @@ class MapEditor extends React.Component
                 {
                     if (response.OK)
                     {
-                        alert("Save successfully!");
+                        MessageBar.show("Map saved successfully!");
                     }
                     else
                     {
-                        alert("Fail to save!")
+                        MessageBar.show("Fail to save!")
                     }
                 })
             }
             else
             {
-                alert("Please add name!");
+                MessageBar.show("Please add name!");
             }
         }
     }

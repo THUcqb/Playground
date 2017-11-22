@@ -204,7 +204,7 @@ export class Map
                 let info = Number(string[i * this.SIZE_X + n]);
 
                 this.block_list[i][n].info = info;
-                if (info === BaseMapInfo.getElementsByTagName('gold')|info === BaseMapInfo.getElementsByTagName('end'))
+                if (info === BaseMapInfo.getElementsByTagName('gold')||info === BaseMapInfo.getElementsByTagName('end'))
                 {
                     this.candy += 1;
                 }
@@ -269,7 +269,7 @@ export class Map
             for (let n = 0; n < this.SIZE_Y; n++)
             {
                 let test = (a[i][n]);
-                let out = "";
+                let out;
                 if (test === BaseMapInfo.getElementsByTagName('gold'))
                 {
                     out = "@";
@@ -299,7 +299,6 @@ export class Map
             }
             str += "\n";
         }
-        console.log(str);
     }
 
     /**
