@@ -38,31 +38,40 @@ class Role
         this.nowX = nowX;
         this.nowY = nowY;
 
+        const FramePos = {
+            downward1: 0, downward2: 1, downward3: 2,
+            leftward1: 3, leftward2: 4, leftward3: 5,
+            upward1: 6, upward2: 7, upward3: 8,
+            rightward1: 9, rightward2: 10, rightward3: 11,
+        };
+        const frameWidth = 21;
+        const frameHeight = 27;
+
         const spriteData = {
             images: [preloader.getResult("role")],
-            frames: {width:21, height:27, regX: 0, regY: 0},
+            frames: {width: frameWidth, height: frameHeight, regX: 0, regY: 0},
             animations: {
-                standDownward:1,
-                standUpward:7,
-                standLeftward:4,
-                standRightward:10,
+                standDownward: FramePos.downward2,
+                standUpward: FramePos.upward2,
+                standLeftward: FramePos.leftward2,
+                standRightward: FramePos.rightward2,
                 walkDown: {
-                    frames: [0, 1, 2, 1],
+                    frames: [FramePos.downward1, FramePos.downward2, FramePos.downward3, FramePos.downward2],
                     next: "walkDown",
                     speed: 0.1
                 },
                 walkLeft: {
-                    frames: [3, 4, 5, 4],
+                    frames: [FramePos.leftward1, FramePos.leftward2, FramePos.leftward3, FramePos.leftward2],
                     next: "walkLeft",
                     speed: 0.1
                 },
                 walkUp: {
-                    frames: [6, 7, 8, 7],
+                    frames: [FramePos.upward1, FramePos.upward2, FramePos.upward3, FramePos.upward2],
                     next: "walkUp",
                     speed: 0.1
                 },
                 walkRight: {
-                    frames: [9, 10, 11, 10],
+                    frames: [FramePos.rightward1, FramePos.rightward2, FramePos.rightward3, FramePos.rightward2],
                     next: "walkRight",
                     speed: 0.1
                 },
@@ -72,7 +81,6 @@ class Role
         this.facing = "up";
         this.role = new EaselJS.Sprite(spriteSheet,"standUpward");
 
-        // this.role = new EaselJS.Shape();
         this.role.shadow = new EaselJS.Shadow(this.color[this.colorNum], 2, 2, 12);
         this.role.cursor = "pointer";
 
@@ -105,9 +113,6 @@ class Role
         let x = this.nowX * this.size + (this.size - this.width) / 2;
         let y = this.nowY * this.size + (this.size - this.width) / 2;
         this.role.setTransform(y, x, this.scaleX, this.scaleY);
-        // this.role.x = y;
-        // this.role.y = x;
-        //this.role.graphics.beginFill(this.color[this.colorNum]).drawRect(y - this.role.x, x - this.role.y, this.width, this.width);
         this.role.shadow = new EaselJS.Shadow(this.color[this.colorNum], 2, 2, 12);
     }
 
