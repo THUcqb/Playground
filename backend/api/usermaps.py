@@ -146,7 +146,7 @@ def get_solution(request):
         try:
             amap = AMap.objects.get(username = username, level = str(level))
             themap = ImmanentMaps.objects.get(level = str(level))
-            response_data["standard"] = themap.solution
+            response_data["standard"] = themap.standard
             response_data["solution"] = amap.solution
             response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
