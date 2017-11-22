@@ -439,6 +439,8 @@ export class Base
 Base.bmap = new Map(10, 10); //初始化地图 每个地块的信息 Base.bmap.block_list[x][y].info 参考map.js
 Base.bsnake = new Snake(5, 5); //初始化蛇
 Base.bmap.testInit(5, 5);//设置出生点 为了测试方便全地图初始化为2 即积分地块
+Base.lastMap = new Map(10, 10); //初始化地图 每个地块的信息 Base.bmap.block_list[x][y].info 参考map.js
+Base.lastMap.testInit(5, 5);//设置出生点 为了测试方便全地图初始化为2 即积分地块
 Base.begin = new Base("user", "begin");
 Base.begin.time = 1;
 Base.success = new Base("success", "end");//初始化success状态

@@ -103,7 +103,8 @@ export class Scene extends Component
     static handleRestart()
     {
         Scene.singleton.stage.removeAllChildren();
-        Controller.controller.switchLevel(Scene.singleton.state.nowLevel);
+        // Controller.controller.switchLevel(Scene.singleton.state.nowLevel);
+        Controller.controller.restart();
         Scene.singleton.reset();
     }
 
@@ -224,7 +225,7 @@ export class Scene extends Component
                     onReplay={() =>
                     {
                         this.setState({overDialogOpen: false});
-                        this.handleChooseLevel(this.state.nowLevel);
+                        Scene.handleRestart();
                     }}
                 />
                 <MessageBar/>

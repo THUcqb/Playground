@@ -68,13 +68,6 @@ export class Map
             }
         }
         this.block_list = block_list;
-        this.localMap = [];
-        this.localMap[0] = (level0);
-        this.localMap[1] = (level1);
-        this.localMap[2] = (level2);
-        this.localMap[3] = (level3);
-        this.localMap[4] = (level4);
-        this.localMap[5] = (level5);
         this.setHead(x, y);
     }
 
@@ -224,7 +217,7 @@ export class Map
      */
     load(level)
     {
-        let str = this.localMap[level];
+        let str = Map.localMap[level];
         this.loadFromString(str);
     }
 
@@ -370,7 +363,12 @@ export class Map
 
 }
 
+Map.localMap = [];
+Map.localMap[0] = (level0);
+Map.localMap[1] = (level1);
+Map.localMap[2] = (level2);
+Map.localMap[3] = (level3);
+Map.localMap[4] = (level4);
+Map.localMap[5] = (level5);
+
 export default Map;
-
-
-

@@ -4,6 +4,7 @@ import EaselJS from "masteryodaeaseljs";
 import Background from "../painter/Background";
 import Element from "../painter/Element";
 import Role from "../painter/Role";
+import {Base} from "../logic/Base";
 import TextField from 'material-ui/TextField';
 import Dialog, {
     DialogTitle,
@@ -64,7 +65,7 @@ const elements = [
     },
     {
         value: 8,
-        label: "treasure",
+        label: "Treasure",
     },
     {
         value: 9,
@@ -193,7 +194,7 @@ class MapEditor extends React.Component
     onEnter()
     {
         this.initialize();
-        this.map = Controller.copyBaseMap();
+        this.map = Controller.copyMap(Base.bmap);
         this.setState({ mapSize: this.map.SIZE_X }, () => this.updateState("init"));
     }
 

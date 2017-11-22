@@ -39,6 +39,7 @@ export class Controller
         this.begin.task = new Base_task(this.begin);
         Base.run_state.state = "runnable";
         Base.run_state.cur = Base.begin;
+        Base.lastMap = Controller.copyMap(Base.bmap);
     }
 
     switchDIYLevel(map)
@@ -55,6 +56,7 @@ export class Controller
         this.begin.task = new Base_task(this.begin);
         Base.run_state.state = "runnable";
         Base.run_state.cur = Base.begin;
+        Base.lastMap = Controller.copyMap(Base.bmap);
     }
 
     getLastType()
@@ -72,11 +74,11 @@ export class Controller
         return Base.bsnake;
     }
     
-    static copyBaseMap()
+    static copyMap(map)
     {
-        let tempMap = new Map(Base.bmap.SIZE_X,Base.bmap.SIZE_Y);
+        let tempMap = new Map(map.SIZE_X, map.SIZE_Y);
         tempMap.editInit();
-        tempMap.copyBlocklist(Base.bmap);
+        tempMap.copyBlocklist(map);
         return tempMap;
     }
 
@@ -116,6 +118,20 @@ export class Controller
     setState(state)
     {
         this.state = state;
+    }
+
+    restart()
+    {
+        Base.lastMap.print();
+        this.begin = Base.begin;
+        this.switchLevelTime++;
+        Base.begin.time = 1;
+        this.begin.type = "user";
+        this.state = "runnable";
+        this.begin.task = new Base_task(this.begin);
+        Base.run_state.state = "runnable";
+        Base.run_state.cur = Base.begin;
+        Base.bmap = Controller.copyMap(Base.lastMap);
     }
 }
 
