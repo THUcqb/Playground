@@ -75,7 +75,7 @@ function autoStep(runTime) {
         while (!highlighting && interpreter.step())
             ;
         highlighting = false;
-        window.setTimeout(() => autoStep(runTime), 500);
+        window.setTimeout(() => autoStep(runTime), 1000);
     }
 }
 
