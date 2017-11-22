@@ -197,12 +197,15 @@ def recharge(request):
             userinfo = UserInfo.objects.get(username = username)
             if userinfo.VIPtime < now:
                 userinfo.VIPtime = now
+                userinfo.VIPtype = ''
             if VIPtype == 'Month':
                 userinfo.VIPtime += 2592000
-                userinfo.VIPtype = 'Month'
+                if userinfo.VIPtype == '':
+                    userinfo.VIPtype = 'Month'
             elif VIPtype == 'Season':
                 userinfo.VIPtime += 7776000
-                userinfo.VIPtype = 'Season'
+                if userinfo.VIPtype != 'Year': 
+                    userinfo.VIPtype = 'Season'
             elif VIPtype == 'Year':
                 userinfo.VIPtime += 31104000
                 userinfo.VIPtype = 'Year'
