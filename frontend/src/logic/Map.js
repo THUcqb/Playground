@@ -13,6 +13,7 @@ export class Map
         this.allcandy = 0;
         this.id = "null";
         this.solution = "";
+        this.flag = 0;
     }
 
     /**
@@ -56,6 +57,7 @@ export class Map
         }
         this.block_list = block_list;
         this.setHead(x, y);
+        this.flag = 1;
     }
 
     /**
@@ -141,6 +143,8 @@ export class Map
             }
         }
         this.allcandy = this.candy;
+        this.flag = 1;
+
     }
 
     reloadEditorMap(map)
@@ -171,6 +175,8 @@ export class Map
 
         this.allcandy = this.candy;
         this.slot_map = slot_map;
+        this.flag = 1;
+
     }
 
 
@@ -196,6 +202,8 @@ export class Map
             }
         }
         this.allcandy = this.candy;
+        this.flag = 1;
+        
     }
 
     /**
@@ -254,7 +262,7 @@ export class Map
             }
             str += "\n";
         }
-        // console.log(str);
+        console.log(str);
     }
 
     /**

@@ -237,6 +237,7 @@ export class Base {
 
             Base.bmap.candy--;
             this.type = "success";
+            console.log("fuck u")
         }
         else
             this.type = "fail";
