@@ -16,7 +16,7 @@ const styles = theme => ({
     root: {
         display: "flex",
         marginTop: 64,
-        height: "calc(100% - 64px)",
+        height: "100%",
     },
     container: {
         margin: 0,
@@ -31,9 +31,8 @@ const styles = theme => ({
     },
     landingPaper: {
         textAlign: 'center',
-        padding: theme.spacing.unit * 20,
-        margin: theme.spacing.unit * 10,
-        marginTop: 0,
+        paddingTop: theme.spacing.unit * 3,
+        margin: theme.spacing.unit * 5,
         backgroundColor: theme.palette.background.contentFrame,
     },
     flex: {
@@ -66,7 +65,7 @@ class App extends Component
         let body = null;
         if (this.state.welcome === true)
             body = (
-                <div>
+                <div style={{display: "flex", height: "100%", width: "100%"}}>
                     <Grid container className={classes.container}>
                         <Grid item xs={12} sm={12}>
                             <Paper className={classes.landingPaper}>

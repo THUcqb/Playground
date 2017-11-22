@@ -11,7 +11,6 @@ export const LOADLEVELSOLUTION = "/maps/get_solution";
 export const SHAREGENERATELINK = "/maps/share";
 export const SHAREGETCONTEXT = "/maps/share_response";
 
-// TODO: change to correct link
 export const SAVEMAP = "/maps/save_maps";
 export const LOADMAP = "/maps/load_maps";
 
