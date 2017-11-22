@@ -14,35 +14,25 @@ export function loadLevelsInfo() {
         })
 }
 
-export function loadLevelSolution(level) {
-    return axios
-        .post(URL + LOADLEVELSOLUTION, {
-            token: getCookie('token'),
-            level
-        })
-        .then(function (response) {
-            if (response.data.status === 'Successful')
-                Gamepad.loadWorkspace(response.data.solution);
-        })
-}
-
-export function loadLevelStandardSolution() {
+export function loadLevelSolution(ifLoad) {
     return axios
         .post(URL + LOADLEVELSOLUTION, {
             token: getCookie('token'),
             level: Scene.singleton.state.nowLevel,
         })
         .then(function (response) {
-            return {OK: response.data.status === 'Successful', solution: response.data.solution}
+            if (response.data.status === 'Successful' && ifLoad)
+                Gamepad.loadWorkspace(response.data.solution);
+            return {OK: response.data.status === 'Successful', solution: response.data.solution, stdSolution: response.data.solution}
         })
 }
 
-export function saveLevelInfo(level) {
+export function saveLevelInfo(level, stars) {
     return axios
         .post(URL + SAVELEVELINFO, {
             token: getCookie('token'),
             level,
-            stars: Gamepad.getScore(),
+            stars,
             solution: Gamepad.dumpWorkspace(),
         })
         .then(function (response) {

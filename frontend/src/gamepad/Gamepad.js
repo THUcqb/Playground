@@ -124,8 +124,8 @@ class Gamepad extends Component {
      * Return the score of the current workspace
      * @returns {number}
      */
-    static getScore() {
-        return 1;
+    static getScore(standardSolution) {
+        return parseInt(3 * standardSolution.length / (Gamepad.dumpWorkspace().length));
     }
 
     render() {

@@ -16,6 +16,7 @@ import {loadToolbox} from "./utils/LoadBlockly";
 import {shareGetContext} from "./utils/SharedLinks";
 import {loadLevelsInfo, loadLevelSolution, saveLevelInfo} from "./utils/LevelInfo";
 import {loadDIYMaps} from "./utils/LevelMap";
+import Gamepad from "./gamepad/Gamepad";
 
 const styles = theme => ({
     button: {
@@ -84,7 +85,10 @@ export class Scene extends Component
         this.reset();
 
         loadToolbox(levelNum);
-        loadLevelSolution(levelNum);
+        loadLevelSolution(true)
+            .then((response) => {
+                this.nowStdSolution = response.stdSolution;
+            })
     }
 
     /**
@@ -146,23 +150,13 @@ export class Scene extends Component
             });
     }
 
-    handleGameOver()
+    handleGameTerminate(message)
     {
-        saveLevelInfo(this.state.nowLevel);
+        saveLevelInfo(this.state.nowLevel, Gamepad.getScore(this.nowStdSolution));
         this.isOver = true;
         this.setState({
             overDialogOpen: true,
-            dialogTitle: "Game Over"
-        });
-    }
-
-    handleSuccess()
-    {
-        saveLevelInfo(this.state.nowLevel);
-        this.isOver = true;
-        this.setState({
-            overDialogOpen: true,
-            dialogTitle: "Success!"
+            dialogTitle: message,
         });
     }
 
@@ -265,7 +259,7 @@ export class Scene extends Component
                 this.isFail = true;
                 if (!this.isOver)
                 {
-                    this.handleGameOver();
+                    this.handleGameTerminate('Game over');
                 }
             }
             else if (status === "success")
@@ -277,7 +271,7 @@ export class Scene extends Component
                 this.isFail = false;
                 if (!this.isOver)
                 {
-                    this.handleSuccess();
+                    this.handleGameTerminate('You win!');
                 }
             }
         }

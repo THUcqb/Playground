@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Blockly from 'node-blockly/browser';
-import Dialog, {DialogTitle, DialogContent} from 'material-ui/Dialog';
-import {loadLevelStandardSolution} from '../utils/LevelInfo';
+import Dialog from 'material-ui/Dialog';
+import {Scene} from '../Scene';
 
 const blocklySolutionWorkspaceXml= {
     readOnly: true,
@@ -31,11 +31,8 @@ class GamepadSolutionDialog extends Component {
         if (this.props.open)
         {
             this.workspace = Blockly.inject('blocklySolutionDiv', blocklySolutionWorkspaceXml);
-            loadLevelStandardSolution()
-                .then((response) => {
-                    let xml = Blockly.Xml.textToDom(response.solution);
-                    Blockly.Xml.domToWorkspace(xml, this.workspace);
-                })
+            let xml = Blockly.Xml.textToDom(Scene.singleton.nowStdSolution);
+            Blockly.Xml.domToWorkspace(xml, this.workspace);
         }
     }
 
