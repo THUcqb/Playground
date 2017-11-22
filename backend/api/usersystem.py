@@ -389,7 +389,7 @@ def send_message(request):
             code = create_code(4)
             userinfo.auth_code = code
             userinfo.save()
-            text = "Your code is: " + code + ". For the safety of your account, please don't leak it to others."
+            text = "您的验证码是：" + code + "。请不要把验证码泄露给其他人。"
             params = urllib.parse.urlencode({'account': account, 'password' : password, 'content': text, 'mobile':userinfo.phonenumber,'format':'json' })
             headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
             conn = http.client.HTTPConnection(host, port=80, timeout=30)
