@@ -156,7 +156,7 @@ export class Scene extends Component
 
     handleGameTerminate(message)
     {
-        this.nowScore = Gamepad.getScore(this.nowStdSolution);
+        this.nowScore = message === 'You win!' ? Gamepad.getScore(this.nowStdSolution) : 0;
         saveLevelInfo(this.state.nowLevel, this.nowScore);
         this.isOver = true;
         this.setState({
