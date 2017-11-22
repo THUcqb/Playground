@@ -8,6 +8,7 @@ import Avatar from 'material-ui/Avatar';
 import PropTypes from 'prop-types';
 import {withStyles} from 'material-ui/styles';
 import {sendSMS} from "../utils/Auth";
+import {emailActivateRequest}  from "../utils/Email";
 
 const style = i => ({
     avatar: {
@@ -150,7 +151,10 @@ class SignButton extends React.Component
                 .then(status =>
                 {
                     if (status.OK)
+                    {
                         this.setState({signingState: 'signin'});
+                        emailActivateRequest();
+                    }
                     this.setState({textStatus: {disabled: false, usernameError: true}});
                 })
         }
