@@ -113,11 +113,22 @@ class UsersystemTest(TestCase):
         login_url = '/users/login'
         get_url = '/users/getinfo'
         UserInfo.objects.create(username = 'zuohaojia', password = 'waitlove', phonenumber = '110', email = 'zuohaojia@example.com')
+        UserInfo.objects.create(username = 'youhaojia', password = 'waitlove', phonenumber = '110', email = 'youhaojia@example.com', VIPtime = 1542469871, VIPtype = 'Year')
         
         login_data = {'username':'zuohaojia', 'password':'waitlove'}
         log_json_data = json.dumps(login_data)
         log_res = self.client.post(login_url, log_json_data, content_type = 'application/json')
         log_text = json.loads(log_res.content.decode('utf-8'))
+        
+        login = {'username':'youhaojia', 'password':'waitlove'}
+        logjson = json.dumps(login)
+        logres = self.client.post(login_url, logjson, content_type = 'application/json')
+        logtext = json.loads(logres.content.decode('utf-8'))
+        
+        data = {'token':logtext['token']}
+        res = self.client.post(get_url, json.dumps(data), content_type = 'application/json')
+        text = json.loads(res.content.decode('utf-8'))
+        self.assertEqual(get_text['status'], 'Successful')
         
         get_data = {'token':log_text['token']}
         get_json_data = json.dumps(get_data)
@@ -385,3 +396,4 @@ class UsersystemTest(TestCase):
         res4 = self.client.post(url2, jdata4, content_type = 'application/json')
         text4 = json.loads(res4.content.decode('utf-8'))
         self.assertEqual(text4['status'], 'CodeError')
+    

@@ -48,20 +48,20 @@ class ImmanentmapsTestcase(TestCase):
         text_2 = json.loads(res_2.content.decode('utf-8'))
         self.assertEqual(text_2['status'], 'NotExisted')
     
-    def test_savesolution(self):
+    def test_savestandard(self):
         '''
-        Test the save_solution API in sources.
+        Test the save standard solution API in sources.
         '''
         theurl = '/sources/save_standard'
         ImmanentMaps.objects.create(level = '1', standard = 'for', immanentmap = '1111000000100002000010010000211000020001000000000110200000000000000200020010000000002001010000000021')
         
-        data = {'level':'1', 'solution':'while'}
+        data = {'level':'1'}
         jdata = json.dumps(data)
         res = self.client.post(theurl, jdata, content_type = "application/json")
         text = json.loads(res.content.decode('utf-8'))
         self.assertEqual(text['status'], 'Successful')
         
-        data = {'level':'100', 'solution':'while'}
+        data = {'level':'100'}
         jdata = json.dumps(data)
         res = self.client.post(theurl, jdata, content_type = "application/json")
         text = json.loads(res.content.decode('utf-8'))
