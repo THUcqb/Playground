@@ -17,8 +17,8 @@ Blockly.Blocks['action_move'] = {
 };
 
 Blockly.JavaScript['action_move'] = function(block) {
-    let dropdown_op = block.getFieldValue('OP');
-    return `move("${dropdown_op}");`;
+    const dropDown_op = block.getFieldValue('OP');
+    return `move("${dropDown_op}");`;
 };
 
 /**
@@ -38,7 +38,7 @@ Blockly.Blocks['action_turn'] = {
 };
 
 Blockly.JavaScript['action_turn'] = function(block) {
-    let dropdown_op = block.getFieldValue('OP');
+    const dropdown_op = block.getFieldValue('OP');
     return `turn("${dropdown_op}");`;
 };
 
@@ -58,6 +58,6 @@ Blockly.Blocks['logic_safe'] = {
 };
 
 Blockly.JavaScript['logic_safe'] = function(block) {
-    let dropdown_op = block.getFieldValue('OP');
+    const dropdown_op = block.getFieldValue('OP');
     return `check("${dropdown_op}");`;
 };

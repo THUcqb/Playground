@@ -32,6 +32,7 @@ export class Scene extends Component
 {
     canvasScene;
     CanvasDiv;
+    ToolbarDiv;
 
     static singleton = null;
 
@@ -136,7 +137,6 @@ export class Scene extends Component
     static handleRestart()
     {
         Scene.singleton.stage.removeAllChildren();
-        // Controller.controller.switchLevel(Scene.singleton.state.nowLevel);
         Controller.controller.restart();
         Scene.singleton.reset();
     }
@@ -158,11 +158,11 @@ export class Scene extends Component
                 this.DIYMaps = {};
                 if (response.OK)
                 {
-                    for (let key in response.map)
+                    for (const key in response.map)
                     {
                         if (response.map.hasOwnProperty(key))
                         {
-                            let map = {
+                            const map = {
                                 id: key,
                                 name: response.map[key].mapname,
                                 info: response.map[key].mapinfo,
@@ -312,16 +312,13 @@ export class Scene extends Component
      */
     handleResize(event)
     {
-        let fatherDiv = this.refs.CanvasDiv;
-        let stage = this.refs.canvasScene;
-        let toolbar = this.refs.ToolbarDiv;
+        const fatherDiv = this.refs.CanvasDiv;
+        const stage = this.refs.canvasScene;
+        const toolbar = this.refs.ToolbarDiv;
 
         let width = fatherDiv.offsetWidth;
         let height = fatherDiv.offsetHeight - toolbar.offsetHeight;
 
-        // let minSize = width;
-        // if (height < width)
-            // minSize = height;
         width = Math.min(width, height * 1.3);
         height = Math.min(height, width * 1.3);
         stage.style.width = width.toString() + 'px';
@@ -330,7 +327,7 @@ export class Scene extends Component
 
     loadSharedContext()
     {
-        let sharedCode = this.props.location.pathname.substring(1);
+        const sharedCode = this.props.location.pathname.substring(1);
         shareGetContext(sharedCode)
             .then((sharedContext) => {
                 if (sharedContext.OK) {

@@ -31,7 +31,7 @@ class GamepadSolutionDialog extends Component {
         if (this.props.open)
         {
             this.workspace = Blockly.inject('blocklySolutionDiv', blocklySolutionWorkspaceXml);
-            let xml = Blockly.Xml.textToDom(Scene.singleton.nowStdSolution);
+            const xml = Blockly.Xml.textToDom(Scene.singleton.nowStdSolution);
             Blockly.Xml.domToWorkspace(xml, this.workspace);
         }
     }

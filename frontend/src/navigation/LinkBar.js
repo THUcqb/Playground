@@ -20,7 +20,10 @@ class LinkBar extends React.Component {
     state = {open: false, msg: '',};
 
     handleRequestClose = (event, reason) => {
-        if (reason === 'clickaway') return;
+        if (reason === 'clickaway')
+        {
+            return;
+        }
         copy(`${THISURL}/${this.state.msg}`);
         this.setState({ open: false });
     };

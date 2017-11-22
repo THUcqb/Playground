@@ -43,7 +43,7 @@ class OverDialog extends React.Component {
 
         const star = <Star className={classes.star} />;
         const starBorder = <StarBorder className={classes.star} />;
-        let stars = [starBorder, starBorder, starBorder];
+        const stars = [starBorder, starBorder, starBorder];
         for (let i = 0; i < this.props.starNum; i++)
         {
             stars[i] = star;

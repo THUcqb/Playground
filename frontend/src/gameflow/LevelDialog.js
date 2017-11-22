@@ -52,7 +52,7 @@ class LevelDialog extends React.Component
                         {
                             const star = <Star/>;
                             const starBorder = <StarBorder/>;
-                            let stars = [starBorder, starBorder, starBorder];
+                            const stars = [starBorder, starBorder, starBorder];
                             for (let i = 0; i < Number(this.props.levelsInfo[data.key.toString()].stars); i++)
                             {
                                 stars[i] = star;

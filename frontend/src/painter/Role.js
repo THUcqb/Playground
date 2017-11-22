@@ -110,8 +110,8 @@ class Role
 
     drawPic()
     {
-        let x = this.nowX * this.size + (this.size - this.width) / 2;
-        let y = this.nowY * this.size + (this.size - this.width) / 2;
+        const x = this.nowX * this.size + (this.size - this.width) / 2;
+        const y = this.nowY * this.size + (this.size - this.width) / 2;
         this.role.setTransform(y, x, this.scaleX, this.scaleY);
         this.role.shadow = new EaselJS.Shadow(this.color[this.colorNum], 2, 2, 12);
     }
@@ -119,7 +119,6 @@ class Role
     move(x, y)
     {
         TweenJS.Tween.removeTweens(this);
-        // this.role.graphics.clear();
         this.drawPic();
         if (x === this.nowX + 1)
         {
@@ -184,9 +183,9 @@ class Role
      */
     update(snake)
     {
-        let l = snake.size;
-        let x = snake.body[l - 1].x;
-        let y = snake.body[l - 1].y;
+        const l = snake.size;
+        const x = snake.body[l - 1].x;
+        const y = snake.body[l - 1].y;
         if (this.container === null)
         {
             this.init(x, y);

@@ -10,10 +10,8 @@ export class Map
         this.SIZE_X = SIZE_X;
         this.SIZE_Y = SIZE_Y;
         this.candy = 0;
-        this.allcandy = 0;
         this.id = "null";
         this.solution = "";
-        this.flag = 0;
     }
 
     /**
@@ -21,8 +19,8 @@ export class Map
      */
     editInit()
     {
-        let block_list = [];
-        let slot_map = [];
+        const block_list = [];
+        const slot_map = [];
         for (let i = 0; i < this.SIZE_X; i++)
         {
             block_list[i] = [];
@@ -43,8 +41,8 @@ export class Map
      */
     testInit(x, y)
     {
-        let block_list = [];
-        let slot_map = [];
+        const block_list = [];
+        const slot_map = [];
         for (let i = 0; i < this.SIZE_X; i++)
         {
             block_list[i] = [];
@@ -123,12 +121,12 @@ export class Map
     copyBlockList(map)
     {
         this.candy = 0;
-        let str = map.stringData();
+        const str = map.stringData();
         for (let i = 0; i < this.SIZE_X; i++)
         {
             for (let n = 0; n < this.SIZE_Y; n++)
             {
-                let info = Number(str[i * this.SIZE_X + n]);
+                const info = Number(str[i * this.SIZE_X + n]);
 
                 this.block_list[i][n].info = info;
                 if (info === BaseMapInfo.getElementsByTagName('gold') || info === BaseMapInfo.getElementsByTagName("end"))
@@ -154,7 +152,7 @@ export class Map
         this.SIZE_Y = map.SIZE_Y;
         this.candy = 0;
 
-        let slot_map = [];
+        const slot_map = [];
         for (let i = 0; i < this.SIZE_X; i++)
         {
             slot_map[i] = [];
@@ -187,7 +185,7 @@ export class Map
         {
             for (let n = 0; n < this.SIZE_Y; n++)
             {
-                let info = Number(string[i * this.SIZE_X + n]);
+                const info = Number(string[i * this.SIZE_X + n]);
 
                 this.block_list[i][n].info = info;
                 if (info === BaseMapInfo.getElementsByTagName('gold') || info === BaseMapInfo.getElementsByTagName('end'))
@@ -201,9 +199,6 @@ export class Map
                 }
             }
         }
-        this.allcandy = this.candy;
-        this.flag = 1;
-        
     }
 
     /**
@@ -212,76 +207,8 @@ export class Map
      */
     load(level)
     {
-        let str = Map.localMap[level];
+        const str = Map.localMap[level];
         this.loadFromString(str);
-    }
-
-    /**
-     * used for test
-     */
-    print()
-    {
-        let a = this.detailData();
-        let str = "";
-        for (let i = 0; i < this.SIZE_X; i++)
-        {
-            for (let n = 0; n < this.SIZE_Y; n++)
-            {
-                let test = (a[i][n]);
-                let out;
-                if (test === BaseMapInfo.getElementsByTagName('gold'))
-                {
-                    out = "@";
-                }
-                else if (test === BaseMapInfo.getElementsByTagName('head'))
-                {
-                    out = "X";
-                }
-                else if (test === BaseMapInfo.getElementsByTagName('body'))
-                {
-                    out = "*";
-                }
-                else if (test === BaseMapInfo.getElementsByTagName('tail'))
-                {
-                    out = ".";
-                }
-                else if (test === BaseMapInfo.getElementsByTagName('block'))
-                {
-                    out = "#"
-                }
-                else if (test === BaseMapInfo.getElementsByTagName('end'))
-                {
-                    out = "E"
-                }
-                else if (test === BaseMapInfo.getElementsByTagName('birthplace'))
-                {
-                    out = "s"
-                }
-                else out = " ";
-                str += out;
-            }
-            str += "\n";
-        }
-        console.log(str);
-    }
-
-    /**
-     * (string list)return map info with snake
-     */
-    detailData()
-    {
-        let block_list = [];
-        for (let i = 0; i < this.SIZE_X; i++)
-        {
-            block_list[i] = [];
-            for (let n = 0; n < this.SIZE_Y; n++)
-            {
-                block_list[i][n] = this.block_list[i][n].info;
-
-            }
-        }
-
-        return block_list;
     }
 
     stringData()
@@ -304,7 +231,7 @@ export class Map
      */
     eData()
     {
-        let block_list = [];
+        const block_list = [];
         for (let i = 0; i < this.SIZE_X; i++)
         {
             block_list[i] = [];

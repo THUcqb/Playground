@@ -28,7 +28,7 @@ class Snake
      */
     del_tail()
     {
-        let cur = [];
+        const cur = [];
         for (let i = 1; i < this.body.length; i++)
         {
             cur[i - 1] = this.body[i];
@@ -44,7 +44,7 @@ class Snake
     {
         this.x = x;
         this.y = y;
-        let cur = [new Block(x, y)];
+        const cur = [new Block(x, y)];
         this.size = 1;
         this.body = cur;
     }

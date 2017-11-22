@@ -68,7 +68,7 @@ class Element
         {
             this.coins.on("mousedown", (ev) => {
                 MessageBar.show(configMsgHints.clickCoin);
-                let coins = ev.target;
+                const coins = ev.target;
                 TweenJS.Tween.get(coins, {loop: 2})
                     .to({
                         alpha: 0.5,
@@ -79,7 +79,7 @@ class Element
             });
             this.treasures.on("mousedown", (ev) => {
                 MessageBar.show(configMsgHints.clickTreasure);
-                let treasure = ev.target;
+                const treasure = ev.target;
                 TweenJS.Tween.get(treasure, {loop: 2})
                     .to({
                         alpha: 0.5,
@@ -142,13 +142,13 @@ class Element
      */
     paintWall(screen_x, screen_y)
     {
-        let wall = new EaselJS.Shape();
+        const wall = new EaselJS.Shape();
         wall.cursor = "pointer";
         if (this.animation)
         {
             wall.on("mousedown", (ev) => {
                 MessageBar.show(configMsgHints.clickWall);
-                let clickedWall = ev.target;
+                const clickedWall = ev.target;
                 TweenJS.Tween.get(clickedWall)
                     .to({
                         alpha: 0.1,
@@ -165,8 +165,6 @@ class Element
                     }, 300);
             });
         }
-
-        //wall.graphics.beginFill("#5D4037");
 
         const m = new EaselJS.Matrix2D();
         m.scale(this.size / this.wall.width, this.size / this.wall.height);
@@ -188,8 +186,6 @@ class Element
      */
     paintCoin(screen_x, screen_y)
     {
-        //this.coins.graphics.beginFill("#FFC107");
-
         const m = new EaselJS.Matrix2D();
         m.translate(screen_x, screen_y);
         m.scale(this.size / this.coin.width, this.size / this.coin.height);

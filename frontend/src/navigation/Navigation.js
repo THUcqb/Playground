@@ -20,7 +20,7 @@ import Purchase from './Purchase';
 import MessageBar from '../utils/MessageBar';
 import { alerts as configMsgAlerts} from "../config/msg";
 
-const styles = theme => ({
+const styles = i => ({
     appBar: {
         position: 'absolute',
         textAlign: 'center',
@@ -112,7 +112,7 @@ class Navigation extends React.Component {
             </div>
         );
 
-        const appbar = (
+        const appBar = (
             <AppBar className={classes.appBar}>
                 <Toolbar>
                     <IconButton
@@ -166,7 +166,7 @@ class Navigation extends React.Component {
 
     return (
         <div>
-            {appbar}
+            {appBar}
             {drawer}
         </div>
     );

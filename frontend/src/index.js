@@ -38,17 +38,17 @@ function startPreload()
     preloader.loadManifest(manifest);
 }
 
-function handleFileProgress(event)
+function handleFileProgress(i)
 {
 //    TODO: handleFileProgress
 }
 
-function loadError(event)
+function loadError(i)
 {
     //    TODO: handleLoadError
 }
 
-function loadComplete(event)
+function loadComplete(i)
 {
     ReactDOM.render(<CookiesProvider><App /></CookiesProvider>,
         document.getElementById('root')

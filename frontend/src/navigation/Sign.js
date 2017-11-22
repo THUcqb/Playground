@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import {withStyles} from 'material-ui/styles';
 import {sendSMS} from "../utils/Auth";
 
-const style = theme => ({
+const style = i => ({
     avatar: {
         background: 'linear-gradient(45deg, #03A9F4 30%, #3F51B5 90%)',
     }
@@ -81,6 +81,8 @@ class SignButton extends React.Component
      * The sign in function.
      * @param username
      * @param password
+     * @param phoneNumber
+     * @param verificationCode
      */
     handleRequestSignIn(username, password, phoneNumber, verificationCode)
     {

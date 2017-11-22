@@ -19,7 +19,6 @@ import MessageBar from '../utils/MessageBar';
 import { hints as configMsgHints } from '../config/msg';
 import {Controller} from '../logic/Controller';
 import {BaseMapInfo} from '../logic/ConstInfo';
-import {getCookie} from "../utils/Auth";
 import {saveDIYMap} from "../utils/LevelMap";
 const styles = theme => ({
     container: {
@@ -128,7 +127,6 @@ class MapEditor extends React.Component
             this.background.updateN(this.state.mapSize);
             this.element.updateN(this.state.mapSize);
             this.role.updateN(this.state.mapSize);
-            this.map.print();
             for (let i = 0; i < this.state.mapSize; i++)
                 for (let j = 0; j < this.state.mapSize; j++)
                 {
@@ -182,10 +180,10 @@ class MapEditor extends React.Component
         }
         if (op === "save")
         {
-            let name = prompt("Map name", "My Map");
+            const name = prompt("Map name", "My Map");
             if (name !== null && name !== "")
             {
-                saveDIYMap(name, this.map).then((response) =>
+                saveDIYMap(name, this.map).then(response =>
                 {
                     if (response.OK)
                     {
@@ -207,12 +205,12 @@ class MapEditor extends React.Component
     handleClick(e)
     {
         const element = this.refs.canvasMapEditor;
-        let rect = element.getBoundingClientRect();
-        let x = e.clientX - rect.left;
-        let y = e.clientY - rect.top;
+        const rect = element.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
 
-        let c_max_x = element.width;
-        let c_max_y = element.height;
+        const c_max_x = element.width;
+        const c_max_y = element.height;
 
         let block_size = this.state.mapSize;
 
@@ -220,10 +218,10 @@ class MapEditor extends React.Component
         {
             block_size = 10;
         }
-        let b_y = Math.floor(Number(x / c_max_x * block_size));
-        let b_x = Math.floor(Number(y / c_max_y * block_size));
+        const b_y = Math.floor(Number(x / c_max_x * block_size));
+        const b_x = Math.floor(Number(y / c_max_y * block_size));
 
-        let current = Number(this.state.element);
+        const current = Number(this.state.element);
         if (this.map.block_list[b_x][b_y].info === BaseMapInfo.getElementsByTagName('birthplace') || this.map.block_list[b_x][b_y].info === BaseMapInfo.getElementsByTagName('head'))
         {
             MessageBar.show(configMsgHints.removeRole);
@@ -237,18 +235,23 @@ class MapEditor extends React.Component
             this.map.block_list[b_x][b_y].info = current;
             if (current === BaseMapInfo.getElementsByTagName('birthplace'))
             {
-                if (this.lastX !== -1) this.map.block_list[this.lastX][this.lastY].info = BaseMapInfo.getElementsByTagName('empty');
+                if (this.lastX !== -1)
+                {
+                    this.map.block_list[this.lastX][this.lastY].info = BaseMapInfo.getElementsByTagName('empty');
+                }
                 this.lastX = b_x;
                 this.lastY = b_y;
             }
             if (current === BaseMapInfo.getElementsByTagName('end'))
             {
-                if (this.lastTreasureX !== -1) this.map.block_list[this.lastTreasureX][this.lastTreasureY].info = BaseMapInfo.getElementsByTagName('empty');
+                if (this.lastTreasureX !== -1)
+                {
+                    this.map.block_list[this.lastTreasureX][this.lastTreasureY].info = BaseMapInfo.getElementsByTagName('empty');
+                }
                 this.lastTreasureX = b_x;
                 this.lastTreasureY = b_y;
             }
         }
-        this.map.print();
         this.updateState("map");
     }
 
