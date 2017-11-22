@@ -128,7 +128,7 @@ class UsersystemTest(TestCase):
         data = {'token':logtext['token']}
         res = self.client.post(get_url, json.dumps(data), content_type = 'application/json')
         text = json.loads(res.content.decode('utf-8'))
-        self.assertEqual(get_text['status'], 'Successful')
+        self.assertEqual(text['status'], 'Successful')
         
         get_data = {'token':log_text['token']}
         get_json_data = json.dumps(get_data)
@@ -160,10 +160,20 @@ class UsersystemTest(TestCase):
         log_res = self.client.post(login_url, json.dumps(login_data), content_type = 'application/json')
         log_text = json.loads(log_res.content.decode('utf-8'))
         
-        param = {'token':log_text['token'], 'VIPtype':'month'}
+        param = {'token':log_text['token'], 'VIPtype':'Month'}
         res = self.client.post(the_url, json.dumps(param), content_type = 'application/json')
         text = json.loads(res.content.decode('utf-8'))
         self.assertEqual(text['status'], 'Successful')
+        
+        param1 = {'token':log_text['token'], 'VIPtype':'Season'}
+        res1 = self.client.post(the_url, json.dumps(param1), content_type = 'application/json')
+        text1 = json.loads(res1.content.decode('utf-8'))
+        self.assertEqual(text1['status'], 'Successful')
+        
+        param2 = {'token':log_text['token'], 'VIPtype':'Year'}
+        res2 = self.client.post(the_url, json.dumps(param2), content_type = 'application/json')
+        text2 = json.loads(res2.content.decode('utf-8'))
+        self.assertEqual(text2['status'], 'Successful')
         
         param = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwNzk5MzUyMC42OTIsICJ1c2VybmFtZSI6ICJoZWppZSIsICJleHAiOiAxNTA4NTk4MzIwLjY5Mn0=', 'VIPtype':'month'}
         res = self.client.post(the_url, json.dumps(param), content_type = 'application/json')
@@ -379,9 +389,9 @@ class UsersystemTest(TestCase):
         Test the send message api in usersystem.
         '''
         url1 = '/users/send_message'
-        UserInfo.objects.create(username = 'yanlimin', password = 'waitlove', phonenumber = '13051312306', email = 'hejie_cq@163.com', is_active = True)
+        UserInfo.objects.create(username = 'yanlimin', password = 'waitlove', phonenumber = '1305131230', email = 'hejie_cq@163.com', is_active = True)
         
-        data1 = {'phonenumber':'13051312306'}
+        data1 = {'phonenumber':'1305131230'}
         jdata1 = json.dumps(data1)
         res1 = self.client.post(url1, jdata1, content_type = 'application/json')
         text1 = json.loads(res1.content.decode('utf-8'))
@@ -399,14 +409,14 @@ class UsersystemTest(TestCase):
         '''
         url1 = '/users/send_message'
         url2 = '/users/mobile_login'
-        UserInfo.objects.create(username = 'yanlimin', password = 'waitlove', phonenumber = '13051312306', email = 'hejie_cq@163.com', is_active = True)
+        UserInfo.objects.create(username = 'yanlimin', password = 'waitlove', phonenumber = '1305131230', email = 'hejie_cq@163.com', is_active = True)
         
-        data1 = {'phonenumber':'13051312306'}
+        data1 = {'phonenumber':'1305131230'}
         jdata1 = json.dumps(data1)
         res1 = self.client.post(url1, jdata1, content_type = 'application/json')
         text1 = json.loads(res1.content.decode('utf-8'))
         
-        data2 = {'phonenumber':'13051312306', 'code':text1['code']}
+        data2 = {'phonenumber':'1305131230', 'code':text1['code']}
         jdata2 = json.dumps(data2)
         res2 = self.client.post(url2, jdata2, content_type = 'application/json')
         text2 = json.loads(res2.content.decode('utf-8'))
@@ -418,7 +428,7 @@ class UsersystemTest(TestCase):
         text3 = json.loads(res3.content.decode('utf-8'))
         self.assertEqual(text3['status'], 'NotExisted')
         
-        data4 = {'phonenumber':'13051312306', 'code':'1111'}
+        data4 = {'phonenumber':'1305131230', 'code':'1111'}
         jdata4 = json.dumps(data4)
         res4 = self.client.post(url2, jdata4, content_type = 'application/json')
         text4 = json.loads(res4.content.decode('utf-8'))

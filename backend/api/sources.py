@@ -102,15 +102,15 @@ def save_standard(request):
         d = json.loads(request.body.decode('utf-8'))
         response_data = {}
         level = d['level']
-        file_path = os.path.join(module_dir, '../static/standard/standard_' + str(level) + '.xml')
-        f = open(file_path, 'r')
         try:
+            file_path = os.path.join(module_dir, '../static/standard/standard_' + str(level) + '.xml')
+            f = open(file_path, 'r')
             the_map = ImmanentMaps.objects.get(level = str(level))
             the_map.standard = f.read()
             the_map.save()
             response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data), content_type = "application/json")
-        except ImmanentMaps.DoesNotExist:
+        except:
             response_data["status"] = "LevelNotExisted"
             return HttpResponse(json.dumps(response_data), content_type = "application/json")
 
