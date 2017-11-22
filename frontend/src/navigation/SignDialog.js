@@ -33,12 +33,10 @@ class SignDialog extends React.Component
         email: '',
         oldPassword: '',
         newPassword: '',
-        SMS: false,
     };
 
     handleChange = name => event =>
     {
-        console.log(name + " " + event.target.value);
         this.setState({
             [name]: event.target.value,
         });
@@ -49,7 +47,7 @@ class SignDialog extends React.Component
         this.setState({
             [name]: checked,
         })
-    }
+    };
 
     handleEnterKeyPress = (ev) =>
     {
@@ -129,6 +127,8 @@ class SignDialog extends React.Component
                         raised color="primary"
                         className={classes.button}
                         align="right"
+                        onClick={() => this.props.onRequestSendSMS(this.state.phoneNumber)}
+                        disabled={this.props.sendButtonState}
                     >
                         SEND
                     </Button>
@@ -139,7 +139,7 @@ class SignDialog extends React.Component
         let signInType = null;
         let message = "";
         let option = "Switch to change mode.";
-        if (this.state.SMS)
+        if (this.props.SMS)
         {
             signInType = phoneNumberType;
             message = "Please type in your phone number.";
@@ -268,7 +268,7 @@ class SignDialog extends React.Component
                         control={
                             <Switch
                                 value={this.state.SMS}
-                                onChange={this.handleSwitch("SMS")}
+                                onChange={(event, checked) => this.props.onRequestSwitch(checked)}
                                 label="Sign in with SMS"
                             />
                         }
