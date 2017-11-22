@@ -32,7 +32,7 @@ export class Base
         this.name = name;
         this.time = 1;
         this.cur_time = 1;
-        Base.check = check;
+        this.checkinfo = check;
     }
 
     /**
@@ -78,9 +78,9 @@ export class Base
      * see also the function Check()
      * @param {[String]} check
      */
-    static set_check(check)
+     set_check(check)
     {
-        Base.check = check;
+        this.checkinfo = check;
     }
 
     /**
@@ -116,7 +116,7 @@ export class Base
      * runnable : the check info is right
      * null: current state is missing or wrong
      */
-    static check(str)
+     check(str)
     {
         let s = "";
         if (str === "true")
@@ -365,6 +365,8 @@ export class Base
      */
     run()
     {
+
+        console.log(this.name)
         if (this.type === "sys")
         {
             if (this.name === "move_up")
@@ -431,7 +433,6 @@ export class Base
             //     }
             // }
         }
-
         Base.bmap.print();
     }
 }

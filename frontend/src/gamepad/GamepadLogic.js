@@ -29,6 +29,17 @@ export function turn(op) {
     Controller.step();
 }
 
+export function check(op)
+{
+
+    if (Base.run_state.cur.check(Base.run_state.tr_check(op)) === "runnable") 
+    {
+        return true;
+    }
+
+    return false;
+}
+
 
 let highlighting = false;
 
