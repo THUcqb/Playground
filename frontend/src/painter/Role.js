@@ -42,7 +42,10 @@ class Role
             images: [preloader.getResult("role")],
             frames: {width:21, height:27, regX: 0, regY: 0},
             animations: {
-                stand:1,
+                standDownward:1,
+                standUpward:7,
+                standLeftward:4,
+                standRightward:10,
                 walkDown: {
                     frames: [0, 1, 2, 1],
                     next: "walkDown",
@@ -66,7 +69,8 @@ class Role
             }
         };
         const spriteSheet = new EaselJS.SpriteSheet(spriteData);
-        this.role = new EaselJS.Sprite(spriteSheet,"stand");
+        this.facing = "up";
+        this.role = new EaselJS.Sprite(spriteSheet,"standUpward");
 
         // this.role = new EaselJS.Shape();
         this.role.shadow = new EaselJS.Shadow(this.color[this.colorNum], 2, 2, 12);
@@ -114,27 +118,46 @@ class Role
         this.drawPic();
         if (x === this.nowX + 1)
         {
+            this.facing = "down";
             this.role.gotoAndPlay("walkDown");
             TweenJS.Tween.get(this.role).to({ y: this.role.y + this.size }, this.time);
         }
         else if (x === this.nowX - 1)
         {
+            this.facing = "up";
             this.role.gotoAndPlay("walkUp");
             TweenJS.Tween.get(this.role).to({ y: this.role.y - this.size }, this.time);
         }
         else if (y === this.nowY + 1)
         {
+            this.facing = "right";
             this.role.gotoAndPlay("walkRight");
             TweenJS.Tween.get(this.role).to({ x: this.role.x + this.size }, this.time);
         }
         else if (y === this.nowY - 1)
         {
+            this.facing = "left";
             this.role.gotoAndPlay("walkLeft");
             TweenJS.Tween.get(this.role).to({ x: this.role.x - this.size }, this.time);
         }
         else
         {
-            this.role.stop();
+            if (this.facing === "up")
+            {
+                this.role.gotoAndStop("standUpward");
+            }
+            else if (this.facing === "down")
+            {
+                this.role.gotoAndStop("standDownward");
+            }
+            else if (this.facing === "left")
+            {
+                this.role.gotoAndStop("standLeftward");
+            }
+            else if (this.facing === "right")
+            {
+                this.role.gotoAndStop("standRightward");
+            }
         }
         this.updatePos(x, y);
     }
