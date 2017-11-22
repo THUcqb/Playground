@@ -132,7 +132,7 @@ export class Scene extends Component
                 this.DIYMaps = {};
                 if (response.OK)
                 {
-                    for (let key in response.map)
+                    for (let key = 0; key < response.map.length; key++)
                     {
                         let map = {
                             id: key,
@@ -301,6 +301,8 @@ export class Scene extends Component
         // let minSize = width;
         // if (height < width)
             // minSize = height;
+        width = Math.min(width, height * 1.3);
+        height = Math.min(height, width * 1.3);
         stage.style.width = width.toString() + 'px';
         stage.style.height = height.toString() + 'px';
     }
@@ -311,16 +313,8 @@ export class Scene extends Component
         shareGetContext(sharedCode)
             .then((sharedContext) => {
                 if (sharedContext.OK) {
-                    let levelInfo = '';
-                    if (sharedContext.level) {
-                        levelInfo = `Level ${sharedContext.level}`;
-                    }
-                    else {
-                        levelInfo = `Level ${sharedContext.mapname}`;
-                    }
-
                     MessageBar.show(
-                        `Successfully opened${levelInfo}shared by ${sharedContext.owner}`
+                        `Successfully opened map shared by ${sharedContext.owner}!`
                     );
                 }
                 else {

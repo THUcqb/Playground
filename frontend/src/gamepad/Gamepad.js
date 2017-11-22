@@ -123,7 +123,7 @@ class Gamepad extends Component {
 
     render() {
         return (
-            <div className="Gamepad" style={{width: "100%", display: "flex", flexDirection: "column"}}>
+            <div className="Gamepad" style={{width: "100%", minHeight: "256px", display: "flex", flexDirection: "column"}}>
                 <GameActions
                     style={{flex: 1}}
                     clear={Gamepad.clearWorkspace}
