@@ -111,6 +111,8 @@ class UserMapsTest(TestCase):
         the_url = '/maps/get_solution'
         UserInfo.objects.create(username = 'zuohaojia', password = 'waitlove', phonenumber = '110', email = 'zuohaojia@example.com')
         AMap.objects.create(username = 'zuohaojia', level = '1', unlock = True, solution = 'while')
+        ImmanentMaps.objects.create(level = '1', standard = 'for', immanentmap = '1111000000100002000010010000211000020001000000000110200000000000000200020010000000002001010000000021')
+        
         for i in range(1, 10):
             AMap.objects.create(level = str(i + 1), username = 'zuohaojia')
         

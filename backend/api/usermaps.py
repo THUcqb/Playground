@@ -122,7 +122,7 @@ def get_solution(request):
     :method: POST
     :param param1: token
     :param param2: level
-    :returns: if succeed, return {"status":"Successful", "solution":solution}
+    :returns: if succeed, return {"status":"Successful", "solution":solution, "standard":standard solution}
               else if the token is out of date, return {"status":"Expiration"}
               else if token is wrong, return {"status":"TokenError"}
               else if the user doesn't exist, return {"status":"NotExisted"}
@@ -145,10 +145,12 @@ def get_solution(request):
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         try:
             amap = AMap.objects.get(username = username, level = str(level))
+            themap = ImmanentMaps.objects.get(level = str(level))
+            response_data["standard"] = themap.solution
             response_data["solution"] = amap.solution
             response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
-        except AMap.DoesNotExist:
+        except:
             response_data["status"] = "NotExisted"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
             
