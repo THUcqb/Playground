@@ -92,7 +92,7 @@ export class Controller
     {
         let tempMap = new Map(map.SIZE_X, map.SIZE_Y);
         tempMap.editInit();
-        tempMap.copyBlocklist(map);
+        tempMap.copyBlockList(map);
         return tempMap;
     }
 

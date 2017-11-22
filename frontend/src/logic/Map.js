@@ -1,18 +1,7 @@
 import {Block} from './Block';
-import { numberOfLevels, level } from './Maplevel';
+import {numberOfLevels, level} from './Maplevel';
 import {Base} from './Base';
 import {BaseMapInfo, SlotMapInfo} from './ConstInfo';
-
-class MapInfo
-{
-    constructor(level, maps)
-    {
-        this.level = level;
-        this.maps = maps;
-        this.candy = 0;
-        this.allcandy = 0;
-    }
-}
 
 export class Map
 {
@@ -129,7 +118,7 @@ export class Map
     /**
      * load map after
      */
-    copyBlocklist(map)
+    copyBlockList(map)
     {
         this.candy = 0;
         let str = map.stringData();
@@ -140,7 +129,7 @@ export class Map
                 let info = Number(str[i * this.SIZE_X + n]);
 
                 this.block_list[i][n].info = info;
-                if (info === BaseMapInfo.getElementsByTagName('gold'))
+                if (info === BaseMapInfo.getElementsByTagName('gold') || info === BaseMapInfo.getElementsByTagName("end"))
                 {
                     this.candy += 1;
                 }
@@ -172,14 +161,14 @@ export class Map
                     Base.bsnake.init(i, n);
                     this.setHead(i, n);
                 }
-                if (this.block_list[i][n].info === BaseMapInfo.getElementsByTagName('gold'))
+                if (this.block_list[i][n].info === BaseMapInfo.getElementsByTagName('gold') || this.block_list[i][n].info === BaseMapInfo.getElementsByTagName('end'))
                 {
                     this.candy += 1;
                 }
                 slot_map[i][n] = 0;
             }
         }
-        
+
         this.allcandy = this.candy;
         this.slot_map = slot_map;
     }
@@ -195,7 +184,7 @@ export class Map
                 let info = Number(string[i * this.SIZE_X + n]);
 
                 this.block_list[i][n].info = info;
-                if (info === BaseMapInfo.getElementsByTagName('gold')||info === BaseMapInfo.getElementsByTagName('end'))
+                if (info === BaseMapInfo.getElementsByTagName('gold') || info === BaseMapInfo.getElementsByTagName('end'))
                 {
                     this.candy += 1;
                 }
@@ -217,35 +206,6 @@ export class Map
     {
         let str = Map.localMap[level];
         this.loadFromString(str);
-    }
-
-    /**
-     * used for test
-     */
-    testLoad(filename)
-    {
-
-
-        let str = 
-            "1111000000"
-            + "1000020000"
-            + "1001000021"
-            + "1000020001"
-            + "0000000001"
-            + "1020000000"
-            + "0000000200"
-            + "0200100000"
-            + "0000200101"
-            + "0000000021";
-
-        for (let i = 0; i < this.SIZE_X; i++)
-        {
-            for (let n = 0; n < this.SIZE_Y; n++)
-            {
-                this.block_list[i][n].info = Number(str[i * this.SIZE_X + n]);
-            }
-        }
-
     }
 
     /**
@@ -348,7 +308,6 @@ export class Map
                 }
             }
         }
-
         return block_list;
     }
 
