@@ -33,6 +33,33 @@ def save_maps(request):
         response_data["status"] = "Existed"
         return HttpResponse(json.dumps(response_data), content_type = "application/json")
 
+@csrf_exempt        
+def save_solution(request):
+    '''
+    Handle request of saving a standard solution of a map.
+
+    :method: post
+    :param param1: level
+    :param param2: solution
+    :returns: if succeed, return {'status':'Successful'}
+              else if it has already saved, return {'status':'Existed'}
+              else if the level doesn't exist, return {'status':'NotExisted'}
+    '''
+    if request.method == 'POST':
+        d = json.loads(request.body.decode('utf-8'))
+        response_data = {}
+        level = d['level']
+        try:
+            the_map = ImmanentMaps.objects.get(level = str(level))
+            the_map.standard = d['solution']
+            the_map.save()
+            response_data["status"] = "Successful"
+            return HttpResponse(json.dumps(response_data), content_type = "application/json")
+        except ImmanentMaps.DoesNotExist:
+            response_data["status"] = "NotExisted"
+            return HttpResponse(json.dumps(response_data), content_type = "application/json")
+
+
 @csrf_exempt
 def load_maps(request):
     '''
@@ -48,7 +75,7 @@ def load_maps(request):
         response_data = {}
         level = d['level']
         try:
-            the_map = ImmanentMaps.objects.get(level = level)
+            the_map = ImmanentMaps.objects.get(level = str(level))
             response_data["maps"] = the_map.immanentmap
             response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data), content_type = "application/json")

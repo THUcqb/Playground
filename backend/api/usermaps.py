@@ -165,12 +165,8 @@ def save_diymap(request):
     :param param5: mapid
     :returns: if succeed, return {"status":"Successful"}
               else if the token is out of date, return {"status":"Expiration"}
-<<<<<<< HEAD
               else if token is wrong, return {"status":"TokenError"}
-              else if the map hasn't been created, return {"status":"NotEixsted"}
-=======
               else if the map hasn't been created but mapid is not null, return {"status":"NotEixsted"}
->>>>>>> 106-Implement-authentication-by-phone-number
     '''
     if request.method == 'POST':
         response_data = {}
