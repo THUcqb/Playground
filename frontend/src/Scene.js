@@ -132,7 +132,7 @@ export class Scene extends Component
                 this.DIYMaps = {};
                 if (response.OK)
                 {
-                    for (let key in response.map)
+                    for (let key = 0; key < response.map.length; key++)
                     {
                         let map = {
                             id: key,
