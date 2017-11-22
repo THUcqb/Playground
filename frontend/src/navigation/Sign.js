@@ -1,12 +1,13 @@
 import React from 'react';
-import { withCookies, Cookies } from 'react-cookie';
+import {withCookies, Cookies} from 'react-cookie';
 import Button from 'material-ui/Button';
 import SignDialog from './SignDialog';
-import { signin, signup, changePassword, getInfoWithCookies } from '../utils/Auth';
-import { instanceOf } from 'prop-types';
+import {signin, signup, changePassword, getInfoWithCookies, phoneSignIn} from '../utils/Auth';
+import {instanceOf} from 'prop-types';
 import Avatar from 'material-ui/Avatar';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
+import {withStyles} from 'material-ui/styles';
+import {sendSMS} from "../utils/Auth";
 
 const style = theme => ({
     avatar: {
@@ -14,19 +15,21 @@ const style = theme => ({
     }
 });
 
-class SignButton extends React.Component {
+class SignButton extends React.Component
+{
 
     static propTypes = {
         cookies: instanceOf(Cookies).isRequired
     };
 
     /**
-    * @constructor
-    * @param props
-    * @state open - If the dialog is open
-    * @state textStatus - If the textField in the dialog is currently busy or not.
-    */
-    constructor(props) {
+     * @constructor
+     * @param props
+     * @state open - If the dialog is open
+     * @state textStatus - If the textField in the dialog is currently busy or not.
+     */
+    constructor(props)
+    {
         super(props);
         this.state = {
             open: false,
@@ -34,38 +37,53 @@ class SignButton extends React.Component {
             textStatus: {
                 disabled: false,
                 usernameError: false,
+                phoneNumberError: false,
+                verificationCodeError: false,
                 passwordError: false,
-            }
+            },
+            sendButtonState: false,
+            SMS: false,
         };
     }
 
-    componentDidMount() {
-    const token = this.props.cookies.get('token');
-    if (token)
+    componentDidMount()
     {
-      getInfoWithCookies(token)
-        .then((response) => {
-          if (response.OK) {
-            this.props.loggedIn(response.username);
-          }
-        });
-    }
+        const token = this.props.cookies.get('token');
+        if (token)
+        {
+            getInfoWithCookies(token)
+                .then((response) =>
+                {
+                    if (response.OK)
+                    {
+                        this.props.loggedIn(response.username);
+                    }
+                });
+        }
     }
 
-    handleClickOpen() {
+    handleClickOpen()
+    {
         this.setState({open: true});
     }
 
-    handleRequestClose() {
+    handleRequestClose()
+    {
         this.setState({open: false});
     }
 
+    handleRequestSwitch(checked)
+    {
+        this.setState({SMS: checked});
+    }
+
     /**
-    * The sign in function.
-    * @param username
-    * @param password
-    */
-    handleRequestSignIn(username, password) {
+     * The sign in function.
+     * @param username
+     * @param password
+     */
+    handleRequestSignIn(username, password, phoneNumber, verificationCode)
+    {
         if (this.state.signingState !== 'signin')
         {
             this.setState({signingState: 'signin'});
@@ -73,18 +91,43 @@ class SignButton extends React.Component {
         else
         {
             this.setState({textStatus: {disabled: true}});
-            signin(username, password)
-                .then(SignInStatus => {
-                    if (SignInStatus.OK) {
-                        this.setState({open: false});
-                        this.props.loggedIn(username, true);
-                        this.props.cookies.set('token', SignInStatus.token, {path: '/', maxAge: 1296000});
+            if (this.state.SMS)
+            {
+                phoneSignIn(phoneNumber, verificationCode).then(signInStatus =>
+                {
+                    if (signInStatus.OK)
+                    {
+                        getInfoWithCookies(signInStatus.token).then(response =>
+                        {
+                            if (response.OK)
+                            {
+                                this.handleSignedIn(signInStatus, response.username);
+                            }
+                        });
                     }
                     this.setState({textStatus: {disabled: false, usernameError: true, passwordError: true}});
                 });
+            }
+            else
+            {
+                signin(username, password).then(signInStatus =>
+                {
+                    this.handleSignedIn(signInStatus, username);
+                });
+            }
         }
     }
 
+    handleSignedIn(status, username)
+    {
+        if (status.OK)
+        {
+            this.setState({open: false});
+            this.props.loggedIn(username, true);
+            this.props.cookies.set('token', status.token, {path: '/', maxAge: 1296000});
+        }
+        this.setState({textStatus: {disabled: false, usernameError: true, passwordError: true}});
+    }
     /**
      * The sign up function.
      * @param username
@@ -92,15 +135,18 @@ class SignButton extends React.Component {
      * @param phonenumber
      * @param email
      */
-    handleRequestSignUp(username, password, phonenumber, email) {
-        if (this.state.signingState !== 'signup') {
+    handleRequestSignUp(username, password, phonenumber, email)
+    {
+        if (this.state.signingState !== 'signup')
+        {
             this.setState({signingState: 'signup'});
         }
         else
         {
             this.setState({textStatus: {disabled: true}});
             signup(username, password, phonenumber, email)
-                .then(status => {
+                .then(status =>
+                {
                     if (status.OK)
                         this.setState({signingState: 'signin'});
                     this.setState({textStatus: {disabled: false, usernameError: true}});
@@ -108,12 +154,25 @@ class SignButton extends React.Component {
         }
     }
 
+    handleRequestSendSMS(phoneNumber)
+    {
+        sendSMS(phoneNumber)
+            .then((response) =>
+            {
+                if (response.OK)
+                {
+                    this.setState({sendButtonState: true})
+                }
+            });
+    }
+
     /**
      * When the user clicks change password
      * @param oldPassword
      * @param newPassword
      */
-    handleRequestChangePassword(oldPassword, newPassword) {
+    handleRequestChangePassword(oldPassword, newPassword)
+    {
         if (this.state.signingState !== 'changepassword')
         {
             this.setState({signingState: 'changepassword'});
@@ -122,20 +181,24 @@ class SignButton extends React.Component {
         {
             this.setState({textStatus: {disabled: true}});
             changePassword(oldPassword, newPassword)
-                .then(SignInStatus => {
-                    if (SignInStatus.OK) {
+                .then(SignInStatus =>
+                {
+                    if (SignInStatus.OK)
+                    {
                         this.setState({open: false});
                     }
-                    else {
+                    else
+                    {
                         this.setState({textStatus: {disabled: false, usernameError: true, passwordError: true}});
                     }
                 });
         }
     }
 
-    render() {
+    render()
+    {
 
-        const { classes } = this.props;
+        const {classes} = this.props;
 
         let userOp = null;
 
@@ -157,10 +220,14 @@ class SignButton extends React.Component {
                     open={this.state.open}
                     signingState={this.state.signingState}
                     textStatus={this.state.textStatus}
+                    SMS={this.state.SMS}
+                    sendButtonState={this.state.sendButtonState}
                     onRequestClose={() => this.handleRequestClose()}
-                    onRequestSignIn={(username, password) => this.handleRequestSignIn(username, password)}
+                    onRequestSignIn={(username, password, phoneNumber, verificationCode) => this.handleRequestSignIn(username, password, phoneNumber, verificationCode)}
                     onRequestSignUp={(username, password, phonenumber, email) => this.handleRequestSignUp(username, password, phonenumber, email)}
-                    onRequestChangePassword={(oldPasword, newPassword) => this.handleRequestChangePassword(oldPasword, newPassword)}
+                    onRequestChangePassword={(oldPassword, newPassword) => this.handleRequestChangePassword(oldPassword, newPassword)}
+                    onRequestSendSMS={(phoneNumber) => this.handleRequestSendSMS(phoneNumber)}
+                    onRequestSwitch={(checked) => this.handleRequestSwitch(checked)}
                 />
             </div>
         )
@@ -172,4 +239,4 @@ SignButton.propTypes = {
     theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(style, { withTheme: true })(withCookies(SignButton));
+export default withStyles(style, {withTheme: true})(withCookies(SignButton));

@@ -16,3 +16,6 @@ export const LOADMAP = "/maps/load_maps";
 
 export const SAVEDIYMAP = "/diymaps/save_diymap";
 export const GETDIYMAPS = "/diymaps/get_diymaps";
+
+export const SENDSMS = "/users/send_message";
+export const PHONESIGNIN ="/users/mobile_login";
