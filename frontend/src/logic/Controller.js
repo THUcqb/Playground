@@ -98,7 +98,6 @@ export class Controller
 
     editNewMap(map)
     {
-
         this.begin = Base.begin;
         Base.begin.time = 1;
         this.begin.type = "user";
@@ -108,7 +107,7 @@ export class Controller
         this.begin.task = new Base_task(this.begin);
         Base.run_state.state = "runnable";
         Base.run_state.cur = Base.begin;
-
+        Base.lastMap = Controller.copyMap(Base.bmap);
     }
 
     static step()

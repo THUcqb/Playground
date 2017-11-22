@@ -133,15 +133,18 @@ export class Scene extends Component
                 this.DIYMaps = {};
                 if (response.OK)
                 {
-                    for (let key = 0; key < response.map.length; key++)
+                    for (let key in response.map)
                     {
-                        let map = {
-                            id: key,
-                            name: response.map[key].mapname,
-                            info: response.map[key].mapinfo,
-                        };
-                        this.DIYMapsInfo.push(map);
-                        this.DIYMaps[map.id] = map;
+                        if (response.map.hasOwnProperty(key))
+                        {
+                            let map = {
+                                id: key,
+                                name: response.map[key].mapname,
+                                info: response.map[key].mapinfo,
+                            };
+                            this.DIYMapsInfo.push(map);
+                            this.DIYMaps[map.id] = map;
+                        }
                     }
                 }
             });
