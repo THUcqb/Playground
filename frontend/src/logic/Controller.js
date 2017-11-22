@@ -10,6 +10,8 @@ export class Controller
         this.switchLevelTime = 0;
         this.state = "runnable";
         Base.bmap.load(0);
+        Base.run_state.state = "runnable";
+        Base.run_state.move_state = "null";
         //将任务列表指向初始节点
         this.begin.task = new Base_task(this.begin);
     }
@@ -38,6 +40,7 @@ export class Controller
         //将任务列表指向初始节点
         this.begin.task = new Base_task(this.begin);
         Base.run_state.state = "runnable";
+        Base.run_state.move_state = "null";
         Base.run_state.cur = Base.begin;
         Base.lastMap = Controller.copyMap(Base.bmap);
     }
@@ -56,6 +59,7 @@ export class Controller
         this.begin.task = new Base_task(this.begin);
         Base.run_state.state = "runnable";
         Base.run_state.cur = Base.begin;
+        Base.run_state.move_state = "null";
         Base.lastMap = Controller.copyMap(Base.bmap);
     }
 
@@ -70,6 +74,7 @@ export class Controller
         Base.bmap.loadFromString(string);
         this.begin.task = new Base_task(this.begin);
         Base.run_state.state = "runnable";
+        Base.run_state.move_state = "null";
         Base.run_state.cur = Base.begin;
     }
 
@@ -106,6 +111,7 @@ export class Controller
         //将任务列表指向初始节点
         this.begin.task = new Base_task(this.begin);
         Base.run_state.state = "runnable";
+        Base.run_state.move_state = "null";
         Base.run_state.cur = Base.begin;
         Base.lastMap = Controller.copyMap(Base.bmap);
     }
@@ -143,6 +149,7 @@ export class Controller
         this.state = "runnable";
         this.begin.task = new Base_task(this.begin);
         Base.run_state.state = "runnable";
+        Base.run_state.move_state = "null";
         Base.run_state.cur = Base.begin;
         Base.bmap = Controller.copyMap(Base.lastMap);
     }

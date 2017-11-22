@@ -45,12 +45,16 @@ export class Base_state
             this.cur.state = "err";
             this.state = "err";
         }
+
         this.tr_run();
 
         if (Base.bmap.candy === 0)
         {
             this.state = "success";
         }
+
+        console.log(Base.bmap.candy);
+        console.log(this.cur.type);
 
         if (this.cur.type === "fail")
         {
@@ -77,21 +81,29 @@ export class Base_state
                 this.move_state = "move_right";
                 let a = new Base("sys", "move_right");
                 a.run();
+                this.cur.type = a.type;
+
             } else if (this.move_state === "move_right")
             {
                 this.move_state = "move_down";
                 let a = new Base("sys", "move_down");
                 a.run();
+                this.cur.type = a.type;
+
             } else if ( this.move_state === "move_down")
             {
                 this.move_state = "move_left";
                 let a = new Base("sys", "move_left");
                 a.run();
+                this.cur.type = a.type;
+
             } else if (this.move_state === "move_left")
             {
                 this.move_state = "move_up";
                 let a = new Base("sys", "move_up");
                 a.run();
+                this.cur.type = a.type;
+
             }
 
 
@@ -103,21 +115,29 @@ export class Base_state
                 this.move_state = "move_left";
                 let a = new Base("sys", "move_left");
                 a.run();
+                this.cur.type = a.type;
+
             } else if (this.move_state === "move_left")
             {
                 this.move_state = "move_down";
                 let a = new Base("sys", "move_down");
                 a.run();
+                this.cur.type = a.type;
+
             } else if ( this.move_state === "move_down")
             {
                 this.move_state = "move_right";
                 let a = new Base("sys", "move_right");
                 a.run();
+                this.cur.type = a.type;
+
             } else if (this.move_state === "move_right")
             {
                 this.move_state = "move_up";
                 let a = new Base("sys", "move_up");
                 a.run();
+                this.cur.type = a.type;
+
             }
         }
         else if (this.cur.name === "move")
@@ -125,24 +145,36 @@ export class Base_state
             if ( this.move_state === "move_down")
             {
                 this.move_state = "move_down";
+                this.cur.name = "move_down"
+
                 let a = new Base("sys", "move_down");
                 a.run();
+                this.cur.type = a.type;
+
             }
             else if (this.move_state === "move_left")
             {
                 this.move_state = "move_left";
+                this.cur.name = "move_left"
                 let a = new Base("sys", "move_left");
                 a.run();
+                this.cur.type = a.type;
             } else if (this.move_state === "null" ||this.move_state === "move_up")
             {
                 this.move_state = "move_up";
+                this.cur.name = "move_up"
                 let a = new Base("sys", "move_up");
                 a.run();
+                this.cur.type = a.type;
+
             } else if (this.move_state === "move_right")
             {
                 this.move_state = "move_right";
+                this.cur.name = "move_right"
                 let a = new Base("sys", "move_right");
                 a.run();
+                this.cur.type = a.type;
+
             }
 
         }
@@ -240,72 +272,72 @@ export class Base_state
         }
         else
         {
-                    if (op === "turn_right")
-                    {
-                        if (this.move_state === "null" ||this.move_state === "move_up")
-                        {
-                            return"check_move_right";
-                           
-                        } else if (this.move_state === "move_right")
-                        {
-                            return"check_move_down";
-                            
-                        } else if ( this.move_state === "move_down")
-                        {
-                            return"check_move_left";
-                           
-                        } else if (this.move_state === "move_left")
-                        {
-                            return"check_move_up";
-                            
-                        }
+            if (op === "turn_right")
+            {
+                if (this.move_state === "null" ||this.move_state === "move_up")
+                {
+                    return"check_move_right";
+                   
+                } else if (this.move_state === "move_right")
+                {
+                    return"check_move_down";
+                    
+                } else if ( this.move_state === "move_down")
+                {
+                    return"check_move_left";
+                   
+                } else if (this.move_state === "move_left")
+                {
+                    return"check_move_up";
+                    
+                }
 
 
-                    }
-                    else if (this.cur.name === "turn_left")
-                    {
-                        if (this.move_state === "null" ||this.move_state === "move_up")
-                        {
-                            return"check_move_left";
-                            
-                        } else if (this.move_state === "move_left")
-                        {
-                            return"check_move_down";
-                            
-                        } else if ( this.move_state === "move_down")
-                        {
-                            return"check_move_right";
-                            
-                        } else if (this.move_state === "move_right")
-                        {
-                            return"check_move_up";
-                           
-                        }
-                    }
-                    else if (this.cur.name === "move")
-                    {
-                        if ( this.move_state === "move_down")
-                        {
-                            return"check_move_down";
-                        }
-                        else if (this.move_state === "move_left")
-                        {
-                            return"check_move_left";
-                            
-                        } else if (this.move_state === "null" ||this.move_state === "move_up")
-                        {
-                            return"check_move_up";
-                            
-                        } else if (this.move_state === "move_right")
-                        {
-                            return"check_move_right";
-                        }
+            }
+            else if (this.cur.name === "turn_left")
+            {
+                if (this.move_state === "null" ||this.move_state === "move_up")
+                {
+                    return"check_move_left";
+                    
+                } else if (this.move_state === "move_left")
+                {
+                    return"check_move_down";
+                    
+                } else if ( this.move_state === "move_down")
+                {
+                    return"check_move_right";
+                    
+                } else if (this.move_state === "move_right")
+                {
+                    return"check_move_up";
+                   
+                }
+            }
+            else if (this.cur.name === "move")
+            {
+                if ( this.move_state === "move_down")
+                {
+                    return"check_move_down";
+                }
+                else if (this.move_state === "move_left")
+                {
+                    return"check_move_left";
+                    
+                } else if (this.move_state === "null" ||this.move_state === "move_up")
+                {
+                    return"check_move_up";
+                    
+                } else if (this.move_state === "move_right")
+                {
+                    return"check_move_right";
+                }
 
-                    }
-                    else
-                    {
-                        return op;
-                    }
+            }
+            else
+            {
+                return op;
+            }
         }
        
     }
