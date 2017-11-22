@@ -66,11 +66,11 @@ export function changePassword(old_password, new_password)
  * @param token - the cookie
  * @returns {Promise.<TResult>}
  */
-export function getInfoWithCookies(token)
+export function getInfoWithCookies()
 {
     return axios
         .post(URL + GETINFO, {
-            token
+            token: getCookie('token'),
         })
         .then((response) =>
         {
@@ -79,7 +79,8 @@ export function getInfoWithCookies(token)
                 username: response.data.username,
                 phonenumber: response.data.phonenumber,
                 email: response.data.email,
-                VIPType: response.data.VIPType,
+                VIPType: response.data.VIPtype,
+                VIPTime: Math.floor(response.data.VIPtime / 86400),
             }
         })
 

@@ -7,6 +7,7 @@ import Radio, { RadioGroup } from 'material-ui/Radio';
 import {FormControl, FormLabel, FormControlLabel} from 'material-ui/Form';
 import {purchase} from '../utils/Purchase';
 import MessageBar from '../utils/MessageBar';
+import {getInfoWithCookies} from "../utils/Auth";
 
 const styles = theme => ({
     formControl: {
@@ -24,7 +25,25 @@ class Purchase extends React.Component
         super(props);
         this.state = {
             value: '',
+            VIPType: 'NotVIP',
+            VIPTime: 0,
         }
+    }
+
+    componentDidMount() {
+        this.refreshPurchase();
+    }
+
+    /** Reload the user's purchase information
+     */
+    refreshPurchase() {
+        getInfoWithCookies()
+            .then((response) => {
+                this.setState({
+                    VIPType: response.VIPType,
+                    VIPTime: response.VIPTime,
+                })
+            })
     }
 
     /**
@@ -44,6 +63,7 @@ class Purchase extends React.Component
             .then((response) => {
                 if (response.OK) {
                     MessageBar.show('VIP Purchase successful!');
+                    this.refreshPurchase();
                 }
             })
     }
@@ -51,13 +71,15 @@ class Purchase extends React.Component
     render() {
         const { classes } = this.props;
 
-        let remainingDays = 0;
-
         return (
             <Dialog open={this.props.open}
                     onRequestClose={this.props.onRequestClose}
             >
-                <DialogTitle>Purchase<br/>Remaining Days: {remainingDays}</DialogTitle>
+                <DialogTitle>
+                    Purchase<br/>
+                    VIP Type - {this.state.VIPType}<br/>
+                    Remaining Days: {this.state.VIPTime}
+                </DialogTitle>
                 <DialogContent>
                     <FormControl required className={classes.formControl}>
                         <FormLabel>Please Choose Your Plan</FormLabel>

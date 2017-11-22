@@ -34,13 +34,13 @@ def create_token(username):
     }
     payload_str = json.dumps(payload_dict)
     payload = base64.b64encode(payload_str.encode(encoding = "utf-8"))
-    
+
     return payload.decode()
 
 def analyze_token(token_byte):
     '''
     Analyze the token received.
-    
+
     :param param1: token_byte
     :returns: user_info
     '''
@@ -48,14 +48,14 @@ def analyze_token(token_byte):
     token_info = base64.b64decode(token_str)
     token = token_info.decode('utf-8','ignore')
     user_info = json.loads(token)
-    
+
     return user_info
 
 @csrf_exempt
 def register(request):
     '''
     Handle request of users' registration.
-    
+
     :method: post
     :param param1: username
     :param param2: password
@@ -87,7 +87,7 @@ def register(request):
 def login(request):
     '''
     Handle request of users' login.
-    
+
     :method: post
     :param param1: username
     :param param2: password
@@ -123,7 +123,7 @@ def login(request):
 def logout(request):
     '''
     Handle request of users' logout.
-    
+
     :method: post
     :returns: {"status":"Successful"}
     '''
@@ -136,7 +136,7 @@ def logout(request):
 def get_userinfo(request):
     '''
     Handle request of getting a user's information after login.
-    
+
     :method: post
     :param param1: token
     :returns: if succeed, return {"username":username, "phonenumber": phonenumber, "email":email, "VIPtype":VIPtype, "status":"Successful"}
@@ -163,6 +163,7 @@ def get_userinfo(request):
                 response_data["VIPtype"] = "NotVIP"
             else:
                 response_data["VIPtype"] = userinfo.VIPtype
+            response_data["VIPtime"] = userinfo.VIPtime - now
             response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         except UserInfo.DoesNotExist:
@@ -173,7 +174,7 @@ def get_userinfo(request):
 def recharge(request):
     '''
     Handle the request of recharge to be VIP.
-    
+
     :method: post
     :param param1: token
     :param param2: VIPtype (Month/Season/Year)
@@ -204,7 +205,7 @@ def recharge(request):
                     userinfo.VIPtype = 'Month'
             elif VIPtype == 'Season':
                 userinfo.VIPtime += 7776000
-                if userinfo.VIPtype != 'Year': 
+                if userinfo.VIPtype != 'Year':
                     userinfo.VIPtype = 'Season'
             elif VIPtype == 'Year':
                 userinfo.VIPtime += 31104000
@@ -215,12 +216,12 @@ def recharge(request):
         except UserInfo.DoesNotExist:
             response_data["status"] = "NotExisted"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
-        
+
 @csrf_exempt
 def change_password(request):
     '''
     Handle the request of changing the password.
-    
+
     :method: post
     :param param1: token
     :param param2: old_password
@@ -255,12 +256,12 @@ def change_password(request):
                 return HttpResponse(json.dumps(response_data),content_type="application/json")
         except UserInfo.DoesNotExist:
             response_data["status"] = "NotExisted"
-            return HttpResponse(json.dumps(response_data),content_type="application/json") 
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 def create_code(randomlength = 8):
     '''
     Create a random code.
-    
+
     :param param1: randomlength
     :returns: A random code whose length is equal to randomlength.
     '''
@@ -283,14 +284,14 @@ def emailsend(userinfo):
     email_title = 'Code'
     email_body = 'Your code is: ' + code
     send_mail(email_title, email_body, EMAIL_FROM, [email])
-    
+
     return code
 
 @csrf_exempt
 def email_auth(request):
     '''
     Handle the request of verification by Email.
-    
+
     :method: post
     :param param1: token
     :returns: if succeed, return {"status":"Successful"}
@@ -326,7 +327,7 @@ def email_auth(request):
 def auth_response(request):
     '''
     Handle the request of verification by Email.
-    
+
     :method: post
     :param param1: token
     :param param2: code
@@ -364,7 +365,7 @@ def auth_response(request):
 def retrieve_password(request):
     '''
     Handle the request of getting back the user's password by Email.
-    
+
     :method: post
     :param param1: username
     :param param2: email
@@ -396,7 +397,7 @@ def retrieve_password(request):
 def retrieve_response(request):
     '''
     Handle the request of getting back the user's password after emailed.
-    
+
     :method: post
     :param param1: username
     :param param2: code
@@ -421,12 +422,12 @@ def retrieve_response(request):
         except UserInfo.DoesNotExist:
             response_data["status"] = "NotExisted"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
-            
+
 @csrf_exempt
 def send_message(request):
     '''
     Handle the request of getting code when login by mobile phone.
-    
+
     :method: post
     :param param1: phonenumber
     :returns: if succeed, return {"status" : "Successful", 'code':code}
@@ -453,13 +454,13 @@ def send_message(request):
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         except UserInfo.DoesNotExist:
             response_data["status"] = "NotExisted"
-            return HttpResponse(json.dumps(response_data),content_type="application/json")    
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 @csrf_exempt
 def mobile_login(request):
     '''
     Handle the request of login by phone number and code.
-    
+
     :method: post
     :param param1: phonenumber
     :param param2: code
@@ -483,5 +484,5 @@ def mobile_login(request):
                 return HttpResponse(json.dumps(response_data),content_type="application/json")
         except UserInfo.DoesNotExist:
             response_data["status"] = "NotExisted"
-            return HttpResponse(json.dumps(response_data),content_type="application/json")     
-    
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+
