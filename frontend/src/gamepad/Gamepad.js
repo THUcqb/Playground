@@ -17,6 +17,13 @@ const blocklyWorkspaceXml = {
     }
 };
 
+const gamepadStyle = {
+    width: "100%",
+    minHeight: "256px",
+    display: "flex",
+    flexDirection: "column"
+};
+
 const blocklyDivStyle = ({
     position: "absolute",
 });
@@ -117,13 +124,13 @@ class Gamepad extends Component {
      * Return the score of the current workspace
      * @returns {number}
      */
-    static getScore() {
-        return 1;
+    static getScore(standardSolution) {
+        return parseInt(3 * standardSolution.length / (Gamepad.dumpWorkspace().length));
     }
 
     render() {
         return (
-            <div className="Gamepad" style={{width: "100%", minHeight: "256px", display: "flex", flexDirection: "column"}}>
+            <div style={gamepadStyle}>
                 <GameActions
                     style={{flex: 1}}
                     clear={Gamepad.clearWorkspace}

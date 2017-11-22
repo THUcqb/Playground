@@ -8,6 +8,8 @@ import Delete from 'material-ui-icons/Delete';
 import Build from 'material-ui-icons/Build';
 import NavigateNext from 'material-ui-icons/NavigateNext';
 import Replay from 'material-ui-icons/Replay';
+import QuestionAnswer from 'material-ui-icons/QuestionAnswer';
+import GamepadSolutionDialog from './GamepadSolution';
 
 const buttonStyle = theme => ({
     margin: theme.spacing.unit,
@@ -35,6 +37,10 @@ const styles = theme => ({
         ...buttonStyle(theme),
         background: 'linear-gradient(45deg, #3F51B5 30%, #000000 90%)',
     },
+    showSolutionButton: {
+        ...buttonStyle(theme),
+        background: 'linear-gradient(45deg, #3F51B5 30%, #FFFFFF 90%)',
+    },
     leftIcon: {
         marginRight: theme.spacing.unit,
     },
@@ -54,6 +60,7 @@ class GameActions extends Component {
         super(props);
         this.state = {
             debugging: false,
+            solutionOpen: false,
         }
     }
 
@@ -85,6 +92,14 @@ class GameActions extends Component {
 
     handleStopDebug() {
         this.props.debug(false);
+    }
+
+    handleShowSolution() {
+        this.setState({solutionOpen: true});
+    }
+
+    handleCloseSolution() {
+        this.setState({solutionOpen: false});
     }
 
     render() {
@@ -140,12 +155,26 @@ class GameActions extends Component {
             </Button>
         );
 
+        const showSolutionButton = (
+            <Button raised className={classes.showSolutionButton}
+                    onClick={() => this.handleShowSolution()}
+            >
+                <QuestionAnswer className={classes.leftIcon}/>
+                Solution
+            </Button>
+        );
+
         if (!this.state.debugging) {
             return (
                 <Toolbar className={classes.toolbar}>
                     {clearButton}
                     {submitButton}
                     {debugButton}
+                    {showSolutionButton}
+                    <GamepadSolutionDialog
+                        open={this.state.solutionOpen}
+                        handleCloseSolution={() => this.handleCloseSolution()}
+                    />
                 </Toolbar>
             )
         }
