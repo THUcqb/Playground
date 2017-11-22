@@ -86,7 +86,7 @@ class SignDialog extends React.Component
                            type="password"
                            autoComplete="current-password"
                            value={this.state.password}
-                           onChange={this.handleChange('phoneNumber')}
+                           onChange={this.handleChange('password')}
                            disabled={this.props.textStatus.disabled}
                            error={this.props.textStatus.passwordError}
                            onKeyPress={this.handleEnterKeyPress}
@@ -96,7 +96,7 @@ class SignDialog extends React.Component
 
         const phoneNumberType = (
             <form>
-                <TextField className={classes.username}
+                <TextField className={classes.phoneNumber}
                            ref="phoneNumberField"
                            id="phoneNumber"
                            label="Phone number"
@@ -286,7 +286,7 @@ class SignDialog extends React.Component
                         Sign up
                     </Button>
                     <Button onClick={() => this.props.onRequestSignIn(
-                        this.state.username, this.state.password)} color="primary">
+                        this.state.username, this.state.password, this.state.phoneNumber, this.state.verificationCode)} color="primary">
                         Sign in
                     </Button>
                     <Button onClick={() => this.props.onRequestChangePassword(

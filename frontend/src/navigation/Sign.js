@@ -2,11 +2,12 @@ import React from 'react';
 import {withCookies, Cookies} from 'react-cookie';
 import Button from 'material-ui/Button';
 import SignDialog from './SignDialog';
-import {signin, signup, changePassword, getInfoWithCookies} from '../utils/Auth';
+import {signin, signup, changePassword, getInfoWithCookies, phoneSignIn} from '../utils/Auth';
 import {instanceOf} from 'prop-types';
 import Avatar from 'material-ui/Avatar';
 import PropTypes from 'prop-types';
 import {withStyles} from 'material-ui/styles';
+import {sendSMS} from "../utils/Auth";
 
 const style = theme => ({
     avatar: {
@@ -81,7 +82,7 @@ class SignButton extends React.Component
      * @param username
      * @param password
      */
-    handleRequestSignIn(username, password)
+    handleRequestSignIn(username, password, phoneNumber, verificationCode)
     {
         if (this.state.signingState !== 'signin')
         {
@@ -90,20 +91,43 @@ class SignButton extends React.Component
         else
         {
             this.setState({textStatus: {disabled: true}});
-            signin(username, password)
-                .then(SignInStatus =>
+            if (this.state.SMS)
+            {
+                phoneSignIn(phoneNumber, verificationCode).then(signInStatus =>
                 {
-                    if (SignInStatus.OK)
+                    if (signInStatus.OK)
                     {
-                        this.setState({open: false});
-                        this.props.loggedIn(username, true);
-                        this.props.cookies.set('token', SignInStatus.token, {path: '/', maxAge: 1296000});
+                        getInfoWithCookies(signInStatus.token).then(response =>
+                        {
+                            if (response.OK)
+                            {
+                                this.handleSignedIn(signInStatus, response.username);
+                            }
+                        });
                     }
                     this.setState({textStatus: {disabled: false, usernameError: true, passwordError: true}});
                 });
+            }
+            else
+            {
+                signin(username, password).then(signInStatus =>
+                {
+                    this.handleSignedIn(signInStatus, username);
+                });
+            }
         }
     }
 
+    handleSignedIn(status, username)
+    {
+        if (status.OK)
+        {
+            this.setState({open: false});
+            this.props.loggedIn(username, true);
+            this.props.cookies.set('token', status.token, {path: '/', maxAge: 1296000});
+        }
+        this.setState({textStatus: {disabled: false, usernameError: true, passwordError: true}});
+    }
     /**
      * The sign up function.
      * @param username
@@ -132,8 +156,14 @@ class SignButton extends React.Component
 
     handleRequestSendSMS(phoneNumber)
     {
-        console.log(phoneNumber);
-        this.setState({sendButtonState: true})
+        sendSMS(phoneNumber)
+            .then((response) =>
+            {
+                if (response.OK)
+                {
+                    this.setState({sendButtonState: true})
+                }
+            });
     }
 
     /**
@@ -193,7 +223,7 @@ class SignButton extends React.Component
                     SMS={this.state.SMS}
                     sendButtonState={this.state.sendButtonState}
                     onRequestClose={() => this.handleRequestClose()}
-                    onRequestSignIn={(username, password) => this.handleRequestSignIn(username, password)}
+                    onRequestSignIn={(username, password, phoneNumber, verificationCode) => this.handleRequestSignIn(username, password, phoneNumber, verificationCode)}
                     onRequestSignUp={(username, password, phonenumber, email) => this.handleRequestSignUp(username, password, phonenumber, email)}
                     onRequestChangePassword={(oldPassword, newPassword) => this.handleRequestChangePassword(oldPassword, newPassword)}
                     onRequestSendSMS={(phoneNumber) => this.handleRequestSendSMS(phoneNumber)}

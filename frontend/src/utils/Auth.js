@@ -1,7 +1,8 @@
 import axios from 'axios';
-import { URL, SIGNIN, SIGNUP, CHANGEPASSWORD, GETINFO } from '../config/api';
+import {URL, SIGNIN, SIGNUP, CHANGEPASSWORD, GETINFO, SENDSMS, PHONESIGNIN} from '../config/api';
 
-export function InvalidCredentialsException(message) {
+export function InvalidCredentialsException(message)
+{
     this.message = message;
     this.name = 'InvalidCredentialsException';
 }
@@ -12,13 +13,15 @@ export function InvalidCredentialsException(message) {
  * @param password
  * @returns {Promise.<T>}
  */
-export function signin(username, password) {
+export function signin(username, password)
+{
     return axios
         .post(URL + SIGNIN, {
             username,
             password,
         })
-        .then(function (response) {
+        .then(function (response)
+        {
             return {OK: (response.data.status === 'Successful'), token: response.data.token};
         })
 }
@@ -30,7 +33,8 @@ export function signin(username, password) {
  * @param phonenumber
  * @param email
  */
-export function signup(username, password, phonenumber, email) {
+export function signup(username, password, phonenumber, email)
+{
     return axios
         .post(URL + SIGNUP, {
             username,
@@ -38,19 +42,22 @@ export function signup(username, password, phonenumber, email) {
             phonenumber,
             email,
         })
-        .then((response) => {
+        .then((response) =>
+        {
             return {OK: (response.data.status === 'Successful')}
         });
 }
 
-export function changePassword(old_password, new_password) {
+export function changePassword(old_password, new_password)
+{
     return axios
         .post(URL + CHANGEPASSWORD, {
             token: getCookie('token'),
             old_password,
             new_password,
         })
-        .then((response) => {
+        .then((response) =>
+        {
             return {OK: (response.data.status === 'Successful')}
         })
 }
@@ -59,12 +66,14 @@ export function changePassword(old_password, new_password) {
  * @param token - the cookie
  * @returns {Promise.<TResult>}
  */
-export function getInfoWithCookies(token) {
+export function getInfoWithCookies(token)
+{
     return axios
         .post(URL + GETINFO, {
             token
         })
-        .then((response) => {
+        .then((response) =>
+        {
             return {
                 OK: (response.data.status === 'Successful'),
                 username: response.data.username,
@@ -83,7 +92,34 @@ export function getInfoWithCookies(token) {
 export function getCookie(cookiename)
 {
     // Get name followed by anything except a semicolon
-    let cookieString=RegExp(""+cookiename+"[^;]+").exec(document.cookie);
+    let cookieString = RegExp("" + cookiename + "[^;]+").exec(document.cookie);
     // Return everything after the equal sign, or an empty string if the cookie name not found
-    return decodeURIComponent(!!cookieString ? cookieString.toString().replace(/^[^=]+./,"") : "");
+    return decodeURIComponent(!!cookieString ? cookieString.toString().replace(/^[^=]+./, "") : "");
+}
+
+export function sendSMS(phoneNumber)
+{
+    let postData = {
+        phonenumber: phoneNumber,
+    };
+
+    return axios
+        .post(URL + SENDSMS, postData)
+        .then(function(response)
+        {
+            return {OK: (response.data.status === 'Successful')};
+        })
+}
+
+export function phoneSignIn(phoneNumber, verificationCode)
+{
+    return axios
+        .post(URL + PHONESIGNIN, {
+            phonenumber: phoneNumber,
+            code: verificationCode,
+        })
+        .then(function (response)
+        {
+            return {OK: (response.data.status === 'Successful'), token: response.data.token};
+        })
 }
