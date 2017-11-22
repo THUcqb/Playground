@@ -54,6 +54,7 @@ export class Scene extends Component
         this.levelsInfo['1'] = {unlock: true, stars: 0};
         this.DIYMapsInfo = [];
         this.DIYMaps = {};
+        this.toLastPlayedLevel();
     }
 
     reset()
@@ -66,6 +67,26 @@ export class Scene extends Component
         this.trajectory.update(Controller.getSnake());
         this.element.update(Controller.getMap());
         this.role.update(Controller.getSnake());
+    }
+
+    toLastPlayedLevel()
+    {
+        loadLevelsInfo()
+            .then((response) => {
+                if (response.OK)
+                {
+                    this.levelsInfo = response.levelsInfo;
+                    let lastLevel = 1;
+                    for (let i = 2; i <= numberOfLevels; i++)
+                    {
+                        if (this.levelsInfo[i.toString()].unlock)
+                        {
+                            lastLevel = i;
+                        }
+                    }
+                    this.handleChooseLevel(lastLevel);
+                }
+            });
     }
 
     isNextLevelAvailable()
