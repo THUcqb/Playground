@@ -79,6 +79,7 @@ export function getInfoWithCookies(token)
                 username: response.data.username,
                 phonenumber: response.data.phonenumber,
                 email: response.data.email,
+                VIPType: response.data.VIPType,
             }
         })
 
