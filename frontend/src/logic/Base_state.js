@@ -92,7 +92,7 @@ export class Base_state
 
         if (this.cur.name === "turn_right")
         {
-            if (this.move_state === "null" || this.move_state === "move_up")
+            if (this.move_state === "null" ||this.move_state === "move_up")
             {
                 this.move_state = "move_right";
                 let a = new Base("sys", "move_right");
@@ -102,7 +102,7 @@ export class Base_state
                 this.move_state = "move_down";
                 let a = new Base("sys", "move_down");
                 a.run();
-            } else if (this.move_state === "move_down")
+            } else if ( this.move_state === "move_down")
             {
                 this.move_state = "move_left";
                 let a = new Base("sys", "move_left");
@@ -118,7 +118,7 @@ export class Base_state
         }
         else if (this.cur.name === "turn_left")
         {
-            if (this.move_state === "null" || this.move_state === "move_up")
+            if (this.move_state === "null" ||this.move_state === "move_up")
             {
                 this.move_state = "move_left";
                 let a = new Base("sys", "move_left");
@@ -128,7 +128,7 @@ export class Base_state
                 this.move_state = "move_down";
                 let a = new Base("sys", "move_down");
                 a.run();
-            } else if (this.move_state === "move_down")
+            } else if ( this.move_state === "move_down")
             {
                 this.move_state = "move_right";
                 let a = new Base("sys", "move_right");
@@ -142,10 +142,10 @@ export class Base_state
         }
         else if (this.cur.name === "move")
         {
-            if (this.move_state === "null" || this.move_state === "move_up")
+            if ( this.move_state === "move_down")
             {
-                this.move_state = "move_up";
-                let a = new Base("sys", "move_up");
+                this.move_state = "move_down";
+                let a = new Base("sys", "move_down");
                 a.run();
             }
             else if (this.move_state === "move_left")
@@ -153,10 +153,10 @@ export class Base_state
                 this.move_state = "move_left";
                 let a = new Base("sys", "move_left");
                 a.run();
-            } else if (this.move_state === "move_down")
+            } else if (this.move_state === "null" ||this.move_state === "move_up")
             {
-                this.move_state = "move_down";
-                let a = new Base("sys", "move_down");
+                this.move_state = "move_up";
+                let a = new Base("sys", "move_up");
                 a.run();
             } else if (this.move_state === "move_right")
             {
