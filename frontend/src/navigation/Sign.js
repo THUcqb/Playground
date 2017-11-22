@@ -81,6 +81,8 @@ class SignButton extends React.Component
      * The sign in function.
      * @param username
      * @param password
+     * @param phoneNumber
+     * @param verificationCode
      */
     handleRequestSignIn(username, password, phoneNumber, verificationCode)
     {
@@ -224,7 +226,7 @@ class SignButton extends React.Component
                     sendButtonState={this.state.sendButtonState}
                     onRequestClose={() => this.handleRequestClose()}
                     onRequestSignIn={(username, password, phoneNumber, verificationCode) => this.handleRequestSignIn(username, password, phoneNumber, verificationCode)}
-                    onRequestSignUp={(username, password, phonenumber, email) => this.handleRequestSignUp(username, password, phonenumber, email)}
+                    onRequestSignUp={(username, password, phoneNumber, email) => this.handleRequestSignUp(username, password, phoneNumber, email)}
                     onRequestChangePassword={(oldPassword, newPassword) => this.handleRequestChangePassword(oldPassword, newPassword)}
                     onRequestSendSMS={(phoneNumber) => this.handleRequestSendSMS(phoneNumber)}
                     onRequestSwitch={(checked) => this.handleRequestSwitch(checked)}

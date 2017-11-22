@@ -106,8 +106,7 @@ class Gamepad extends Component {
      */
     static dumpWorkspace() {
         let xml = Blockly.Xml.workspaceToDom(Gamepad.workspace);
-        let xml_text = Blockly.Xml.domToText(xml);
-        return xml_text;
+        return Blockly.Xml.domToText(xml);
     }
 
     /**

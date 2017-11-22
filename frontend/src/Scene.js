@@ -32,6 +32,7 @@ export class Scene extends Component
 {
     canvasScene;
     CanvasDiv;
+    ToolbarDiv;
 
     static singleton = null;
 
@@ -312,6 +313,7 @@ export class Scene extends Component
      */
     handleResize(event)
     {
+        event = null;
         let fatherDiv = this.refs.CanvasDiv;
         let stage = this.refs.canvasScene;
         let toolbar = this.refs.ToolbarDiv;

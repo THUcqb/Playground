@@ -60,9 +60,7 @@ def save_mapsinfo(request):
             stars = d['stars']
             solution = d['solution']
             amap = AMap.objects.get(username = username, level = str(level))
-            if amap.stars == '':
-                amap.stars = stars
-            elif int(amap.stars) < int(stars):
+            if (amap.stars == '') or (int(amap.stars) < int(stars)):
                 amap.stars = stars
             amap.solution = solution
             amap.save()

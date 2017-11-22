@@ -112,7 +112,7 @@ class Navigation extends React.Component {
             </div>
         );
 
-        const appbar = (
+        const appBar = (
             <AppBar className={classes.appBar}>
                 <Toolbar>
                     <IconButton
@@ -166,7 +166,7 @@ class Navigation extends React.Component {
 
     return (
         <div>
-            {appbar}
+            {appBar}
             {drawer}
         </div>
     );

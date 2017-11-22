@@ -63,8 +63,7 @@ export function changePassword(old_password, new_password)
 }
 
 /** Get basic user information with the cookie stored
- * @param token - the cookie
- * @returns {Promise.<TResult>}
+ * @returns {Promise.<T>}
  */
 export function getInfoWithCookies()
 {
@@ -88,13 +87,13 @@ export function getInfoWithCookies()
 
 /**
  * The the required cookie
- * @param cookiename - the name of the cookie, ex: token
+ * @param cookieName - the name of the cookie, ex: token
  * @returns {string}
  */
-export function getCookie(cookiename)
+export function getCookie(cookieName)
 {
     // Get name followed by anything except a semicolon
-    let cookieString = RegExp("" + cookiename + "[^;]+").exec(document.cookie);
+    let cookieString = RegExp("" + cookieName + "[^;]+").exec(document.cookie);
     // Return everything after the equal sign, or an empty string if the cookie name not found
     return decodeURIComponent(!!cookieString ? cookieString.toString().replace(/^[^=]+./, "") : "");
 }

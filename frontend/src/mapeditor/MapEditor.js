@@ -19,7 +19,6 @@ import MessageBar from '../utils/MessageBar';
 import { hints as configMsgHints } from '../config/msg';
 import {Controller} from '../logic/Controller';
 import {BaseMapInfo} from '../logic/ConstInfo';
-import {getCookie} from "../utils/Auth";
 import {saveDIYMap} from "../utils/LevelMap";
 const styles = theme => ({
     container: {
@@ -185,7 +184,7 @@ class MapEditor extends React.Component
             let name = prompt("Map name", "My Map");
             if (name !== null && name !== "")
             {
-                saveDIYMap(name, this.map).then((response) =>
+                saveDIYMap(name, this.map).then(response =>
                 {
                     if (response.OK)
                     {

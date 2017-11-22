@@ -53,9 +53,6 @@ export class Base_state
             this.state = "success";
         }
 
-        console.log(Base.bmap.candy);
-        console.log(this.cur.type);
-
         if (this.cur.type === "fail")
         {
             this.state = "fail";
@@ -145,7 +142,7 @@ export class Base_state
             if ( this.move_state === "move_down")
             {
                 this.move_state = "move_down";
-                this.cur.name = "move_down"
+                this.cur.name = "move_down";
 
                 let a = new Base("sys", "move_down");
                 a.run();
@@ -155,14 +152,14 @@ export class Base_state
             else if (this.move_state === "move_left")
             {
                 this.move_state = "move_left";
-                this.cur.name = "move_left"
+                this.cur.name = "move_left";
                 let a = new Base("sys", "move_left");
                 a.run();
                 this.cur.type = a.type;
             } else if (this.move_state === "null" ||this.move_state === "move_up")
             {
                 this.move_state = "move_up";
-                this.cur.name = "move_up"
+                this.cur.name = "move_up";
                 let a = new Base("sys", "move_up");
                 a.run();
                 this.cur.type = a.type;
@@ -170,7 +167,7 @@ export class Base_state
             } else if (this.move_state === "move_right")
             {
                 this.move_state = "move_right";
-                this.cur.name = "move_right"
+                this.cur.name = "move_right";
                 let a = new Base("sys", "move_right");
                 a.run();
                 this.cur.type = a.type;
@@ -368,7 +365,6 @@ export class Base_state
                     }
                     else
                     {
-                       
                         this.cur = this.cur.else_task.tasklist[0];
                         this.cur.time = this.cur.cur_time;
                     }

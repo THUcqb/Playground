@@ -50,6 +50,7 @@ function loadError(event)
 
 function loadComplete(event)
 {
+    event = null;
     ReactDOM.render(<CookiesProvider><App /></CookiesProvider>,
         document.getElementById('root')
     );

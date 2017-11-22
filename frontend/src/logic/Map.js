@@ -201,9 +201,6 @@ export class Map
                 }
             }
         }
-        this.allcandy = this.candy;
-        this.flag = 1;
-        
     }
 
     /**
@@ -214,74 +211,6 @@ export class Map
     {
         let str = Map.localMap[level];
         this.loadFromString(str);
-    }
-
-    /**
-     * used for test
-     */
-    print()
-    {
-        let a = this.detailData();
-        let str = "";
-        for (let i = 0; i < this.SIZE_X; i++)
-        {
-            for (let n = 0; n < this.SIZE_Y; n++)
-            {
-                let test = (a[i][n]);
-                let out;
-                if (test === BaseMapInfo.getElementsByTagName('gold'))
-                {
-                    out = "@";
-                }
-                else if (test === BaseMapInfo.getElementsByTagName('head'))
-                {
-                    out = "X";
-                }
-                else if (test === BaseMapInfo.getElementsByTagName('body'))
-                {
-                    out = "*";
-                }
-                else if (test === BaseMapInfo.getElementsByTagName('tail'))
-                {
-                    out = ".";
-                }
-                else if (test === BaseMapInfo.getElementsByTagName('block'))
-                {
-                    out = "#"
-                }
-                else if (test === BaseMapInfo.getElementsByTagName('end'))
-                {
-                    out = "E"
-                }
-                else if (test === BaseMapInfo.getElementsByTagName('birthplace'))
-                {
-                    out = "s"
-                }
-                else out = " ";
-                str += out;
-            }
-            str += "\n";
-        }
-        console.log(str);
-    }
-
-    /**
-     * (string list)return map info with snake
-     */
-    detailData()
-    {
-        let block_list = [];
-        for (let i = 0; i < this.SIZE_X; i++)
-        {
-            block_list[i] = [];
-            for (let n = 0; n < this.SIZE_Y; n++)
-            {
-                block_list[i][n] = this.block_list[i][n].info;
-
-            }
-        }
-
-        return block_list;
     }
 
     stringData()

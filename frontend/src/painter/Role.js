@@ -95,6 +95,7 @@ class Role
         if (this.animation)
         {
             this.role.on("mousedown", (ev) => {
+                ev = null;
                 MessageBar.show(configMsgHints.clickRole);
                 this.colorNum = (this.colorNum + 1) % this.color.length;
                 this.drawPic();

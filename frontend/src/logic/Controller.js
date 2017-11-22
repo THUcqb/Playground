@@ -16,13 +16,6 @@ export class Controller
         this.begin.task = new Base_task(this.begin);
     }
 
-    init(task)
-    {
-        let user_task = new Base_task(this.begin);
-        user_task.add(task);
-        this.begin.task = user_task;
-    }
-
     static getLevelTime()
     {
         return Controller.controller.switchLevelTime;
@@ -141,7 +134,6 @@ export class Controller
 
     restart()
     {
-        Base.lastMap.print();
         this.begin = Base.begin;
         this.switchLevelTime++;
         Base.begin.time = 1;

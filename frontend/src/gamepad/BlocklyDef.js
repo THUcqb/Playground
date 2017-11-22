@@ -17,8 +17,8 @@ Blockly.Blocks['action_move'] = {
 };
 
 Blockly.JavaScript['action_move'] = function(block) {
-    let dropdown_op = block.getFieldValue('OP');
-    return `move("${dropdown_op}");`;
+    let dropDown_op = block.getFieldValue('OP');
+    return `move("${dropDown_op}");`;
 };
 
 /**

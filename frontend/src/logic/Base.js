@@ -76,7 +76,7 @@ export class Base {
      * runnable : the check info is right
      * null: current state is missing or wrong
      */
-    check(str)
+    static check(str)
     {
         let s = "";
         if (str === "true")
@@ -237,7 +237,6 @@ export class Base {
 
             Base.bmap.candy--;
             this.type = "success";
-            console.log("fuck u")
         }
         else
             this.type = "fail";
@@ -268,7 +267,6 @@ export class Base {
                 this.move_right();
             }
         }
-        Base.bmap.print();
     }
 }
 

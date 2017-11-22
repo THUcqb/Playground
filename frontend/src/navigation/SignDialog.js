@@ -42,13 +42,6 @@ class SignDialog extends React.Component
         });
     };
 
-    handleSwitch = name => (event, checked) =>
-    {
-        this.setState({
-            [name]: checked,
-        })
-    };
-
     handleEnterKeyPress = (ev) =>
     {
         if (ev.key === 'Enter')
