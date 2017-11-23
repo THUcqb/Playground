@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {URL, SIGNIN, SIGNUP, CHANGEPASSWORD, GETINFO, SENDSMS, PHONESIGNIN} from '../config/api';
+import {emailActivateRequest} from "./Email";
 
 export function InvalidCredentialsException(message)
 {
@@ -56,9 +57,14 @@ export function changePassword(old_password, new_password)
             old_password,
             new_password,
         })
-        .then((response) =>
-        {
-            return {OK: (response.data.status === 'Successful')}
+        .then((response) => {
+            if (response.data.status === 'Successful') {
+                emailActivateRequest()
+                return {OK: true};
+            }
+            else {
+                return {OK: false};
+            }
         })
 }
 
