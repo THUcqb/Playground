@@ -43,8 +43,8 @@ def save_mapsinfo(request):
     if request.method == 'POST':
         response_data = {}
         d = json.loads(request.body.decode('utf-8'))
-        token_byte = d['token']
         try:
+            token_byte = d['token']
             user_info = analyze_token(token_byte)
         except:
             response_data["status"] = "TokenError"
@@ -90,10 +90,10 @@ def get_mapsinfo(request):
     '''
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
-        token_byte = d['token']
         response_data = {}
         now = time.time()
         try:
+            token_byte = d['token']
             user_info = analyze_token(token_byte)
         except:
             response_data["status"] = "TokenError"
@@ -131,9 +131,9 @@ def get_solution(request):
     '''
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
-        token_byte = d['token']
         response_data = {}
         try:
+            token_byte = d['token']
             user_info = analyze_token(token_byte)
         except:
             response_data["status"] = "TokenError"
@@ -175,9 +175,9 @@ def save_diymap(request):
     if request.method == 'POST':
         response_data = {}
         d = json.loads(request.body.decode('utf-8'))
-        token_byte = d['token']
         now = time.time()
         try:
+            token_byte = d['token']
             user_info = analyze_token(token_byte)
         except:
             response_data["status"] = "TokenError"
@@ -225,8 +225,8 @@ def delete_diymap(request):
         now = time.time()
         d = json.loads(request.body.decode('utf-8'))
         response_data = {}
-        token_byte = d['token']
         try:
+            token_byte = d['token']
             user_info = analyze_token(token_byte)
             expire = user_info['exp']
         except:
@@ -261,8 +261,8 @@ def get_diysolution(request):
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
         response_data = {}
-        token_byte = d['token']
         try:
+            token_byte = d['token']
             user_info = analyze_token(token_byte)
         except:
             response_data["status"] = "TokenError"
@@ -297,9 +297,9 @@ def get_diymaps(request):
     '''
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
-        token_byte = d['token']
         response_data = {}
         try:
+            token_byte = d['token']
             user_info = analyze_token(token_byte)
         except:
             response_data["status"] = "TokenError"
@@ -336,8 +336,8 @@ def map_share(request):
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
         response_data = {}
-        token_byte = d['token']
         try:
+            token_byte = d['token']
             user_info = analyze_token(token_byte)
         except:
             response_data["status"] = "TokenError"
@@ -388,9 +388,9 @@ def share_response(request):
     '''
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
-        token_byte = d['token']
         response_data = {}
         try:
+            token_byte = d['token']
             user_info = analyze_token(token_byte)
         except:
             response_data["status"] = "TokenError"

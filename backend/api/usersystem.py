@@ -145,11 +145,15 @@ def get_userinfo(request):
     '''
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
-        token_byte = d['token']
-        now = time.time()
-        user_info = analyze_token(token_byte)
-        username = user_info['username']
         response_data = {}
+        try:
+            token_byte = d['token']
+            user_info = analyze_token(token_byte)
+        except:
+            response_data["status"] = "TokenError"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+        now = time.time()
+        username = user_info['username']
         expire = user_info['exp']
         if expire < now:
             response_data["status"] = "Expiration"
@@ -185,10 +189,14 @@ def recharge(request):
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
         response_data = {}
-        token_byte = d['token']
+        try:
+            token_byte = d['token']
+            user_info = analyze_token(token_byte)
+        except:
+            response_data["status"] = "TokenError"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
         VIPtype = d['VIPtype']
         now = time.time()
-        user_info = analyze_token(token_byte)
         username = user_info['username']
         expire = user_info['exp']
         if expire < now:
@@ -234,8 +242,12 @@ def change_password(request):
     if request.method == 'POST':
         response_data = {}
         d = json.loads(request.body.decode('utf-8'))
-        token_byte = d['token']
-        user_info = analyze_token(token_byte)
+        try:
+            token_byte = d['token']
+            user_info = analyze_token(token_byte)
+        except:
+            response_data["status"] = "TokenError"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
         username = user_info['username']
         old_password = d['old_password']
         new_password = d['new_password']
@@ -302,9 +314,13 @@ def email_auth(request):
     if request.method == 'POST':
         response_data = {}
         d = json.loads(request.body.decode('utf-8'))
-        token_byte = d['token']
+        try:
+            token_byte = d['token']
+            user_info = analyze_token(token_byte)
+        except:
+            response_data["status"] = "TokenError"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
         now = time.time()
-        user_info = analyze_token(token_byte)
         expire = user_info['exp']
         username = user_info['username']
         if expire < now:
@@ -339,8 +355,12 @@ def auth_response(request):
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
         response_data = {}
-        token_byte = d['token']
-        user_info = analyze_token(token_byte)
+        try:
+            token_byte = d['token']
+            user_info = analyze_token(token_byte)
+        except:
+            response_data["status"] = "TokenError"
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
         username = user_info['username']
         now = time.time()
         expire = user_info['exp']
