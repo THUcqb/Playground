@@ -32,23 +32,13 @@ function setupManifest()
 
 function startPreload()
 {
-    preloader.on("progress", handleFileProgress);
+    preloader.on("progress", () => {});
     preloader.on("complete", loadComplete);
-    preloader.on("error", loadError);
+    preloader.on("error", () => {});
     preloader.loadManifest(manifest);
 }
 
-function handleFileProgress(i)
-{
-//    TODO: handleFileProgress
-}
-
-function loadError(i)
-{
-    //    TODO: handleLoadError
-}
-
-function loadComplete(i)
+function loadComplete()
 {
     ReactDOM.render(<CookiesProvider><App /></CookiesProvider>,
         document.getElementById('root')

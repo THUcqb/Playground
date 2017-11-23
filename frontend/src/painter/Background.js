@@ -17,7 +17,7 @@ class Background
         this.container = null;
     }
 
-    init(map)
+    init()
     {
         this.container = new EaselJS.Container();
         this.stage.addChild(this.container);

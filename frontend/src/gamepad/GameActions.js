@@ -9,7 +9,7 @@ import Build from 'material-ui-icons/Build';
 import NavigateNext from 'material-ui-icons/NavigateNext';
 import Replay from 'material-ui-icons/Replay';
 import QuestionAnswer from 'material-ui-icons/QuestionAnswer';
-import GamepadSolutionDialog from './GamepadSolution';
+import GamepadSolutionDialog from './GamepadSolutionDialog';
 
 const buttonStyle = theme => ({
     margin: theme.spacing.unit,

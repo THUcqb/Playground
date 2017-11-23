@@ -46,7 +46,7 @@ class Gamepad extends Component {
         Gamepad.workspace = Blockly.inject('blocklyDiv', blocklyWorkspaceXml);
         const blocklyArea = document.getElementById('blocklyArea');
         const blocklyDiv = document.getElementById('blocklyDiv');
-        const onresize = function(i) {
+        const onresize = function() {
             // Compute the absolute coordinates and dimensions of blocklyArea.
             let element = blocklyArea;
             let x = 0;

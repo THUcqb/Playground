@@ -186,10 +186,9 @@ export class Base {
     /**
      * base_move change snake and map info by task
      */
-    base_move(_x, _y)
-    {
-        if (Base.runnable(_x, _y) === 'candy')
-        {
+    base_move(_x, _y) {
+        let runnable = Base.runnable(_x, _y);
+        if (runnable === 'candy' || runnable === 'runnable' || runnable === 'end') {
             Base.bmap.setBody(Base.bsnake.x, Base.bsnake.y);
             let __x = Base.bsnake.body[0].x;
             let __y = Base.bsnake.body[0].y;
@@ -202,41 +201,13 @@ export class Base {
             if (Base.bmap.state === "down")
                 Base.bmap.setSlot(_x, _y);
             Base.bmap.setHead(_x, _y);
-
-            Base.bmap.candy--;
-        }
-        else if (Base.runnable(_x, _y) === 'runnable')
-        {
-            Base.bmap.setBody(Base.bsnake.x, Base.bsnake.y);
-            let __x = Base.bsnake.body[0].x;
-            let __y = Base.bsnake.body[0].y;
-            Base.bmap.setEmpty(__x, __y);
-            Base.bsnake.add_head(_x, _y);
-            Base.bsnake.del_tail();
-            __x = Base.bsnake.body[0].x;
-            __y = Base.bsnake.body[0].y;
-            Base.bmap.setTail(__x, __y);
-            if (Base.bmap.state === "down")
-                Base.bmap.setSlot(_x, _y);
-            Base.bmap.setHead(_x, _y);
-        }
-        else if (Base.runnable(_x, _y) === 'end')
-        {
-            Base.bmap.setBody(Base.bsnake.x, Base.bsnake.y);
-            let __x = Base.bsnake.body[0].x;
-            let __y = Base.bsnake.body[0].y;
-            Base.bmap.setEmpty(__x, __y);
-            Base.bsnake.add_head(_x, _y);
-            Base.bsnake.del_tail();
-            __x = Base.bsnake.body[0].x;
-            __y = Base.bsnake.body[0].y;
-            Base.bmap.setTail(__x, __y);
-            if (Base.bmap.state === "down")
-                Base.bmap.setSlot(_x, _y);
-            Base.bmap.setHead(_x, _y);
-
-            Base.bmap.candy--;
-            this.type = "success";
+            if (runnable === 'candy') {
+                Base.bmap.candy--;
+            }
+            else if (runnable === 'end') {
+                Base.bmap.candy--;
+                this.type = "success";
+            }
         }
         else
             this.type = "fail";

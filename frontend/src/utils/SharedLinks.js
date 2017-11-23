@@ -3,6 +3,7 @@ import { URL, SHAREGENERATELINK, SHAREGETCONTEXT } from '../config/api';
 import { getCookie } from "./Auth";
 import {Controller} from "../logic/Controller";
 import {Scene} from "../Scene";
+import {Base} from '../logic/Base';
 import Gamepad from "../gamepad/Gamepad";
 
 export function shareGenerateLink() {
@@ -16,7 +17,7 @@ export function shareGenerateLink() {
         postData['level'] = Scene.singleton.state.nowLevel;
     }
     else {
-        postData['mapid'] = Map.bmap.id;
+        postData['mapid'] = Base.bmap.id;
     }
 
     return axios
