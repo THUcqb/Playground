@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response
 from django.shortcuts import render
 from django.template import Template, Context
 from django.views.decorators.csrf import csrf_exempt
-from .models import AMap, DIYMaps, ImmanentMaps
+from .models import AMap, DIYMaps, ImmanentMaps, UserInfo
 import json
 import base64
 import time
@@ -60,15 +60,16 @@ def save_mapsinfo(request):
             stars = d['stars']
             solution = d['solution']
             amap = AMap.objects.get(username = username, level = str(level))
+            theuser = UserInfo.objects.get(username = username)
             if (amap.stars == '') or (int(amap.stars) < int(stars)):
                 amap.stars = stars
-            amap.solution = solution
+                amap.solution = solution
             amap.save()
-            if int(level) < 10:
-                nmap = AMap.objects.get(username = username, level = str(int(level) + 1))
-                if int(stars) > 0:
-                	nmap.unlock = True
-                	nmap.save()
+            if int(level) < 10 and 0 < int(stars):
+                if (int(level) < 5) or (4 < int(level) and now < theuser.VIPtime):
+                    nmap = AMap.objects.get(username = username, level = str(int(level) + 1))
+                    nmap.unlock = True
+                    nmap.save()
             response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
         except AMap.DoesNotExist:
