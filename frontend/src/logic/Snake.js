@@ -7,8 +7,7 @@ class Snake
         this.x = x;
         this.y = y;
         this.info = 0;
-        this.body = new Array(Block);
-        this.body[0] = new Block(x, y);
+        this.body = [new Block(x,y)];
         this.size = 1;
         this.state = "up";
     }
@@ -29,7 +28,7 @@ class Snake
      */
     del_tail()
     {
-        let cur = new Array(Block);
+        const cur = [];
         for (let i = 1; i < this.body.length; i++)
         {
             cur[i - 1] = this.body[i];
@@ -45,8 +44,7 @@ class Snake
     {
         this.x = x;
         this.y = y;
-        let cur = new Array(Block);
-        cur[0] = new Block(x, y);
+        const cur = [new Block(x, y)];
         this.size = 1;
         this.body = cur;
     }

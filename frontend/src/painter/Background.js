@@ -17,7 +17,7 @@ class Background
         this.container = null;
     }
 
-    init(map)
+    init()
     {
         this.container = new EaselJS.Container();
         this.stage.addChild(this.container);
@@ -25,11 +25,11 @@ class Background
         this.paintGround();
     }
 
-    update(map)
+    update()
     {
         if (this.container === null)
         {
-            this.init(map);
+            this.init();
         }
     }
 

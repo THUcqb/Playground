@@ -25,9 +25,9 @@ def save_maps(request):
         level = d['level']
         immanentmap = d['maps']
         try:
-            exist_level = ImmanentMaps.objects.get(level = level)
+            exist_level = ImmanentMaps.objects.get(level = str(level))
         except ImmanentMaps.DoesNotExist:
-            the_map = ImmanentMaps.objects.create(level = level, immanentmap = immanentmap)
+            the_map = ImmanentMaps.objects.create(level = str(level), immanentmap = immanentmap)
             response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data), content_type = "application/json")
         response_data["status"] = "Existed"
@@ -48,7 +48,7 @@ def load_maps(request):
         response_data = {}
         level = d['level']
         try:
-            the_map = ImmanentMaps.objects.get(level = level)
+            the_map = ImmanentMaps.objects.get(level = str(level))
             response_data["maps"] = the_map.immanentmap
             response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data), content_type = "application/json")
@@ -82,11 +82,37 @@ def save_toolbox(request):
             response_data["status"] = "Existed"
             return HttpResponse(json.dumps(response_data), content_type = 'application/json')
         except ToolBox.DoesNotExist:
-            toolbox = ToolBox.objects.create(level = level)
+            toolbox = ToolBox.objects.create(level = str(level))
             toolbox.toolbox = f.read()
             toolbox.save()
             response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data), content_type = 'application/json')
+
+@csrf_exempt        
+def save_standard(request):
+    '''
+    Handle request of saving a standard solution of a map.
+
+    :method: post
+    :param param1: level
+    :returns: if succeed, return {'status':'Successful'}
+              else if the level doesn't exist, return {'status':'LevelNotExisted'}
+    '''
+    if request.method == 'POST':
+        d = json.loads(request.body.decode('utf-8'))
+        response_data = {}
+        level = d['level']
+        try:
+            file_path = os.path.join(module_dir, '../static/standard/standard_' + str(level) + '.xml')
+            f = open(file_path, 'r')
+            the_map = ImmanentMaps.objects.get(level = str(level))
+            the_map.standard = f.read()
+            the_map.save()
+            response_data["status"] = "Successful"
+            return HttpResponse(json.dumps(response_data), content_type = "application/json")
+        except:
+            response_data["status"] = "LevelNotExisted"
+            return HttpResponse(json.dumps(response_data), content_type = "application/json")
 
 @csrf_exempt
 def load_toolbox(request):

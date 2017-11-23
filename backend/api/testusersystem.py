@@ -26,10 +26,10 @@ class ModelTest(TestCase):
         '''
         Test the function of '__str__(self)' in UserInfo in Models.
         '''
-        First = UserInfo.objects.get(username = 'First')
-        Second = UserInfo.objects.get(username = 'Second')
-        self.assertEqual(First.__str__(), 'First')
-        self.assertEqual(Second.__str__(), 'Second')
+        first = UserInfo.objects.get(username = 'First')
+        second = UserInfo.objects.get(username = 'Second')
+        self.assertEqual(first.__str__(), 'First')
+        self.assertEqual(second.__str__(), 'Second')
         
     def test_str_2(self):
         '''
@@ -113,11 +113,27 @@ class UsersystemTest(TestCase):
         login_url = '/users/login'
         get_url = '/users/getinfo'
         UserInfo.objects.create(username = 'zuohaojia', password = 'waitlove', phonenumber = '110', email = 'zuohaojia@example.com')
+        UserInfo.objects.create(username = 'youhaojia', password = 'waitlove', phonenumber = '110', email = 'youhaojia@example.com', VIPtime = 1542469871, VIPtype = 'Year')
         
         login_data = {'username':'zuohaojia', 'password':'waitlove'}
         log_json_data = json.dumps(login_data)
         log_res = self.client.post(login_url, log_json_data, content_type = 'application/json')
         log_text = json.loads(log_res.content.decode('utf-8'))
+        
+        login = {'username':'youhaojia', 'password':'waitlove'}
+        logjson = json.dumps(login)
+        logres = self.client.post(login_url, logjson, content_type = 'application/json')
+        logtext = json.loads(logres.content.decode('utf-8'))
+        
+        data = {'token':logtext['token']}
+        res = self.client.post(get_url, json.dumps(data), content_type = 'application/json')
+        text = json.loads(res.content.decode('utf-8'))
+        self.assertEqual(text['status'], 'Successful')
+        
+        data = {'token':'haha'}
+        res = self.client.post(get_url, json.dumps(data), content_type = 'application/json')
+        text = json.loads(res.content.decode('utf-8'))
+        self.assertEqual(text['status'], 'TokenError')
         
         get_data = {'token':log_text['token']}
         get_json_data = json.dumps(get_data)
@@ -136,7 +152,49 @@ class UsersystemTest(TestCase):
         get_res_3 = self.client.post(get_url, get_json_data_3, content_type = 'application/json')
         get_text_3 = json.loads(get_res_3.content.decode('utf-8'))
         self.assertEqual(get_text_3['status'], 'NotExisted')
+    
+    def test_recharge(self):
+        '''
+        Test the recharge API in usersystem.
+        '''
+        the_url = '/users/recharge'
+        login_url = '/users/login'
+        UserInfo.objects.create(username = 'zuohaojia', password = 'waitlove', phonenumber = '13051312306', email = 'zuohaojia@163.com', is_active = True)
         
+        login_data = {'username':'zuohaojia', 'password':'waitlove'}
+        log_res = self.client.post(login_url, json.dumps(login_data), content_type = 'application/json')
+        log_text = json.loads(log_res.content.decode('utf-8'))
+        
+        param = {'token':log_text['token'], 'VIPtype':'Month'}
+        res = self.client.post(the_url, json.dumps(param), content_type = 'application/json')
+        text = json.loads(res.content.decode('utf-8'))
+        self.assertEqual(text['status'], 'Successful')
+        
+        param = {'VIPtype':'Month'}
+        res = self.client.post(the_url, json.dumps(param), content_type = 'application/json')
+        text = json.loads(res.content.decode('utf-8'))
+        self.assertEqual(text['status'], 'TokenError')
+        
+        param1 = {'token':log_text['token'], 'VIPtype':'Season'}
+        res1 = self.client.post(the_url, json.dumps(param1), content_type = 'application/json')
+        text1 = json.loads(res1.content.decode('utf-8'))
+        self.assertEqual(text1['status'], 'Successful')
+        
+        param2 = {'token':log_text['token'], 'VIPtype':'Year'}
+        res2 = self.client.post(the_url, json.dumps(param2), content_type = 'application/json')
+        text2 = json.loads(res2.content.decode('utf-8'))
+        self.assertEqual(text2['status'], 'Successful')
+        
+        param = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwNzk5MzUyMC42OTIsICJ1c2VybmFtZSI6ICJoZWppZSIsICJleHAiOiAxNTA4NTk4MzIwLjY5Mn0=', 'VIPtype':'month'}
+        res = self.client.post(the_url, json.dumps(param), content_type = 'application/json')
+        text = json.loads(res.content.decode('utf-8'))
+        self.assertEqual(text['status'], 'Expiration')
+        
+        param = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwODkxMjc5Mi4yMTEsICJ1c2VybmFtZSI6ICJoZWxsbyIsICJleHAiOiAxNTQwNDQ4NzkyLjIxMX0=', 'VIPtype':'month'}
+        res = self.client.post(the_url, json.dumps(param), content_type = 'application/json')
+        text = json.loads(res.content.decode('utf-8'))
+        self.assertEqual(text['status'], 'NotExisted')
+    
     def test_changepassword(self):
         '''
         Test the changepassword API in usersystem.
@@ -149,6 +207,12 @@ class UsersystemTest(TestCase):
         log_json_data = json.dumps(login_data)
         log_res = self.client.post(login_url, log_json_data, content_type = 'application/json')
         log_text = json.loads(log_res.content.decode('utf-8'))
+        
+        the_data = {'token':'haha','old_password':'waitlove','new_password':'wait5683'}
+        the_json_data = json.dumps(the_data)
+        the_res = self.client.post(the_url, the_json_data, content_type = 'application/json')
+        the_text = json.loads(the_res.content.decode('utf-8'))
+        self.assertEqual(the_text['status'], 'TokenError')
         
         the_data = {'token':log_text['token'],'old_password':'waitlove','new_password':'wait5683'}
         the_json_data = json.dumps(the_data)
@@ -207,22 +271,28 @@ class UsersystemTest(TestCase):
         the_text = json.loads(the_res.content.decode('utf-8'))
         self.assertEqual(the_text['status'], 'Successful')
         
+        the_data = {'token':'haha'}
+        the_json_data = json.dumps(the_data)
+        the_res = self.client.post(the_url, the_json_data, content_type = 'application/json')
+        the_text = json.loads(the_res.content.decode('utf-8'))
+        self.assertEqual(the_text['status'], 'TokenError')
+        
         login_data_1 = {'username':'yanlimin', 'password':'wait5683'}
         log_json_data_1 = json.dumps(login_data_1)
         log_res_1 = self.client.post(login_url, log_json_data_1, content_type = 'application/json')
         log_text_1 = json.loads(log_res_1.content.decode('utf-8'))
-        
-        the_data_2 = {'token':log_text_1['token']}
-        the_json_data_2 = json.dumps(the_data_2)
-        the_res_2 = self.client.post(the_url, the_json_data_2, content_type = 'application/json')
-        the_text_2 = json.loads(the_res_2.content.decode('utf-8'))
-        self.assertEqual(the_text_2['status'], 'Actived')
         
         the_data_3 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwNzk5MzUyMC42OTIsICJ1c2VybmFtZSI6ICJoZWppZSIsICJleHAiOiAxNTA4NTk4MzIwLjY5Mn0='}
         the_json_data_3 = json.dumps(the_data_3)
         the_res_3 = self.client.post(the_url, the_json_data_3, content_type = 'application/json')
         the_text_3 = json.loads(the_res_3.content.decode('utf-8'))
         self.assertEqual(the_text_3['status'], 'Expiration')
+        
+        the_data_2 = {'token':log_text_1['token']}
+        the_json_data_2 = json.dumps(the_data_2)
+        the_res_2 = self.client.post(the_url, the_json_data_2, content_type = 'application/json')
+        the_text_2 = json.loads(the_res_2.content.decode('utf-8'))
+        self.assertEqual(the_text_2['status'], 'Actived')
         
         the_data_4 = {'token':'eyJpc3MiOiAiYWRtaW4iLCAiaWF0IjogMTUwODkxMjc5Mi4yMTEsICJ1c2VybmFtZSI6ICJoZWxsbyIsICJleHAiOiAxNTQwNDQ4NzkyLjIxMX0='}
         the_json_data_4 = json.dumps(the_data_4)
@@ -254,6 +324,12 @@ class UsersystemTest(TestCase):
         the_res_1 = self.client.post(the_url, the_json_data_1, content_type = 'application/json')
         the_text_1 = json.loads(the_res_1.content.decode('utf-8'))
         self.assertEqual(the_text_1['status'], 'Successful')
+        
+        the_data_2 = {'token':'haha', 'code':'12345678'}
+        the_json_data_2 = json.dumps(the_data_2)
+        the_res_2 = self.client.post(the_url, the_json_data_2, content_type = 'application/json')
+        the_text_2 = json.loads(the_res_2.content.decode('utf-8'))
+        self.assertEqual(the_text_2['status'], 'TokenError')
         
         the_data_2 = {'token':log_text['token'], 'code':'12345678'}
         the_json_data_2 = json.dumps(the_data_2)
@@ -335,3 +411,53 @@ class UsersystemTest(TestCase):
         the_res_3 = self.client.post(the_url_2, the_json_data_3, content_type = 'application/json')
         the_text_3 = json.loads(the_res_3.content.decode('utf-8'))
         self.assertEqual(the_text_3['status'], 'Successful')
+        
+    def test_sendmessage(self):
+        '''
+        Test the send message api in usersystem.
+        '''
+        url1 = '/users/send_message'
+        UserInfo.objects.create(username = 'yanlimin', password = 'waitlove', phonenumber = '1305131230', email = 'hejie_cq@163.com', is_active = True)
+        
+        data1 = {'phonenumber':'1305131230'}
+        jdata1 = json.dumps(data1)
+        res1 = self.client.post(url1, jdata1, content_type = 'application/json')
+        text1 = json.loads(res1.content.decode('utf-8'))
+        self.assertEqual(text1['status'], 'Successful')
+        
+        data = {'phonenumber':'110'}
+        jdata = json.dumps(data)
+        res = self.client.post(url1, jdata, content_type = 'application/json')
+        text = json.loads(res.content.decode('utf-8'))
+        self.assertEqual(text['status'], 'NotExisted')
+        
+    def test_mobilelogin(self):
+        '''
+        Test the login by phone number api in usersystem.
+        '''
+        url1 = '/users/send_message'
+        url2 = '/users/mobile_login'
+        UserInfo.objects.create(username = 'yanlimin', password = 'waitlove', phonenumber = '1305131230', email = 'hejie_cq@163.com', is_active = True)
+        
+        data1 = {'phonenumber':'1305131230'}
+        jdata1 = json.dumps(data1)
+        res1 = self.client.post(url1, jdata1, content_type = 'application/json')
+        text1 = json.loads(res1.content.decode('utf-8'))
+        
+        data2 = {'phonenumber':'1305131230', 'code':text1['code']}
+        jdata2 = json.dumps(data2)
+        res2 = self.client.post(url2, jdata2, content_type = 'application/json')
+        text2 = json.loads(res2.content.decode('utf-8'))
+        self.assertEqual(text2['status'], 'Successful')
+        
+        data3 = {'phonenumber':'130', 'code':text1['code']}
+        jdata3 = json.dumps(data3)
+        res3 = self.client.post(url2, jdata3, content_type = 'application/json')
+        text3 = json.loads(res3.content.decode('utf-8'))
+        self.assertEqual(text3['status'], 'NotExisted')
+        
+        data4 = {'phonenumber':'1305131230', 'code':'1111'}
+        jdata4 = json.dumps(data4)
+        res4 = self.client.post(url2, jdata4, content_type = 'application/json')
+        text4 = json.loads(res4.content.decode('utf-8'))
+        self.assertEqual(text4['status'], 'CodeError')

@@ -10,9 +10,14 @@ import OverDialog from './gameflow/OverDialog';
 import Button from 'material-ui/Button';
 import {withStyles} from 'material-ui/styles';
 import {Controller} from './logic/Controller';
-import {loadToolbox} from "./utils/LoadBlockly";
 import Trajectory from "./painter/Trajectory";
-import HintBar from './painter/Hints';
+import MessageBar from './utils/MessageBar';
+import {loadToolbox} from "./utils/LoadBlockly";
+import {shareGetContext} from "./utils/SharedLinks";
+import {loadLevelsInfo, loadLevelSolution, saveLevelInfo} from "./utils/LevelInfo";
+import {loadDIYMaps} from "./utils/LevelMap";
+import {numberOfLevels} from "./logic/Maplevel";
+import Gamepad from "./gamepad/Gamepad";
 
 const styles = theme => ({
     button: {
@@ -23,13 +28,18 @@ const styles = theme => ({
 /**
  * The app's scene part
  */
-class Scene extends Component {
+export class Scene extends Component
+{
     canvasScene;
     CanvasDiv;
+    ToolbarDiv;
+
+    static singleton = null;
 
     constructor()
     {
         super();
+        Scene.singleton = this;
         this.handleResize = this.handleResize.bind(this);
         this.state = {
             overDialogOpen: false,
@@ -37,6 +47,14 @@ class Scene extends Component {
             nowLevel: 1,
             dialogTitle: "Game Over",
         };
+        this.levelsInfo = {};
+        for (let i = 1; i <= numberOfLevels; i++)
+        {
+            this.levelsInfo[i.toString()] = {unlock: false, stars: '0'};
+        }
+        this.levelsInfo['1'] = {unlock: true, stars: 0};
+        this.DIYMapsInfo = [];
+        this.DIYMaps = {};
     }
 
     reset()
@@ -45,15 +63,40 @@ class Scene extends Component {
         this.element.reset();
         this.trajectory.reset();
         this.role.reset();
-        this.background.update(Controller.getMap());
+        this.background.update();
         this.trajectory.update(Controller.getSnake());
         this.element.update(Controller.getMap());
         this.role.update(Controller.getSnake());
     }
 
+    toLastPlayedLevel()
+    {
+        loadLevelsInfo()
+            .then((response) => {
+                if (response.OK)
+                {
+                    this.levelsInfo = response.levelsInfo;
+                    let lastLevel = 1;
+                    for (let i = 2; i <= numberOfLevels; i++)
+                    {
+                        if (this.levelsInfo[i.toString()].unlock)
+                        {
+                            lastLevel = i;
+                        }
+                    }
+                    this.handleChooseLevel(lastLevel);
+                }
+                else
+                {
+                    this.handleChooseLevel(1);
+                }
+            });
+    }
+
     isNextLevelAvailable()
     {
-        return (this.state.nowLevel < 5 && !this.isFail);
+        return (this.state.nowLevel < numberOfLevels && !this.isFail
+                && this.levelsInfo[(this.state.nowLevel + 1).toString()].unlock);
     }
 
     /**
@@ -65,32 +108,115 @@ class Scene extends Component {
         this.setState({nowLevel: levelNum});
         this.stage.removeAllChildren();
         Controller.controller.switchLevel(levelNum);
-        //Controller.controller.getSnake().init(5, 5);
+        this.reset();
+
         loadToolbox(levelNum);
+        loadLevelSolution(levelNum, true)
+            .then((response) => {
+                this.nowStdSolution = response.stdSolution;
+            })
+    }
+
+    /**
+     *
+     * @param {String} id
+     */
+    handleChooseDIYLevel(id)
+    {
+        this.stage.removeAllChildren();
+        Controller.controller.switchDIYLevel(this.DIYMaps[id]);
         this.reset();
     }
 
-    handleGameOver()
+    handleChooseSharedLevel(string)
     {
-        this.isOver = true;
-        this.setState({
-            overDialogOpen: true,
-            dialogTitle: "Game Over"
-        });
+        this.stage.removeAllChildren();
+        Controller.controller.switchStringLevel(string);
+        this.reset();
     }
 
-    handleSuccess()
+    /**
+     * Refresh the scene and reset the controller when the user click submit
+     */
+    static handleRestart()
     {
+        Scene.singleton.stage.removeAllChildren();
+        Controller.controller.restart();
+        Scene.singleton.reset();
+    }
+
+    handleOpenLevelDialog()
+    {
+        loadLevelsInfo()
+            .then((response) => {
+                if (response.OK)
+                {
+                    this.levelsInfo = response.levelsInfo;
+                }
+                this.setState({levelDialogOpen: true});
+            });
+        loadDIYMaps()
+            .then((response) =>
+            {
+                this.DIYMapsInfo = [];
+                this.DIYMaps = {};
+                if (response.OK)
+                {
+                    for (const key in response.map)
+                    {
+                        if (response.map.hasOwnProperty(key))
+                        {
+                            const map = {
+                                id: key,
+                                name: response.map[key].mapname,
+                                info: response.map[key].mapinfo,
+                            };
+                            this.DIYMapsInfo.push(map);
+                            this.DIYMaps[map.id] = map;
+                        }
+                    }
+                }
+            });
+    }
+
+    handleGameTerminate(message)
+    {
+        this.nowScore = message === 'You win!' ? Gamepad.getScore(this.nowStdSolution) : 0;
+        saveLevelInfo(this.state.nowLevel, this.nowScore)
+            .then((response) =>
+            {
+                if (!response.OK)
+                {
+                    if (this.state.nowLevel < 5 && numberOfLevels > this.state.nowLevel)
+                    {
+                        this.levelsInfo[(this.state.nowLevel + 1).toString()].unlock = true;
+                    }
+                    this.setState({
+                        overDialogOpen: true,
+                        dialogTitle: message,
+                    });
+                }
+                else
+                {
+                    loadLevelsInfo()
+                        .then((response) => {
+                            if (response.OK)
+                            {
+                                this.levelsInfo = response.levelsInfo;
+                            }
+                            this.setState({
+                                overDialogOpen: true,
+                                dialogTitle: message,
+                            });
+                        });
+                }
+            });
         this.isOver = true;
-        this.setState({
-            overDialogOpen: true,
-            dialogTitle: "Success!"
-        });
     }
 
     handleNextLevel()
     {
-        if (this.state.nowLevel < 5)
+        if (this.state.nowLevel < numberOfLevels)
         {
             this.handleChooseLevel(this.state.nowLevel + 1);
         }
@@ -110,20 +236,31 @@ class Scene extends Component {
     {
         const {classes} = this.props;
         return (
-            <div className="CanvasDiv" ref="CanvasDiv">
-                <Toolbar color="primary">
+            <div className="CanvasDiv" ref="CanvasDiv" style={{width: "100%"}}>
+                <div ref="ToolbarDiv">
+                <Toolbar color="primary" ref="Toolbar" style={{padding: 0}}>
                     <Button raised
                             className={classes.button}
                             color="primary"
-                            onClick={() => this.setState({levelDialogOpen: true})}>
+                            onClick={() => this.handleOpenLevelDialog()}>
                         Levels
                     </Button>
                     <LevelDialog
                         open={this.state.levelDialogOpen}
+                        levelsInfo={this.levelsInfo}
+                        DIYMapsInfo={this.DIYMapsInfo}
                         onRequestClose={() => this.setState({levelDialogOpen: false})}
                         onChooseLevel={(levelNum) =>
                         {
                             this.handleChooseLevel(levelNum);
+                            this.setState({
+                                overDialogOpen: false,
+                                levelDialogOpen: false
+                                });
+                        }}
+                        onChooseDIYMap={(id) =>
+                        {
+                            this.handleChooseDIYLevel(id);
                             this.setState({
                                 overDialogOpen: false,
                                 levelDialogOpen: false
@@ -132,20 +269,22 @@ class Scene extends Component {
                     />
                     <MapEditorButton color="primary"/>
                 </Toolbar>
+                </div>
                 <canvas id="canvasScene" ref="canvasScene" width="600" height="600"/>
                 <OverDialog
                     open={this.state.overDialogOpen}
                     dialogTitle={this.state.dialogTitle}
+                    starNum={this.nowScore}
                     nextAvail={this.isNextLevelAvailable()}
                     onNext={() => this.handleNextLevel()}
-                    onLevels={() => this.setState({levelDialogOpen: true})}
+                    onLevels={() => this.handleOpenLevelDialog()}
                     onReplay={() =>
                     {
                         this.setState({overDialogOpen: false});
-                        this.handleChooseLevel(this.state.nowLevel);
+                        Scene.handleRestart();
                     }}
                 />
-                <HintBar/>
+                <MessageBar/>
             </div>
         );
     }
@@ -158,7 +297,7 @@ class Scene extends Component {
             const status = controller.currentState();
             if (status === "runnable")
             {
-                this.background.update(Controller.getMap());
+                this.background.update();
                 this.trajectory.update(Controller.getSnake());
                 this.element.update(Controller.getMap());
                 this.role.update(Controller.getSnake());
@@ -175,19 +314,19 @@ class Scene extends Component {
                 this.isFail = true;
                 if (!this.isOver)
                 {
-                    this.handleGameOver();
+                    this.handleGameTerminate('Game over');
                 }
             }
             else if (status === "success")
             {
+                this.background.update();
+                this.trajectory.update(Controller.getSnake());
+                this.element.update(Controller.getMap());
+                this.role.update(Controller.getSnake());
                 this.isFail = false;
                 if (!this.isOver)
                 {
-                    this.background.update(Controller.getMap());
-                    this.trajectory.update(Controller.getSnake());
-                    this.element.update(Controller.getMap());
-                    this.role.update(Controller.getSnake());
-                    this.handleSuccess();
+                    this.handleGameTerminate('You win!');
                 }
             }
         }
@@ -197,21 +336,37 @@ class Scene extends Component {
 
     /**
      * Handle resizing event
-     * @param event
      */
-    handleResize(event)
+    handleResize()
     {
-        let fatherDiv = this.refs.CanvasDiv;
-        let stage = this.refs.canvasScene;
+        const fatherDiv = this.refs.CanvasDiv;
+        const stage = this.refs.canvasScene;
+        const toolbar = this.refs.ToolbarDiv;
 
         let width = fatherDiv.offsetWidth;
-        let height = fatherDiv.offsetHeight;
+        let height = fatherDiv.offsetHeight - toolbar.offsetHeight;
 
-        let minSize = width;
-        if (height < width)
-            minSize = height;
-        stage.style.width = minSize.toString() + 'px';
-        stage.style.height = minSize.toString() + 'px';
+        width = Math.min(width, height * 1.3);
+        height = Math.min(height, width * 1.3);
+        stage.style.width = width.toString() + 'px';
+        stage.style.height = height.toString() + 'px';
+    }
+
+    loadSharedContext()
+    {
+        const sharedCode = this.props.location.pathname.substring(1);
+        shareGetContext(sharedCode)
+            .then((sharedContext) => {
+                if (sharedContext.OK) {
+                    MessageBar.show(
+                        `Successfully opened map shared by ${sharedContext.owner}!`
+                    );
+                }
+                else {
+                    MessageBar.show('Oops! Link invalid!');
+                    this.handleChooseLevel(1);
+                }
+            })
     }
 
     /**
@@ -232,7 +387,14 @@ class Scene extends Component {
         EaselJS.Ticker.addEventListener("tick", () => this.tick());
         EaselJS.Ticker.framerate = 60;
         EaselJS.Ticker.timingMode = EaselJS.Ticker.RAF;
-        this.handleChooseLevel(1);
+        if (this.props.location.pathname === '/')
+        {
+            this.toLastPlayedLevel();
+        }
+        else
+        {
+            this.loadSharedContext();
+        }
     }
 
     /**

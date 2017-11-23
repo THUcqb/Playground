@@ -4,6 +4,7 @@ import EaselJS from "masteryodaeaseljs";
 import Background from "../painter/Background";
 import Element from "../painter/Element";
 import Role from "../painter/Role";
+import {Base} from "../logic/Base";
 import TextField from 'material-ui/TextField';
 import Dialog, {
     DialogTitle,
@@ -14,9 +15,11 @@ import Dialog, {
 import PropTypes from 'prop-types';
 import {withStyles} from 'material-ui/styles';
 import Button from 'material-ui/Button';
-import HintBar from '../painter/Hints';
+import MessageBar from '../utils/MessageBar';
+import { hints as configMsgHints } from '../config/msg';
 import {Controller} from '../logic/Controller';
-
+import {BaseMapInfo} from '../logic/ConstInfo';
+import {saveDIYMap} from "../utils/LevelMap";
 const styles = theme => ({
     container: {
         display: 'flex',
@@ -31,21 +34,6 @@ const styles = theme => ({
 
 });
 
-const currencies = [
-    {
-        value: 8,
-        label: 'S (8 * 8)',
-    },
-    {
-        value: 10,
-        label: 'M (10 * 10)',
-    },
-    {
-        value: 12,
-        label: 'L (12 * 12)',
-    },
-];
-
 const elements = [
     {
         value: 0,
@@ -58,6 +46,10 @@ const elements = [
     {
         value: 2,
         label: 'Coin',
+    },
+    {
+        value: 8,
+        label: "Treasure",
     },
     {
         value: 9,
@@ -81,14 +73,21 @@ class MapEditor extends React.Component
         this.canvasSize = 420;
         this.lastX = 0;
         this.lastY = 0;
+        this.lastTreasureX = 0;
+        this.lastTreasureY = 1;
         this.stage = null;
         this.state = {
             "mapSize": 10,
             "element": 0
         };
-        this.map = new Map(10, 10);
-        this.map.editInit();
-        this.map.block_list[0][0].info = 9;
+
+        if (this.map === null)
+        {
+            this.map = new Map(10, 10);
+            this.map.editInit();
+            this.map.block_list[0][0].info = BaseMapInfo.getElementsByTagName('birthplace');
+        }
+       
     }
 
     initialize()
@@ -110,9 +109,12 @@ class MapEditor extends React.Component
     {
         this.map = new Map(this.state.mapSize, this.state.mapSize);
         this.map.editInit();
-        this.map.block_list[0][0].info = 9;
+        this.map.block_list[0][0].info = BaseMapInfo.getElementsByTagName('birthplace');
+        this.map.block_list[0][1].info = BaseMapInfo.getElementsByTagName('end');
         this.lastX = 0;
         this.lastY = 0;
+        this.lastTreasureX = 0;
+        this.lastTreasureY = 1;
         this.background.reset();
         this.element.reset();
         this.role.reset();
@@ -120,12 +122,25 @@ class MapEditor extends React.Component
 
     updateState(name)
     {
-        if (name === "mapSize")
+        if (name === "init")
         {
-            this.reset();
             this.background.updateN(this.state.mapSize);
             this.element.updateN(this.state.mapSize);
             this.role.updateN(this.state.mapSize);
+            for (let i = 0; i < this.state.mapSize; i++)
+                for (let j = 0; j < this.state.mapSize; j++)
+                {
+                    if (this.map.block_list[i][j].info === BaseMapInfo.getElementsByTagName('head')  || this.map.block_list[i][j].info === BaseMapInfo.getElementsByTagName('birthplace') )
+                    {
+                        this.lastX = i;
+                        this.lastY = j;
+                    }
+                    if (this.map.block_list[i][j].info === BaseMapInfo.getElementsByTagName('end'))
+                    {
+                        this.lastTreasureX = i;
+                        this.lastTreasureY = j;
+                    }
+                }
             this.background.init(this.map);
             this.element.init(this.map);
             this.role.init(this.lastX, this.lastY);
@@ -152,12 +167,12 @@ class MapEditor extends React.Component
     onEnter()
     {
         this.initialize();
-        this.updateState("mapSize");
+        this.map = Controller.copyMap(Base.bmap);
+        this.setState({ mapSize: this.map.SIZE_X }, () => this.updateState("init"));
     }
 
     handleFinishEditing(op)
     {
-        //TODO: to something including save the map and close the dialog.
         if (op === "start")
         {
             Controller.controller.editNewMap(this.map);
@@ -165,26 +180,37 @@ class MapEditor extends React.Component
         }
         if (op === "save")
         {
-            let name = prompt("Map name", "My Map");
+            const name = prompt("Map name", "My Map");
             if (name !== null && name !== "")
             {
-                Controller.controller.save(name, this.map);
+                saveDIYMap(name, this.map).then(response =>
+                {
+                    if (response.OK)
+                    {
+                        MessageBar.show("Map saved successfully!");
+                    }
+                    else
+                    {
+                        MessageBar.show("Fail to save!")
+                    }
+                })
             }
             else
-                alert("Please add name!");
+            {
+                MessageBar.show("Please add name!");
+            }
         }
     }
 
     handleClick(e)
     {
         const element = this.refs.canvasMapEditor;
-        let rect = element.getBoundingClientRect();
-        let x = e.clientX - rect.left;
-        let y = e.clientY - rect.top;
+        const rect = element.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
 
-
-        let c_max_x = element.width;
-        let c_max_y = element.height;
+        const c_max_x = element.width;
+        const c_max_y = element.height;
 
         let block_size = this.state.mapSize;
 
@@ -192,25 +218,40 @@ class MapEditor extends React.Component
         {
             block_size = 10;
         }
-        let b_y = Math.floor(Number(x / c_max_x * block_size));
-        let b_x = Math.floor(Number(y / c_max_y * block_size));
+        const b_y = Math.floor(Number(x / c_max_x * block_size));
+        const b_x = Math.floor(Number(y / c_max_y * block_size));
 
-        let current = Number(this.state.element);
-        if (this.map.block_list[b_x][b_y].info !== 9)
+        const current = Number(this.state.element);
+        if (this.map.block_list[b_x][b_y].info === BaseMapInfo.getElementsByTagName('birthplace') || this.map.block_list[b_x][b_y].info === BaseMapInfo.getElementsByTagName('head'))
         {
-            this.map.block_list[b_x][b_y].info = current;
-            if (current === 9)
-            {
-                if (this.lastX !== -1) this.map.block_list[this.lastX][this.lastY].info = 0;
-                this.lastX = b_x;
-                this.lastY = b_y;
-            }
+            MessageBar.show(configMsgHints.removeRole);
+        }
+        else if (this.map.block_list[b_x][b_y].info === BaseMapInfo.getElementsByTagName('end'))
+        {
+            MessageBar.show(configMsgHints.removeTreasure);
         }
         else
         {
-            HintBar.show('removeRole');
+            this.map.block_list[b_x][b_y].info = current;
+            if (current === BaseMapInfo.getElementsByTagName('birthplace'))
+            {
+                if (this.lastX !== -1)
+                {
+                    this.map.block_list[this.lastX][this.lastY].info = BaseMapInfo.getElementsByTagName('empty');
+                }
+                this.lastX = b_x;
+                this.lastY = b_y;
+            }
+            if (current === BaseMapInfo.getElementsByTagName('end'))
+            {
+                if (this.lastTreasureX !== -1)
+                {
+                    this.map.block_list[this.lastTreasureX][this.lastTreasureY].info = BaseMapInfo.getElementsByTagName('empty');
+                }
+                this.lastTreasureX = b_x;
+                this.lastTreasureY = b_y;
+            }
         }
-        this.map.print();
         this.updateState("map");
     }
 
@@ -229,32 +270,6 @@ class MapEditor extends React.Component
                         Explore and create your own map !
                     </DialogContentText>
                     <div>
-
-                        <TextField
-                            id = "select-size"
-                            select
-                            label = "Size select"
-                            className = {classes.textField}
-                            ref = "selectSize"
-                            value = {this.state.mapSize}
-                            onChange = {(e) => this.handleChange('mapSize', e)}
-                            SelectProps = {{
-                                native: true,
-                                MenuProps: {
-                                    className: classes.menu,
-                                },
-                            }}
-                            helperText = "Please select your map's size"
-                            margin = "normal"
-                        >
-                            {currencies.map(option => (
-                                <option key = {option.value} value = {option.value}>
-                                    {option.label}
-                                </option>
-                            ))}
-
-                        </TextField>
-
                         <TextField
                             id = "select-element"
                             select

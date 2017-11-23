@@ -1,16 +1,18 @@
 import React from 'react';
 import Dialog, {
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
 } from 'material-ui/Dialog';
+import {FormControlLabel} from 'material-ui/Form';
+import Switch from 'material-ui/Switch'
 import TextField from 'material-ui/TextField';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
+import {withStyles} from 'material-ui/styles';
 import Button from 'material-ui/Button';
 
-const styles = theme => ({
+const styles = ({
     container: {
         display: 'flex',
         flexWrap: 'wrap',
@@ -20,32 +22,41 @@ const styles = theme => ({
 /**
  * The sign in/up pop up dialog.
  */
-class SignDialog extends React.Component {
+class SignDialog extends React.Component
+{
     state = {
         username: '',
         password: '',
-        phonenumber: '',
+        confirmPassword: '',
+        phoneNumber: '',
+        verificationCode: '',
         email: '',
+        oldPassword: '',
+        newPassword: '',
     };
 
-    handleChange = name => event => {
+    handleChange = name => event =>
+    {
         this.setState({
-           [name]: event.target.value,
+            [name]: event.target.value,
         });
     };
 
-    handleEnterKeyPress = (ev) => {
-        if (ev.key === 'Enter') {
-            this.props.onRequestSignIn(this.state.username, this.state.password)
+    handleEnterKeyPress = (ev) =>
+    {
+        if (ev.key === 'Enter')
+        {
+            this.props.onRequestSignIn(this.state.username, this.state.password);
             ev.preventDefault();
         }
     };
 
-    render() {
-        const { classes } = this.props;
+    render()
+    {
+        const {classes} = this.props;
 
-        const signInForm = (
-            <form className={classes.container} autoComplete="off">
+        const usernameType = (
+            <form>
                 <TextField className={classes.username}
                            ref="usernameField"
                            id="username"
@@ -76,6 +87,69 @@ class SignDialog extends React.Component {
             </form>
         );
 
+        const phoneNumberType = (
+            <form>
+                <TextField className={classes.phoneNumber}
+                           ref="phoneNumberField"
+                           id="phoneNumber"
+                           label="Phone number"
+                           margin="dense"
+                           fullWidth
+                           autoFocus
+                           value={this.state.phoneNumber}
+                           onChange={this.handleChange('phoneNumber')}
+                           disabled={this.props.textStatus.disabled}
+                           error={this.props.textStatus.phoneNumberError}
+                           onKeyPress={this.handleEnterKeyPress}
+                />
+                <div>
+                    <TextField className={classes.verificationCode}
+                               ref="verificationCodeField"
+                               id="verificationCode"
+                               label="Verification code"
+                               margin="dense"
+                               type="verificationCode"
+                               autoComplete=""
+                               value={this.state.verificationCode}
+                               onChange={this.handleChange('verificationCode')}
+                               disabled={this.props.textStatus.disabled}
+                               error={this.props.textStatus.verificationCodeError}
+                               onKeyPress={this.handleEnterKeyPress}
+                    />
+                    <Button
+                        raised color="primary"
+                        className={classes.button}
+                        align="right"
+                        onClick={() => this.props.onRequestSendSMS(this.state.phoneNumber)}
+                        disabled={this.props.sendButtonState}
+                    >
+                        SEND
+                    </Button>
+                </div>
+            </form>
+        );
+
+        let signInType = null;
+        let message = "";
+        const option = "Switch to change mode.";
+        if (this.props.SMS)
+        {
+            signInType = phoneNumberType;
+            message = "Please type in your phone number.";
+        }
+        else
+        {
+            signInType = usernameType;
+            message = "Please type in your username and password.";
+        }
+
+
+        const signInForm = (
+            <form className={classes.container} autoComplete="off">
+                {signInType}
+            </form>
+        );
+
         const signUpForm = (
             <form className={classes.container} autoComplete="off">
                 <TextField className={classes.username}
@@ -102,25 +176,25 @@ class SignDialog extends React.Component {
                            disabled={this.props.textStatus.disabled}
                 />
                 <TextField className={classes.password}
-                           ref="comfirmPasswordField"
-                           id="comfirmPassword"
-                           label="Comfirm password"
+                           ref="confirmPasswordField"
+                           id="confirmPassword"
+                           label="Confirm password"
                            margin="dense"
                            fullWidth
                            type="password"
-                           value={this.state.comfirmPassword}
-                           onChange={this.handleChange('comfirmPassword')}
+                           value={this.state.confirmPassword}
+                           onChange={this.handleChange('confirmPassword')}
                            disabled={this.props.textStatus.disabled}
                 />
-                <TextField className={classes.phonenumber}
-                           ref="phonenumberField"
-                           id="phonenumber"
+                <TextField className={classes.phoneNumber}
+                           ref="phoneNumberField"
+                           id="phoneNumber"
                            label="Phone"
                            margin="dense"
                            fullWidth
                            type="phone"
-                           value={this.state.phonenumber}
-                           onChange={this.handleChange('phonenumber')}
+                           value={this.state.phoneNumber}
+                           onChange={this.handleChange('phoneNumber')}
                            disabled={this.props.textStatus.disabled}
                 />
                 <TextField className={classes.email}
@@ -137,11 +211,44 @@ class SignDialog extends React.Component {
             </form>
         );
 
+        const changePasswordForm = (
+            <form className={classes.container} autoComplete="off">
+                <TextField
+                    id="oldPassword"
+                    label="oldPassword"
+                    margin="dense"
+                    type="password"
+                    fullWidth
+                    autoFocus
+                    value={this.state.oldPassword}
+                    onChange={this.handleChange('oldPassword')}
+                    onKeyPress={this.handleEnterKeyPress}
+                    disabled={this.props.textStatus.disabled}
+                    error={this.props.textStatus.usernameError}
+                />
+                <TextField
+                    id="newPassword"
+                    label="newPassword"
+                    margin="dense"
+                    fullWidth
+                    type="password"
+                    autoComplete="current-password"
+                    value={this.state.newPassword}
+                    onChange={this.handleChange('newPassword')}
+                    onKeyPress={this.handleEnterKeyPress}
+                    disabled={this.props.textStatus.disabled}
+                    error={this.props.textStatus.usernameError}
+                />
+            </form>
+        );
+
         let signForm = null;
-        if (this.props.isSignUp)
+        if (this.props.signingState === 'signup')
             signForm = signUpForm;
-        else
+        else if (this.props.signingState === 'signin')
             signForm = signInForm;
+        else
+            signForm = changePasswordForm;
 
         return (
             <Dialog
@@ -150,28 +257,43 @@ class SignDialog extends React.Component {
             >
                 <DialogTitle>Sign in</DialogTitle>
                 <DialogContent>
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                value={this.state.SMS}
+                                onChange={(event, checked) => this.props.onRequestSwitch(checked)}
+                                label="Sign in with SMS"
+                            />
+                        }
+                        label={option}
+                    />
                     <DialogContentText>
-                        Please type in your username and password.
+                        {message}
                     </DialogContentText>
                     {signForm}
                 </DialogContent>
                 <DialogActions className={classes.actions}>
-                    <Button raised
-                            onClick={() => this.props.onRequestSignUp(this.state.username, this.state.password, this.state.phonenumber, this.state.email)}
-                            color="primary">
+                    <Button onClick={() => this.props.onRequestSignUp(
+                        this.state.username, this.state.password, this.state.phoneNumber, this.state.email)}
+                            raised color="primary">
                         Sign up
                     </Button>
-                    <Button onClick={() => this.props.onRequestSignIn(this.state.username, this.state.password)} color="primary">
+                    <Button onClick={() => this.props.onRequestSignIn(
+                        this.state.username, this.state.password, this.state.phoneNumber, this.state.verificationCode)} color="primary">
                         Sign in
+                    </Button>
+                    <Button onClick={() => this.props.onRequestChangePassword(
+                        this.state.oldPassword, this.state.newPassword)} color="primary">
+                        Change Password
                     </Button>
                 </DialogActions>
             </Dialog>
-    );
-  }
+        );
+    }
 }
 
 SignDialog.propTypes = {
-  classes: PropTypes.object.isRequired,
+    classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles, {withTheme: true})(SignDialog);

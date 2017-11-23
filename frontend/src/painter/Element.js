@@ -1,7 +1,9 @@
 import EaselJS from "masteryodaeaseljs";
 import TweenJS from "masteryodatweenjs";
 import {preloader} from "../index";
-import HintBar from './Hints';
+import MessageBar from '../utils/MessageBar';
+import { hints as configMsgHints } from '../config/msg';
+import { BaseMapInfo } from '../logic/ConstInfo';
 
 class Element
 {
@@ -11,6 +13,7 @@ class Element
         this.n = n;
         this.wall = preloader.getResult("wall");
         this.coin = preloader.getResult("coin");
+        this.treasure = preloader.getResult("treasure");
         this.animation = animation;
         this.stage = stage;
         this.reset()
@@ -31,6 +34,7 @@ class Element
         this.stage.addChild(this.container);
 
         this.coins = new EaselJS.Shape();
+        this.treasures = new EaselJS.Shape();
         const info_arr = map.eData();
         const size_x = map.SIZE_X;
         const size_y = map.SIZE_Y;
@@ -40,41 +44,53 @@ class Element
             for (let j = 0; j < size_y; j++)
             {
                 const screen_x = this.size * j;
-                if (info_arr[i][j] === 1)
+                if (info_arr[i][j] === BaseMapInfo.getElementsByTagName("block"))
                 {
                     this.paintWall(screen_x, screen_y);
                 }
-                if (info_arr[i][j] === 2)
+                else if (info_arr[i][j] === BaseMapInfo.getElementsByTagName("gold"))
                 {
                     this.paintCoin(screen_x, screen_y);
+                }
+                else if (info_arr[i][j] === BaseMapInfo.getElementsByTagName("end"))
+                {
+                    this.paintFinish(screen_x, screen_y);
                 }
             }
         }
         this.coins.cursor = "pointer";
         this.coins.shadow = new EaselJS.Shadow('#ffcb3d', 0, 0, 8);
 
+        this.treasures.cursor = "pointer";
+        this.treasures.shadow = new EaselJS.Shadow('#000000', 2, 2, 8);
+
         if (this.animation)
         {
             this.coins.on("mousedown", (ev) => {
-                HintBar.show('coin');
-                let coins = ev.target;
-                TweenJS.Tween.get(coins)
-                    .to({
-                        alpha: 0.5,
-                    }, 1000)
-                    .to({
-                        alpha: 1
-                    }, 300)
+                MessageBar.show(configMsgHints.clickCoin);
+                const coins = ev.target;
+                TweenJS.Tween.get(coins, {loop: 2})
                     .to({
                         alpha: 0.5,
                     }, 1000)
                     .to({
                         alpha: 1
                     }, 300);
-
+            });
+            this.treasures.on("mousedown", (ev) => {
+                MessageBar.show(configMsgHints.clickTreasure);
+                const treasure = ev.target;
+                TweenJS.Tween.get(treasure, {loop: 2})
+                    .to({
+                        alpha: 0.5,
+                    }, 1000)
+                    .to({
+                        alpha: 1
+                    }, 300);
             });
         }
         this.container.addChild(this.coins);
+        this.container.addChild(this.treasures);
     }
 
     /**
@@ -89,6 +105,7 @@ class Element
         }
 
         this.coins.graphics.clear();
+        this.treasures.graphics.clear();
         const info_arr = map.eData();
         const size_x = map.SIZE_X;
         const size_y = map.SIZE_Y;
@@ -99,9 +116,13 @@ class Element
             for (let j = 0; j < size_y; j++)
             {
                 const screen_x = this.size * j;
-                if (info_arr[i][j] === 2)
+                if (info_arr[i][j] === BaseMapInfo.getElementsByTagName("gold"))
                 {
                     this.paintCoin(screen_x, screen_y);
+                }
+                else if (info_arr[i][j] === BaseMapInfo.getElementsByTagName("end"))
+                {
+                    this.paintFinish(screen_x, screen_y);
                 }
             }
         }
@@ -121,13 +142,13 @@ class Element
      */
     paintWall(screen_x, screen_y)
     {
-        let wall = new EaselJS.Shape();
+        const wall = new EaselJS.Shape();
         wall.cursor = "pointer";
         if (this.animation)
         {
             wall.on("mousedown", (ev) => {
-                HintBar.show('wall');
-                let clickedWall = ev.target;
+                MessageBar.show(configMsgHints.clickWall);
+                const clickedWall = ev.target;
                 TweenJS.Tween.get(clickedWall)
                     .to({
                         alpha: 0.1,
@@ -145,8 +166,6 @@ class Element
             });
         }
 
-        //wall.graphics.beginFill("#5D4037");
-
         const m = new EaselJS.Matrix2D();
         m.scale(this.size / this.wall.width, this.size / this.wall.height);
         wall.graphics.beginBitmapFill(this.wall, "no-repeat", m);
@@ -161,19 +180,35 @@ class Element
     }
 
     /**
-     * paint a coin given its center
+     * paint a coin given the upper-left point of the block
      * @param screen_x horizontal ordinate of the center
      * @param screen_y vertical ordinate of the center
      */
     paintCoin(screen_x, screen_y)
     {
-        //this.coins.graphics.beginFill("#FFC107");
-
         const m = new EaselJS.Matrix2D();
         m.translate(screen_x, screen_y);
         m.scale(this.size / this.coin.width, this.size / this.coin.height);
         this.coins.graphics.beginBitmapFill(this.coin, "no-repeat", m);
         this.coins.graphics.drawCircle(screen_x + this.size / 2, screen_y + this.size / 2, this.size / 4);
+    }
+
+    /**
+     * paint the finish point given the upper-left point of the block
+     * now it is painted as a treasure chest
+     * @param screen_x horizontal ordinate of the center
+     * @param screen_y vertical ordinate of the center
+     */
+    paintFinish(screen_x, screen_y)
+    {
+        const m = new EaselJS.Matrix2D();
+        const width = 0.7 * this.size;
+        const height = 0.7 * this.size;
+        m.translate(screen_x + (this.size - width) / 2, screen_y + (this.size - height) / 2);
+        m.scale(width / this.treasure.width, height / this.treasure.height);
+        this.treasures.graphics.beginBitmapFill(this.treasure, "no-repeat", m);
+
+        this.treasures.graphics.drawRect(screen_x + (this.size - width) / 2, screen_y + (this.size - height) / 2, width, height);
     }
 }
 

@@ -5,6 +5,5 @@ export class Block
         this.x = x;
         this.y = y;
         this.info = 0;
-        this.detial_info = 0;
     }
 }

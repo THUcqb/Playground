@@ -10,27 +10,29 @@ import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 import { withCookies, Cookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 
 const styles = theme => ({
     root: {
-        flexGrow: 1,
-        overflow: "hidden",
+        display: "flex",
         marginTop: 64,
+        height: "100%",
     },
     container: {
-        bottom: 0,
+        margin: 0,
+        display: "flex",
+    },
+    item: {
+        display: "flex",
     },
     paper: {
-        textAlign: 'center',
-        margin: theme.spacing.unit * 2,
-        padding: theme.spacing.unit * 2,
-        color: theme.palette.text.secondary,
+        display: "flex",
+        width: "100%",
     },
     landingPaper: {
         textAlign: 'center',
-        padding: theme.spacing.unit * 20,
-        margin: theme.spacing.unit * 10,
-        marginTop: 0,
+        paddingTop: theme.spacing.unit * 3,
+        margin: theme.spacing.unit * 5,
         backgroundColor: theme.palette.background.contentFrame,
     },
     flex: {
@@ -50,16 +52,7 @@ class App extends Component
 
     constructor(props) {
         super(props);
-        if (this.props.cookies.get('token')) {
-            this.state = {
-                welcome: false,
-            }
-        }
-        else {
-            this.state = {
-                welcome: true,
-            }
-        }
+        this.state = {welcome: (this.props.cookies.get('token') === undefined),}
     }
 
     handleWelcome() {
@@ -72,7 +65,7 @@ class App extends Component
         let body = null;
         if (this.state.welcome === true)
             body = (
-                <div>
+                <div style={{display: "flex", height: "100%", width: "100%"}}>
                     <Grid container className={classes.container}>
                         <Grid item xs={12} sm={12}>
                             <Paper className={classes.landingPaper}>
@@ -97,17 +90,17 @@ class App extends Component
             );
         else
             body = (
-                <div>
+                <div style={{display: "flex", height: "100%", width: "100%"}}>
                     <Navigation className={classes.appbar}/>
                     <Grid container className={classes.container}>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={6} className={classes.item}>
                             <Paper className={classes.paper}>
-                                <Scene/>
+                                <Router><Route path="/" component={Scene}/></Router>
                             </Paper>
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={6} className={classes.item}>
                             <Paper className={classes.paper}>
-                                <Gamepad />
+                                <Gamepad/>
                             </Paper>
                         </Grid>
                     </Grid>

@@ -20,32 +20,26 @@ function setupManifest()
     }, {
         src: process.env.PUBLIC_URL + "/coin.jpg",
         id: "coin"
+    }, {
+        src: process.env.PUBLIC_URL + "/role.png",
+        id: "role"
+    }, {
+        src: process.env.PUBLIC_URL + "/treasure.png",
+        id: "treasure"
     }
     ];
 }
 
 function startPreload()
 {
-    preloader.on("progress", handleFileProgress);
+    preloader.on("progress", () => {/*Handle the progress event*/});
     preloader.on("complete", loadComplete);
-    preloader.on("error", loadError);
+    preloader.on("error", () => {/*Handle the errors*/});
     preloader.loadManifest(manifest);
 }
 
-function handleFileProgress(event)
+function loadComplete()
 {
-    console.log(preloader.progress);
-}
-
-function loadError(event)
-{
-    console.log("Error!", event.text);
-    alert("Error");
-}
-
-function loadComplete(event)
-{
-    console.log("Finished Loading Assets");
     ReactDOM.render(<CookiesProvider><App /></CookiesProvider>,
         document.getElementById('root')
     );

@@ -8,9 +8,8 @@ class Trajectory
     {
         this.size = size / n;
         this.n = n;
-        this.width = this.size / 3;
+        this.width = this.size / 5 * 4;
         this.time = 480;
-        this.totalLength = 10;
         this.stage = stage;
         this.nowX = 0;
         this.nowY = 0;
@@ -27,12 +26,12 @@ class Trajectory
         this.container = new EaselJS.Container();
         this.stage.addChild(this.container);
 
-        let img = preloader.getResult("square");
+        const img = preloader.getResult("square");
 
         this.blur = new EaselJS.Bitmap(img);
         this.picWidth = img.width;
         this.picHeight = img.height;
-        let blurFilter = new EaselJS.BlurFilter(6, 6, 3);
+        const blurFilter = new EaselJS.BlurFilter(24, 24, 2);
         this.blur.filters = [blurFilter, new EaselJS.ColorMatrixFilter(new EaselJS.ColorMatrix(60, 0, 0, 0))];
         this.blur.setTransform(0, 0, this.size * this.n / this.picWidth, this.size * this.n / this.picHeight);
         this.blur.cache(0, 0, this.picWidth, this.picHeight);
@@ -42,7 +41,7 @@ class Trajectory
         this.drawingCanvas.setTransform(0, 0, this.size * this.n / this.picWidth, this.size * this.n / this.picHeight);
 
         this.bitmap = new EaselJS.Bitmap(img);
-        let maskFilter = new EaselJS.AlphaMaskFilter(this.drawingCanvas.cacheCanvas);
+        const maskFilter = new EaselJS.AlphaMaskFilter(this.drawingCanvas.cacheCanvas);
         this.bitmap.setTransform(0, 0, this.size * this.n / this.picWidth, this.size * this.n / this.picHeight);
         this.bitmap.filters = [maskFilter];
         this.bitmap.cache(0, 0, this.picWidth, this.picHeight);
@@ -68,9 +67,9 @@ class Trajectory
 
     update(snake)
     {
-        let l = snake.size;
-        let x = snake.body[l - 1].x;
-        let y = snake.body[l - 1].y;
+        const l = snake.size;
+        const x = snake.body[l - 1].x;
+        const y = snake.body[l - 1].y;
         if (this.container === null)
         {
             this.init(x, y);
@@ -84,36 +83,38 @@ class Trajectory
     newTrajectory(nowX, nowY)
     {
         this.drawingCanvas.alpha = 0;
-        let tween = TweenJS.Tween.get(this.drawingCanvas).to({ alpha: 1 }, this.time).call(() => this.complete(nowX, nowY));
+        const tween = TweenJS.Tween.get(this.drawingCanvas).to({ alpha: 1 }, this.time).call(() => this.complete(nowX, nowY));
         this.length = 0;
         tween.addEventListener("change", () => this.change(nowX, nowY));
     }
 
     complete(nowX, nowY)
     {
+        this.change(nowX, nowY);
         this.nowX = nowX;
         this.nowY = nowY;
     }
 
     change(nowX, nowY)
     {
+        const alpha = this.drawingCanvas.alpha;
         this.length++;
         this.drawingCanvas.graphics.clear().beginFill("rgba(0, 0, 0, 1)");
         if (nowX === this.nowX + 1)
         {
-            this.drawingCanvas.graphics.drawRect(this.nowY * this.deltaWidth + this.edgeWidth, this.nowX * this.deltaHeight + this.edgeHeight + this.widthH, this.widthW, this.deltaHeight * this.length / (this.totalLength - 1));
+            this.drawingCanvas.graphics.drawRect(this.nowY * this.deltaWidth + this.edgeWidth, this.nowX * this.deltaHeight + this.edgeHeight + this.widthH, this.widthW, this.deltaHeight * alpha);
         }
         if (nowX === this.nowX - 1)
         {
-            this.drawingCanvas.graphics.drawRect(this.nowY * this.deltaWidth + this.edgeWidth, this.nowX * this.deltaHeight + this.edgeHeight, this.widthW, -this.deltaHeight * this.length / (this.totalLength - 1));
+            this.drawingCanvas.graphics.drawRect(this.nowY * this.deltaWidth + this.edgeWidth, this.nowX * this.deltaHeight + this.edgeHeight, this.widthW, -this.deltaHeight * alpha);
         }
         if (nowY === this.nowY + 1)
         {
-            this.drawingCanvas.graphics.drawRect(this.nowY * this.deltaWidth + this.edgeWidth + this.widthW, this.nowX * this.deltaHeight + this.edgeHeight, this.deltaWidth * this.length / (this.totalLength - 1), this.widthH);
+            this.drawingCanvas.graphics.drawRect(this.nowY * this.deltaWidth + this.edgeWidth + this.widthW, this.nowX * this.deltaHeight + this.edgeHeight, this.deltaWidth * alpha, this.widthH);
         }
         if (nowY === this.nowY - 1)
         {
-            this.drawingCanvas.graphics.drawRect(this.nowY * this.deltaWidth + this.edgeWidth, this.nowX * this.deltaHeight + this.edgeHeight, -this.deltaWidth * this.length / (this.totalLength - 1), this.widthH);
+            this.drawingCanvas.graphics.drawRect(this.nowY * this.deltaWidth + this.edgeWidth, this.nowX * this.deltaHeight + this.edgeHeight, -this.deltaWidth * alpha, this.widthH);
         }
         this.drawingCanvas.updateCache("source-over");
         this.bitmap.updateCache();
