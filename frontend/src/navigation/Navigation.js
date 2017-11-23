@@ -15,12 +15,12 @@ import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import ChevronRightIcon from 'material-ui-icons/ChevronRight';
 import { CookiesProvider } from 'react-cookie';
 import SignButton from './Sign';
-import ShareButton from './Share';
+import ShareButton from './ShareButton';
 import Purchase from './Purchase';
 import MessageBar from '../utils/MessageBar';
 import { alerts as configMsgAlerts} from "../config/msg";
 
-const styles = i => ({
+const styles = ({
     appBar: {
         position: 'absolute',
         textAlign: 'center',

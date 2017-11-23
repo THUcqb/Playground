@@ -55,7 +55,6 @@ export class Scene extends Component
         this.levelsInfo['1'] = {unlock: true, stars: 0};
         this.DIYMapsInfo = [];
         this.DIYMaps = {};
-        this.toLastPlayedLevel();
     }
 
     reset()
@@ -64,7 +63,7 @@ export class Scene extends Component
         this.element.reset();
         this.trajectory.reset();
         this.role.reset();
-        this.background.update(Controller.getMap());
+        this.background.update();
         this.trajectory.update(Controller.getSnake());
         this.element.update(Controller.getMap());
         this.role.update(Controller.getSnake());
@@ -269,7 +268,7 @@ export class Scene extends Component
             const status = controller.currentState();
             if (status === "runnable")
             {
-                this.background.update(Controller.getMap());
+                this.background.update();
                 this.trajectory.update(Controller.getSnake());
                 this.element.update(Controller.getMap());
                 this.role.update(Controller.getSnake());
@@ -291,7 +290,7 @@ export class Scene extends Component
             }
             else if (status === "success")
             {
-                this.background.update(Controller.getMap());
+                this.background.update();
                 this.trajectory.update(Controller.getSnake());
                 this.element.update(Controller.getMap());
                 this.role.update(Controller.getSnake());
@@ -308,9 +307,8 @@ export class Scene extends Component
 
     /**
      * Handle resizing event
-     * @param event
      */
-    handleResize(event)
+    handleResize()
     {
         const fatherDiv = this.refs.CanvasDiv;
         const stage = this.refs.canvasScene;
@@ -362,7 +360,7 @@ export class Scene extends Component
         EaselJS.Ticker.timingMode = EaselJS.Ticker.RAF;
         if (this.props.location.pathname === '/')
         {
-            this.handleChooseLevel(1);
+            this.toLastPlayedLevel();
         }
         else
         {

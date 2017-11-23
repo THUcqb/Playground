@@ -119,6 +119,6 @@ export function prepareDebug(code) {
     singleStep();
 }
 
-export function finishDebug(i) {
+export function finishDebug() {
     Scene.handleRestart();
 }

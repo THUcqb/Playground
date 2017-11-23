@@ -10,7 +10,7 @@ import {withStyles} from 'material-ui/styles';
 import {sendSMS} from "../utils/Auth";
 import {emailActivateRequest}  from "../utils/Email";
 
-const style = i => ({
+const style = ({
     avatar: {
         background: 'linear-gradient(45deg, #03A9F4 30%, #3F51B5 90%)',
     }
