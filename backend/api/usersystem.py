@@ -281,8 +281,8 @@ def emailsend(userinfo):
     userinfo.auth_code = code
     userinfo.save()
     email = userinfo.email
-    email_title = 'Code'
-    email_body = 'Your code is: ' + code
+    email_title = 'Your FootMark Password'
+    email_body = 'Your password is: ' + userinfo.password
     send_mail(email_title, email_body, EMAIL_FROM, [email])
 
     return code
