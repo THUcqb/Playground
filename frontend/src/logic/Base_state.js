@@ -30,6 +30,11 @@ export class Base_state
             this.cur = this.cur.next;
             this.next_move();
         }
+        else if (this.cur.type === "turn")
+        {
+            this.cur = this.cur.next;
+            this.next_move();
+        }
         else if (this.cur.type === "success")
         {
             this.cur.state = "success";
@@ -75,31 +80,59 @@ export class Base_state
         {
             if (this.move_state === "null" ||this.move_state === "move_up")
             {
-                this.move_state = "move_right";
-                const a = new Base("sys", "move_right");
-                a.run();
-                this.cur.type = a.type;
+                if (this.cur.type === "turn") 
+                {
+                    this.move_state = "move_right";
+                }
+                else
+                {
+                    this.move_state = "move_right";
+                    const a = new Base("sys", "move_right");
+                    a.run();
+                    this.cur.type = a.type;
+                }
 
             } else if (this.move_state === "move_right")
             {
-                this.move_state = "move_down";
-                const a = new Base("sys", "move_down");
-                a.run();
-                this.cur.type = a.type;
+                if (this.cur.type === "turn") 
+                {
+                    this.move_state = "move_down";
+                }
+                else
+                {   
+                    this.move_state = "move_down";
+                    const a = new Base("sys", "move_down");
+                    a.run();
+                    this.cur.type = a.type;
+                }
 
             } else if ( this.move_state === "move_down")
             {
-                this.move_state = "move_left";
-                const a = new Base("sys", "move_left");
-                a.run();
-                this.cur.type = a.type;
+                if (this.cur.type === "turn") 
+                {
+                     this.move_state = "move_left";
+                }
+                else
+                { 
+                    this.move_state = "move_left";
+                    const a = new Base("sys", "move_left");
+                    a.run();
+                    this.cur.type = a.type;
+                }
 
             } else if (this.move_state === "move_left")
             {
-                this.move_state = "move_up";
-                const a = new Base("sys", "move_up");
-                a.run();
-                this.cur.type = a.type;
+                if (this.cur.type === "turn") 
+                {
+                     this.move_state = "move_up";
+                }
+                else
+                { 
+                    this.move_state = "move_up";
+                    const a = new Base("sys", "move_up");
+                    a.run();
+                    this.cur.type = a.type;
+                }
 
             }
 
@@ -109,31 +142,60 @@ export class Base_state
         {
             if (this.move_state === "null" ||this.move_state === "move_up")
             {
-                this.move_state = "move_left";
-                const a = new Base("sys", "move_left");
-                a.run();
-                this.cur.type = a.type;
+
+                if (this.cur.type === "turn") 
+                {
+                     this.move_state = "move_left";
+                }
+                else
+                {
+                    this.move_state = "move_left";
+                    const a = new Base("sys", "move_left");
+                    a.run();
+                    this.cur.type = a.type;
+                }
 
             } else if (this.move_state === "move_left")
             {
-                this.move_state = "move_down";
-                const a = new Base("sys", "move_down");
-                a.run();
-                this.cur.type = a.type;
+                if (this.cur.type === "turn") 
+                {
+                    this.move_state = "move_down";
+                }
+                else
+                {
+                    this.move_state = "move_down";
+                    const a = new Base("sys", "move_down");
+                    a.run();
+                    this.cur.type = a.type;
+                }
 
             } else if ( this.move_state === "move_down")
             {
-                this.move_state = "move_right";
-                const a = new Base("sys", "move_right");
-                a.run();
-                this.cur.type = a.type;
+                if (this.cur.type === "turn") 
+                {
+                    this.move_state = "move_right";
+                }
+                else
+                {
+                    this.move_state = "move_right";
+                    const a = new Base("sys", "move_right");
+                    a.run();
+                    this.cur.type = a.type;
+                }
 
             } else if (this.move_state === "move_right")
             {
-                this.move_state = "move_up";
-                const a = new Base("sys", "move_up");
-                a.run();
-                this.cur.type = a.type;
+                if (this.cur.type === "turn") 
+                {
+                    this.move_state = "move_up";
+                }
+                else
+                { 
+                    this.move_state = "move_up";
+                    const a = new Base("sys", "move_up");
+                    a.run();
+                    this.cur.type = a.type;
+                }
 
             }
         }
