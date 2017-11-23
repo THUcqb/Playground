@@ -28,15 +28,11 @@ export function turn(op) {
     Controller.step();
 }
 
-export function check(op)
+export function safe(op)
 {
 
-    if (Base.run_state.cur.check(Base.run_state.tr_check(op)) === "runnable") 
-    {
-        return true;
-    }
+    return Base.check(Base.run_state.tr_check(op)) === "runnable";
 
-    return false;
 }
 
 
@@ -59,6 +55,18 @@ function initApi(interpreter, scope) {
         return interpreter.createPrimitive(move(op));
     };
     interpreter.setProperty(scope, 'move', interpreter.createNativeFunction(wrapper));
+
+    // Add an API function for the turn() block.
+    wrapper = function (op) {
+        return interpreter.createPrimitive(turn(op));
+    };
+    interpreter.setProperty(scope, 'turn', interpreter.createNativeFunction(wrapper));
+
+    // Add an API function for the safe() block.
+    wrapper = function (op) {
+        return interpreter.createPrimitive(safe(op));
+    };
+    interpreter.setProperty(scope, 'safe', interpreter.createNativeFunction(wrapper));
 
     // Add an API function for the highlightBlock(id) block.
     wrapper = function (id) {
