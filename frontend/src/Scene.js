@@ -192,11 +192,25 @@ export class Scene extends Component
                     {
                         this.levelsInfo[(this.state.nowLevel + 1).toString()].unlock = true;
                     }
+                    this.setState({
+                        overDialogOpen: true,
+                        dialogTitle: message,
+                    });
                 }
-                this.setState({
-                    overDialogOpen: true,
-                    dialogTitle: message,
-                });
+                else
+                {
+                    loadLevelsInfo()
+                        .then((response) => {
+                            if (response.OK)
+                            {
+                                this.levelsInfo = response.levelsInfo;
+                            }
+                            this.setState({
+                                overDialogOpen: true,
+                                dialogTitle: message,
+                            });
+                        });
+                }
             });
         this.isOver = true;
     }
