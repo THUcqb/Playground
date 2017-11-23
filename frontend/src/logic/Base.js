@@ -187,7 +187,7 @@ export class Base {
      * base_move change snake and map info by task
      */
     base_move(_x, _y) {
-        let runnable = Base.runnable(_x, _y);
+        const runnable = Base.runnable(_x, _y);
         if (runnable === 'candy' || runnable === 'runnable' || runnable === 'end') {
             Base.bmap.setBody(Base.bsnake.x, Base.bsnake.y);
             let __x = Base.bsnake.body[0].x;

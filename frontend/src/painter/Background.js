@@ -25,11 +25,11 @@ class Background
         this.paintGround();
     }
 
-    update(map)
+    update()
     {
         if (this.container === null)
         {
-            this.init(map);
+            this.init();
         }
     }
 

@@ -63,7 +63,7 @@ export class Scene extends Component
         this.element.reset();
         this.trajectory.reset();
         this.role.reset();
-        this.background.update(Controller.getMap());
+        this.background.update();
         this.trajectory.update(Controller.getSnake());
         this.element.update(Controller.getMap());
         this.role.update(Controller.getSnake());
@@ -268,7 +268,7 @@ export class Scene extends Component
             const status = controller.currentState();
             if (status === "runnable")
             {
-                this.background.update(Controller.getMap());
+                this.background.update();
                 this.trajectory.update(Controller.getSnake());
                 this.element.update(Controller.getMap());
                 this.role.update(Controller.getSnake());
@@ -290,7 +290,7 @@ export class Scene extends Component
             }
             else if (status === "success")
             {
-                this.background.update(Controller.getMap());
+                this.background.update();
                 this.trajectory.update(Controller.getSnake());
                 this.element.update(Controller.getMap());
                 this.role.update(Controller.getSnake());

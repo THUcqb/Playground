@@ -32,9 +32,9 @@ function setupManifest()
 
 function startPreload()
 {
-    preloader.on("progress", () => {});
+    preloader.on("progress", () => {/*Handle the progress event*/});
     preloader.on("complete", loadComplete);
-    preloader.on("error", () => {});
+    preloader.on("error", () => {/*Handle the errors*/});
     preloader.loadManifest(manifest);
 }
 
