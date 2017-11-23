@@ -86,12 +86,17 @@ export class Scene extends Component
                     }
                     this.handleChooseLevel(lastLevel);
                 }
+                else
+                {
+                    this.handleChooseLevel(1);
+                }
             });
     }
 
     isNextLevelAvailable()
     {
-        return (this.state.nowLevel < numberOfLevels && !this.isFail);
+        return (this.state.nowLevel < numberOfLevels && !this.isFail
+                && this.levelsInfo[(this.state.nowLevel + 1).toString()].unlock);
     }
 
     /**
@@ -148,8 +153,8 @@ export class Scene extends Component
                 if (response.OK)
                 {
                     this.levelsInfo = response.levelsInfo;
-                    this.setState({levelDialogOpen: true});
                 }
+                this.setState({levelDialogOpen: true});
             });
         loadDIYMaps()
             .then((response) =>
@@ -178,12 +183,22 @@ export class Scene extends Component
     handleGameTerminate(message)
     {
         this.nowScore = message === 'You win!' ? Gamepad.getScore(this.nowStdSolution) : 0;
-        saveLevelInfo(this.state.nowLevel, this.nowScore);
+        saveLevelInfo(this.state.nowLevel, this.nowScore)
+            .then((response) =>
+            {
+                if (!response.OK)
+                {
+                    if (this.state.nowLevel < 5 && numberOfLevels > this.state.nowLevel)
+                    {
+                        this.levelsInfo[(this.state.nowLevel + 1).toString()].unlock = true;
+                    }
+                }
+                this.setState({
+                    overDialogOpen: true,
+                    dialogTitle: message,
+                });
+            });
         this.isOver = true;
-        this.setState({
-            overDialogOpen: true,
-            dialogTitle: message,
-        });
     }
 
     handleNextLevel()
