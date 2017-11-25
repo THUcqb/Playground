@@ -98,7 +98,7 @@ export class Scene extends Component
      * Change the game level and update the scene
      * @param levelNum number representation of a game level
      */
-    handleChooseLevel(levelNum)
+    handleChooseLevel(levelNum, notLoad)
     {
         this.setState({nowLevel: levelNum});
         this.stage.removeAllChildren();
@@ -106,6 +106,7 @@ export class Scene extends Component
         this.reset();
 
         loadToolbox(levelNum);
+        if (notLoad) return;
         loadLevelSolution(levelNum, true)
             .then((response) => {
                 this.nowStdSolution = response.stdSolution;

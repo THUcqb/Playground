@@ -28,10 +28,16 @@ export function turn(op) {
     Controller.step();
 }
 
+let t = 0;
 export function safe(op)
 {
+    t++;
+    if (t === 5 || t === 9)
+        return false;
+    else
+        return true;
 
-    return Base.check(Base.run_state.tr_check(op)) === "runnable";
+    // return Base.check(Base.run_state.tr_check(op)) === "runnable";
 
 }
 
@@ -97,6 +103,7 @@ export function run(code) {
 
     interpreter = new Interpreter(code + 'highlightBlock("xxx");', initApi);
     Scene.handleRestart();
+    t = 0;
     autoStep(Controller.getLevelTime());
 }
 

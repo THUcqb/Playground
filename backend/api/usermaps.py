@@ -14,7 +14,7 @@ from random import Random
 def analyze_token(token_byte):
     '''
     Analyze the token received.
-    
+
     :param param1: token_byte
     :returns: user_info
     '''
@@ -22,14 +22,14 @@ def analyze_token(token_byte):
     token_info = base64.b64decode(token_str)
     token = token_info.decode('utf-8','ignore')
     user_info = json.loads(token)
-    
+
     return user_info
 
 @csrf_exempt
 def save_mapsinfo(request):
     '''
     Save a map when the user have completed a level.
-    
+
     :method: POST
     :param param1: token
     :param param2: level
@@ -61,7 +61,7 @@ def save_mapsinfo(request):
             solution = d['solution']
             amap = AMap.objects.get(username = username, level = str(level))
             theuser = UserInfo.objects.get(username = username)
-            if (amap.stars == '') or (int(amap.stars) < int(stars)):
+            if (amap.stars == '') or (int(amap.stars) <= int(stars)):
                 amap.stars = stars
                 amap.solution = solution
             amap.save()
@@ -80,7 +80,7 @@ def save_mapsinfo(request):
 def get_mapsinfo(request):
     '''
     Get a user's all maps information.
-    
+
     :method: POST
     :param param1: token
     :returns: if succeed, return {"status":"Successful", level:{"stars":stars, "unlock":true or false}, level:{}, level:{}}
@@ -120,7 +120,7 @@ def get_mapsinfo(request):
 def get_solution(request):
     '''
     Get a user's single map solution.
-    
+
     :method: POST
     :param param1: token
     :param param2: level
@@ -155,12 +155,12 @@ def get_solution(request):
         except:
             response_data["status"] = "NotExisted"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
-            
+
 @csrf_exempt
 def save_diymap(request):
     '''
     Save the maps edited by the users.
-    
+
     :method: POST
     :param param1: token
     :param param2: mapinfo
@@ -206,13 +206,13 @@ def save_diymap(request):
                 return HttpResponse(json.dumps(response_data),content_type="application/json")
             except DIYMaps.DoesNotExist:
                 response_data["status"] = "NotExisted"
-                return HttpResponse(json.dumps(response_data),content_type="application/json")            
+                return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 @csrf_exempt
 def delete_diymap(request):
     '''
     Save the maps edited by the users.
-    
+
     :method: POST
     :param param1: token
     :param param2: mapid
@@ -244,12 +244,12 @@ def delete_diymap(request):
         except DIYMaps.DoesNotExist:
             response_data["status"] = "NotExisted"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
-           
+
 @csrf_exempt
 def get_diysolution(request):
     '''
     Save the maps edited by the users.
-    
+
     :method: POST
     :param param1: token
     :param param2: mapid
@@ -287,7 +287,7 @@ def get_diysolution(request):
 def get_diymaps(request):
     '''
     Save the maps edited by the users.
-    
+
     :method: POST
     :param param1: token
     :returns: if succeed, return {"status":"Successful", mapname:{"mapinfo":mapinfo, "mapid":mapid}, ...}
@@ -319,12 +319,12 @@ def get_diymaps(request):
             response_data["map"][str(maps[i].id)] = themap
         response_data["status"] = "Successful"
         return HttpResponse(json.dumps(response_data),content_type="application/json")
-        
+
 @csrf_exempt
 def map_share(request):
     '''
     Create a share-link when the user wants to share his diy-maps or common-maps.
-    
+
     :method: POST
     :param param1: token
     :param param2: type (diy or common)
@@ -332,7 +332,7 @@ def map_share(request):
     :returns: if succeed, return {"status":"Successful", "link":link}
               else if the token is out of date, return {"status":"Expiration"}
               else if token is wrong, return {"status":"TokenError"}
-    '''         
+    '''
     if request.method == 'POST':
         d = json.loads(request.body.decode('utf-8'))
         response_data = {}
@@ -369,13 +369,13 @@ def map_share(request):
             response_data["link"] = payload.decode()
             response_data["status"] = "Successful"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
-            
+
 
 @csrf_exempt
 def share_response(request):
     '''
     Return the map when the user click the share link.
-    
+
     :method: POST
     :param param1: token
     :param param2: link
@@ -395,7 +395,7 @@ def share_response(request):
         except:
             response_data["status"] = "TokenError"
             return HttpResponse(json.dumps(response_data),content_type="application/json")
-        now = time.time()  
+        now = time.time()
         link_byte = d['link']
         link_str = link_byte.encode(encoding = "utf-8")
         try:

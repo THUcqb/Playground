@@ -36,13 +36,13 @@ export function shareGetContext(sharedCode) {
         .then(function (response) {
             if (response.data.status === "Successful")
             {
-                Gamepad.loadWorkspace(response.data.solution);
                 if (response.data.level === undefined) {
                     Scene.singleton.handleChooseSharedLevel(response.data.mapinfo);
                 }
                 else {
-                    Scene.singleton.handleChooseLevel(response.data.level);
+                    Scene.singleton.handleChooseLevel(response.data.level, true);
                 }
+                Gamepad.loadWorkspace(response.data.solution);
             }
             return {
                 OK: response.data.status === "Successful",

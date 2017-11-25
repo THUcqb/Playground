@@ -1,5 +1,5 @@
-export const THISURL = "http://127.0.0.1:3000";
-export const URL = "http://127.0.0.1:8000";
+export const THISURL = "http://101.5.129.136:3000";
+export const URL = "http://101.5.129.136:8000";
 export const SIGNIN = "/users/login";
 export const SIGNUP = "/users/register";
 export const CHANGEPASSWORD = "/users/change_password";

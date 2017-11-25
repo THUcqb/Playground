@@ -124,7 +124,7 @@ class Gamepad extends Component {
      * @returns {number}
      */
     static getScore(standardSolution) {
-        if (typeof standardSolution === 'string') {
+        if (typeof standardSolution === 'string' && standardSolution.length > 0) {
             return parseInt(3 * standardSolution.length / (Gamepad.dumpWorkspace().length));
         }
         else {
